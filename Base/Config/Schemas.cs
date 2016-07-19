@@ -5,6 +5,9 @@ using WPILib;
 
 namespace Base.Config
 {
+    /// <summary>
+    /// Class to define a schema for a partucular control or set of controls.
+    /// </summary>
     public static class Schemas
     {
         #region Public Enums

@@ -67,10 +67,29 @@ namespace Base.Config
 
         #region Public Properties
 
+        /// <summary>
+        /// Instance of the ActiveCollection to be used thoughout the program.
+        /// </summary>
         public ActiveCollection ActiveCollection { get; }
+
+        /// <summary>
+        /// Boolean flag to determin if autonomous should be enabled in any sence.
+        /// </summary>
         public bool AutonEnabled { get; private set; }
+
+        /// <summary>
+        /// Instance of the driver's control schema to be used thoughout the program.
+        /// </summary>
         public DriverConfig DriverConfig { get; private set; }
+
+        /// <summary>
+        /// Instance of the operators's control schema to be used thoughout the program.
+        /// </summary>
         public OperatorConfig OperatorConfig { get; private set; }
+
+        /// <summary>
+        /// Boolean flag to set QuickLoad mode, see reference manule for details.
+        /// </summary>
         public bool QuickLoad { get; private set; }
 
         #endregion Public Properties
