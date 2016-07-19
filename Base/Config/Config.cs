@@ -6,7 +6,7 @@ Copyright (c) BroncBotz.
 All rights reserved.
 
 Author(s): Ryan Cooper
-Email: cooper.ryan@centaurisoft.org
+Email: cooper.ryan@centaurisoftware.co
 \********************************************************************/
 
 using System;
