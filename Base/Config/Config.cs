@@ -27,6 +27,9 @@ namespace Base.Config
     {
         #region Public Constructors
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public Config()
         {
             ActiveCollection = new ActiveCollection();
