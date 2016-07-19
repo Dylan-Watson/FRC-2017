@@ -1,2 +1,1 @@
-# 2017FRC_TMP
-Temporary repo for 2017 work
+Repository for the BroncBotz 2017 FRC season.
