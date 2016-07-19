@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Robot>
+
+  <Version version="4.0" />
+  <Comment comment="Configured for roboRio deployment." />
+
+  <!-- Absolutely do not change QuickLoad to true, only Ryan should do this. -->
+  <QuickLoad value="false" />
+
+  <EnableAuton value="true" />
+
+  <!-- Contains assignments to ports and robot dimensions -->
+  <RobotConfig>
+
+    <!-- All victor assignments type="SP" or type="888"-->
+    <Victors>
+      <rightDrive_1 type="888" channel="0" reversed="true" drive="true" side="right" />
+      <rightDrive_2 type="888" channel="1" reversed="true" drive="true" side="right" />
+      <!--<rightDrive_3 type="888" channel="2" reversed="false" type="drive" side="right" />-->
+      <leftDrive_1 type="888" channel="2" reversed="false" drive="true" side="left" />
+      <leftDrive_2 type="888" channel="3" reversed="false" drive="true" side="left" />
+      <!--<leftDrive_3 type="888" channel="5" reversed="false" type="drive" side="left" />-->
+    </Victors>
+
+    <!-- All CANTalon assignments -->
+    <Talons>
+      <!-- Examples -->
+      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="pwm" />-->
+      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="master" optional PID p="double" i="double" d="double" />-->
+      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="slave" master="binding name (name of master talon)" />-->
+
+      <shooter_1 channel="22" reversed="false" type="pwm" />
+      <!--<shooter_1 channel="24" reversed="false" type="master" p=".5" i=".001" d="0" />-->
+      <!-- <shooter_2 channel="22" reversed="false" type="slave" master="shooter_1" />-->
+    </Talons>
+
+    <!-- Encoder locations -->
+    <Encoders>
+      <!--<xxxxxx aChannel="x" bChannel="x" />-->
+    </Encoders>
+
+    <!-- Double solenoid locations-->
+    <Solenoids>
+      <!--<xxxxxx forward="x" reverse="x" default="forward/reverse" />-->
+    </Solenoids>
+
+    <!--  Digital input/outputs !!!!NOTE!!!! DI and DO are on the same line as the Encoders -->
+    <!--  so DO NOT have matching channel numbers, that allocated drifferent resources in the same spot.-->
+    <DI>
+      <!--<xxxxxx channel="x" />-->
+    </DI>
+
+    <DO>
+      <!--<xxxxxx channel="x" />-->
+    </DO>
+
+    <!-- Analog inputs/outputs -->
+    <AI>
+      <!--<xxxxxx channel="x" />-->
+    </AI>
+
+    <AO>
+      <!--<xxxxxx channel="x" />-->
+    </AO>
+
+    <Relays>
+      <!--<xxxxxx channel="x" />-->
+    </Relays>
+  </RobotConfig>
+
+  <!-- Control assignments -->
+  <Controls>
+    <!--control item exampls, reversed="true/false"
+	     and powerMultiplier="double" are optional additions to these tags-->
+
+    <!--<example type="button" button=""int bindTo="IComponent" />
+	<example type="dualButton" buttonA="int" buttonB="" bindTo="IComponent" />
+	<example type="togggle" button="int" bindTo="IComponent" />
+	<example type="axis" axis="int" deadZone="double" bindTo="IComponent" />-->
+
+    <!-- Driver assignments: ONLY VALUES SHOULD CHANGE! NEVER EDIT TAGS OR ATTRIBUTE IDENTIFIERS-->
+    <Driver>
+      <slot controllerSlot="0" />
+
+      <!-- fit values are linear=0, quadratic=1, exponential=2, and poly=3 -->
+      <drive driveFit="0" power="3" />
+
+      <powerMultiplier powerMultiplier="1" />
+
+      <leftDrive axis="1" reversed="false" deadZone=".02" bindTo="leftDrive_1, leftDrive_2" />
+      <rightDrive axis="5" reversed="false" deadZone=".02" bindTo="rightDrive_1, rightDrive_2" />
+    </Driver>
+
+    <DriverAux>
+    </DriverAux>
+
+    <!-- Operator assignments -->
+    <Operator>
+      <slot controllerSlot="1" />
+      <shooter type="axis" axis="5" reversed="false" deadZone="0" bindTo="shooter_1" />
+    </Operator>
+  </Controls>
+</Robot>
