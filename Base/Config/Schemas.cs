@@ -6,7 +6,7 @@ using WPILib;
 namespace Base.Config
 {
     /// <summary>
-    /// Class to define a schema for a partucular control or set of controls.
+    /// Class to store all relevant ControlSchemas
     /// </summary>
     public static class Schemas
     {
@@ -27,10 +27,20 @@ namespace Base.Config
 
         #region Public Structs
 
+        /// <summary>
+        /// Structure to define all of the drivers control schemas.
+        /// </summary>
         public struct DriverConfig
         {
             #region Public Constructors
 
+            /// <summary>
+            /// Default contructor.
+            /// </summary>
+            /// <param name="driver">WPIlib Joystick that the driver will use</param>
+            /// <param name="leftSchema">DriverControlSchema for the left side of the drive train</param>
+            /// <param name="rightSchema">DriverControlSchema for the right side of the drive train</param>
+            /// <param name="controlsData">List of control schemas for auxillary driver controls</param>
             public DriverConfig(Joystick driver, DriverControlSchema leftSchema, DriverControlSchema rightSchema,
                 List<ControlSchema> controlsData = null)
             {
@@ -44,18 +54,41 @@ namespace Base.Config
 
             #region Public Properties
 
+            /// <summary>
+            /// List to hold auxillary driver control schemas (aka not drive train controls)
+            /// </summary>
             public List<ControlSchema> ControlsData { get; private set; }
+
+            /// <summary>
+            /// The object to hold the WPIlib Joystick that the driver will use.
+            /// </summary>
             public Joystick Driver { get; private set; }
+
+            /// <summary>
+            /// Defines the left drive controls.
+            /// </summary>
             public DriverControlSchema LeftDriveControlSchema { get; private set; }
+
+            /// <summary>
+            /// Defines the right drive controls.
+            /// </summary>
             public DriverControlSchema RightDriveControlSchema { get; private set; }
 
             #endregion Public Properties
         }
 
+        /// <summary>
+        /// Structure to define all of the operators control schemas.
+        /// </summary>
         public struct OperatorConfig
         {
             #region Public Constructors
 
+            /// <summary>
+            /// Default constructor.
+            /// </summary>
+            /// <param name="operator_">WPIlib Joystick that the operator will use</param>
+            /// <param name="controlsData">List of control schemas for the operator's controls</param>
             public OperatorConfig(Joystick operator_, List<ControlSchema> controlsData = null)
             {
                 Operator = operator_;
@@ -66,7 +99,14 @@ namespace Base.Config
 
             #region Public Properties
 
+            /// <summary>
+            /// List to hold the operator's control schemas.
+            /// </summary>
             public List<ControlSchema> ControlsData { get; private set; }
+
+            /// <summary>
+            /// The object to hold the WPIlib Joystick that the operator will use.
+            /// </summary>
             public Joystick Operator { get; private set; }
 
             #endregion Public Properties
@@ -76,10 +116,18 @@ namespace Base.Config
 
         #region Public Classes
 
+        /// <summary>
+        /// Class to define the schema of a control.
+        /// </summary>
         public class ControlSchema
         {
             #region Public Methods
 
+            /// <summary>
+            /// Gets the type of control that a schema would represent from an XAttribute object.
+            /// </summary>
+            /// <param name="attribute">XAttribute object loaded from XML</param>
+            /// <returns></returns>
             public static ControlType GetControlTypeFromAttribute(XAttribute attribute)
             {
                 if (attribute == null)
@@ -106,8 +154,20 @@ namespace Base.Config
 
             #region Public Constructors
 
+            /// <summary>
+            /// Default constructor.
+            /// </summary>
             public ControlSchema() {}
 
+            /// <summary>
+            /// Constructor.
+            /// </summary>
+            /// <param name="name">Name of the control schema</param>
+            /// <param name="controlType">Type of control that the schema represents</param>
+            /// <param name="bindTo">List of CommonNames to represent what components the schema is bound to</param>
+            /// <param name="button">The address of the button on the controller that will be used by this control</param>
+            /// <param name="powerMultiplier">The multiplier to be applied before output to the IComponents</param>
+            /// <param name="reversed">Defines if the control will be reversed</param>
             public ControlSchema(string name, ControlType controlType, List<CommonName> bindTo, int button,
                 double powerMultiplier = 1, bool reversed = false)
             {
@@ -119,6 +179,16 @@ namespace Base.Config
                 Reversed = reversed;
             }
 
+            /// <summary>
+            /// Constructor.
+            /// </summary>
+            /// <param name="name">Name of the control schema</param>
+            /// <param name="controlType">Type of control that the schema represents</param>
+            /// <param name="bindTo">List of CommonNames to represent what components the schema is bound to</param>
+            /// <param name="buttona">The address of one of the buttons on the controller that will be used by this control</param>
+            /// <param name="buttonb">The address of one of the buttons on the controller that will be used by this control</param>
+            /// <param name="powerMultiplier">The multiplier to be applied before output to the IComponents</param>
+            /// <param name="reversed">Defines if the control will be reversed</param>
             public ControlSchema(string name, ControlType controlType, List<CommonName> bindTo, int buttona, int buttonb,
                 double powerMultiplier = 1, bool reversed = false)
             {
@@ -131,6 +201,16 @@ namespace Base.Config
                 Reversed = reversed;
             }
 
+            /// <summary>
+            /// Constructor.
+            /// </summary>
+            /// <param name="name">Name of the control schema</param>
+            /// <param name="controlType">Type of control that the schema represents</param>
+            /// <param name="bindTo">List of CommonNames to represent what components the schema is bound to</param>
+            /// <param name="axis">The address of the axis on the controller that will be used by this control</param>
+            /// <param name="deadZone">The deadzones (lower limits) on the axis that this shema represents</param>
+            /// <param name="powerMultiplier">The multiplier to be applied before output to the IComponents</param>
+            /// <param name="reversed">Defines if the control will be reversed</param>
             public ControlSchema(string name, ControlType controlType, List<CommonName> bindTo, int axis,
                 double deadZone, double powerMultiplier = 1, bool reversed = false)
             {
