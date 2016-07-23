@@ -9,33 +9,33 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-using Base.Config;
-using WPILib;
-
 namespace Trephine
 {
-    public class Autonomous
+    /// <summary>
+    /// Abstract class to define an atonomous program
+    /// </summary>
+    public abstract class Autonomous
     {
-        private readonly BaseCalls baseCalls;
-        private readonly Config config;
+        /// <summary>
+        /// Instance of BaseCalls
+        /// </summary>
+        protected BaseCalls BaseCalls { get; }
 
-        public Autonomous(Config config)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="baseCalls">auton base calls instance</param>
+        protected Autonomous(BaseCalls baseCalls)
         {
-            this.config = config;
-            baseCalls = new BaseCalls(config);
+            BaseCalls = baseCalls;
         }
 
         #region Public Methods
 
-        public void Start()
-        {
-            baseCalls.SetRightDrive(.5);
-            baseCalls.SetLeftDrive(.5);
-
-            Timer.Delay(1);
-
-            baseCalls.FullStop();
-        }
+        /// <summary>
+        /// Runs the auton program
+        /// </summary>
+        public abstract void Start();
 
         #endregion Public Methods
     }

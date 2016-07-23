@@ -18,10 +18,24 @@ namespace Tourniquet.ControlItems
 {
     internal delegate double FitFunction(double x, double y, double z);
 
+    /// <summary>
+    /// Class to handle an axis control
+    /// </summary>
     public class AxisControl : ControlItem
     {
         #region Public Constructors
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">name of the control</param>
+        /// <param name="joystick">WPI joysick the control will use</param>
+        /// <param name="axis">the axis to use</param>
+        /// <param name="fitFunction">the fit function to use, see Filters class in Base</param>
+        /// <param name="reversed">if the control is reversed</param>
+        /// <param name="deadZone">the deadzone of the axis</param>
+        /// <param name="multiplier">the output multiplier</param>
+        /// <param name="power">the power for the fit function, see Filters class in Base</param>
         public AxisControl(string name, Joystick joystick, int axis, MotorControlFitFunction fitFunction, bool reversed,
             double deadZone, double multiplier = 1, double power = 2)
         {
@@ -60,7 +74,9 @@ namespace Tourniquet.ControlItems
         #endregion Public Constructors
 
         #region Public Methods
-
+        /// <summary>
+        /// Update the control and its bindings
+        /// </summary>
         public override void Update()
         {
             var raw = Joystick.GetRawAxis(axis);

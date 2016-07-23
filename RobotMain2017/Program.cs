@@ -13,6 +13,9 @@ using WPILib;
 
 namespace RobotMain2017
 {
+    /// <summary>
+    /// Entry point
+    /// </summary>
     public static class Program
     {
         private static void Main() => RobotBase.Main(null, typeof(RobotMain2017));

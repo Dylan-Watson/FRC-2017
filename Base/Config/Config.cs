@@ -115,7 +115,7 @@ namespace Base.Config
                 {
                     var type = element.Attribute("type").Value;
 
-                    var t = VictorType.SP;
+                    var t = VictorType.Sp;
                     if (type == "888")
                         t = VictorType.EightEightEight;
 
@@ -161,7 +161,7 @@ namespace Base.Config
 
                     if (element.Attribute("type").Value == "pwm")
                         ActiveCollection.AddComponent(
-                            new CanTalonItem(new CANTalon(Convert.ToInt32(element.Attribute("channel").Value)),
+                            new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
                                 element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value)));
                     else
                         switch (element.Attribute("type").Value)
@@ -195,7 +195,7 @@ namespace Base.Config
                                 }
 
                                 ActiveCollection.AddComponent(
-                                    new CanTalonItem(new CANTalon(Convert.ToInt32(element.Attribute("channel").Value)),
+                                    new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
                                         element.Name.ToString(), p, i, d,
                                         Convert.ToBoolean(element.Attribute("reversed").Value)));
                                 Report.General($"{element.Name} is a master with PID set to {p}, {i}, {d}");
@@ -208,7 +208,7 @@ namespace Base.Config
 
                                     ActiveCollection.AddComponent(
                                         new CanTalonItem(
-                                            new CANTalon(Convert.ToInt32(element.Attribute("channel").Value)),
+                                            Convert.ToInt32(element.Attribute("channel").Value),
                                             element.Name.ToString(),
                                             (CanTalonItem) ActiveCollection.Get(new CommonName(master)),
                                             Convert.ToBoolean(element.Attribute("reversed").Value)));

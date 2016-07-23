@@ -1,5 +1,5 @@
 ﻿/****************************** Header ******************************\
-Class Name: Operator inherits ControllerLoop
+Class Name: Operator inherits ControlLoop
 Summary: Loop that handles all Operator activities.
 Project:     FRC2017
 Copyright (c) BroncBotz.
@@ -13,10 +13,16 @@ using Base;
 
 namespace Tourniquet
 {
-    public class Operator : ControllerLoop
+    /// <summary>
+    /// Class to handle the operators controls,
+    /// this is a ControlLoop, see ControlLoop in Base
+    /// </summary>
+    public class Operator : ControlLoop
     {
         #region Protected Methods
-
+        /// <summary>
+        /// Instruction to execute within the loop
+        /// </summary>
         protected override void Main()
         {
             foreach (var control in ControlCollection.Instance.GetOperatorControls())

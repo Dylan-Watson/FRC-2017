@@ -18,15 +18,14 @@ using System.Xml.Linq;
 
 namespace Base
 {
+    /// <summary>
+    /// Class to define the way IComponents are found and bound to controls, via their CommonNames, 
+    /// basically a string wrapper with utilities
+    /// </summary>
     public sealed class CommonName
     {
         //declaired for use in auton
-        public static readonly CommonName Right_drive1 = new CommonName("rightDrive_1");
-
-        public static readonly CommonName Right_drive2 = new CommonName("rightDrive_2");
-        public static readonly CommonName Left_drive1 = new CommonName("leftDrive_1");
-        public static readonly CommonName Left_drive2 = new CommonName("leftDrive_2");
-        public static readonly CommonName Gear_switch = new CommonName("gearShift");
+        //public static readonly CommonName Gear_switch = new CommonName("gearShift");
 
         #region Private Fields
 
@@ -36,6 +35,10 @@ namespace Base
 
         #region Public Constructors
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="name">vaule of the CommonName (the name)</param>
         public CommonName(string name)
         {
             this.name = name;
@@ -45,6 +48,11 @@ namespace Base
 
         private bool Equals(CommonName other) => string.Equals(name, other.name);
 
+        /// <summary>
+        /// Overrides the Equals method for CommonNames
+        /// </summary>
+        /// <param name="obj">object of interest</param>
+        /// <returns>comparison result</returns>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -53,8 +61,17 @@ namespace Base
             return obj is CommonName && Equals((CommonName) obj);
         }
 
+        /// <summary>
+        /// Returns the hash of the CommonName's string value
+        /// </summary>
+        /// <returns>Hash value as int</returns>
         public override int GetHashCode() => name.GetHashCode();
 
+        /// <summary>
+        /// Binds a config file value to a CommonName
+        /// </summary>
+        /// <param name="attribute">attribute of interest from config</param>
+        /// <returns>List of bindings</returns>
         [Obsolete("ToBindCommonName is no longer used, as bindings are dynamically done within the Config class.")]
         public static List<CommonName> ToBindCommonName(XAttribute attribute)
         {
@@ -99,10 +116,26 @@ namespace Base
 
         #region Public Methods
 
+        /// <summary>
+        /// != operator for CommonNames
+        /// </summary>
+        /// <param name="x">object of interest</param>
+        /// <param name="y">object of interest</param>
+        /// <returns>comparison result</returns>
         public static bool operator !=(CommonName x, CommonName y) => x?.name != y?.name;
 
+        /// <summary>
+        /// == operator for CommonNames
+        /// </summary>
+        /// <param name="x">object of interest</param>
+        /// <param name="y">object of interest</param>
+        /// <returns>comparison result</returns>
         public static bool operator ==(CommonName x, CommonName y) => x?.name == y?.name;
 
+        /// <summary>
+        /// Overrides ToString for CommonName
+        /// </summary>
+        /// <returns>string value of the CommonName</returns>
         public override string ToString() => name;
 
         #endregion Public Methods

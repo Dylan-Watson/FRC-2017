@@ -12,43 +12,59 @@ Email: cooper.ryan@centaurisoft.org
 
 using Base;
 using Base.Config;
-using Tourniquet;
-using Trephine;
 using WPILib;
 
 namespace RobotMain2017
 {
+    /// <summary>
+    /// Class called by WPI for robot states (teleop, auto, test...)
+    /// </summary>
     public class RobotMain2017 : SampleRobot
     {
         private const string CONFIG_FILE = @"robot.xml";
         private readonly Config config = new Config();
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public RobotMain2017()
         {
             Log.ClearSessionLog();
             config.Load(CONFIG_FILE);
         }
 
-        protected override void RobotInit() => Initialize.BuildControlSchema(config);
+        /// <summary>
+        /// Called by WPI on robot initialization
+        /// </summary>
+        protected override void RobotInit() => Tourniquet.Initialize.BuildControlSchema(config);
 
+        /// <summary>
+        /// Called when auton starts
+        /// </summary>
         public override void Autonomous()
         {
             QuickLoad();
 
             if (config.AutonEnabled)
-                new Autonomous(config).Start();
+                new Trephine.Initialize(config).Run();
         }
 
+        /// <summary>
+        /// Called with teleop starts
+        /// </summary>
         public override void OperatorControl()
         {
             QuickLoad();
 
-            new Driver().Start();
-            new Operator().Start();
+            new Tourniquet.Driver().Start();
+            new Tourniquet.Operator().Start();
 
             //while (IsOperatorControl && IsEnabled) { }
         }
 
+        /// <summary>
+        /// Called when Test is run
+        /// </summary>
         public override void Test() {}
 
         private void QuickLoad()
@@ -56,7 +72,7 @@ namespace RobotMain2017
             if (!config.QuickLoad) return;
 
             config.Load(CONFIG_FILE);
-            Initialize.BuildControlSchema(config);
+            Tourniquet.Initialize.BuildControlSchema(config);
         }
     }
 }

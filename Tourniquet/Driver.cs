@@ -1,5 +1,5 @@
 ﻿/****************************** Header ******************************\
-Class Name: Driver inherits ControllerLoop
+Class Name: Driver inherits ControlLoop
 Summary: Loop that handles all Driver activities.
 Project:     FRC2017
 Copyright (c) BroncBotz.
@@ -13,10 +13,16 @@ using Base;
 
 namespace Tourniquet
 {
-    public class Driver : ControllerLoop
+    /// <summary>
+    /// Class to handle the drivers controls,
+    /// this is a ControlLoop, see ControlLoop in Base
+    /// </summary>
+    public class Driver : ControlLoop
     {
         #region Protected Methods
-
+        /// <summary>
+        /// Instruction to execute within the loop
+        /// </summary>
         protected override void Main()
         {
             foreach (var control in ControlCollection.Instance.GetDriverControls())

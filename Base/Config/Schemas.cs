@@ -17,9 +17,21 @@ namespace Base.Config
         /// </summary>
         public enum ControlType
         {
+            /// <summary>
+            /// Axis control
+            /// </summary>
             Axis,
+            /// <summary>
+            /// Button control
+            /// </summary>
             Button,
+            /// <summary>
+            /// Two button control
+            /// </summary>
             DualButton,
+            /// <summary>
+            /// Toggle button control
+            /// </summary>
             ToggleButton
         }
 
@@ -235,25 +247,56 @@ namespace Base.Config
             /// CommonNames of components that are bound to this control
             /// </summary>
             public List<CommonName> Bindings { get; protected set; }
+            /// <summary>
+            /// Button A in a dual button control
+            /// </summary>
             public int ButtonA { get; private set; }
+            /// <summary>
+            /// Button B in a dual button control
+            /// </summary>
             public int ButtonB { get; private set; }
+            /// <summary>
+            /// Type of control this schema represents
+            /// </summary>
             public ControlType ControlType { get; protected set; }
-
+            /// <summary>
+            /// Deadzone of an axis control
+            /// </summary>
             public double DeadZone { get; protected set; }
-
+            /// <summary>
+            /// Name of the control this schema represents
+            /// </summary>
             public string Name { get; protected set; }
-
+            /// <summary>
+            /// Output multiplier for control
+            /// </summary>
             public double PowerMultiplier { get; protected set; }
-
+            /// <summary>
+            /// Defines if the control will be reversed
+            /// </summary>
             public bool Reversed { get; protected set; }
 
             #endregion Public Properties
         }
 
+        /// <summary>
+        /// Defines the driver's control schema
+        /// </summary>
         public sealed class DriverControlSchema : ControlSchema
         {
             #region Public Constructors
 
+            /// <summary>
+            /// Constructor
+            /// </summary>
+            /// <param name="name">name of the control</param>
+            /// <param name="fitFunction">fit function to use, see Filters class</param>
+            /// <param name="fitPower">power for fit function, see Filters class</param>
+            /// <param name="bindTo">IComponent bindings by CommonName</param>
+            /// <param name="axis">axis on the controller</param>
+            /// <param name="deadZone">deadzone on the axis</param>
+            /// <param name="powerMultiplier">output power multiplier</param>
+            /// <param name="reversed">if the control should be reversed</param>
             public DriverControlSchema(string name, MotorControlFitFunction fitFunction, double fitPower,
                 List<CommonName> bindTo, int axis, double deadZone, double powerMultiplier = 1, bool reversed = false)
             {
@@ -272,8 +315,14 @@ namespace Base.Config
 
             #region Public Properties
 
+            /// <summary>
+            /// The fit function to use, see Filters class
+            /// </summary>
             public MotorControlFitFunction FitFunction { get; private set; }
 
+            /// <summary>
+            /// The power for the fit function, see Filters class
+            /// </summary>
             public double FitPower { get; private set; }
 
             #endregion Public Properties

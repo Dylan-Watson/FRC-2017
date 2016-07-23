@@ -14,6 +14,9 @@ using System.IO;
 
 namespace Base
 {
+    /// <summary>
+    /// Utility class for logging functions
+    /// </summary>
     public static class Log
     {
         #region Public Methods

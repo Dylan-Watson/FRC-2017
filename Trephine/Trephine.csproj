@@ -60,6 +60,8 @@
   <ItemGroup>
     <Compile Include="Autonomous.cs" />
     <Compile Include="BaseCalls.cs" />
+    <Compile Include="DriveStrait.cs" />
+    <Compile Include="Initialize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
