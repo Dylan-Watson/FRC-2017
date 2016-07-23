@@ -231,6 +231,9 @@ namespace Base.Config
             /// Axis for this control
             /// </summary>
             public int Axis { get; protected set; }
+            /// <summary>
+            /// CommonNames of components that are bound to this control
+            /// </summary>
             public List<CommonName> Bindings { get; protected set; }
             public int ButtonA { get; private set; }
             public int ButtonB { get; private set; }
