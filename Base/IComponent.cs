@@ -14,10 +14,17 @@ using System;
 
 namespace Base
 {
+    /// <summary>
+    /// Interface that all components [physical devices on the robot] implement.
+    /// </summary>
     public interface IComponent
     {
         #region Public Methods
 
+        /// <summary>
+        /// Returns the WPI object that this component wraps.
+        /// </summary>
+        /// <returns></returns>
         [Obsolete("Not thread safe! Be sure to lock if you are using this method.")]
         object GetRawComponent();
 
@@ -25,73 +32,21 @@ namespace Base
 
         #region Public Properties
 
+        /// <summary>
+        /// The name of the component
+        /// </summary>
         string Name { get; }
 
+        /// <summary>
+        /// Boolean flag to determin if the component is in use
+        /// </summary>
         bool InUse { get; }
 
+        /// <summary>
+        /// Returns the object that is currently using the component
+        /// </summary>
         object Sender { get; }
 
         #endregion Public Properties
-    }
-
-    public abstract class Motor
-    {
-        #region Public Enums
-
-        public enum Side
-        {
-            Left,
-            Right
-        }
-
-        #endregion Public Enums
-
-        protected Motor()
-        {
-            AllowC = true;
-            AllowCc = true;
-            IsReversed = false;
-        }
-
-        #region Public Properties
-
-        public bool AllowC { get; private set; }
-        public bool AllowCc { get; private set; }
-
-        public Side DriveSide { get; protected set; }
-        public bool IsDrivetrainMotor { get; protected set; }
-        public bool IsReversed { get; protected set; }
-
-        #endregion Public Properties
-
-        #region Public Methods
-
-        public int GetPolarity
-        {
-            get
-            {
-                if (IsReversed) return -1;
-
-                return 1;
-            }
-        }
-
-        public void RestoreDirection() => IsReversed = false;
-
-        public void ReverseDirection() => IsReversed = true;
-
-        public abstract void Set(double val, object sender);
-
-        public void SetAllowC(bool val) => AllowC = val;
-
-        //!< Sets allowC value
-
-        public void SetAllowCc(bool val) => AllowCc = val;
-
-        //!< Sets allowCC value
-
-        public abstract void Stop();
-
-        #endregion Public Methods
     }
 }
