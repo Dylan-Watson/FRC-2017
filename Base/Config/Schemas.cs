@@ -227,6 +227,9 @@ namespace Base.Config
 
             #region Public Properties
 
+            /// <summary>
+            /// Axis for this control
+            /// </summary>
             public int Axis { get; protected set; }
             public List<CommonName> Bindings { get; protected set; }
             public int ButtonA { get; private set; }
