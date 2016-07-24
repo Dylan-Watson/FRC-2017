@@ -18,8 +18,10 @@
     <HtmlHelpName>Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\Source\Repos\FRC2017\RobotMain2017.sln" xmlns="" />
-    </DocumentationSources>
+      <DocumentationSource sourceFile="Base\Base.csproj" />
+<DocumentationSource sourceFile="RobotMain2017\RobotMain2017.csproj" />
+<DocumentationSource sourceFile="Tourniquet\Tourniquet.csproj" />
+<DocumentationSource sourceFile="Trephine\Trephine.csproj" /></DocumentationSources>
     <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>Website</HelpFileFormat>
@@ -29,16 +31,57 @@
     <CleanIntermediates>True</CleanIntermediates>
     <HelpFileVersion>1.0.0.0</HelpFileVersion>
     <MaximumGroupParts>2</MaximumGroupParts>
-    <NamespaceGrouping>False</NamespaceGrouping>
+    <NamespaceGrouping>True</NamespaceGrouping>
     <SyntaxFilters>C#, Managed C++</SyntaxFilters>
     <SdkLinkTarget>Blank</SdkLinkTarget>
-    <RootNamespaceContainer>False</RootNamespaceContainer>
+    <RootNamespaceContainer>True</RootNamespaceContainer>
     <PresentationStyle>VS2013</PresentationStyle>
-    <Preliminary>False</Preliminary>
+    <Preliminary>True</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
-    <HelpTitle>A Sandcastle Documented Class Library</HelpTitle>
+    <HelpTitle>BroncBotz 2017 Software Documentation</HelpTitle>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, InheritedFrameworkInternalMembers, InheritedFrameworkPrivateMembers, Internals, Privates, PrivateFields, Protected, SealedProtected, ProtectedInternalAsProtected</VisibleItems>
+    <FeedbackEMailLinkText>cooper.ryan%40centaurisoftware.co</FeedbackEMailLinkText>
+    <FeedbackEMailAddress>cooper.ryan%40centaurisoftware.co</FeedbackEMailAddress>
+    <CopyrightText>Copyright &amp;#169%3b BroncBotz</CopyrightText>
+    <ComponentConfigurations>
+      <ComponentConfig id="Syntax Component" enabled="True">
+        <component id="Syntax Component">
+  <syntax input="/document/reference" output="/document/syntax" renderReferenceLinks="false" />
+  <generators>
+    {@SyntaxFilters}
+</generators>
+  <containerElement name="codeSnippetGroup" addNoExampleTabs="true" includeOnSingleSnippets="false" groupingEnabled="{@CodeSnippetGrouping}" />
+  <configurations>
+    <generator id="C#" />
+    <generator id="Managed C++" />
+    <generator id="Visual Basic">
+      <includeLineContinuation value="false" />
+    </generator>
+    <generator id="Visual Basic Usage">
+      <includeLineContinuation value="false" />
+    </generator>
+    <generator id="F#" />
+    <generator id="J#" />
+    <generator id="JScript" />
+    <generator id="JavaScript" />
+    <generator id="XAML Usage" />
+    <generator id="ASP.NET" />
+  </configurations>
+</component>
+      </ComponentConfig>
+<ComponentConfig id="API Token Resolution" enabled="True"><component id="API Token Resolution">{@TokenFiles}
+<replace elements="/*//token" item="string(.)" /></component></ComponentConfig></ComponentConfigurations>
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="Base (Group)" isGroup="True" isDocumented="True" xmlns="">Contains all classes and utilities to interface with the WPI library.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Base" isDocumented="True" xmlns="">Contains all classes and utilities to interface with the WPI library.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Base.Components" isDocumented="True" xmlns="">Contains custom wrapper classes to add functionality and control to specific WPI objects, usualy involving objects that control hardware on the robot.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Base.Config" isDocumented="True" xmlns="">Contains classes and utilities for configuring the program to run properly on the robot; based primarily off of an external configuration file.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="RobotMain2017" isDocumented="True" xmlns="">Contains all the methods and classes called/initialized by WPI during robot operation.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Tourniquet (Group)" isGroup="True" isDocumented="True" xmlns="">Contains all the necessary classes, functions, and utilities for controlling he robot during the teleoperation period.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Tourniquet" isDocumented="True" xmlns="">Contains all the necessary classes, functions, and utilities for controlling he robot during the teleoperation period.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Tourniquet.ControlItems" isDocumented="True" xmlns="">Contains classes that define different types of controls, e.g. Axii, Buttons, Toggles, etc.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Trephine" isDocumented="True" xmlns="">Contains all the necessary classes, functions, and utilities for controlling he robot during the atonomous period.</NamespaceSummaryItem></NamespaceSummaries>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->
@@ -70,21 +113,21 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Source\Repos\FRC2017\Base\Base.csproj">
+    <ProjectReference Include="Base\Base.csproj">
       <Name>Base</Name>
       <Project>{3AE27981-E03B-4E39-848C-FCA7D0B3FCEE}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Source\Repos\FRC2017\RobotMain2017\RobotMain2017.csproj">
-      <Name>RobotMain2017</Name>
-      <Project>{C0916445-B1C7-45C5-A934-9EEC6F22818E}</Project>
+    <ProjectReference Include="Trephine\Trephine.csproj">
+      <Name>Trephine</Name>
+      <Project>{A095383E-5DA6-41E2-AE9D-5B6F07B0390D}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Source\Repos\FRC2017\Tourniquet\Tourniquet.csproj">
+    <ProjectReference Include="Tourniquet\Tourniquet.csproj">
       <Name>Tourniquet</Name>
       <Project>{1DAA9679-ABD6-4922-872D-02214A5FA490}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Source\Repos\FRC2017\Trephine\Trephine.csproj">
-      <Name>Trephine</Name>
-      <Project>{A095383E-5DA6-41E2-AE9D-5B6F07B0390D}</Project>
+    <ProjectReference Include="RobotMain2017\RobotMain2017.csproj">
+      <Name>RobotMain2017</Name>
+      <Project>{C0916445-B1C7-45C5-A934-9EEC6F22818E}</Project>
     </ProjectReference>
   </ItemGroup>
 </Project>
