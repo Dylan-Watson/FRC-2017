@@ -9,16 +9,16 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-using System;
-using System.Windows.Forms;
-using Emgu.CV;
-using Emgu.CV.CvEnum;
-using Emgu.CV.UI;
-using NetworkTables;
-using NetworkTables.Tables;
-
 namespace Dashboard2017
 {
+    using Emgu.CV;
+    using Emgu.CV.CvEnum;
+    using Emgu.CV.UI;
+    using NetworkTables;
+    using NetworkTables.Tables;
+    using System;
+    using System.Windows.Forms;
+
     public partial class Form1 : Form
     {
         private readonly FeedHandler feedHandler;
@@ -58,7 +58,9 @@ namespace Dashboard2017
 
         public class TableActivityListener : ITableListener
         {
-            public void ValueChanged(ITable source, string key, object value, NotifyFlags flags) {}
+            public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
+            {
+            }
         }
     }
 }

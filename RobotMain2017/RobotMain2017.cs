@@ -10,14 +10,15 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-using Base;
-using Base.Config;
-using WPILib;
-
 namespace RobotMain2017
 {
+    using Base;
+    using Base.Config;
+    using Tourniquet;
+    using WPILib;
+
     /// <summary>
-    /// Class called by WPI for robot states (teleop, auto, test...)
+    ///     Class called by WPI for robot states (teleop, auto, test...)
     /// </summary>
     public class RobotMain2017 : SampleRobot
     {
@@ -25,7 +26,7 @@ namespace RobotMain2017
         private readonly Config config = new Config();
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         public RobotMain2017()
         {
@@ -34,12 +35,12 @@ namespace RobotMain2017
         }
 
         /// <summary>
-        /// Called by WPI on robot initialization
+        ///     Called by WPI on robot initialization
         /// </summary>
-        protected override void RobotInit() => Tourniquet.Initialize.BuildControlSchema(config);
+        protected override void RobotInit() => Initialize.BuildControlSchema(config);
 
         /// <summary>
-        /// Called when auton starts
+        ///     Called when auton starts
         /// </summary>
         public override void Autonomous()
         {
@@ -50,29 +51,31 @@ namespace RobotMain2017
         }
 
         /// <summary>
-        /// Called with teleop starts
+        ///     Called with teleop starts
         /// </summary>
         public override void OperatorControl()
         {
             QuickLoad();
 
-            new Tourniquet.Driver().Start();
-            new Tourniquet.Operator().Start();
+            new Driver().Start();
+            new Operator().Start();
 
             //while (IsOperatorControl && IsEnabled) { }
         }
 
         /// <summary>
-        /// Called when Test is run
+        ///     Called when Test is run
         /// </summary>
-        public override void Test() {}
+        public override void Test()
+        {
+        }
 
         private void QuickLoad()
         {
             if (!config.QuickLoad) return;
 
             config.Load(CONFIG_FILE);
-            Tourniquet.Initialize.BuildControlSchema(config);
+            Initialize.BuildControlSchema(config);
         }
     }
 }

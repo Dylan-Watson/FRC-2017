@@ -10,23 +10,23 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-using System;
-using Base;
-using WPILib;
-
 namespace Tourniquet.ControlItems
 {
+    using Base;
+    using System;
+    using WPILib;
+
     internal delegate double FitFunction(double x, double y, double z);
 
     /// <summary>
-    /// Class to handle an axis control
+    ///     Class to handle an axis control
     /// </summary>
     public class AxisControl : ControlItem
     {
         #region Public Constructors
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="name">name of the control</param>
         /// <param name="joystick">WPI joysick the control will use</param>
@@ -74,15 +74,16 @@ namespace Tourniquet.ControlItems
         #endregion Public Constructors
 
         #region Public Methods
+
         /// <summary>
-        /// Update the control and its bindings
+        ///     Update the control and its bindings
         /// </summary>
         public override void Update()
         {
             var raw = Joystick.GetRawAxis(axis);
             if ((raw > deadZone) || (raw < -deadZone))
             {
-                Set(fitFunction(raw, deadZone, power)*multiplier);
+                Set(fitFunction(raw, deadZone, power) * multiplier);
                 IsRunning = true;
             }
             else if (IsRunning)

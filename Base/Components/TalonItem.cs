@@ -1,32 +1,36 @@
 ﻿namespace Base.Components
 {
+    using System.Collections.Generic;
+    using WPILib;
+    using WPILib.Interfaces;
+
     /// <summary>
-    /// Class to handle CanTalon motor controllers
+    ///     Class to handle CanTalon motor controllers
     /// </summary>
     public class CanTalonItem : Motor, IComponent
     {
         private readonly string master;
 
-        private readonly System.Collections.Generic.List<CanTalonItem> slaves;
-        private readonly WPILib.CANTalon talon;
+        private readonly List<CanTalonItem> slaves;
+        private readonly CANTalon talon;
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="channel">channel/address of the talon</param>
         /// <param name="commonName">CommonName the component will have</param>
         /// <param name="isReversed">if the controller output should be reversed</param>
         public CanTalonItem(int channel, string commonName, bool isReversed = false)
         {
-            talon = new WPILib.CANTalon(channel);
+            talon = new CANTalon(channel);
             Name = commonName;
             IsReversed = isReversed;
-            talon.MotorControlMode = WPILib.Interfaces.ControlMode.PercentVbus;
+            talon.MotorControlMode = ControlMode.PercentVbus;
             talon.ControlEnabled = true;
         }
 
         /// <summary>
-        /// PID Constructor
+        ///     PID Constructor
         /// </summary>
         /// <param name="channel">channel/address of the talon</param>
         /// <param name="commonName">CommonName the component will have</param>
@@ -36,19 +40,19 @@
         /// <param name="isReversed">if the controller output should be reversed</param>
         public CanTalonItem(int channel, string commonName, double p, double i, double d, bool isReversed = false)
         {
-            talon = new WPILib.CANTalon(channel);
+            talon = new CANTalon(channel);
             Name = commonName;
             IsReversed = isReversed;
             Master = true;
-            slaves = new System.Collections.Generic.List<CanTalonItem>();
-            talon.MotorControlMode = WPILib.Interfaces.ControlMode.PercentVbus;
-            talon.FeedBackDevice = WPILib.CANTalon.FeedbackDevice.QuadEncoder;
+            slaves = new List<CanTalonItem>();
+            talon.MotorControlMode = ControlMode.PercentVbus;
+            talon.FeedBackDevice = CANTalon.FeedbackDevice.QuadEncoder;
             talon.SetPID(p, i, d);
             talon.ControlEnabled = true;
         }
 
         /// <summary>
-        /// Slave Constructor
+        ///     Slave Constructor
         /// </summary>
         /// <param name="channel">channel/address of the talon</param>
         /// <param name="commonName">CommonName the component will have</param>
@@ -56,52 +60,55 @@
         /// <param name="isReversed">if the controller output should be reversed</param>
         public CanTalonItem(int channel, string commonName, CanTalonItem master, bool isReversed = false)
         {
-            talon = new WPILib.CANTalon(channel);
+            talon = new CANTalon(channel);
             Name = commonName;
             IsReversed = isReversed;
             talon.ReverseOutput(isReversed);
             Slave = true;
-            talon.MotorControlMode = WPILib.Interfaces.ControlMode.Follower;
+            talon.MotorControlMode = ControlMode.Follower;
             master.AddSlave(this);
             this.master = master.Name;
         }
 
         /// <summary>
-        /// Defines if the talon is a master
+        ///     Defines if the talon is a master
         /// </summary>
         public bool Master { get; }
+
         /// <summary>
-        /// Defines if the talon is a slave
+        ///     Defines if the talon is a slave
         /// </summary>
         public bool Slave { get; }
 
         /// <summary>
-        /// Defines if the talon is in use
+        ///     Defines if the talon is in use
         /// </summary>
         public bool InUse { get; private set; }
+
         /// <summary>
-        /// Defines the object issuing the commands
+        ///     Defines the object issuing the commands
         /// </summary>
         public object Sender { get; private set; }
+
         /// <summary>
-        /// Name of the component
+        ///     Name of the component
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// Gets the raw WPI CANTalon object
+        ///     Gets the raw WPI CANTalon object
         /// </summary>
         /// <returns></returns>
         public object GetRawComponent() => talon;
 
         /// <summary>
-        /// Adds a slave to this controller
+        ///     Adds a slave to this controller
         /// </summary>
         /// <param name="slave"></param>
         public void AddSlave(CanTalonItem slave) => slaves.Add(slave);
 
         /// <summary>
-        /// Sets a value to the talon
+        ///     Sets a value to the talon
         /// </summary>
         /// <param name="val">value to set the controller to</param>
         /// <param name="sender">the caller of this method</param>
@@ -152,8 +159,8 @@
                     foreach (var slave in slaves)
                         lock (slave)
                         {
-                            ((WPILib.CANTalon) slave.GetRawComponent()).ControlEnabled = true;
-                            ((WPILib.CANTalon) slave.GetRawComponent()).Set(talon.DeviceId);
+                            ((CANTalon)slave.GetRawComponent()).ControlEnabled = true;
+                            ((CANTalon)slave.GetRawComponent()).Set(talon.DeviceId);
                         }
                 }
                 else
@@ -167,8 +174,8 @@
                     foreach (var slave in slaves)
                         lock (slave)
                         {
-                            ((WPILib.CANTalon) slave.GetRawComponent()).ControlEnabled = true;
-                            ((WPILib.CANTalon) slave.GetRawComponent()).Set(talon.DeviceId);
+                            ((CANTalon)slave.GetRawComponent()).ControlEnabled = true;
+                            ((CANTalon)slave.GetRawComponent()).Set(talon.DeviceId);
                         }
                 }
             }
@@ -185,8 +192,8 @@
                     foreach (var slave in slaves)
                         lock (slave)
                         {
-                            ((WPILib.CANTalon) slave.GetRawComponent()).ControlEnabled = true;
-                            ((WPILib.CANTalon) slave.GetRawComponent()).Set(talon.DeviceId);
+                            ((CANTalon)slave.GetRawComponent()).ControlEnabled = true;
+                            ((CANTalon)slave.GetRawComponent()).Set(talon.DeviceId);
                         }
                 }
                 else
@@ -200,8 +207,8 @@
                     foreach (var slave in slaves)
                         lock (slave)
                         {
-                            ((WPILib.CANTalon) slave.GetRawComponent()).ControlEnabled = true;
-                            ((WPILib.CANTalon) slave.GetRawComponent()).Set(talon.DeviceId);
+                            ((CANTalon)slave.GetRawComponent()).ControlEnabled = true;
+                            ((CANTalon)slave.GetRawComponent()).Set(talon.DeviceId);
                         }
                 }
             }
@@ -215,13 +222,13 @@
                 foreach (var slave in slaves)
                     lock (slave)
                     {
-                        ((WPILib.CANTalon) slave.GetRawComponent()).ControlEnabled = false;
+                        ((CANTalon)slave.GetRawComponent()).ControlEnabled = false;
                     }
             }
         }
 
         /// <summary>
-        /// Stops the controller
+        ///     Stops the controller
         /// </summary>
         public override void Stop()
         {

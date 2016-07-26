@@ -9,12 +9,12 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-using WPILib;
-
 namespace RobotMain2017
 {
+    using WPILib;
+
     /// <summary>
-    /// Entry point
+    ///     Entry point
     /// </summary>
     public static class Program
     {

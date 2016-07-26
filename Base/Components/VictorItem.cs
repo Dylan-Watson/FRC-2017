@@ -10,27 +10,28 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-using WPILib;
-
 namespace Base.Components
 {
+    using WPILib;
+
     /// <summary>
-    /// Defines the type of Victor
+    ///     Defines the type of Victor
     /// </summary>
     public enum VictorType
     {
         /// <summary>
-        /// Victor 888
+        ///     Victor 888
         /// </summary>
         EightEightEight,
+
         /// <summary>
-        /// VictorSP
+        ///     VictorSP
         /// </summary>
         Sp
     }
 
     /// <summary>
-    /// Class to handle Victor motor controllers
+    ///     Class to handle Victor motor controllers
     /// </summary>
     public class VictorItem : Motor, IComponent
     {
@@ -43,22 +44,22 @@ namespace Base.Components
         #region Public Properties
 
         /// <summary>
-        /// Name of the component
+        ///     Name of the component
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// Type of victor
+        ///     Type of victor
         /// </summary>
         public VictorType VictorType { get; }
 
         /// <summary>
-        /// Defines wether the component is in use or not
+        ///     Defines wether the component is in use or not
         /// </summary>
         public bool InUse { get; private set; }
 
         /// <summary>
-        /// Defines the object issuing the commands
+        ///     Defines the object issuing the commands
         /// </summary>
         public object Sender { get; private set; }
 
@@ -67,7 +68,7 @@ namespace Base.Components
         #region Public Constructors
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="type">type of victor</param>
         /// <param name="channel">pwm channel the victor is plugged into</param>
@@ -86,7 +87,7 @@ namespace Base.Components
         }
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="type">type of victor</param>
         /// <param name="channel">pwm channel the victor is plugged into</param>
@@ -112,13 +113,13 @@ namespace Base.Components
         #region Public Methods
 
         /// <summary>
-        /// Gets the raw WPI PWMSpeedController object representing the victor
+        ///     Gets the raw WPI PWMSpeedController object representing the victor
         /// </summary>
         /// <returns></returns>
         public object GetRawComponent() => victor;
 
         /// <summary>
-        /// Sets a value to the victor
+        ///     Sets a value to the victor
         /// </summary>
         /// <param name="val">value to set the controller to</param>
         /// <param name="sender">the caller of this method</param>
@@ -148,7 +149,7 @@ namespace Base.Components
         }
 
         /// <summary>
-        /// Stops the controller
+        ///     Stops the controller
         /// </summary>
         public override void Stop()
         {

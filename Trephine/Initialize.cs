@@ -1,9 +1,9 @@
-﻿using Base.Config;
-
-namespace Trephine
+﻿namespace Trephine
 {
+    using Base.Config;
+
     /// <summary>
-    /// Initializes the autonomous period
+    ///     Initializes the autonomous period
     /// </summary>
     public class Initialize
     {
@@ -11,7 +11,7 @@ namespace Trephine
         private readonly Config config;
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="config">instance of the config</param>
         public Initialize(Config config)
@@ -21,7 +21,7 @@ namespace Trephine
         }
 
         /// <summary>
-        /// Run autonomous
+        ///     Run autonomous
         /// </summary>
         public void Run()
         {

@@ -9,17 +9,19 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-using System;
-using System.Collections.Generic;
-using Tourniquet.ControlItems;
-
 namespace Tourniquet
 {
+    using System;
+    using System.Collections.Generic;
+    using Tourniquet.ControlItems;
+
     internal class ControlCollection
     {
         #region Private Constructors
 
-        private ControlCollection() {}
+        private ControlCollection()
+        {
+        }
 
         #endregion Private Constructors
 

@@ -9,11 +9,11 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-using System;
-using System.Windows.Forms;
-
 namespace Dashboard2017
 {
+    using System;
+    using System.Windows.Forms;
+
     internal static class Program
     {
         /// <summary>

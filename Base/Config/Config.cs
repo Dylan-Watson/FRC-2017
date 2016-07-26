@@ -9,17 +9,18 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoftware.co
 \********************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Linq;
-using Base.Components;
-using WPILib;
 using static Base.Config.Schemas;
 using static Base.Motor;
 
 namespace Base.Config
 {
+    using Base.Components;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Xml.Linq;
+    using WPILib;
+
     /// <summary>
     ///     Manages and loads the configuration file from XML.
     /// </summary>
@@ -28,7 +29,7 @@ namespace Base.Config
         #region Public Constructors
 
         /// <summary>
-        /// Default constructor
+        ///     Default constructor
         /// </summary>
         public Config()
         {
@@ -68,27 +69,27 @@ namespace Base.Config
         #region Public Properties
 
         /// <summary>
-        /// Instance of the ActiveCollection to be used thoughout the program.
+        ///     Instance of the ActiveCollection to be used thoughout the program.
         /// </summary>
         public ActiveCollection ActiveCollection { get; }
 
         /// <summary>
-        /// Boolean flag to determin if autonomous should be enabled in any sence.
+        ///     Boolean flag to determin if autonomous should be enabled in any sence.
         /// </summary>
         public bool AutonEnabled { get; private set; }
 
         /// <summary>
-        /// Instance of the driver's control schema to be used thoughout the program.
+        ///     Instance of the driver's control schema to be used thoughout the program.
         /// </summary>
         public DriverConfig DriverConfig { get; private set; }
 
         /// <summary>
-        /// Instance of the operators's control schema to be used thoughout the program.
+        ///     Instance of the operators's control schema to be used thoughout the program.
         /// </summary>
         public OperatorConfig OperatorConfig { get; private set; }
 
         /// <summary>
-        /// Boolean flag to set QuickLoad mode, see reference manule for details.
+        ///     Boolean flag to set QuickLoad mode, see reference manule for details.
         /// </summary>
         public bool QuickLoad { get; private set; }
 
@@ -210,7 +211,7 @@ namespace Base.Config
                                         new CanTalonItem(
                                             Convert.ToInt32(element.Attribute("channel").Value),
                                             element.Name.ToString(),
-                                            (CanTalonItem) ActiveCollection.Get(new CommonName(master)),
+                                            (CanTalonItem)ActiveCollection.Get(new CommonName(master)),
                                             Convert.ToBoolean(element.Attribute("reversed").Value)));
                                     Report.General($"{element.Name} is a slave whose master is {master}");
                                 }
@@ -366,11 +367,11 @@ namespace Base.Config
                     Log.Write(ex);
                 }
 
-                var left = new DriverControlSchema("leftDrive", (MotorControlFitFunction) driveFit, driveFitPower,
+                var left = new DriverControlSchema("leftDrive", (MotorControlFitFunction)driveFit, driveFitPower,
                     ToBindCommonName(GetAttribute("bindTo", "Controls", "Driver", "leftDrive")), leftAxis, leftDz,
                     multiplier, leftReversed);
 
-                var right = new DriverControlSchema("rightDrive", (MotorControlFitFunction) driveFit, driveFitPower,
+                var right = new DriverControlSchema("rightDrive", (MotorControlFitFunction)driveFit, driveFitPower,
                     ToBindCommonName(GetAttribute("bindTo", "Controls", "Driver", "rightDrive")), rightAxis, rightDz,
                     multiplier, rightReversed);
 
@@ -633,7 +634,7 @@ namespace Base.Config
 
             var values = attribute.Value.Contains(",")
                 ? attribute.Value.Split(',').ToList()
-                : new List<string> {attribute.Value};
+                : new List<string> { attribute.Value };
 
             values = values.Distinct().ToList();
 

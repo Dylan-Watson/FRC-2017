@@ -10,19 +10,19 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-using System;
-
 namespace Base
 {
+    using System;
+
     /// <summary>
-    /// Interface that all components [physical devices on the robot] implement.
+    ///     Interface that all components [physical devices on the robot] implement.
     /// </summary>
     public interface IComponent
     {
         #region Public Methods
 
         /// <summary>
-        /// Returns the WPI object that this component wraps.
+        ///     Returns the WPI object that this component wraps.
         /// </summary>
         /// <returns></returns>
         [Obsolete("Not thread safe! Be sure to lock if you are using this method.")]
@@ -33,17 +33,17 @@ namespace Base
         #region Public Properties
 
         /// <summary>
-        /// The name of the component
+        ///     The name of the component
         /// </summary>
         string Name { get; }
 
         /// <summary>
-        /// Boolean flag to determin if the component is in use
+        ///     Boolean flag to determin if the component is in use
         /// </summary>
         bool InUse { get; }
 
         /// <summary>
-        /// Returns the object that is currently using the component
+        ///     Returns the object that is currently using the component
         /// </summary>
         object Sender { get; }
 

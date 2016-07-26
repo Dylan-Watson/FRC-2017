@@ -9,19 +9,20 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-using Base;
-
 namespace Tourniquet
 {
+    using Base;
+
     /// <summary>
-    /// Class to handle the drivers controls,
-    /// this is a ControlLoop, see ControlLoop in Base
+    ///     Class to handle the drivers controls,
+    ///     this is a ControlLoop, see ControlLoop in Base
     /// </summary>
     public class Driver : ControlLoop
     {
         #region Protected Methods
+
         /// <summary>
-        /// Instruction to execute within the loop
+        ///     Instruction to execute within the loop
         /// </summary>
         protected override void Main()
         {

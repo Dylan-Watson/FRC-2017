@@ -9,22 +9,22 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
-using System.Runtime.ExceptionServices;
-using System.Security;
-using Dashboard2017.Properties;
-using Emgu.CV;
-using Emgu.CV.CvEnum;
-using Emgu.CV.Structure;
-using Emgu.CV.UI;
-using Emgu.CV.Util;
-
 namespace Dashboard2017
 {
+    using Dashboard2017.Properties;
+    using Emgu.CV;
+    using Emgu.CV.CvEnum;
+    using Emgu.CV.Structure;
+    using Emgu.CV.UI;
+    using Emgu.CV.Util;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Drawing;
+    using System.Linq;
+    using System.Runtime.ExceptionServices;
+    using System.Security;
+
     public enum CaptureType
     {
         Usb,
@@ -51,7 +51,7 @@ namespace Dashboard2017
             destOutputImage = normal;
             destCompositOutputImage = composit;
 
-            bw = new BackgroundWorker {WorkerSupportsCancellation = true};
+            bw = new BackgroundWorker { WorkerSupportsCancellation = true };
             bw.DoWork += Bw_DoWork;
             bw.RunWorkerAsync();
         }
@@ -63,7 +63,7 @@ namespace Dashboard2017
             destOutputImage = normal;
             destCompositOutputImage = composit;
 
-            bw = new BackgroundWorker {WorkerSupportsCancellation = true};
+            bw = new BackgroundWorker { WorkerSupportsCancellation = true };
             bw.DoWork += Bw_DoWork;
             bw.RunWorkerAsync();
         }
@@ -83,9 +83,9 @@ namespace Dashboard2017
         {
             capture.Dispose();
             if (source is int)
-                capture = new Capture((int) source);
+                capture = new Capture((int)source);
             else
-                capture = new Capture((string) source);
+                capture = new Capture((string)source);
         }
 
         private void Bw_DoWork(object sender, DoWorkEventArgs e)
@@ -162,22 +162,22 @@ namespace Dashboard2017
             var sortedCircles = circles.OrderBy(o => o.Area).ToList();
             sortedCircles.Reverse(); //reverse to largets to smallest
 
-            var xCentre = original.Size.Width/2;
-            var yCentre = original.Size.Height/2;
+            var xCentre = original.Size.Width / 2;
+            var yCentre = original.Size.Height / 2;
             var largestAndClosest = sortedCircles[0]; //where our final circle will be stored
 
             if (sortedCircles.Count != 1)
                 foreach (var cir in from cir in sortedCircles
-                    let offset = cir.Center.X - xCentre
-                    let offset2 = largestAndClosest.Center.X - xCentre
-                    let offsetY = cir.Center.Y - yCentre
-                    let offsetY2 = largestAndClosest.Center.Y - yCentre
-                    where (offset < offset2)
-                          || ((offsetY < offsetY2) && !(offset > offset2))
-                    select cir) largestAndClosest = cir;
+                                    let offset = cir.Center.X - xCentre
+                                    let offset2 = largestAndClosest.Center.X - xCentre
+                                    let offsetY = cir.Center.Y - yCentre
+                                    let offsetY2 = largestAndClosest.Center.Y - yCentre
+                                    where (offset < offset2)
+                                          || ((offsetY < offsetY2) && !(offset > offset2))
+                                    select cir) largestAndClosest = cir;
 
-            CvInvoke.Circle(original, new Point((int) largestAndClosest.Center.X, (int) largestAndClosest.Center.Y),
-                (int) largestAndClosest.Radius, new MCvScalar(0, 0, 255), 2, LineType.AntiAlias);
+            CvInvoke.Circle(original, new Point((int)largestAndClosest.Center.X, (int)largestAndClosest.Center.Y),
+                (int)largestAndClosest.Radius, new MCvScalar(0, 0, 255), 2, LineType.AntiAlias);
 
             /* if (((int)largestAndClosest.Center.X - xCentre) >= -16 && ((int)largestAndClosest.Center.X - xCentre) <= 9)
                          parent.UpdateOffsetLabel(((int)largestAndClosest.Center.X - xCentre), System.Windows.Media.Brushes.LimeGreen);

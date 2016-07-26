@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Xml.Linq;
-using WPILib;
-
-namespace Base.Config
+﻿namespace Base.Config
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Xml.Linq;
+    using WPILib;
+
     /// <summary>
-    /// Class to store all relevant ControlSchemas
+    ///     Class to store all relevant ControlSchemas
     /// </summary>
     public static class Schemas
     {
@@ -18,19 +18,22 @@ namespace Base.Config
         public enum ControlType
         {
             /// <summary>
-            /// Axis control
+            ///     Axis control
             /// </summary>
             Axis,
+
             /// <summary>
-            /// Button control
+            ///     Button control
             /// </summary>
             Button,
+
             /// <summary>
-            /// Two button control
+            ///     Two button control
             /// </summary>
             DualButton,
+
             /// <summary>
-            /// Toggle button control
+            ///     Toggle button control
             /// </summary>
             ToggleButton
         }
@@ -40,14 +43,14 @@ namespace Base.Config
         #region Public Structs
 
         /// <summary>
-        /// Structure to define all of the drivers control schemas.
+        ///     Structure to define all of the drivers control schemas.
         /// </summary>
         public struct DriverConfig
         {
             #region Public Constructors
 
             /// <summary>
-            /// Default contructor.
+            ///     Default contructor.
             /// </summary>
             /// <param name="driver">WPIlib Joystick that the driver will use</param>
             /// <param name="leftSchema">DriverControlSchema for the left side of the drive train</param>
@@ -67,22 +70,22 @@ namespace Base.Config
             #region Public Properties
 
             /// <summary>
-            /// List to hold auxillary driver control schemas (aka not drive train controls)
+            ///     List to hold auxillary driver control schemas (aka not drive train controls)
             /// </summary>
             public List<ControlSchema> ControlsData { get; private set; }
 
             /// <summary>
-            /// The object to hold the WPIlib Joystick that the driver will use.
+            ///     The object to hold the WPIlib Joystick that the driver will use.
             /// </summary>
             public Joystick Driver { get; private set; }
 
             /// <summary>
-            /// Defines the left drive controls.
+            ///     Defines the left drive controls.
             /// </summary>
             public DriverControlSchema LeftDriveControlSchema { get; private set; }
 
             /// <summary>
-            /// Defines the right drive controls.
+            ///     Defines the right drive controls.
             /// </summary>
             public DriverControlSchema RightDriveControlSchema { get; private set; }
 
@@ -90,14 +93,14 @@ namespace Base.Config
         }
 
         /// <summary>
-        /// Structure to define all of the operators control schemas.
+        ///     Structure to define all of the operators control schemas.
         /// </summary>
         public struct OperatorConfig
         {
             #region Public Constructors
 
             /// <summary>
-            /// Default constructor.
+            ///     Default constructor.
             /// </summary>
             /// <param name="operator_">WPIlib Joystick that the operator will use</param>
             /// <param name="controlsData">List of control schemas for the operator's controls</param>
@@ -112,12 +115,12 @@ namespace Base.Config
             #region Public Properties
 
             /// <summary>
-            /// List to hold the operator's control schemas.
+            ///     List to hold the operator's control schemas.
             /// </summary>
             public List<ControlSchema> ControlsData { get; private set; }
 
             /// <summary>
-            /// The object to hold the WPIlib Joystick that the operator will use.
+            ///     The object to hold the WPIlib Joystick that the operator will use.
             /// </summary>
             public Joystick Operator { get; private set; }
 
@@ -129,14 +132,14 @@ namespace Base.Config
         #region Public Classes
 
         /// <summary>
-        /// Class to define the schema of a control.
+        ///     Class to define the schema of a control.
         /// </summary>
         public class ControlSchema
         {
             #region Public Methods
 
             /// <summary>
-            /// Gets the type of control that a schema would represent from an XAttribute object.
+            ///     Gets the type of control that a schema would represent from an XAttribute object.
             /// </summary>
             /// <param name="attribute">XAttribute object loaded from XML</param>
             /// <returns></returns>
@@ -167,12 +170,14 @@ namespace Base.Config
             #region Public Constructors
 
             /// <summary>
-            /// Default constructor.
+            ///     Default constructor.
             /// </summary>
-            public ControlSchema() {}
+            public ControlSchema()
+            {
+            }
 
             /// <summary>
-            /// Constructor.
+            ///     Constructor.
             /// </summary>
             /// <param name="name">Name of the control schema</param>
             /// <param name="controlType">Type of control that the schema represents</param>
@@ -192,7 +197,7 @@ namespace Base.Config
             }
 
             /// <summary>
-            /// Constructor.
+            ///     Constructor.
             /// </summary>
             /// <param name="name">Name of the control schema</param>
             /// <param name="controlType">Type of control that the schema represents</param>
@@ -214,7 +219,7 @@ namespace Base.Config
             }
 
             /// <summary>
-            /// Constructor.
+            ///     Constructor.
             /// </summary>
             /// <param name="name">Name of the control schema</param>
             /// <param name="controlType">Type of control that the schema represents</param>
@@ -240,39 +245,47 @@ namespace Base.Config
             #region Public Properties
 
             /// <summary>
-            /// Axis for this control
+            ///     Axis for this control
             /// </summary>
             public int Axis { get; protected set; }
+
             /// <summary>
-            /// CommonNames of components that are bound to this control
+            ///     CommonNames of components that are bound to this control
             /// </summary>
             public List<CommonName> Bindings { get; protected set; }
+
             /// <summary>
-            /// Button A in a dual button control
+            ///     Button A in a dual button control
             /// </summary>
             public int ButtonA { get; private set; }
+
             /// <summary>
-            /// Button B in a dual button control
+            ///     Button B in a dual button control
             /// </summary>
             public int ButtonB { get; private set; }
+
             /// <summary>
-            /// Type of control this schema represents
+            ///     Type of control this schema represents
             /// </summary>
             public ControlType ControlType { get; protected set; }
+
             /// <summary>
-            /// Deadzone of an axis control
+            ///     Deadzone of an axis control
             /// </summary>
             public double DeadZone { get; protected set; }
+
             /// <summary>
-            /// Name of the control this schema represents
+            ///     Name of the control this schema represents
             /// </summary>
             public string Name { get; protected set; }
+
             /// <summary>
-            /// Output multiplier for control
+            ///     Output multiplier for control
             /// </summary>
             public double PowerMultiplier { get; protected set; }
+
             /// <summary>
-            /// Defines if the control will be reversed
+            ///     Defines if the control will be reversed
             /// </summary>
             public bool Reversed { get; protected set; }
 
@@ -280,14 +293,14 @@ namespace Base.Config
         }
 
         /// <summary>
-        /// Defines the driver's control schema
+        ///     Defines the driver's control schema
         /// </summary>
         public sealed class DriverControlSchema : ControlSchema
         {
             #region Public Constructors
 
             /// <summary>
-            /// Constructor
+            ///     Constructor
             /// </summary>
             /// <param name="name">name of the control</param>
             /// <param name="fitFunction">fit function to use, see Filters class</param>
@@ -316,12 +329,12 @@ namespace Base.Config
             #region Public Properties
 
             /// <summary>
-            /// The fit function to use, see Filters class
+            ///     The fit function to use, see Filters class
             /// </summary>
             public MotorControlFitFunction FitFunction { get; private set; }
 
             /// <summary>
-            /// The power for the fit function, see Filters class
+            ///     The power for the fit function, see Filters class
             /// </summary>
             public double FitPower { get; private set; }
 
