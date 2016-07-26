@@ -151,6 +151,7 @@ namespace Base.Components
         /// <summary>
         ///     Stops the controller
         /// </summary>
+//TODO: It says in the summary "Stops the controller". Is this stopping the actual joystick controller, or the Victor?
         public override void Stop()
         {
             lock (victor)

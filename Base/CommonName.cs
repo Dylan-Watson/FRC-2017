@@ -45,7 +45,7 @@ namespace Base
         }
 
         #endregion Public Constructors
-
+//TODO: what is the string.Equals function? How does it differ from  ===?
         private bool Equals(CommonName other) => string.Equals(name, other.name);
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace Base
         }
 
         #region Public Methods
-
+//TODO: What exactly do these next two methods do, and why are they useful?
         /// <summary>
         ///     != operator for CommonNames
         /// </summary>
