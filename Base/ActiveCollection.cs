@@ -13,7 +13,9 @@ namespace Base
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
+    using WPILib.Exceptions;
 
     /// <summary>
     ///     Class that stores the currently active collection of components on the robot.
@@ -50,7 +52,17 @@ namespace Base
         {
             try
             {
+                if (componentCollection.ContainsKey(component.Name))
+                    throw new AllocationException(
+                        $"Attempting to allocate two components with the same name - {component.Name}");
                 componentCollection.Add(component.Name, component);
+            }
+            catch (AllocationException ex)
+            {
+                Report.Error(ex.Message);
+                Report.Warning($"As a result the latter defined {component.Name} was not added to the active collection, " +
+                               $"meaning any controls intended to use this component will not work, or will control the " +
+                               $"component that {component.Name} was a duplicate of. CHECK CONFIG.");
             }
             catch (Exception ex)
             {
