@@ -148,7 +148,7 @@ namespace Base.Config
             }
             catch (Exception ex)
             {
-                Report.Error("There was an error loading one or more victors. This may cause fatal runtime error!");
+                Report.Error("There was an error loading one or more victors. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
                 Log.Write(ex);
             }
 
@@ -227,7 +227,7 @@ namespace Base.Config
             }
             catch (Exception ex)
             {
-                Report.Error("There was an error loading one or more talons. This may cause fatal runtime error!");
+                Report.Error("There was an error loading one or more talons. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
                 Log.Write(ex);
             }
 
