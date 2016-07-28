@@ -12,8 +12,8 @@ Email: cooper.ryan@centaurisoft.org
 
 namespace Tourniquet.ControlItems
 {
-    using Base;
     using System;
+    using Base;
     using WPILib;
 
     internal delegate double FitFunction(double x, double y, double z);
@@ -45,8 +45,8 @@ namespace Tourniquet.ControlItems
             this.multiplier = multiplier;
             this.power = power;
             this.axis = axis;
-            Joystick = joystick;
-            SetReversed(reversed);
+            this.joystick = joystick;
+            setReversed(reversed);
 
             switch (fitFunction)
             {
@@ -80,15 +80,15 @@ namespace Tourniquet.ControlItems
         /// </summary>
         public override void Update()
         {
-            var raw = Joystick.GetRawAxis(axis);
+            var raw = joystick.GetRawAxis(axis);
             if ((raw > deadZone) || (raw < -deadZone))
             {
-                Set(fitFunction(raw, deadZone, power) * multiplier);
+                set(fitFunction(raw, deadZone, power) * multiplier);
                 IsRunning = true;
             }
             else if (IsRunning)
             {
-                StopMotors();
+                stopMotors();
                 IsRunning = false;
             }
         }

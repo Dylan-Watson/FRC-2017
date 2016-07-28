@@ -55,7 +55,7 @@ namespace Tourniquet.ControlItems
         /// <summary>
         ///     Joystick the control is to use
         /// </summary>
-        protected Joystick Joystick { get; set; }
+        protected Joystick joystick { get; set; }
 
         #endregion Protected Properties
 
@@ -101,7 +101,7 @@ namespace Tourniquet.ControlItems
         ///     Sets a solenoid value if there is a solenoid in the controls bindings
         /// </summary>
         /// <param name="value">solenoid position</param>
-        protected void Set(DoubleSolenoid.Value value)
+        protected void set(DoubleSolenoid.Value value)
         {
             if (!IsEnabled) return;
         }
@@ -119,11 +119,11 @@ namespace Tourniquet.ControlItems
         ///     Sets a value to motor controllers in the control's bindings
         /// </summary>
         /// <param name="val">motor controller speed</param>
-        protected void Set(double val)
+        protected void set(double val)
         {
             if (!IsEnabled)
             {
-                StopMotors();
+                stopMotors();
                 return;
             }
 
@@ -139,7 +139,7 @@ namespace Tourniquet.ControlItems
         ///     NotImplementedException
         /// </summary>
         /// <param name="val"></param>
-        protected void Set(bool val)
+        protected void set(bool val)
         {
             throw new NotImplementedException();
             /*
@@ -151,7 +151,7 @@ namespace Tourniquet.ControlItems
         /// <summary>
         ///     Sets the control's motor bindings to only forward motion
         /// </summary>
-        protected void SetOnlyForward()
+        protected void setOnlyForward()
         {
             foreach (var motor in components.Select(component => component as Motor)) motor?.SetAllowCc(false);
         }
@@ -159,7 +159,7 @@ namespace Tourniquet.ControlItems
         /// <summary>
         ///     Sets the control's motor bindings to only reverse motion
         /// </summary>
-        protected void SetOnlyReverse()
+        protected void setOnlyReverse()
         {
             foreach (var motor in components.Select(component => component as Motor)) motor?.SetAllowCc(false);
         }
@@ -168,7 +168,7 @@ namespace Tourniquet.ControlItems
         ///     Sets all the motor controllers in the control's bindings to reverse or not
         /// </summary>
         /// <param name="val">if the controllers should be reversed</param>
-        protected void SetReversed(bool val)
+        protected void setReversed(bool val)
         {
             foreach (var motor in components.OfType<Motor>())
                 if (val)
@@ -180,7 +180,7 @@ namespace Tourniquet.ControlItems
         /// <summary>
         ///     Stopps all motors in the control's bindings
         /// </summary>
-        protected void StopMotors()
+        protected void stopMotors()
         {
             foreach (
                 var motor in

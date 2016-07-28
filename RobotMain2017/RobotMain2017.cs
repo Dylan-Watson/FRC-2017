@@ -44,7 +44,7 @@ namespace RobotMain2017
         /// </summary>
         public override void Autonomous()
         {
-            QuickLoad();
+            quickLoad();
 
             if (config.AutonEnabled)
                 new Trephine.Initialize(config).Run();
@@ -55,7 +55,7 @@ namespace RobotMain2017
         /// </summary>
         public override void OperatorControl()
         {
-            QuickLoad();
+            quickLoad();
 
             new Driver().Start();
             new Operator().Start();
@@ -70,7 +70,7 @@ namespace RobotMain2017
         {
         }
 
-        private void QuickLoad()
+        private void quickLoad()
         {
             if (!config.QuickLoad) return;
 

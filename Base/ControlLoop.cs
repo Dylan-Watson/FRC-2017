@@ -35,7 +35,7 @@ namespace Base
         public void Start()
         {
             Report.General($"Spinning up the {GetType()} system.");
-            thread = new Task(Loop);
+            thread = new Task(loop);
             thread.Start();
         }
 
@@ -60,13 +60,13 @@ namespace Base
         /// <summary>
         ///     Method for the implimentor to implement, this is what is called withing the loop
         /// </summary>
-        protected abstract void Main();
+        protected abstract void main();
 
-        private void Loop()
+        private void loop()
         {
             while (!kill && (LoopCheck._IsAutonomous() || LoopCheck._IsTeleoporated()))
             {
-                Main();
+                main();
                 Timer.Delay(cycleTime);
             }
         }

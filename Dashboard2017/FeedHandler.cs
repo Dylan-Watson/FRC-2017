@@ -75,7 +75,7 @@ namespace Dashboard2017
 
         public void Dispose()
         {
-            Dispose(true);
+            dispose(true);
             GC.SuppressFinalize(this);
         }
 
@@ -91,12 +91,12 @@ namespace Dashboard2017
         private void Bw_DoWork(object sender, DoWorkEventArgs e)
         {
             while (!terminate)
-                Update();
+                update();
         }
 
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
-        private void Update()
+        private void update()
         {
             try
             {
@@ -104,7 +104,7 @@ namespace Dashboard2017
 
                 if (Targeting && (temp != null))
                 {
-                    var output = ProcessImage(temp);
+                    var output = processImage(temp);
                     destOutputImage.Invoke(new Action(() => destOutputImage.Image = output.Item1));
                     destOutputImage.Invoke(new Action(() => destCompositOutputImage.Image = output.Item2));
                 }
@@ -126,7 +126,7 @@ namespace Dashboard2017
         }
 
         //This is where frames are proccessed
-        private Tuple<Mat, Image<Gray, byte>> ProcessImage(Mat original)
+        private Tuple<Mat, Image<Gray, byte>> processImage(Mat original)
         {
             if (original == null) return new Tuple<Mat, Image<Gray, byte>>(null, null);
 
@@ -197,11 +197,11 @@ namespace Dashboard2017
 
         ~FeedHandler()
         {
-            Dispose(false);
+            dispose(false);
         }
 
         [HandleProcessCorruptedStateExceptions]
-        protected virtual void Dispose(bool disposing)
+        protected virtual void dispose(bool disposing)
         {
             if (!disposing) return;
 

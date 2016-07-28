@@ -60,7 +60,7 @@ namespace Base
             {
                 Report.Error(ex.Message);
                 Report.Warning($"As a result the latter defined {component.Name} was not added to the active collection, " +
-                               $"meaning any controls intended to use this component will not work, or will control the " +
+                               "meaning any controls intended to use this component will not work, or will control the " +
                                $"component that {component.Name} was a duplicate of. CHECK CONFIG.");
             }
             catch (Exception ex)

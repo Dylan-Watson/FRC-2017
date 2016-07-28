@@ -22,13 +22,13 @@ namespace Trephine
         /// <param name="baseCalls">auton base calls instance</param>
         protected Autonomous(BaseCalls baseCalls)
         {
-            BaseCalls = baseCalls;
+            this.baseCalls = baseCalls;
         }
 
         /// <summary>
         ///     Instance of BaseCalls
         /// </summary>
-        protected BaseCalls BaseCalls { get; }
+        protected BaseCalls baseCalls { get; }
 
         #region Public Methods
 

@@ -46,7 +46,7 @@ namespace Base
 
         #endregion Public Constructors
 //TODO: what is the string.Equals function? How does it differ from  ===?
-        private bool Equals(CommonName other) => string.Equals(name, other.name);
+        private bool equals(CommonName other) => string.Equals(name, other.name);
 
         /// <summary>
         ///     Overrides the Equals method for CommonNames
@@ -58,7 +58,7 @@ namespace Base
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
 
-            return obj is CommonName && Equals((CommonName)obj);
+            return obj is CommonName && equals((CommonName)obj);
         }
 
         /// <summary>

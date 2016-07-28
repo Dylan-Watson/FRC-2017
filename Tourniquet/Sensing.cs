@@ -25,7 +25,7 @@ namespace Tourniquet
         /// <summary>
         ///     Instruction to execute within the loop
         /// </summary>
-        protected override void Main()
+        protected override void main()
         {
             throw new NotImplementedException();
         }

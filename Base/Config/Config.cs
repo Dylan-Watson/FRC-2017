@@ -97,7 +97,7 @@ namespace Base.Config
 
         #region Private Methods
 
-        private void AllocateComponents()
+        private void allocateComponents()
         {
             #region channel asignments
 
@@ -107,12 +107,12 @@ namespace Base.Config
                 return;
             }
 
-            QuickLoad = Convert.ToBoolean(GetAttributeValue("value", "QuickLoad"));
+            QuickLoad = Convert.ToBoolean(getAttributeValue("value", "QuickLoad"));
             if (QuickLoad) Report.Warning("I see QuickLoad is turned... This should only be used during practice!");
 
             try
             {
-                foreach (var element in GetElements("RobotConfig", "Victors"))
+                foreach (var element in getElements("RobotConfig", "Victors"))
                 {
                     var type = element.Attribute("type").Value;
 
@@ -154,7 +154,7 @@ namespace Base.Config
 
             try
             {
-                foreach (var element in GetElements("RobotConfig", "Talons"))
+                foreach (var element in getElements("RobotConfig", "Talons"))
                 {
                     componentNames.Add(new CommonName(element.Name.ToString()));
                     Report.General(
@@ -240,11 +240,11 @@ namespace Base.Config
         /// <param name="attribute">The attribute from which to obtain the value.</param>
         /// <param name="elements">Name of elements to navigate.</param>
         /// <returns>The value from the attribute as a string.</returns>
-        private XAttribute GetAttribute(string attribute, params string[] elements)
+        private XAttribute getAttribute(string attribute, params string[] elements)
         {
             try
             {
-                return GetNode(elements).Attribute(attribute);
+                return getNode(elements).Attribute(attribute);
             }
             catch (Exception ex)
             {
@@ -261,11 +261,11 @@ namespace Base.Config
         /// <param name="attribute">The attribute from which to obtain the value.</param>
         /// <param name="elements">Name of elements to navigate.</param>
         /// <returns>The value from the attribute as a string.</returns>
-        private string GetAttributeValue(string attribute, params string[] elements)
+        private string getAttributeValue(string attribute, params string[] elements)
         {
             try
             {
-                return GetNode(elements).Attribute(attribute).Value;
+                return getNode(elements).Attribute(attribute).Value;
             }
             catch (Exception ex)
             {
@@ -282,14 +282,14 @@ namespace Base.Config
         /// </summary>
         /// <param name="elements">Name of elements to navigate.</param>
         /// <returns></returns>
-        private IEnumerable<XElement> GetElements(params string[] elements) => GetNode(elements).Elements();
+        private IEnumerable<XElement> getElements(params string[] elements) => getNode(elements).Elements();
 
         /// <summary>
         ///     Returns the last nodes from a path of XElements.
         /// </summary>
         /// <param name="elements">Name of elements to navigate.</param>
         /// <returns></returns>
-        private XElement GetNode(params string[] elements)
+        private XElement getNode(params string[] elements)
         {
             var node = doc.Root;
 
@@ -314,13 +314,13 @@ namespace Base.Config
         {
             try
             {
-                Report.General($"Version: {Convert.ToDouble(GetAttributeValue("version", "Version"))}");
-                Report.General($"Comment: {GetAttributeValue("comment", "Comment")}");
-                AutonEnabled = Convert.ToBoolean(GetAttributeValue("value", "EnableAuton"));
+                Report.General($"Version: {Convert.ToDouble(getAttributeValue("version", "Version"))}");
+                Report.General($"Comment: {getAttributeValue("comment", "Comment")}");
+                AutonEnabled = Convert.ToBoolean(getAttributeValue("value", "EnableAuton"));
                 Report.General($"Auton Enabled: {AutonEnabled}");
-                AllocateComponents();
-                RetrieveDriverSchema();
-                RetrieveOperatorSchema();
+                allocateComponents();
+                retrieveDriverSchema();
+                retrieveOperatorSchema();
             }
             catch (Exception ex)
             {
@@ -329,30 +329,30 @@ namespace Base.Config
             }
         }
 
-        private void RetrieveDriverSchema()
+        private void retrieveDriverSchema()
         {
             #region driver control schema
 
             //drive controls are not dynamic, they will always be axis based controls.
             try
             {
-                var controllerSlot = Convert.ToInt32(GetAttributeValue("controllerSlot", "Controls", "Driver", "slot"));
-                var driveFit = Convert.ToInt32(GetAttributeValue("driveFit", "Controls", "Driver", "drive"));
-                var driveFitPower = Convert.ToDouble(GetAttributeValue("power", "Controls", "Driver", "drive"));
+                var controllerSlot = Convert.ToInt32(getAttributeValue("controllerSlot", "Controls", "Driver", "slot"));
+                var driveFit = Convert.ToInt32(getAttributeValue("driveFit", "Controls", "Driver", "drive"));
+                var driveFitPower = Convert.ToDouble(getAttributeValue("power", "Controls", "Driver", "drive"));
                 var multiplier =
-                    Convert.ToDouble(GetAttributeValue("powerMultiplier", "Controls", "Driver", "powerMultiplier"));
+                    Convert.ToDouble(getAttributeValue("powerMultiplier", "Controls", "Driver", "powerMultiplier"));
 
-                var leftAxis = Convert.ToInt32(GetAttributeValue("axis", "Controls", "Driver", "leftDrive"));
-                var rightAxis = Convert.ToInt32(GetAttributeValue("axis", "Controls", "Driver", "rightDrive"));
-                var leftReversed = Convert.ToBoolean(GetAttributeValue("reversed", "Controls", "Driver", "leftDrive"));
-                var rightReversed = Convert.ToBoolean(GetAttributeValue("reversed", "Controls", "Driver", "rightDrive"));
+                var leftAxis = Convert.ToInt32(getAttributeValue("axis", "Controls", "Driver", "leftDrive"));
+                var rightAxis = Convert.ToInt32(getAttributeValue("axis", "Controls", "Driver", "rightDrive"));
+                var leftReversed = Convert.ToBoolean(getAttributeValue("reversed", "Controls", "Driver", "leftDrive"));
+                var rightReversed = Convert.ToBoolean(getAttributeValue("reversed", "Controls", "Driver", "rightDrive"));
 
                 double leftDz = 0;
                 double rightDz = 0;
 
                 try
                 {
-                    leftDz = Convert.ToDouble(GetAttributeValue("deadZone", "Controls", "Driver", "leftDrive"));
+                    leftDz = Convert.ToDouble(getAttributeValue("deadZone", "Controls", "Driver", "leftDrive"));
                 }
                 catch (Exception ex)
                 {
@@ -360,7 +360,7 @@ namespace Base.Config
                 }
                 try
                 {
-                    rightDz = Convert.ToDouble(GetAttributeValue("deadZone", "Controls", "Driver", "rightDrive"));
+                    rightDz = Convert.ToDouble(getAttributeValue("deadZone", "Controls", "Driver", "rightDrive"));
                 }
                 catch (Exception ex)
                 {
@@ -368,15 +368,15 @@ namespace Base.Config
                 }
 
                 var left = new DriverControlSchema("leftDrive", (MotorControlFitFunction)driveFit, driveFitPower,
-                    ToBindCommonName(GetAttribute("bindTo", "Controls", "Driver", "leftDrive")), leftAxis, leftDz,
+                    toBindCommonName(getAttribute("bindTo", "Controls", "Driver", "leftDrive")), leftAxis, leftDz,
                     multiplier, leftReversed);
 
                 var right = new DriverControlSchema("rightDrive", (MotorControlFitFunction)driveFit, driveFitPower,
-                    ToBindCommonName(GetAttribute("bindTo", "Controls", "Driver", "rightDrive")), rightAxis, rightDz,
+                    toBindCommonName(getAttribute("bindTo", "Controls", "Driver", "rightDrive")), rightAxis, rightDz,
                     multiplier, rightReversed);
 
                 var temp = new List<ControlSchema>();
-                foreach (var element in GetElements("Controls", "DriverAux"))
+                foreach (var element in getElements("Controls", "DriverAux"))
                 {
                     bool reversed;
                     double powerMultiplier;
@@ -411,20 +411,20 @@ namespace Base.Config
                                 Log.Write(ex);
                             }
                             temp.Add(new ControlSchema(element.Name.ToString(), ControlType.Axis,
-                                ToBindCommonName(element.Attribute("bindTo")),
+                                toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("axis").Value), deadZone,
                                 powerMultiplier, reversed));
                             break;
 
                         case ControlType.Button:
                             temp.Add(new ControlSchema(element.Name.ToString(), ControlType.Button,
-                                ToBindCommonName(element.Attribute("bindTo")),
+                                toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("button").Value), powerMultiplier, reversed));
                             break;
 
                         case ControlType.DualButton:
                             temp.Add(new ControlSchema(element.Name.ToString(), ControlType.DualButton,
-                                ToBindCommonName(element.Attribute("bindTo")),
+                                toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("buttonA").Value),
                                 Convert.ToInt32(element.Attribute("buttonB").Value),
                                 powerMultiplier, reversed));
@@ -432,7 +432,7 @@ namespace Base.Config
 
                         case ControlType.ToggleButton:
                             temp.Add(new ControlSchema(element.Name.ToString(), ControlType.ToggleButton,
-                                ToBindCommonName(element.Attribute("bindTo")),
+                                toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("button").Value), powerMultiplier, reversed));
                             break;
                     }
@@ -449,14 +449,14 @@ namespace Base.Config
             #endregion driver control schema
         }
 
-        private void RetrieveOperatorSchema()
+        private void retrieveOperatorSchema()
         {
             #region operator control schema
 
             try
             {
                 var temp = new List<ControlSchema>();
-                foreach (var element in GetElements("Controls", "Operator").Where(element => element.Name != "slot"))
+                foreach (var element in getElements("Controls", "Operator").Where(element => element.Name != "slot"))
                 {
                     bool reversed;
                     double powerMultiplier;
@@ -491,20 +491,20 @@ namespace Base.Config
                                 Log.Write(ex);
                             }
                             temp.Add(new ControlSchema(element.Name.ToString(), ControlType.Axis,
-                                ToBindCommonName(element.Attribute("bindTo")),
+                                toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("axis").Value), deadZone,
                                 powerMultiplier, reversed));
                             break;
 
                         case ControlType.Button:
                             temp.Add(new ControlSchema(element.Name.ToString(), ControlType.Button,
-                                ToBindCommonName(element.Attribute("bindTo")),
+                                toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("button").Value), powerMultiplier, reversed));
                             break;
 
                         case ControlType.DualButton:
                             temp.Add(new ControlSchema(element.Name.ToString(), ControlType.DualButton,
-                                ToBindCommonName(element.Attribute("bindTo")),
+                                toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("buttonA").Value),
                                 Convert.ToInt32(element.Attribute("buttonB").Value),
                                 powerMultiplier, reversed));
@@ -512,7 +512,7 @@ namespace Base.Config
 
                         case ControlType.ToggleButton:
                             temp.Add(new ControlSchema(element.Name.ToString(), ControlType.ToggleButton,
-                                ToBindCommonName(element.Attribute("bindTo")),
+                                toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("button").Value), powerMultiplier, reversed));
                             break;
 
@@ -616,7 +616,7 @@ namespace Base.Config
 
                 OperatorConfig =
                     new OperatorConfig(
-                        new Joystick(Convert.ToInt32(GetAttributeValue("controllerSlot", "Controls", "Operator", "slot"))),
+                        new Joystick(Convert.ToInt32(getAttributeValue("controllerSlot", "Controls", "Operator", "slot"))),
                         temp);
             }
             catch (Exception ex)
@@ -628,7 +628,7 @@ namespace Base.Config
             #endregion operator control schema
         }
 
-        private List<CommonName> ToBindCommonName(XAttribute attribute)
+        private List<CommonName> toBindCommonName(XAttribute attribute)
         {
             var bindings = new List<CommonName>();
 

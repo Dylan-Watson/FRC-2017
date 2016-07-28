@@ -18,6 +18,7 @@ namespace RobotMain2017
     /// </summary>
     public static class Program
     {
+        // ReSharper disable once InconsistentNaming
         private static void Main() => RobotBase.Main(null, typeof(RobotMain2017));
     }
 }

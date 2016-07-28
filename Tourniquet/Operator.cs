@@ -24,7 +24,7 @@ namespace Tourniquet
         /// <summary>
         ///     Instruction to execute within the loop
         /// </summary>
-        protected override void Main()
+        protected override void main()
         {
             foreach (var control in ControlCollection.Instance.GetOperatorControls())
                 control.Update();
