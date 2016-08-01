@@ -11,7 +11,6 @@ Email: cooper.ryan@centaurisoft.org
 
 namespace Dashboard2017
 {
-    using Properties;
     using Emgu.CV;
     using Emgu.CV.CvEnum;
     using Emgu.CV.Structure;
@@ -22,10 +21,8 @@ namespace Dashboard2017
     using System.ComponentModel;
     using System.Drawing;
     using System.Linq;
-    using System.Runtime;
     using System.Runtime.ExceptionServices;
     using System.Security;
-    using System.Threading;
 
     public enum CaptureType
     {
@@ -92,6 +89,13 @@ namespace Dashboard2017
                 capture = new Capture((int)source);
             else
                 capture = new Capture((string)source);
+
+            capture.ImageGrabbed += Capture_ImageGrabbed;
+        }
+
+        private void Capture_ImageGrabbed(object sender, EventArgs e)
+        {
+            Console.WriteLine("Test");
         }
 
         private void Bw_DoWork(object sender, DoWorkEventArgs e)
@@ -113,21 +117,21 @@ namespace Dashboard2017
                 {
                     output = processImage(temp);
                     destOutputImage.Invoke(new Action(() => destOutputImage.Image = output.Item1));
-                    destOutputImage.Invoke(new Action(() => destCompositOutputImage.Image = output.Item2));
+                    destCompositOutputImage.Invoke(new Action(() => destCompositOutputImage.Image = output.Item2));
                     if (VideoWriterManager.Instance.Record)
                         VideoWriterManager.Instance.WriteFrame(temp);
                 }
                 else if (temp != null)
                 {
                     destOutputImage.Invoke(new Action(() => destOutputImage.Image = temp));
-                    destOutputImage.Invoke(new Action(() => destCompositOutputImage.Image = logo));
+                    destCompositOutputImage.Invoke(new Action(() => destCompositOutputImage.Image = logo));
                     if (VideoWriterManager.Instance.Record)
                         VideoWriterManager.Instance.WriteFrame(temp);
                 }
                 else
                 {
                     destOutputImage.Invoke(new Action(() => destOutputImage.Image = logo));
-                    destOutputImage.Invoke(new Action(() => destCompositOutputImage.Image = logo));
+                    destCompositOutputImage.Invoke(new Action(() => destCompositOutputImage.Image = logo));
                 }
             }
             catch (Exception)
@@ -236,6 +240,7 @@ namespace Dashboard2017
 
             TableManager.Instance.Table?.PutNumber("VISION_OFFSET", (int)largestAndClosest.Center.X - xCentre);
             TableManager.Instance.Table?.PutNumber("CIRCLE_RADIUS", (int)largestAndClosest.Radius);
+
             return new Tuple<Mat, Image<Gray, byte>>(original, imageHsvDest);
         }
 

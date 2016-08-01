@@ -283,7 +283,9 @@ namespace Dashboard2017
 
         private void createFeedHandler()
         {
+            justSet = false;
             feedHandler?.Dispose();
+            feedHandler = null;
 
             mainVideoBox.Invoke(new Action(() =>
             {
@@ -304,7 +306,7 @@ namespace Dashboard2017
                 ConsoleManager.Instance.AppendInfo("FeedHandler created for source at : " + source);
                 feedHandler.Targeting = true;
             }
-            catch
+            catch(Exception)
             {
                 // ignored
             }
@@ -315,6 +317,7 @@ namespace Dashboard2017
                 {
                     bw.Abort();
                     bw.Dispose();
+                    bw = null;
                 }
 
                 bw = new AbortableBackgroundWorker();
@@ -329,9 +332,11 @@ namespace Dashboard2017
             }
         }
 
+        private bool justSet;
         private void Bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (!pingSuccess) return;
+            if (!pingSuccess || (feedHandler!=null) || justSet) return;
+            justSet = true;
             feedHandler = new FeedHandler(Properties.Settings.Default.videoSource, mainVideoBox, compositVideoBox, this);
             ConsoleManager.Instance.AppendInfo("FeedHandler created for source at : " +
                                                Properties.Settings.Default.videoSource);
@@ -340,7 +345,7 @@ namespace Dashboard2017
 
         private void Bw_DoWork(object sender, DoWorkEventArgs e)
         {
-            var timeout = 60;
+            var timeout = 25;
             var match = Regex.Match(Properties.Settings.Default.videoSource, @"\b(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b");
             ConsoleManager.Instance.AppendInfo("Attempting to contact http://" + match.Captures[0]);
 
@@ -350,8 +355,8 @@ namespace Dashboard2017
             while ((reply != null) && (reply.Status != IPStatus.Success) && (timeout > 0))
             {
                 ConsoleManager.Instance.AppendError($"Failed to ping {match.Value}, trying {timeout} more times.");
-                Thread.Sleep(1500);
                 timeout--;
+                reply = pingSender.Send(IPAddress.Parse(match.Value));
             }
 
             if ((reply != null) && (reply.Status == IPStatus.Success))
