@@ -22,8 +22,10 @@ namespace Dashboard2017
     using System.ComponentModel;
     using System.Drawing;
     using System.Linq;
+    using System.Runtime;
     using System.Runtime.ExceptionServices;
     using System.Security;
+    using System.Threading;
 
     public enum CaptureType
     {
@@ -98,6 +100,7 @@ namespace Dashboard2017
                 update();
         }
 
+        private Tuple<Mat, Image<Gray, byte>> output;
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
         private void update()
@@ -108,7 +111,7 @@ namespace Dashboard2017
 
                 if (Targeting && (temp != null))
                 {
-                    var output = processImage(temp);
+                    output = processImage(temp);
                     destOutputImage.Invoke(new Action(() => destOutputImage.Image = output.Item1));
                     destOutputImage.Invoke(new Action(() => destCompositOutputImage.Image = output.Item2));
                     if (VideoWriterManager.Instance.Record)
@@ -125,8 +128,6 @@ namespace Dashboard2017
                 {
                     destOutputImage.Invoke(new Action(() => destOutputImage.Image = logo));
                     destOutputImage.Invoke(new Action(() => destCompositOutputImage.Image = logo));
-                    if (VideoWriterManager.Instance.Record)
-                        VideoWriterManager.Instance.WriteFrame(temp);
                 }
             }
             catch (Exception)
@@ -135,19 +136,24 @@ namespace Dashboard2017
             }
         }
 
+        private Image<Hsv, byte> hsvImage;
+        private Image<Gray, byte> imageHsvDest;
+        private Hsv lowerLimit, upperLimit;
+        private readonly List<CircleF> circles = new List<CircleF>();
+        private readonly HsvTargetingSettings hsvSettings = HsvTargetingSettings.Instance;
+
         //This is where frames are proccessed
         private Tuple<Mat, Image<Gray, byte>> processImage(Mat original)
         {
             if (original == null) return new Tuple<Mat, Image<Gray, byte>>(null, null);
 
-            var hsvImage = original.ToImage<Hsv, byte>();
-            var lowerLimit = new Hsv(Settings.Default.lowerHue, Settings.Default.lowerSaturation,
-                Settings.Default.lowerValue);
-            var upperLimit = new Hsv(Settings.Default.upperHue, Settings.Default.upperSaturation,
-                Settings.Default.upperValue);
-            var imageHsvDest = hsvImage.InRange(lowerLimit, upperLimit);
+             lowerLimit = new Hsv(hsvSettings.LowerHue, hsvSettings.LowerSaturation, hsvSettings.LowerValue);
+             upperLimit = new Hsv(hsvSettings.UpperHue, hsvSettings.UpperSaturation, hsvSettings.UpperValue);
 
-            var circles = new List<CircleF>();
+            hsvImage = original.ToImage<Hsv, byte>();
+            imageHsvDest = hsvImage.InRange(lowerLimit, upperLimit);
+
+            circles.Clear();
 
             //find contours and draw smallest possible circle around it
             using (var contours = new VectorOfVectorOfPoint())
@@ -159,7 +165,7 @@ namespace Dashboard2017
                     for (var i = 0; i < contourSize; i++)
                     {
                         var circle = CvInvoke.MinEnclosingCircle(contours[i]);
-                        if ((circle.Area > 3500) && (circle.Area < 25000))
+                        if ((circle.Area > 3600) && (circle.Area < 25000))
                             circles.Add(circle);
                     }
             }
@@ -171,14 +177,21 @@ namespace Dashboard2017
             }
             //if there are no good targets, return the frame unaltered
 
-            var sortedCircles = circles.OrderBy(o => o.Area).ToList();
-            sortedCircles.Reverse(); //reverse to largets to smallest
-
             var xCentre = original.Size.Width / 2;
-            var yCentre = original.Size.Height / 2;
-            var largestAndClosest = sortedCircles[0]; //where our final circle will be stored
+            var largestAndClosest = circles[0];
 
-            if (sortedCircles.Count != 1)
+            if (circles.Count != 1)
+                foreach (var cir in from cir in circles
+                                    let offset = cir.Center.X - xCentre
+                                    let offset2 = largestAndClosest.Center.X - xCentre
+                                    where (offset < offset2) && !(offset > offset2)
+                                    select cir) largestAndClosest = cir;
+
+
+            //var sortedCircles = circles.OrderBy(o => o.Area).ToList();
+            //sortedCircles.Reverse(); //reverse to largets to smallest
+            //var largestAndClosest = sortedCircles[0]; //where our final circle will be stored
+            /*if (sortedCircles.Count != 1)
                 foreach (var cir in from cir in sortedCircles
                                     let offset = cir.Center.X - xCentre
                                     let offset2 = largestAndClosest.Center.X - xCentre
@@ -186,7 +199,7 @@ namespace Dashboard2017
                                     let offsetY2 = largestAndClosest.Center.Y - yCentre
                                     where (offset < offset2)
                                           || ((offsetY < offsetY2) && !(offset > offset2))
-                                    select cir) largestAndClosest = cir;
+                                    select cir) largestAndClosest = cir;*/
 
             if (!hasTarget)
                 parent.HasTarget();
@@ -197,9 +210,9 @@ namespace Dashboard2017
                 (int) largestAndClosest.Radius, !hasTarget ? new MCvScalar(0, 0, 255) : new MCvScalar(0, 255, 0), 2,
                 LineType.AntiAlias);
 
-            parent.UpdateTargetLabels((int)largestAndClosest.Center.X- xCentre, (int)largestAndClosest.Center.Y- yCentre, (int)largestAndClosest.Radius);
+            parent.UpdateTargetLabels((int)largestAndClosest.Center.X- xCentre, (int)largestAndClosest.Radius);
 
-            if (((int) largestAndClosest.Center.X - xCentre >= Settings.Default.targetLeftXBound) && ((int) largestAndClosest.Center.X - xCentre <= Settings.Default.targetRightXBound))
+            if (((int) largestAndClosest.Center.X - xCentre >= hsvSettings.TargetLeftXBound) && ((int) largestAndClosest.Center.X - xCentre <= hsvSettings.TargetRightXBound))
             {
                 //parent.UpdateOffsetLabel(((int) largestAndClosest.Center.X - xCentre),
                 // System.Windows.Media.Brushes.LimeGreen);
@@ -211,7 +224,7 @@ namespace Dashboard2017
                 //parent.UpdateOffsetLabel(((int) largestAndClosest.Center.X - xCentre), System.Windows.Media.Brushes.Red);
             }
 
-            if (((int) largestAndClosest.Radius >= Settings.Default.targetRadiusLowerBound) && ((int) largestAndClosest.Radius <= Settings.Default.targetRadiusUpperBound))
+            if (((int) largestAndClosest.Radius >= hsvSettings.TargetRadiusLowerBound) && ((int) largestAndClosest.Radius <= hsvSettings.TargetRadiusUpperBound))
             {
                 //parent.UpdateRadiusLabel(((int) largestAndClosest.Radius), System.Windows.Media.Brushes.LimeGreen);
             }
@@ -221,9 +234,8 @@ namespace Dashboard2017
                 //parent.UpdateRadiusLabel(((int) largestAndClosest.Radius), System.Windows.Media.Brushes.Red);
             }
 
-            TableManager.Instance.Table.PutNumber("VISION_OFFSET", ((int)largestAndClosest.Center.X - xCentre));
-            TableManager.Instance.Table.PutNumber("CIRCLE_RADIUS", (int)largestAndClosest.Radius);
-
+            TableManager.Instance.Table?.PutNumber("VISION_OFFSET", (int)largestAndClosest.Center.X - xCentre);
+            TableManager.Instance.Table?.PutNumber("CIRCLE_RADIUS", (int)largestAndClosest.Radius);
             return new Tuple<Mat, Image<Gray, byte>>(original, imageHsvDest);
         }
 
@@ -236,6 +248,7 @@ namespace Dashboard2017
         protected virtual void dispose(bool disposing)
         {
             if (!disposing) return;
+
 
             bw.Dispose();
             capture.Dispose();

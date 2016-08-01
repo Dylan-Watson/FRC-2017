@@ -18,6 +18,7 @@ namespace Dashboard2017
     using System.ComponentModel;
     using NetworkTables;
     using System.Drawing;
+    using System.IO;
     using System.Net;
     using System.Net.NetworkInformation;
     using System.Text.RegularExpressions;
@@ -25,12 +26,18 @@ namespace Dashboard2017
     using System.Windows.Forms;
     using NetworkTables.Tables;
 
+    /// <summary>
+    /// Main window of the dashboard
+    /// </summary>
     public partial class Form1 : Form
     {
         private bool pingSuccess;
-        private AbortableBackgroundWorker bw, targetLabel;
+        private AbortableBackgroundWorker bw;
         private FeedHandler feedHandler;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public Form1()
         {
             InitializeComponent();
@@ -68,6 +75,13 @@ namespace Dashboard2017
             lowerSaturationTrackbar.Value = (int) Properties.Settings.Default.lowerSaturation;
             lowerHueTrackbar.Value = (int) Properties.Settings.Default.lowerHue;
 
+            HsvTargetingSettings.Instance.UpperValue = Properties.Settings.Default.upperValue;
+            HsvTargetingSettings.Instance.UpperSaturation = Properties.Settings.Default.upperSaturation;
+            HsvTargetingSettings.Instance .UpperHue= Properties.Settings.Default.upperHue;
+            HsvTargetingSettings.Instance.LowerValue = Properties.Settings.Default.lowerValue;
+            HsvTargetingSettings.Instance.LowerSaturation = Properties.Settings.Default.lowerSaturation;
+            HsvTargetingSettings.Instance.LowerHue = Properties.Settings.Default.lowerHue;
+
             lowerHueLabel.Text = lowerHueTrackbar.Value.ToString();
             lowerValueLabel.Text = lowerValueTrackbar.Value.ToString();
             lowerSaturationLabel.Text = lowerSaturationTrackbar.Value.ToString();
@@ -88,11 +102,16 @@ namespace Dashboard2017
             upperXBound.Text = Properties.Settings.Default.targetRightXBound.ToString();
             lowerRadiusBound.Text = Properties.Settings.Default.targetRadiusLowerBound.ToString();
             upperRadiusBound.Text = Properties.Settings.Default.targetRadiusUpperBound.ToString();
+            HsvTargetingSettings.Instance.TargetLeftXBound = Properties.Settings.Default.targetLeftXBound;
+            HsvTargetingSettings.Instance.TargetRightXBound = Properties.Settings.Default.targetRightXBound;
+            HsvTargetingSettings.Instance.TargetRadiusLowerBound = Properties.Settings.Default.targetRadiusLowerBound;
+            HsvTargetingSettings.Instance.TargetRadiusUpperBound = Properties.Settings.Default.targetRadiusUpperBound;
 
             #endregion
 
             KeyPreview = true;
             Shown += Form1_Shown;
+            Closing += Form1_Closing;
             KeyDown += Form1_KeyPress;
             lockVideoSource.Checked = true;
             lockHSVSettings.Checked = true;
@@ -108,6 +127,14 @@ namespace Dashboard2017
             setupNetworkTables();
             ConsoleManager.Instance.AppendInfo("Dashboard ready.", Color.Green);
             new Thread(createFeedHandler).Start();
+        }
+
+        private void Form1_Closing(object sender, CancelEventArgs e)
+        {
+            VideoWriterManager.Instance.Dispose();
+            foreach (var file in new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).GetFiles(@"*.avi"))
+                if (file.Length == 0)
+                    File.Delete(file.Name);
         }
 
         private void Form1_KeyPress(object sender, KeyEventArgs e)
@@ -191,6 +218,10 @@ namespace Dashboard2017
                 Properties.Settings.Default.targetRightXBound = Convert.ToInt32(upperXBound.Text);
                 Properties.Settings.Default.targetRadiusLowerBound = Convert.ToInt32(lowerRadiusBound.Text);
                 Properties.Settings.Default.targetRadiusUpperBound = Convert.ToInt32(upperRadiusBound.Text);
+                HsvTargetingSettings.Instance.TargetLeftXBound = Convert.ToInt32(lowerXBound.Text);
+                HsvTargetingSettings.Instance.TargetRightXBound = Convert.ToInt32(upperXBound.Text);
+                HsvTargetingSettings.Instance.TargetRadiusLowerBound = Convert.ToInt32(lowerRadiusBound.Text);
+                HsvTargetingSettings.Instance.TargetRadiusUpperBound = Convert.ToInt32(upperRadiusBound.Text);
                 Properties.Settings.Default.Save();
             }
             catch (Exception ex)
@@ -208,6 +239,12 @@ namespace Dashboard2017
             Properties.Settings.Default.lowerHue = (uint) lowerHueTrackbar.Value;
             Properties.Settings.Default.upperSaturation = (uint) upperSaturationTrackbar.Value;
             Properties.Settings.Default.lowerSaturation = (uint) lowerSaturationTrackbar.Value;
+            HsvTargetingSettings.Instance.UpperValue = (uint)upperValueTrackbar.Value;
+            HsvTargetingSettings.Instance.UpperSaturation = (uint)upperSaturationTrackbar.Value;
+            HsvTargetingSettings.Instance.UpperHue = (uint)upperHueTrackbar.Value;
+            HsvTargetingSettings.Instance.LowerValue = (uint)lowerValueTrackbar.Value;
+            HsvTargetingSettings.Instance.LowerSaturation = (uint)lowerSaturationTrackbar.Value;
+            HsvTargetingSettings.Instance.LowerHue = (uint)lowerHueTrackbar.Value;
             Properties.Settings.Default.Save();
 
             lowerHueLabel.Text = lowerHueTrackbar.Value.ToString();
@@ -328,16 +365,17 @@ namespace Dashboard2017
                 $"Failed to ping {match.Value}, canceling operation. Check video source.");
         }
 
-        public void UpdateTargetLabels(int x, int y, int radius)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="radius"></param>
+        public void UpdateTargetLabels(int x, int radius)
         {
             xValueLabel.Invoke(new Action(() =>
             {
                 xValueLabel.Text = $"Current X: {x}";
-            }));
-
-            yValueLabel.Invoke(new Action(() =>
-            {
-                yValueLabel.Text = $"Current Y: {y}";
             }));
 
             radiusValueLabel.Invoke(new Action(() =>
@@ -346,19 +384,22 @@ namespace Dashboard2017
             }));
         }
 
+        /// <summary>
+        /// Updates targetingLabel
+        /// </summary>
         public void NoTarget()
         {
-            new Thread(() =>
-            {
                 targetingLabel.Invoke(new Action(() =>
                 {
                     targetingLabel.BackColor = DefaultBackColor;
                     targetingLabel.Text = @"NO TARGET";
                     targetingLabel.Enabled = false;
                 }));
-            }).Start();
         }
 
+        /// <summary>
+        /// Updates targetingLabel
+        /// </summary>
         public void HasTarget()
         {
             targetingLabel.Invoke(new Action(() =>
@@ -369,6 +410,9 @@ namespace Dashboard2017
             }));
         }
 
+        /// <summary>
+        /// Updates targetingLabel
+        /// </summary>
         public void TargetAquired()
         {
             targetingLabel.Invoke(new Action(() =>
