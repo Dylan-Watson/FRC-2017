@@ -67,6 +67,7 @@ namespace Dashboard2017
             this.upperValueLabel = new System.Windows.Forms.Label();
             this.upperSaturationLabel = new System.Windows.Forms.Label();
             this.upperHueLabel = new System.Windows.Forms.Label();
+            this.lockHSVSettings = new System.Windows.Forms.CheckBox();
             this.lowerValueLabel = new System.Windows.Forms.Label();
             this.lowerSaturationLabel = new System.Windows.Forms.Label();
             this.lowerHueLabel = new System.Windows.Forms.Label();
@@ -82,7 +83,6 @@ namespace Dashboard2017
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.lockHSVSettings = new System.Windows.Forms.CheckBox();
             this.videoSettingsGroupBox = new System.Windows.Forms.GroupBox();
             this.setVideoSource = new System.Windows.Forms.Button();
             this.videoSourceTextBox = new System.Windows.Forms.TextBox();
@@ -96,6 +96,7 @@ namespace Dashboard2017
             this.consoleTab = new System.Windows.Forms.TabPage();
             this.consoleTextBox = new System.Windows.Forms.RichTextBox();
             this.debugTab = new System.Windows.Forms.TabPage();
+            this.debugControlLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -119,6 +120,7 @@ namespace Dashboard2017
             this.videoComposit.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.compositVideoBox)).BeginInit();
             this.consoleTab.SuspendLayout();
+            this.debugTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -287,7 +289,7 @@ namespace Dashboard2017
             this.targetSettingsGroupBox.Controls.Add(this.xValueLabel);
             this.targetSettingsGroupBox.Location = new System.Drawing.Point(8, 488);
             this.targetSettingsGroupBox.Name = "targetSettingsGroupBox";
-            this.targetSettingsGroupBox.Size = new System.Drawing.Size(451, 223);
+            this.targetSettingsGroupBox.Size = new System.Drawing.Size(434, 223);
             this.targetSettingsGroupBox.TabIndex = 2;
             this.targetSettingsGroupBox.TabStop = false;
             this.targetSettingsGroupBox.Text = "Target Settings";
@@ -308,7 +310,7 @@ namespace Dashboard2017
             | System.Windows.Forms.AnchorStyles.Right)));
             this.upperRadiusBound.Location = new System.Drawing.Point(345, 109);
             this.upperRadiusBound.Name = "upperRadiusBound";
-            this.upperRadiusBound.Size = new System.Drawing.Size(100, 20);
+            this.upperRadiusBound.Size = new System.Drawing.Size(83, 20);
             this.upperRadiusBound.TabIndex = 29;
             // 
             // upperXBound
@@ -317,7 +319,7 @@ namespace Dashboard2017
             | System.Windows.Forms.AnchorStyles.Right)));
             this.upperXBound.Location = new System.Drawing.Point(345, 68);
             this.upperXBound.Name = "upperXBound";
-            this.upperXBound.Size = new System.Drawing.Size(100, 20);
+            this.upperXBound.Size = new System.Drawing.Size(83, 20);
             this.upperXBound.TabIndex = 28;
             // 
             // lowerRadiusBound
@@ -326,7 +328,7 @@ namespace Dashboard2017
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lowerRadiusBound.Location = new System.Drawing.Point(124, 109);
             this.lowerRadiusBound.Name = "lowerRadiusBound";
-            this.lowerRadiusBound.Size = new System.Drawing.Size(100, 20);
+            this.lowerRadiusBound.Size = new System.Drawing.Size(83, 20);
             this.lowerRadiusBound.TabIndex = 27;
             // 
             // lowerXBound
@@ -335,7 +337,7 @@ namespace Dashboard2017
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lowerXBound.Location = new System.Drawing.Point(124, 68);
             this.lowerXBound.Name = "lowerXBound";
-            this.lowerXBound.Size = new System.Drawing.Size(100, 20);
+            this.lowerXBound.Size = new System.Drawing.Size(83, 20);
             this.lowerXBound.TabIndex = 26;
             // 
             // label11
@@ -442,7 +444,7 @@ namespace Dashboard2017
             this.hsvSettingsGroupBox.Controls.Add(this.label2);
             this.hsvSettingsGroupBox.Location = new System.Drawing.Point(8, 114);
             this.hsvSettingsGroupBox.Name = "hsvSettingsGroupBox";
-            this.hsvSettingsGroupBox.Size = new System.Drawing.Size(451, 368);
+            this.hsvSettingsGroupBox.Size = new System.Drawing.Size(434, 368);
             this.hsvSettingsGroupBox.TabIndex = 1;
             this.hsvSettingsGroupBox.TabStop = false;
             this.hsvSettingsGroupBox.Text = "HSV Settings";
@@ -479,6 +481,19 @@ namespace Dashboard2017
             this.upperHueLabel.Size = new System.Drawing.Size(27, 13);
             this.upperHueLabel.TabIndex = 16;
             this.upperHueLabel.Text = "N/A";
+            // 
+            // lockHSVSettings
+            // 
+            this.lockHSVSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lockHSVSettings.AutoSize = true;
+            this.lockHSVSettings.Location = new System.Drawing.Point(0, 345);
+            this.lockHSVSettings.Name = "lockHSVSettings";
+            this.lockHSVSettings.Size = new System.Drawing.Size(50, 17);
+            this.lockHSVSettings.TabIndex = 0;
+            this.lockHSVSettings.Text = "Lock";
+            this.lockHSVSettings.UseVisualStyleBackColor = true;
+            this.lockHSVSettings.CheckedChanged += new System.EventHandler(this.lockHSVSettings_CheckedChanged);
             // 
             // lowerValueLabel
             // 
@@ -519,7 +534,7 @@ namespace Dashboard2017
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lowerSaturationTrackbar.Location = new System.Drawing.Point(108, 101);
             this.lowerSaturationTrackbar.Name = "lowerSaturationTrackbar";
-            this.lowerSaturationTrackbar.Size = new System.Drawing.Size(332, 45);
+            this.lowerSaturationTrackbar.Size = new System.Drawing.Size(315, 45);
             this.lowerSaturationTrackbar.TabIndex = 12;
             // 
             // upperValueTrackbar
@@ -528,7 +543,7 @@ namespace Dashboard2017
             | System.Windows.Forms.AnchorStyles.Right)));
             this.upperValueTrackbar.Location = new System.Drawing.Point(108, 305);
             this.upperValueTrackbar.Name = "upperValueTrackbar";
-            this.upperValueTrackbar.Size = new System.Drawing.Size(332, 45);
+            this.upperValueTrackbar.Size = new System.Drawing.Size(315, 45);
             this.upperValueTrackbar.TabIndex = 11;
             // 
             // upperSaturationTrackbar
@@ -537,7 +552,7 @@ namespace Dashboard2017
             | System.Windows.Forms.AnchorStyles.Right)));
             this.upperSaturationTrackbar.Location = new System.Drawing.Point(108, 254);
             this.upperSaturationTrackbar.Name = "upperSaturationTrackbar";
-            this.upperSaturationTrackbar.Size = new System.Drawing.Size(332, 45);
+            this.upperSaturationTrackbar.Size = new System.Drawing.Size(315, 45);
             this.upperSaturationTrackbar.TabIndex = 10;
             // 
             // upperHueTrackbar
@@ -546,7 +561,7 @@ namespace Dashboard2017
             | System.Windows.Forms.AnchorStyles.Right)));
             this.upperHueTrackbar.Location = new System.Drawing.Point(108, 203);
             this.upperHueTrackbar.Name = "upperHueTrackbar";
-            this.upperHueTrackbar.Size = new System.Drawing.Size(332, 45);
+            this.upperHueTrackbar.Size = new System.Drawing.Size(315, 45);
             this.upperHueTrackbar.TabIndex = 9;
             // 
             // lowerValueTrackbar
@@ -555,7 +570,7 @@ namespace Dashboard2017
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lowerValueTrackbar.Location = new System.Drawing.Point(108, 152);
             this.lowerValueTrackbar.Name = "lowerValueTrackbar";
-            this.lowerValueTrackbar.Size = new System.Drawing.Size(332, 45);
+            this.lowerValueTrackbar.Size = new System.Drawing.Size(315, 45);
             this.lowerValueTrackbar.TabIndex = 8;
             // 
             // lowerHueTrackbar
@@ -564,7 +579,7 @@ namespace Dashboard2017
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lowerHueTrackbar.Location = new System.Drawing.Point(108, 50);
             this.lowerHueTrackbar.Name = "lowerHueTrackbar";
-            this.lowerHueTrackbar.Size = new System.Drawing.Size(332, 45);
+            this.lowerHueTrackbar.Size = new System.Drawing.Size(315, 45);
             this.lowerHueTrackbar.TabIndex = 7;
             // 
             // label8
@@ -633,19 +648,6 @@ namespace Dashboard2017
             this.label2.TabIndex = 1;
             this.label2.Text = "Lower Hue:";
             // 
-            // lockHSVSettings
-            // 
-            this.lockHSVSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lockHSVSettings.AutoSize = true;
-            this.lockHSVSettings.Location = new System.Drawing.Point(0, 345);
-            this.lockHSVSettings.Name = "lockHSVSettings";
-            this.lockHSVSettings.Size = new System.Drawing.Size(50, 17);
-            this.lockHSVSettings.TabIndex = 0;
-            this.lockHSVSettings.Text = "Lock";
-            this.lockHSVSettings.UseVisualStyleBackColor = true;
-            this.lockHSVSettings.CheckedChanged += new System.EventHandler(this.lockHSVSettings_CheckedChanged);
-            // 
             // videoSettingsGroupBox
             // 
             this.videoSettingsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -656,7 +658,7 @@ namespace Dashboard2017
             this.videoSettingsGroupBox.Controls.Add(this.lockVideoSource);
             this.videoSettingsGroupBox.Location = new System.Drawing.Point(8, 6);
             this.videoSettingsGroupBox.Name = "videoSettingsGroupBox";
-            this.videoSettingsGroupBox.Size = new System.Drawing.Size(451, 102);
+            this.videoSettingsGroupBox.Size = new System.Drawing.Size(434, 102);
             this.videoSettingsGroupBox.TabIndex = 0;
             this.videoSettingsGroupBox.TabStop = false;
             this.videoSettingsGroupBox.Text = "Video Source";
@@ -667,7 +669,7 @@ namespace Dashboard2017
             | System.Windows.Forms.AnchorStyles.Right)));
             this.setVideoSource.Location = new System.Drawing.Point(179, 73);
             this.setVideoSource.Name = "setVideoSource";
-            this.setVideoSource.Size = new System.Drawing.Size(89, 23);
+            this.setVideoSource.Size = new System.Drawing.Size(72, 23);
             this.setVideoSource.TabIndex = 3;
             this.setVideoSource.Text = "Set Source";
             this.setVideoSource.UseVisualStyleBackColor = true;
@@ -776,12 +778,21 @@ namespace Dashboard2017
             // 
             // debugTab
             // 
+            this.debugTab.Controls.Add(this.debugControlLayoutPanel);
             this.debugTab.Location = new System.Drawing.Point(4, 22);
             this.debugTab.Name = "debugTab";
             this.debugTab.Size = new System.Drawing.Size(506, 425);
             this.debugTab.TabIndex = 3;
             this.debugTab.Text = "Debug";
             this.debugTab.UseVisualStyleBackColor = true;
+            // 
+            // debugControlLayoutPanel
+            // 
+            this.debugControlLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.debugControlLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this.debugControlLayoutPanel.Name = "debugControlLayoutPanel";
+            this.debugControlLayoutPanel.Size = new System.Drawing.Size(506, 425);
+            this.debugControlLayoutPanel.TabIndex = 0;
             // 
             // Form1
             // 
@@ -821,6 +832,7 @@ namespace Dashboard2017
             this.videoComposit.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.compositVideoBox)).EndInit();
             this.consoleTab.ResumeLayout(false);
+            this.debugTab.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -889,6 +901,7 @@ namespace Dashboard2017
         private ComboBox autonCombo;
         private Label label12;
         private Label targetingLabel;
+        private FlowLayoutPanel debugControlLayoutPanel;
     }
 }
 

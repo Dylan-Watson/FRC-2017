@@ -32,6 +32,7 @@ namespace RobotMain2017
         {
             Log.ClearSessionLog();
             config.Load(CONFIG_FILE);
+            DashboardComms.Instance.NotifyRobotState(Constants.STANDBY);
         }
 
         /// <summary>
@@ -45,7 +46,7 @@ namespace RobotMain2017
         public override void Autonomous()
         {
             quickLoad();
-
+            DashboardComms.Instance.NotifyRobotState(Constants.AUTON);
             if (config.AutonEnabled)
                 new Trephine.Initialize(config).Run();
         }
@@ -56,11 +57,11 @@ namespace RobotMain2017
         public override void OperatorControl()
         {
             quickLoad();
-
+            DashboardComms.Instance.NotifyRobotState(Constants.TELEOP);
             new Driver().Start();
             new Operator().Start();
 
-            //while (IsOperatorControl && IsEnabled) { }
+           //while (IsOperatorControl && IsEnabled) { }
         }
 
         /// <summary>

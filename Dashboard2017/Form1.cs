@@ -11,20 +11,22 @@ Email: cooper.ryan@centaurisoft.org
 
 namespace Dashboard2017
 {
-    using Emgu.CV;
-    using Emgu.CV.CvEnum;
-    using Emgu.CV.UI;
     using System;
     using System.ComponentModel;
-    using NetworkTables;
     using System.Drawing;
     using System.IO;
+    using System.Linq;
     using System.Net;
     using System.Net.NetworkInformation;
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Windows.Forms;
+    using Emgu.CV;
+    using Emgu.CV.CvEnum;
+    using Emgu.CV.UI;
+    using NetworkTables;
     using NetworkTables.Tables;
+    using Properties;
 
     /// <summary>
     /// Main window of the dashboard
@@ -68,19 +70,19 @@ namespace Dashboard2017
             upperValueTrackbar.Minimum = 0;
             upperValueTrackbar.Maximum = 255;
 
-            upperValueTrackbar.Value = (int) Properties.Settings.Default.upperValue;
-            upperSaturationTrackbar.Value = (int) Properties.Settings.Default.upperSaturation;
-            upperHueTrackbar.Value = (int) Properties.Settings.Default.upperHue;
-            lowerValueTrackbar.Value = (int) Properties.Settings.Default.lowerValue;
-            lowerSaturationTrackbar.Value = (int) Properties.Settings.Default.lowerSaturation;
-            lowerHueTrackbar.Value = (int) Properties.Settings.Default.lowerHue;
+            upperValueTrackbar.Value = (int) Settings.Default.upperValue;
+            upperSaturationTrackbar.Value = (int) Settings.Default.upperSaturation;
+            upperHueTrackbar.Value = (int) Settings.Default.upperHue;
+            lowerValueTrackbar.Value = (int) Settings.Default.lowerValue;
+            lowerSaturationTrackbar.Value = (int) Settings.Default.lowerSaturation;
+            lowerHueTrackbar.Value = (int) Settings.Default.lowerHue;
 
-            HsvTargetingSettings.Instance.UpperValue = Properties.Settings.Default.upperValue;
-            HsvTargetingSettings.Instance.UpperSaturation = Properties.Settings.Default.upperSaturation;
-            HsvTargetingSettings.Instance .UpperHue= Properties.Settings.Default.upperHue;
-            HsvTargetingSettings.Instance.LowerValue = Properties.Settings.Default.lowerValue;
-            HsvTargetingSettings.Instance.LowerSaturation = Properties.Settings.Default.lowerSaturation;
-            HsvTargetingSettings.Instance.LowerHue = Properties.Settings.Default.lowerHue;
+            HsvTargetingSettings.Instance.UpperValue = Settings.Default.upperValue;
+            HsvTargetingSettings.Instance.UpperSaturation = Settings.Default.upperSaturation;
+            HsvTargetingSettings.Instance .UpperHue= Settings.Default.upperHue;
+            HsvTargetingSettings.Instance.LowerValue = Settings.Default.lowerValue;
+            HsvTargetingSettings.Instance.LowerSaturation = Settings.Default.lowerSaturation;
+            HsvTargetingSettings.Instance.LowerHue = Settings.Default.lowerHue;
 
             lowerHueLabel.Text = lowerHueTrackbar.Value.ToString();
             lowerValueLabel.Text = lowerValueTrackbar.Value.ToString();
@@ -98,14 +100,14 @@ namespace Dashboard2017
             targetingLabel.BackColor = DefaultBackColor;
             targetingLabel.Text = @"NO TARGET";
             targetingLabel.Enabled = false;
-            lowerXBound.Text = Properties.Settings.Default.targetLeftXBound.ToString();
-            upperXBound.Text = Properties.Settings.Default.targetRightXBound.ToString();
-            lowerRadiusBound.Text = Properties.Settings.Default.targetRadiusLowerBound.ToString();
-            upperRadiusBound.Text = Properties.Settings.Default.targetRadiusUpperBound.ToString();
-            HsvTargetingSettings.Instance.TargetLeftXBound = Properties.Settings.Default.targetLeftXBound;
-            HsvTargetingSettings.Instance.TargetRightXBound = Properties.Settings.Default.targetRightXBound;
-            HsvTargetingSettings.Instance.TargetRadiusLowerBound = Properties.Settings.Default.targetRadiusLowerBound;
-            HsvTargetingSettings.Instance.TargetRadiusUpperBound = Properties.Settings.Default.targetRadiusUpperBound;
+            lowerXBound.Text = Settings.Default.targetLeftXBound.ToString();
+            upperXBound.Text = Settings.Default.targetRightXBound.ToString();
+            lowerRadiusBound.Text = Settings.Default.targetRadiusLowerBound.ToString();
+            upperRadiusBound.Text = Settings.Default.targetRadiusUpperBound.ToString();
+            HsvTargetingSettings.Instance.TargetLeftXBound = Settings.Default.targetLeftXBound;
+            HsvTargetingSettings.Instance.TargetRightXBound = Settings.Default.targetRightXBound;
+            HsvTargetingSettings.Instance.TargetRadiusLowerBound = Settings.Default.targetRadiusLowerBound;
+            HsvTargetingSettings.Instance.TargetRadiusUpperBound = Settings.Default.targetRadiusUpperBound;
 
             #endregion
 
@@ -116,7 +118,8 @@ namespace Dashboard2017
             lockVideoSource.Checked = true;
             lockHSVSettings.Checked = true;
             lockTargetSettings.Checked = true;
-            videoSourceTextBox.Text = Properties.Settings.Default.videoSource;
+            videoSourceTextBox.Text = Settings.Default.videoSource;
+            debugControlLayoutPanel.FlowDirection = FlowDirection.TopDown;
         }
 
         #region UI_EVENTS
@@ -160,7 +163,7 @@ namespace Dashboard2017
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (new Options().ShowDialog() == DialogResult.OK)
-                networkTablesInit(Properties.Settings.Default.rioAddress);
+                networkTablesInit(Settings.Default.rioAddress);
         }
 
         private void recordToolStripMenuItem_Click(object sender, EventArgs e)
@@ -184,8 +187,8 @@ namespace Dashboard2017
 
         private void setVideoSource_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.videoSource = videoSourceTextBox.Text;
-            Properties.Settings.Default.Save();
+            Settings.Default.videoSource = videoSourceTextBox.Text;
+            Settings.Default.Save();
             new Thread(createFeedHandler).Start();
         }
 
@@ -214,15 +217,15 @@ namespace Dashboard2017
         {
             try
             {
-                Properties.Settings.Default.targetLeftXBound = Convert.ToInt32(lowerXBound.Text);
-                Properties.Settings.Default.targetRightXBound = Convert.ToInt32(upperXBound.Text);
-                Properties.Settings.Default.targetRadiusLowerBound = Convert.ToInt32(lowerRadiusBound.Text);
-                Properties.Settings.Default.targetRadiusUpperBound = Convert.ToInt32(upperRadiusBound.Text);
+                Settings.Default.targetLeftXBound = Convert.ToInt32(lowerXBound.Text);
+                Settings.Default.targetRightXBound = Convert.ToInt32(upperXBound.Text);
+                Settings.Default.targetRadiusLowerBound = Convert.ToInt32(lowerRadiusBound.Text);
+                Settings.Default.targetRadiusUpperBound = Convert.ToInt32(upperRadiusBound.Text);
                 HsvTargetingSettings.Instance.TargetLeftXBound = Convert.ToInt32(lowerXBound.Text);
                 HsvTargetingSettings.Instance.TargetRightXBound = Convert.ToInt32(upperXBound.Text);
                 HsvTargetingSettings.Instance.TargetRadiusLowerBound = Convert.ToInt32(lowerRadiusBound.Text);
                 HsvTargetingSettings.Instance.TargetRadiusUpperBound = Convert.ToInt32(upperRadiusBound.Text);
-                Properties.Settings.Default.Save();
+                Settings.Default.Save();
             }
             catch (Exception ex)
             {
@@ -233,19 +236,19 @@ namespace Dashboard2017
         private void Trackbar_ValueChanged(object sender, EventArgs e)
         {
             unbindTrackbarEvent();
-            Properties.Settings.Default.upperValue = (uint) upperValueTrackbar.Value;
-            Properties.Settings.Default.lowerValue = (uint) lowerValueTrackbar.Value;
-            Properties.Settings.Default.upperHue = (uint) upperHueTrackbar.Value;
-            Properties.Settings.Default.lowerHue = (uint) lowerHueTrackbar.Value;
-            Properties.Settings.Default.upperSaturation = (uint) upperSaturationTrackbar.Value;
-            Properties.Settings.Default.lowerSaturation = (uint) lowerSaturationTrackbar.Value;
+            Settings.Default.upperValue = (uint) upperValueTrackbar.Value;
+            Settings.Default.lowerValue = (uint) lowerValueTrackbar.Value;
+            Settings.Default.upperHue = (uint) upperHueTrackbar.Value;
+            Settings.Default.lowerHue = (uint) lowerHueTrackbar.Value;
+            Settings.Default.upperSaturation = (uint) upperSaturationTrackbar.Value;
+            Settings.Default.lowerSaturation = (uint) lowerSaturationTrackbar.Value;
             HsvTargetingSettings.Instance.UpperValue = (uint)upperValueTrackbar.Value;
             HsvTargetingSettings.Instance.UpperSaturation = (uint)upperSaturationTrackbar.Value;
             HsvTargetingSettings.Instance.UpperHue = (uint)upperHueTrackbar.Value;
             HsvTargetingSettings.Instance.LowerValue = (uint)lowerValueTrackbar.Value;
             HsvTargetingSettings.Instance.LowerSaturation = (uint)lowerSaturationTrackbar.Value;
             HsvTargetingSettings.Instance.LowerHue = (uint)lowerHueTrackbar.Value;
-            Properties.Settings.Default.Save();
+            Settings.Default.Save();
 
             lowerHueLabel.Text = lowerHueTrackbar.Value.ToString();
             lowerValueLabel.Text = lowerValueTrackbar.Value.ToString();
@@ -301,7 +304,7 @@ namespace Dashboard2017
 
             try
             {
-                var source = Convert.ToInt32(Properties.Settings.Default.videoSource);
+                var source = Convert.ToInt32(Settings.Default.videoSource);
                 feedHandler = new FeedHandler(source, mainVideoBox, compositVideoBox, this);
                 ConsoleManager.Instance.AppendInfo("FeedHandler created for source at : " + source);
                 feedHandler.Targeting = true;
@@ -311,7 +314,7 @@ namespace Dashboard2017
                 // ignored
             }
 
-            if (Properties.Settings.Default.videoSource.Contains("://"))
+            if (Settings.Default.videoSource.Contains("://"))
             {
                 if ((bw != null) && bw.IsBusy)
                 {
@@ -328,7 +331,7 @@ namespace Dashboard2017
             else
             {
                 ConsoleManager.Instance.AppendError(
-                    $"Error creating a feed handler for {Properties.Settings.Default.videoSource}. Check to make sure the source is valid.");
+                    $"Error creating a feed handler for {Settings.Default.videoSource}. Check to make sure the source is valid.");
             }
         }
 
@@ -337,16 +340,16 @@ namespace Dashboard2017
         {
             if (!pingSuccess || (feedHandler!=null) || justSet) return;
             justSet = true;
-            feedHandler = new FeedHandler(Properties.Settings.Default.videoSource, mainVideoBox, compositVideoBox, this);
+            feedHandler = new FeedHandler(Settings.Default.videoSource, mainVideoBox, compositVideoBox, this);
             ConsoleManager.Instance.AppendInfo("FeedHandler created for source at : " +
-                                               Properties.Settings.Default.videoSource);
+                                               Settings.Default.videoSource);
             feedHandler.Targeting = true;
         }
 
         private void Bw_DoWork(object sender, DoWorkEventArgs e)
         {
             var timeout = 25;
-            var match = Regex.Match(Properties.Settings.Default.videoSource, @"\b(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b");
+            var match = Regex.Match(Settings.Default.videoSource, @"\b(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b");
             ConsoleManager.Instance.AppendInfo("Attempting to contact http://" + match.Captures[0]);
 
             var pingSender = new Ping();
@@ -435,8 +438,8 @@ namespace Dashboard2017
         private void setupNetworkTables()
         {
             IPAddress ipAddress;
-            if (IPAddress.TryParse(Properties.Settings.Default.rioAddress, out ipAddress))
-                networkTablesInit(Properties.Settings.Default.rioAddress);
+            if (IPAddress.TryParse(Settings.Default.rioAddress, out ipAddress))
+                networkTablesInit(Settings.Default.rioAddress);
             else
                 ConsoleManager.Instance.AppendError(
                     "No NetworkTables address set, go to 'Options' to set roboRIO address.");
@@ -458,6 +461,7 @@ namespace Dashboard2017
 
         private class TableActivityListener : ITableListener
         {
+            private string currentState;
             private Form1 parent;
 
             public TableActivityListener(Form1 parent)
@@ -465,10 +469,42 @@ namespace Dashboard2017
                 this.parent = parent;
             }
 
+
             public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
             {
                 /*if (key == "AUTONS")
                     parent.UpdateAutonList(source.GetStringArray(key));*/
+
+                if (key == "ROBOT_STATE")
+                {
+                    var newState = source.GetValue(key).ToString();
+                    if (currentState != newState)
+                        parent.debugControlLayoutPanel.Invoke(
+                            new Action(() => parent.debugControlLayoutPanel.Controls.Clear()));
+                    currentState = newState;
+                }
+
+
+                parent.debugControlLayoutPanel.Invoke(new Action(() =>
+                {
+                    var controls = parent.debugControlLayoutPanel.Controls.OfType<DebugControl>().Select(control => control).ToList();
+
+                    if ((key.Split('_')[0] == "AUTON") || (key.Split('_')[0] == "TELEOP")) 
+                    {
+                        if (controls.All(c => c.Name != key))
+                        {
+                            var tmp = new DebugControl(key);
+                            parent.debugControlLayoutPanel.Controls.Add(tmp);
+                            tmp.UpdateLabel($"{key.Substring(6)}: {source.GetValue(key)}");
+                        }
+                        else
+                        {
+                            var control = controls.FirstOrDefault(c => c.Name == key);
+                            control?.UpdateLabel($"{key.Substring(6)}: {source.GetValue(key)}");
+                        }
+                    }
+                }));
+
             }
         }
 

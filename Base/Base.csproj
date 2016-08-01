@@ -66,6 +66,7 @@
     <Compile Include="Config\Schemas.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ControlLoop.cs" />
+    <Compile Include="DashboardComms.cs" />
     <Compile Include="Filters.cs" />
     <Compile Include="IComponent.cs" />
     <Compile Include="IO.cs" />

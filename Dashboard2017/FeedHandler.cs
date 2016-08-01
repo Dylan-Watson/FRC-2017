@@ -89,13 +89,6 @@ namespace Dashboard2017
                 capture = new Capture((int)source);
             else
                 capture = new Capture((string)source);
-
-            capture.ImageGrabbed += Capture_ImageGrabbed;
-        }
-
-        private void Capture_ImageGrabbed(object sender, EventArgs e)
-        {
-            Console.WriteLine("Test");
         }
 
         private void Bw_DoWork(object sender, DoWorkEventArgs e)

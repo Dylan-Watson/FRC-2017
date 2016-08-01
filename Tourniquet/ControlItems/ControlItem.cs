@@ -79,11 +79,16 @@ namespace Tourniquet.ControlItems
         /// <summary>
         ///     Defines if the control is enabled
         /// </summary>
-        public bool IsEnabled { get; set; }
+        public bool IsEnabled { get; set; } = true;
 
         #endregion Public Properties
 
         #region Public Methods
+
+        /// <summary>
+        ///     Overrides ToString to return the control's name
+        /// </summary>
+        public override string ToString() => ControlName;
 
         /// <summary>
         ///     Adds a IComponent to the control

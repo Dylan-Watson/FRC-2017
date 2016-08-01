@@ -12,6 +12,7 @@ Email: cooper.ryan@centaurisoft.org
 
 namespace Base.Components
 {
+    using System;
     using WPILib;
 
     /// <summary>
