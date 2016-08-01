@@ -11,7 +11,7 @@ Email: cooper.ryan@centaurisoft.org
 
 namespace Dashboard2017
 {
-    using Dashboard2017.Properties;
+    using Properties;
     using Emgu.CV;
     using Emgu.CV.CvEnum;
     using Emgu.CV.Structure;
@@ -35,18 +35,20 @@ namespace Dashboard2017
 
     public class FeedHandler : IDisposable
     {
+        private readonly Form1 parent;
         private readonly BackgroundWorker bw;
         private readonly ImageBox destCompositOutputImage;
         private readonly ImageBox destOutputImage;
         private readonly Mat logo = CvInvoke.Imread(@"defaultFeed.jpg", LoadImageType.Color);
         private readonly object source;
-        private readonly bool terminate = false;
+        private bool terminate, hasTarget;
         private Capture capture;
         private Mat temp;
 
-        public FeedHandler(int source, ImageBox normal, ImageBox composit)
+        public FeedHandler(int source, ImageBox normal, ImageBox composit, Form1 parentForm1)
         {
             this.source = source;
+            parent = parentForm1;
             capture = new Capture(source);
             destOutputImage = normal;
             destCompositOutputImage = composit;
@@ -56,9 +58,10 @@ namespace Dashboard2017
             bw.RunWorkerAsync();
         }
 
-        public FeedHandler(string source, ImageBox normal, ImageBox composit)
+        public FeedHandler(string source, ImageBox normal, ImageBox composit, Form1 parentForm1)
         {
             this.source = source;
+            parent = parentForm1;
             capture = new Capture(source);
             destOutputImage = normal;
             destCompositOutputImage = composit;
@@ -75,6 +78,7 @@ namespace Dashboard2017
 
         public void Dispose()
         {
+            terminate = true;
             dispose(true);
             GC.SuppressFinalize(this);
         }
@@ -107,16 +111,22 @@ namespace Dashboard2017
                     var output = processImage(temp);
                     destOutputImage.Invoke(new Action(() => destOutputImage.Image = output.Item1));
                     destOutputImage.Invoke(new Action(() => destCompositOutputImage.Image = output.Item2));
+                    if (VideoWriterManager.Instance.Record)
+                        VideoWriterManager.Instance.WriteFrame(temp);
                 }
                 else if (temp != null)
                 {
                     destOutputImage.Invoke(new Action(() => destOutputImage.Image = temp));
                     destOutputImage.Invoke(new Action(() => destCompositOutputImage.Image = logo));
+                    if (VideoWriterManager.Instance.Record)
+                        VideoWriterManager.Instance.WriteFrame(temp);
                 }
                 else
                 {
                     destOutputImage.Invoke(new Action(() => destOutputImage.Image = logo));
                     destOutputImage.Invoke(new Action(() => destCompositOutputImage.Image = logo));
+                    if (VideoWriterManager.Instance.Record)
+                        VideoWriterManager.Instance.WriteFrame(temp);
                 }
             }
             catch (Exception)
@@ -132,9 +142,9 @@ namespace Dashboard2017
 
             var hsvImage = original.ToImage<Hsv, byte>();
             var lowerLimit = new Hsv(Settings.Default.lowerHue, Settings.Default.lowerSaturation,
-                Settings.Default.lowerBrightness);
+                Settings.Default.lowerValue);
             var upperLimit = new Hsv(Settings.Default.upperHue, Settings.Default.upperSaturation,
-                Settings.Default.upperBrightness);
+                Settings.Default.upperValue);
             var imageHsvDest = hsvImage.InRange(lowerLimit, upperLimit);
 
             var circles = new List<CircleF>();
@@ -149,14 +159,16 @@ namespace Dashboard2017
                     for (var i = 0; i < contourSize; i++)
                     {
                         var circle = CvInvoke.MinEnclosingCircle(contours[i]);
-                        if ((circle.Area > 3200) && (circle.Area < 25000))
+                        if ((circle.Area > 3500) && (circle.Area < 25000))
                             circles.Add(circle);
                     }
             }
 
-            if (circles.Count == 0) return new Tuple<Mat, Image<Gray, byte>>(original, imageHsvDest);
             if (circles.Count == 0)
+            {
+                parent.NoTarget();
                 return new Tuple<Mat, Image<Gray, byte>>(original, imageHsvDest);
+            }
             //if there are no good targets, return the frame unaltered
 
             var sortedCircles = circles.OrderBy(o => o.Area).ToList();
@@ -176,21 +188,41 @@ namespace Dashboard2017
                                           || ((offsetY < offsetY2) && !(offset > offset2))
                                     select cir) largestAndClosest = cir;
 
-            CvInvoke.Circle(original, new Point((int)largestAndClosest.Center.X, (int)largestAndClosest.Center.Y),
-                (int)largestAndClosest.Radius, new MCvScalar(0, 0, 255), 2, LineType.AntiAlias);
+            if (!hasTarget)
+                parent.HasTarget();
+            else
+                parent.TargetAquired();
 
-            /* if (((int)largestAndClosest.Center.X - xCentre) >= -16 && ((int)largestAndClosest.Center.X - xCentre) <= 9)
-                         parent.UpdateOffsetLabel(((int)largestAndClosest.Center.X - xCentre), System.Windows.Media.Brushes.LimeGreen);
-                     else
-                         parent.UpdateOffsetLabel(((int)largestAndClosest.Center.X - xCentre), System.Windows.Media.Brushes.Red);
+            CvInvoke.Circle(original, new Point((int) largestAndClosest.Center.X, (int) largestAndClosest.Center.Y),
+                (int) largestAndClosest.Radius, !hasTarget ? new MCvScalar(0, 0, 255) : new MCvScalar(0, 255, 0), 2,
+                LineType.AntiAlias);
 
-                     if (((int)largestAndClosest.Radius) >= 61 && ((int)largestAndClosest.Radius) <= 72)
-                         parent.UpdateRadiusLabel(((int)largestAndClosest.Radius), System.Windows.Media.Brushes.LimeGreen);
-                     else
-                         parent.UpdateRadiusLabel(((int)largestAndClosest.Radius), System.Windows.Media.Brushes.Red);*/
+            parent.UpdateTargetLabels((int)largestAndClosest.Center.X- xCentre, (int)largestAndClosest.Center.Y- yCentre, (int)largestAndClosest.Radius);
 
-            //TableWrapper.Instance.Table.PutNumber("VISION_OFFSET", ((int)largestAndClosest.Center.X - xCentre));
-            //TableWrapper.Instance.Table.PutNumber("CIRCLE_RADIUS", (int)largestAndClosest.Radius);
+            if (((int) largestAndClosest.Center.X - xCentre >= Settings.Default.targetLeftXBound) && ((int) largestAndClosest.Center.X - xCentre <= Settings.Default.targetRightXBound))
+            {
+                //parent.UpdateOffsetLabel(((int) largestAndClosest.Center.X - xCentre),
+                // System.Windows.Media.Brushes.LimeGreen);
+                hasTarget = true;
+            }
+            else
+            {
+                hasTarget = false;
+                //parent.UpdateOffsetLabel(((int) largestAndClosest.Center.X - xCentre), System.Windows.Media.Brushes.Red);
+            }
+
+            if (((int) largestAndClosest.Radius >= Settings.Default.targetRadiusLowerBound) && ((int) largestAndClosest.Radius <= Settings.Default.targetRadiusUpperBound))
+            {
+                //parent.UpdateRadiusLabel(((int) largestAndClosest.Radius), System.Windows.Media.Brushes.LimeGreen);
+            }
+            else
+            {
+                hasTarget = false;
+                //parent.UpdateRadiusLabel(((int) largestAndClosest.Radius), System.Windows.Media.Brushes.Red);
+            }
+
+            TableManager.Instance.Table.PutNumber("VISION_OFFSET", ((int)largestAndClosest.Center.X - xCentre));
+            TableManager.Instance.Table.PutNumber("CIRCLE_RADIUS", (int)largestAndClosest.Radius);
 
             return new Tuple<Mat, Image<Gray, byte>>(original, imageHsvDest);
         }
