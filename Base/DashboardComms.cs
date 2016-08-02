@@ -1,20 +1,20 @@
-﻿using System;
+﻿using NetworkTables;
+using System;
 
 namespace Base
 {
-    using NetworkTables;
-
     public sealed class DashboardComms
     {
         private static readonly Lazy<DashboardComms> _lazy =
-        new Lazy<DashboardComms>(() => new DashboardComms());
+            new Lazy<DashboardComms>(() => new DashboardComms());
 
-        public static DashboardComms Instance => _lazy.Value;
         private readonly NetworkTable dashboard = NetworkTable.GetTable(Constants.PRIMARY_NETWORK_TABLE);
 
         private DashboardComms()
         {
         }
+
+        public static DashboardComms Instance => _lazy.Value;
 
         public void NotifyRobotState(object value)
         {
@@ -30,6 +30,5 @@ namespace Base
             else
                 dashboard.PutValue($"{key}", value);
         }
-
     }
 }

@@ -10,11 +10,10 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using WPILib;
+
 namespace Base.Components
 {
-    using System;
-    using WPILib;
-
     /// <summary>
     ///     Defines the type of Victor
     /// </summary>

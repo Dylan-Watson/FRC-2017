@@ -9,36 +9,36 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using Dashboard2017.Properties;
+using Emgu.CV;
+using Emgu.CV.CvEnum;
+using Emgu.CV.UI;
+using NetworkTables;
+using NetworkTables.Tables;
+using System;
+using System.ComponentModel;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Windows.Forms;
+
 namespace Dashboard2017
 {
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.NetworkInformation;
-    using System.Text.RegularExpressions;
-    using System.Threading;
-    using System.Windows.Forms;
-    using Emgu.CV;
-    using Emgu.CV.CvEnum;
-    using Emgu.CV.UI;
-    using NetworkTables;
-    using NetworkTables.Tables;
-    using Properties;
-
     /// <summary>
-    /// Main window of the dashboard
+    ///     Main window of the dashboard
     /// </summary>
     public partial class Form1 : Form
     {
-        private bool pingSuccess;
         private AbortableBackgroundWorker bw;
         private FeedHandler feedHandler;
+        private bool pingSuccess;
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         public Form1()
         {
@@ -79,7 +79,7 @@ namespace Dashboard2017
 
             HsvTargetingSettings.Instance.UpperValue = Settings.Default.upperValue;
             HsvTargetingSettings.Instance.UpperSaturation = Settings.Default.upperSaturation;
-            HsvTargetingSettings.Instance .UpperHue= Settings.Default.upperHue;
+            HsvTargetingSettings.Instance.UpperHue = Settings.Default.upperHue;
             HsvTargetingSettings.Instance.LowerValue = Settings.Default.lowerValue;
             HsvTargetingSettings.Instance.LowerSaturation = Settings.Default.lowerSaturation;
             HsvTargetingSettings.Instance.LowerHue = Settings.Default.lowerHue;
@@ -93,7 +93,7 @@ namespace Dashboard2017
 
             bindTrackbarEvent();
 
-            #endregion
+            #endregion TRACKBAR_SETUP
 
             #region TARGETING_SETUP
 
@@ -109,7 +109,7 @@ namespace Dashboard2017
             HsvTargetingSettings.Instance.TargetRadiusLowerBound = Settings.Default.targetRadiusLowerBound;
             HsvTargetingSettings.Instance.TargetRadiusUpperBound = Settings.Default.targetRadiusUpperBound;
 
-            #endregion
+            #endregion TARGETING_SETUP
 
             KeyPreview = true;
             Shown += Form1_Shown;
@@ -147,9 +147,11 @@ namespace Dashboard2017
                 case Keys.F5:
                     feedHandler?.Refresh();
                     break;
+
                 case Keys.F7:
                     recordToolStripMenuItem_Click(this, new EventArgs());
                     break;
+
                 case Keys.F8:
                     targetingF8ToolStripMenuItem_Click(this, new EventArgs());
                     break;
@@ -242,12 +244,12 @@ namespace Dashboard2017
             Settings.Default.lowerHue = (uint) lowerHueTrackbar.Value;
             Settings.Default.upperSaturation = (uint) upperSaturationTrackbar.Value;
             Settings.Default.lowerSaturation = (uint) lowerSaturationTrackbar.Value;
-            HsvTargetingSettings.Instance.UpperValue = (uint)upperValueTrackbar.Value;
-            HsvTargetingSettings.Instance.UpperSaturation = (uint)upperSaturationTrackbar.Value;
-            HsvTargetingSettings.Instance.UpperHue = (uint)upperHueTrackbar.Value;
-            HsvTargetingSettings.Instance.LowerValue = (uint)lowerValueTrackbar.Value;
-            HsvTargetingSettings.Instance.LowerSaturation = (uint)lowerSaturationTrackbar.Value;
-            HsvTargetingSettings.Instance.LowerHue = (uint)lowerHueTrackbar.Value;
+            HsvTargetingSettings.Instance.UpperValue = (uint) upperValueTrackbar.Value;
+            HsvTargetingSettings.Instance.UpperSaturation = (uint) upperSaturationTrackbar.Value;
+            HsvTargetingSettings.Instance.UpperHue = (uint) upperHueTrackbar.Value;
+            HsvTargetingSettings.Instance.LowerValue = (uint) lowerValueTrackbar.Value;
+            HsvTargetingSettings.Instance.LowerSaturation = (uint) lowerSaturationTrackbar.Value;
+            HsvTargetingSettings.Instance.LowerHue = (uint) lowerHueTrackbar.Value;
             Settings.Default.Save();
 
             lowerHueLabel.Text = lowerHueTrackbar.Value.ToString();
@@ -260,7 +262,7 @@ namespace Dashboard2017
             bindTrackbarEvent();
         }
 
-        #endregion
+        #endregion UI_EVENTS
 
         #region Utilities
 
@@ -309,7 +311,7 @@ namespace Dashboard2017
                 ConsoleManager.Instance.AppendInfo("FeedHandler created for source at : " + source);
                 feedHandler.Targeting = true;
             }
-            catch(Exception)
+            catch (Exception)
             {
                 // ignored
             }
@@ -336,9 +338,10 @@ namespace Dashboard2017
         }
 
         private bool justSet;
+
         private void Bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (!pingSuccess || (feedHandler!=null) || justSet) return;
+            if (!pingSuccess || (feedHandler != null) || justSet) return;
             justSet = true;
             feedHandler = new FeedHandler(Settings.Default.videoSource, mainVideoBox, compositVideoBox, this);
             ConsoleManager.Instance.AppendInfo("FeedHandler created for source at : " +
@@ -374,39 +377,32 @@ namespace Dashboard2017
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="radius"></param>
         public void UpdateTargetLabels(int x, int radius)
         {
-            xValueLabel.Invoke(new Action(() =>
-            {
-                xValueLabel.Text = $"Current X: {x}";
-            }));
+            xValueLabel.Invoke(new Action(() => { xValueLabel.Text = $"Current X: {x}"; }));
 
-            radiusValueLabel.Invoke(new Action(() =>
-            {
-                radiusValueLabel.Text = $"Current Radius: {radius}";
-            }));
+            radiusValueLabel.Invoke(new Action(() => { radiusValueLabel.Text = $"Current Radius: {radius}"; }));
         }
 
         /// <summary>
-        /// Updates targetingLabel
+        ///     Updates targetingLabel
         /// </summary>
         public void NoTarget()
         {
-                targetingLabel.Invoke(new Action(() =>
-                {
-                    targetingLabel.BackColor = DefaultBackColor;
-                    targetingLabel.Text = @"NO TARGET";
-                    targetingLabel.Enabled = false;
-                }));
+            targetingLabel.Invoke(new Action(() =>
+            {
+                targetingLabel.BackColor = DefaultBackColor;
+                targetingLabel.Text = @"NO TARGET";
+                targetingLabel.Enabled = false;
+            }));
         }
 
         /// <summary>
-        /// Updates targetingLabel
+        ///     Updates targetingLabel
         /// </summary>
         public void HasTarget()
         {
@@ -419,7 +415,7 @@ namespace Dashboard2017
         }
 
         /// <summary>
-        /// Updates targetingLabel
+        ///     Updates targetingLabel
         /// </summary>
         public void TargetAquired()
         {
@@ -431,7 +427,7 @@ namespace Dashboard2017
             }));
         }
 
-        #endregion
+        #endregion Utilities
 
         #region NetworkTables_INIT
 
@@ -455,20 +451,19 @@ namespace Dashboard2017
             TableManager.Instance.Table.AddTableListener(new TableActivityListener(this), true);
         }
 
-        #endregion
+        #endregion NetworkTables_INIT
 
         #region NetworkTables_LISTENERS
 
         private class TableActivityListener : ITableListener
         {
             private string currentState;
-            private Form1 parent;
+            private readonly Form1 parent;
 
             public TableActivityListener(Form1 parent)
             {
                 this.parent = parent;
             }
-
 
             public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
             {
@@ -484,13 +479,14 @@ namespace Dashboard2017
                     currentState = newState;
                 }
 
-
                 parent.debugControlLayoutPanel.Invoke(new Action(() =>
                 {
-                    var controls = parent.debugControlLayoutPanel.Controls.OfType<DebugControl>().Select(control => control).ToList();
+                    var controls =
+                        parent.debugControlLayoutPanel.Controls.OfType<DebugControl>()
+                            .Select(control => control)
+                            .ToList();
 
-                    if ((key.Split('_')[0] == "AUTON") || (key.Split('_')[0] == "TELEOP")) 
-                    {
+                    if ((key.Split('_')[0] == "AUTON") || (key.Split('_')[0] == "TELEOP"))
                         if (controls.All(c => c.Name != key))
                         {
                             var tmp = new DebugControl(key);
@@ -502,9 +498,7 @@ namespace Dashboard2017
                             var control = controls.FirstOrDefault(c => c.Name == key);
                             control?.UpdateLabel($"{key.Substring(6)}: {source.GetValue(key)}");
                         }
-                    }
                 }));
-
             }
         }
 
@@ -524,7 +518,6 @@ namespace Dashboard2017
             }
         }
 
-        #endregion
-
+        #endregion NetworkTables_LISTENERS
     }
 }

@@ -9,11 +9,11 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using Base;
+using System;
+
 namespace Tourniquet
 {
-    using Base;
-    using System;
-
     /// <summary>
     ///     Class to handle sensors on the robot,
     ///     this is a ControlLoop, see ControlLoop in Base

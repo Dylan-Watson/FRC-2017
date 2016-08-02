@@ -5,13 +5,13 @@ namespace Dashboard2017
     public sealed class HsvTargetingSettings
     {
         private static readonly Lazy<HsvTargetingSettings> _lazy =
-       new Lazy<HsvTargetingSettings>(() => new HsvTargetingSettings());
-
-        public static HsvTargetingSettings Instance => _lazy.Value;
+            new Lazy<HsvTargetingSettings>(() => new HsvTargetingSettings());
 
         private HsvTargetingSettings()
         {
         }
+
+        public static HsvTargetingSettings Instance => _lazy.Value;
 
         public int TargetRightXBound { get; set; }
         public int TargetLeftXBound { get; set; }

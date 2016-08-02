@@ -9,16 +9,15 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using HAL.Simulator;
+using WPILib;
+using DriverStation = DriverStationGUI.DriverStation;
+
 namespace FRCSimulator
 {
-    using HAL.Simulator;
-    using RobotMain2017;
-    using WPILib;
-    using DriverStation = DriverStationGUI.DriverStation;
-
     public static class Program
     {
-        public static void Main() => RobotBase.Main(null, typeof(RobotMain2017));
+        public static void Main() => RobotBase.Main(null, typeof(RobotMain2017.RobotMain2017));
     }
 
     public class Simulator : ISimulator

@@ -10,14 +10,14 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Xml.Linq;
+
 namespace Base
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-    using System.Xml.Linq;
-
     /// <summary>
     ///     Class to define the way IComponents are found and bound to controls, via their CommonNames,
     ///     basically a string wrapper with utilities
@@ -45,7 +45,8 @@ namespace Base
         }
 
         #endregion Public Constructors
-//TODO: what is the string.Equals function? How does it differ from  ===?
+
+        //TODO: what is the string.Equals function? How does it differ from  ===?
         private bool equals(CommonName other) => string.Equals(name, other.name);
 
         /// <summary>
@@ -58,7 +59,7 @@ namespace Base
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
 
-            return obj is CommonName && equals((CommonName)obj);
+            return obj is CommonName && equals((CommonName) obj);
         }
 
         /// <summary>
@@ -83,7 +84,7 @@ namespace Base
 
             var values = attribute.Value.Contains(",")
                 ? attribute.Value.Split(',').ToList()
-                : new List<string> { attribute.Value };
+                : new List<string> {attribute.Value};
 
             values = values.Distinct().ToList();
 
@@ -98,7 +99,7 @@ namespace Base
                 {
                     if (v.ToString() == values[0])
                     {
-                        bindings.Add((CommonName)v);
+                        bindings.Add((CommonName) v);
                         values.Remove(values[0]);
                         break;
                     }
@@ -115,7 +116,8 @@ namespace Base
         }
 
         #region Public Methods
-//TODO: What exactly do these next two methods do, and why are they useful?
+
+        //TODO: What exactly do these next two methods do, and why are they useful?
         /// <summary>
         ///     != operator for CommonNames
         /// </summary>

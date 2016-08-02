@@ -10,13 +10,13 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using Base;
+using Base.Config;
+using Tourniquet;
+using WPILib;
+
 namespace RobotMain2017
 {
-    using Base;
-    using Base.Config;
-    using Tourniquet;
-    using WPILib;
-
     /// <summary>
     ///     Class called by WPI for robot states (teleop, auto, test...)
     /// </summary>
@@ -61,7 +61,7 @@ namespace RobotMain2017
             new Driver().Start();
             new Operator().Start();
 
-           //while (IsOperatorControl && IsEnabled) { }
+            //while (IsOperatorControl && IsEnabled) { }
         }
 
         /// <summary>

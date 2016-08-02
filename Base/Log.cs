@@ -9,11 +9,11 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using System;
+using System.IO;
+
 namespace Base
 {
-    using System;
-    using System.IO;
-
     /// <summary>
     ///     Utility class for logging functions
     /// </summary>

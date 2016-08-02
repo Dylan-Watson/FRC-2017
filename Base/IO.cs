@@ -1,9 +1,9 @@
-﻿namespace Base
-{
-    using System;
+﻿using System;
 
+namespace Base
+{
     /// <summary>
-    /// Abstract class for IO components (not including motors)
+    ///     Abstract class for IO components (not including motors)
     /// </summary>
     // ReSharper disable once InconsistentNaming
     public abstract class IO

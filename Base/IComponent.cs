@@ -10,10 +10,10 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using System;
+
 namespace Base
 {
-    using System;
-
     /// <summary>
     ///     Interface that all components [physical devices on the robot] implement.
     /// </summary>

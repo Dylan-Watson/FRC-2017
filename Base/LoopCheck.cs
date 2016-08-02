@@ -10,10 +10,10 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using WPILib;
+
 namespace Base
 {
-    using WPILib;
-
     /// <summary>
     ///     Utility class for custom WPI functions describing match states
     /// </summary>

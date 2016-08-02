@@ -10,12 +10,12 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using Base;
+using System;
+using WPILib;
+
 namespace Tourniquet.ControlItems
 {
-    using System;
-    using Base;
-    using WPILib;
-
     internal delegate double FitFunction(double x, double y, double z);
 
     /// <summary>
@@ -83,7 +83,7 @@ namespace Tourniquet.ControlItems
             var raw = joystick.GetRawAxis(axis);
             if ((raw > deadZone) || (raw < -deadZone))
             {
-                set(fitFunction(raw, deadZone, power) * multiplier);
+                set(fitFunction(raw, deadZone, power)*multiplier);
                 IsRunning = true;
             }
             else if (IsRunning)

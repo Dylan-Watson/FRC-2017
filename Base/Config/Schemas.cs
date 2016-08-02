@@ -1,10 +1,10 @@
-﻿namespace Base.Config
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Xml.Linq;
-    using WPILib;
+﻿using System;
+using System.Collections.Generic;
+using System.Xml.Linq;
+using WPILib;
 
+namespace Base.Config
+{
     /// <summary>
     ///     Class to store all relevant ControlSchemas
     /// </summary>
@@ -169,7 +169,8 @@
             #endregion Public Methods
 
             #region Public Constructors
-//TODO: For future use?
+
+            //TODO: For future use?
             /// <summary>
             ///     Default constructor.
             /// </summary>

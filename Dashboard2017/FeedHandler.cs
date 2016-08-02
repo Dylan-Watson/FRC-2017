@@ -9,21 +9,21 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using Emgu.CV;
+using Emgu.CV.CvEnum;
+using Emgu.CV.Structure;
+using Emgu.CV.UI;
+using Emgu.CV.Util;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Linq;
+using System.Runtime.ExceptionServices;
+using System.Security;
+
 namespace Dashboard2017
 {
-    using Emgu.CV;
-    using Emgu.CV.CvEnum;
-    using Emgu.CV.Structure;
-    using Emgu.CV.UI;
-    using Emgu.CV.Util;
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Linq;
-    using System.Runtime.ExceptionServices;
-    using System.Security;
-
     public enum CaptureType
     {
         Usb,
@@ -34,15 +34,23 @@ namespace Dashboard2017
 
     public class FeedHandler : IDisposable
     {
-        private readonly Form1 parent;
         private readonly BackgroundWorker bw;
+        private readonly List<CircleF> circles = new List<CircleF>();
         private readonly ImageBox destCompositOutputImage;
         private readonly ImageBox destOutputImage;
+        private readonly HsvTargetingSettings hsvSettings = HsvTargetingSettings.Instance;
         private readonly Mat logo = CvInvoke.Imread(@"defaultFeed.jpg", LoadImageType.Color);
+        private readonly Form1 parent;
         private readonly object source;
-        private bool terminate, hasTarget;
         private Capture capture;
+
+        private Image<Hsv, byte> hsvImage;
+        private Image<Gray, byte> imageHsvDest;
+        private Hsv lowerLimit, upperLimit;
+
+        private Tuple<Mat, Image<Gray, byte>> output;
         private Mat temp;
+        private bool terminate, hasTarget;
 
         public FeedHandler(int source, ImageBox normal, ImageBox composit, Form1 parentForm1)
         {
@@ -52,7 +60,7 @@ namespace Dashboard2017
             destOutputImage = normal;
             destCompositOutputImage = composit;
 
-            bw = new BackgroundWorker { WorkerSupportsCancellation = true };
+            bw = new BackgroundWorker {WorkerSupportsCancellation = true};
             bw.DoWork += Bw_DoWork;
             bw.RunWorkerAsync();
         }
@@ -65,7 +73,7 @@ namespace Dashboard2017
             destOutputImage = normal;
             destCompositOutputImage = composit;
 
-            bw = new BackgroundWorker { WorkerSupportsCancellation = true };
+            bw = new BackgroundWorker {WorkerSupportsCancellation = true};
             bw.DoWork += Bw_DoWork;
             bw.RunWorkerAsync();
         }
@@ -86,9 +94,9 @@ namespace Dashboard2017
         {
             capture.Dispose();
             if (source is int)
-                capture = new Capture((int)source);
+                capture = new Capture((int) source);
             else
-                capture = new Capture((string)source);
+                capture = new Capture((string) source);
         }
 
         private void Bw_DoWork(object sender, DoWorkEventArgs e)
@@ -97,7 +105,6 @@ namespace Dashboard2017
                 update();
         }
 
-        private Tuple<Mat, Image<Gray, byte>> output;
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
         private void update()
@@ -133,19 +140,13 @@ namespace Dashboard2017
             }
         }
 
-        private Image<Hsv, byte> hsvImage;
-        private Image<Gray, byte> imageHsvDest;
-        private Hsv lowerLimit, upperLimit;
-        private readonly List<CircleF> circles = new List<CircleF>();
-        private readonly HsvTargetingSettings hsvSettings = HsvTargetingSettings.Instance;
-
         //This is where frames are proccessed
         private Tuple<Mat, Image<Gray, byte>> processImage(Mat original)
         {
             if (original == null) return new Tuple<Mat, Image<Gray, byte>>(null, null);
 
-             lowerLimit = new Hsv(hsvSettings.LowerHue, hsvSettings.LowerSaturation, hsvSettings.LowerValue);
-             upperLimit = new Hsv(hsvSettings.UpperHue, hsvSettings.UpperSaturation, hsvSettings.UpperValue);
+            lowerLimit = new Hsv(hsvSettings.LowerHue, hsvSettings.LowerSaturation, hsvSettings.LowerValue);
+            upperLimit = new Hsv(hsvSettings.UpperHue, hsvSettings.UpperSaturation, hsvSettings.UpperValue);
 
             hsvImage = original.ToImage<Hsv, byte>();
             imageHsvDest = hsvImage.InRange(lowerLimit, upperLimit);
@@ -174,16 +175,15 @@ namespace Dashboard2017
             }
             //if there are no good targets, return the frame unaltered
 
-            var xCentre = original.Size.Width / 2;
+            var xCentre = original.Size.Width/2;
             var largestAndClosest = circles[0];
 
             if (circles.Count != 1)
                 foreach (var cir in from cir in circles
-                                    let offset = cir.Center.X - xCentre
-                                    let offset2 = largestAndClosest.Center.X - xCentre
-                                    where (offset < offset2) && !(offset > offset2)
-                                    select cir) largestAndClosest = cir;
-
+                    let offset = cir.Center.X - xCentre
+                    let offset2 = largestAndClosest.Center.X - xCentre
+                    where (offset < offset2) && !(offset > offset2)
+                    select cir) largestAndClosest = cir;
 
             //var sortedCircles = circles.OrderBy(o => o.Area).ToList();
             //sortedCircles.Reverse(); //reverse to largets to smallest
@@ -207,21 +207,16 @@ namespace Dashboard2017
                 (int) largestAndClosest.Radius, !hasTarget ? new MCvScalar(0, 0, 255) : new MCvScalar(0, 255, 0), 2,
                 LineType.AntiAlias);
 
-            parent.UpdateTargetLabels((int)largestAndClosest.Center.X- xCentre, (int)largestAndClosest.Radius);
+            parent.UpdateTargetLabels((int) largestAndClosest.Center.X - xCentre, (int) largestAndClosest.Radius);
 
-            if (((int) largestAndClosest.Center.X - xCentre >= hsvSettings.TargetLeftXBound) && ((int) largestAndClosest.Center.X - xCentre <= hsvSettings.TargetRightXBound))
-            {
-                //parent.UpdateOffsetLabel(((int) largestAndClosest.Center.X - xCentre),
-                // System.Windows.Media.Brushes.LimeGreen);
+            if (((int) largestAndClosest.Center.X - xCentre >= hsvSettings.TargetLeftXBound) &&
+                ((int) largestAndClosest.Center.X - xCentre <= hsvSettings.TargetRightXBound))
                 hasTarget = true;
-            }
             else
-            {
                 hasTarget = false;
-                //parent.UpdateOffsetLabel(((int) largestAndClosest.Center.X - xCentre), System.Windows.Media.Brushes.Red);
-            }
 
-            if (((int) largestAndClosest.Radius >= hsvSettings.TargetRadiusLowerBound) && ((int) largestAndClosest.Radius <= hsvSettings.TargetRadiusUpperBound))
+            if (((int) largestAndClosest.Radius >= hsvSettings.TargetRadiusLowerBound) &&
+                ((int) largestAndClosest.Radius <= hsvSettings.TargetRadiusUpperBound))
             {
                 //parent.UpdateRadiusLabel(((int) largestAndClosest.Radius), System.Windows.Media.Brushes.LimeGreen);
             }
@@ -231,8 +226,8 @@ namespace Dashboard2017
                 //parent.UpdateRadiusLabel(((int) largestAndClosest.Radius), System.Windows.Media.Brushes.Red);
             }
 
-            TableManager.Instance.Table?.PutNumber("VISION_OFFSET", (int)largestAndClosest.Center.X - xCentre);
-            TableManager.Instance.Table?.PutNumber("CIRCLE_RADIUS", (int)largestAndClosest.Radius);
+            TableManager.Instance.Table?.PutNumber("VISION_OFFSET", (int) largestAndClosest.Center.X - xCentre);
+            TableManager.Instance.Table?.PutNumber("CIRCLE_RADIUS", (int) largestAndClosest.Radius);
 
             return new Tuple<Mat, Image<Gray, byte>>(original, imageHsvDest);
         }
@@ -246,7 +241,6 @@ namespace Dashboard2017
         protected virtual void dispose(bool disposing)
         {
             if (!disposing) return;
-
 
             bw.Dispose();
             capture.Dispose();

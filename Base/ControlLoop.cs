@@ -10,11 +10,11 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using System.Threading.Tasks;
+using WPILib;
+
 namespace Base
 {
-    using System.Threading.Tasks;
-    using WPILib;
-
     /// <summary>
     ///     Abstract class to create and manage a loop for robot functions
     /// </summary>

@@ -1,8 +1,8 @@
-﻿namespace Base
-{
-    using System;
-    using WPILib;
+﻿using System;
+using WPILib;
 
+namespace Base
+{
     /// <summary>
     ///     Utility class for reporting information to the log and driver station
     /// </summary>

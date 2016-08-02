@@ -9,18 +9,17 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoftware.co
 \********************************************************************/
 
+using Base.Components;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
+using WPILib;
 using static Base.Config.Schemas;
 using static Base.Motor;
 
 namespace Base.Config
 {
-    using Base.Components;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Xml.Linq;
-    using WPILib;
-
     /// <summary>
     ///     Manages and loads the configuration file from XML.
     /// </summary>
@@ -148,7 +147,8 @@ namespace Base.Config
             }
             catch (Exception ex)
             {
-                Report.Error("There was an error loading one or more victors. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
+                Report.Error(
+                    "There was an error loading one or more victors. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
                 Log.Write(ex);
             }
 
@@ -211,7 +211,7 @@ namespace Base.Config
                                         new CanTalonItem(
                                             Convert.ToInt32(element.Attribute("channel").Value),
                                             element.Name.ToString(),
-                                            (CanTalonItem)ActiveCollection.Get(new CommonName(master)),
+                                            (CanTalonItem) ActiveCollection.Get(new CommonName(master)),
                                             Convert.ToBoolean(element.Attribute("reversed").Value)));
                                     Report.General($"{element.Name} is a slave whose master is {master}");
                                 }
@@ -227,7 +227,8 @@ namespace Base.Config
             }
             catch (Exception ex)
             {
-                Report.Error("There was an error loading one or more talons. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
+                Report.Error(
+                    "There was an error loading one or more talons. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
                 Log.Write(ex);
             }
 
@@ -367,11 +368,11 @@ namespace Base.Config
                     Log.Write(ex);
                 }
 
-                var left = new DriverControlSchema("leftDrive", (MotorControlFitFunction)driveFit, driveFitPower,
+                var left = new DriverControlSchema("leftDrive", (MotorControlFitFunction) driveFit, driveFitPower,
                     toBindCommonName(getAttribute("bindTo", "Controls", "Driver", "leftDrive")), leftAxis, leftDz,
                     multiplier, leftReversed);
 
-                var right = new DriverControlSchema("rightDrive", (MotorControlFitFunction)driveFit, driveFitPower,
+                var right = new DriverControlSchema("rightDrive", (MotorControlFitFunction) driveFit, driveFitPower,
                     toBindCommonName(getAttribute("bindTo", "Controls", "Driver", "rightDrive")), rightAxis, rightDz,
                     multiplier, rightReversed);
 
@@ -634,7 +635,7 @@ namespace Base.Config
 
             var values = attribute.Value.Contains(",")
                 ? attribute.Value.Split(',').ToList()
-                : new List<string> { attribute.Value };
+                : new List<string> {attribute.Value};
 
             values = values.Distinct().ToList();
 

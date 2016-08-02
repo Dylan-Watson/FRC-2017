@@ -1,16 +1,16 @@
-﻿namespace Dashboard2017
-{
-    using NetworkTables;
+﻿using NetworkTables;
 
+namespace Dashboard2017
+{
     public class TableManager
     {
-        public NetworkTable Table { get; set; }
+        private static TableManager instance;
 
         private TableManager()
         {
         }
 
-        private static TableManager instance;
+        public NetworkTable Table { get; set; }
 
         public static TableManager Instance => instance ?? (instance = new TableManager());
     }

@@ -9,15 +9,26 @@ namespace Dashboard2017
     {
         private static Size size;
 
+        private static VideoWriterManager instance;
+
+        private readonly VideoWriter Writer =
+            new VideoWriter(
+                @"Dashboard_2017" + DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss", CultureInfo.CurrentCulture) + ".avi",
+                24, size, true);
+
         private VideoWriterManager()
         {
         }
 
-        private static VideoWriterManager instance;
-
         public bool Record { get; set; }
 
-        private VideoWriter Writer = new VideoWriter(@"Dashboard_2017" + DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss", CultureInfo.CurrentCulture) + ".avi", 24, size, true);
+        public static VideoWriterManager Instance => instance ?? (instance = new VideoWriterManager());
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
         public void WriteFrame(Mat frame)
         {
@@ -26,17 +37,9 @@ namespace Dashboard2017
             Writer.Write(frame);
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
         protected virtual void Dispose(bool disposing)
         {
             Writer?.Dispose();
         }
-
-        public static VideoWriterManager Instance => instance ?? (instance = new VideoWriterManager());
     }
 }

@@ -1,7 +1,7 @@
-﻿namespace Trephine
-{
-    using Base.Config;
+﻿using Base.Config;
 
+namespace Trephine
+{
     /// <summary>
     ///     Initializes the autonomous period
     /// </summary>

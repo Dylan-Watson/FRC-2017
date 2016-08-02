@@ -1,9 +1,9 @@
-﻿namespace Base.Components
-{
-    using System.Collections.Generic;
-    using WPILib;
-    using WPILib.Interfaces;
+﻿using System.Collections.Generic;
+using WPILib;
+using WPILib.Interfaces;
 
+namespace Base.Components
+{
     /// <summary>
     ///     Class to handle CanTalon motor controllers
     /// </summary>
@@ -159,8 +159,8 @@
                     foreach (var slave in slaves)
                         lock (slave)
                         {
-                            ((CANTalon)slave.GetRawComponent()).ControlEnabled = true;
-                            ((CANTalon)slave.GetRawComponent()).Set(talon.DeviceId);
+                            ((CANTalon) slave.GetRawComponent()).ControlEnabled = true;
+                            ((CANTalon) slave.GetRawComponent()).Set(talon.DeviceId);
                         }
                 }
                 else
@@ -174,8 +174,8 @@
                     foreach (var slave in slaves)
                         lock (slave)
                         {
-                            ((CANTalon)slave.GetRawComponent()).ControlEnabled = true;
-                            ((CANTalon)slave.GetRawComponent()).Set(talon.DeviceId);
+                            ((CANTalon) slave.GetRawComponent()).ControlEnabled = true;
+                            ((CANTalon) slave.GetRawComponent()).Set(talon.DeviceId);
                         }
                 }
             }
@@ -192,8 +192,8 @@
                     foreach (var slave in slaves)
                         lock (slave)
                         {
-                            ((CANTalon)slave.GetRawComponent()).ControlEnabled = true;
-                            ((CANTalon)slave.GetRawComponent()).Set(talon.DeviceId);
+                            ((CANTalon) slave.GetRawComponent()).ControlEnabled = true;
+                            ((CANTalon) slave.GetRawComponent()).Set(talon.DeviceId);
                         }
                 }
                 else
@@ -207,8 +207,8 @@
                     foreach (var slave in slaves)
                         lock (slave)
                         {
-                            ((CANTalon)slave.GetRawComponent()).ControlEnabled = true;
-                            ((CANTalon)slave.GetRawComponent()).Set(talon.DeviceId);
+                            ((CANTalon) slave.GetRawComponent()).ControlEnabled = true;
+                            ((CANTalon) slave.GetRawComponent()).Set(talon.DeviceId);
                         }
                 }
             }
@@ -222,7 +222,7 @@
                 foreach (var slave in slaves)
                     lock (slave)
                     {
-                        ((CANTalon)slave.GetRawComponent()).ControlEnabled = false;
+                        ((CANTalon) slave.GetRawComponent()).ControlEnabled = false;
                     }
             }
         }

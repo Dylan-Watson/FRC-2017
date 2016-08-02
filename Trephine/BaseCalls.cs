@@ -1,8 +1,8 @@
-﻿namespace Trephine
-{
-    using Base;
-    using Base.Config;
+﻿using Base;
+using Base.Config;
 
+namespace Trephine
+{
     /// <summary>
     ///     Instance based utility class for calles to Base
     /// </summary>
@@ -30,14 +30,14 @@
         /// </summary>
         /// <param name="value">value to set</param>
         public void SetRightDrive(double value)
-            => config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor)s).Set(value, this));
+            => config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor) s).Set(value, this));
 
         /// <summary>
         ///     Sets the left drive of the robot to a specified value
         /// </summary>
         /// <param name="value">value to set</param>
         public void SetLeftDrive(double value)
-            => config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor)s).Set(value, this));
+            => config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor) s).Set(value, this));
 
         //TODO: complete full stop of all components
         /// <summary>
@@ -45,8 +45,8 @@
         /// </summary>
         public void FullStop()
         {
-            config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor)s).Stop());
-            config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor)s).Stop());
+            config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor) s).Stop());
+            config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor) s).Stop());
         }
 
         /// <summary>
@@ -54,8 +54,8 @@
         /// </summary>
         public void FullDriveStop()
         {
-            config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor)s).Stop());
-            config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor)s).Stop());
+            config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor) s).Stop());
+            config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor) s).Stop());
         }
     }
 }

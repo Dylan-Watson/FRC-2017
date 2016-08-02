@@ -1,11 +1,10 @@
-﻿namespace Dashboard2017
-{
-    using System.ComponentModel;
-    using System.Threading;
+﻿using System.ComponentModel;
+using System.Threading;
 
+namespace Dashboard2017
+{
     public class AbortableBackgroundWorker : BackgroundWorker
     {
-
         private Thread workerThread;
 
         protected override void OnDoWork(DoWorkEventArgs e)
@@ -21,7 +20,6 @@
                 Thread.ResetAbort(); //Prevents ThreadAbortException propagation
             }
         }
-
 
         public void Abort()
         {

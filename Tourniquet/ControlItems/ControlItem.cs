@@ -10,14 +10,14 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using Base;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using WPILib;
+
 namespace Tourniquet.ControlItems
 {
-    using Base;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using WPILib;
-
     /// <summary>
     ///     Defines a control type
     /// </summary>
@@ -135,7 +135,7 @@ namespace Tourniquet.ControlItems
             foreach (
                 var motor in
                     components.Select(component => component as Motor)
-                        .Where(motor => !((IComponent)motor).InUse || (((IComponent)motor).Sender == this)))
+                        .Where(motor => !((IComponent) motor).InUse || (((IComponent) motor).Sender == this)))
                 motor?.Set(val, this);
         }
 
@@ -190,7 +190,7 @@ namespace Tourniquet.ControlItems
             foreach (
                 var motor in
                     components.Select(component => component as Motor)
-                        .Where(motor => ((IComponent)motor).Sender == this))
+                        .Where(motor => ((IComponent) motor).Sender == this))
                 motor?.Stop();
         }
 

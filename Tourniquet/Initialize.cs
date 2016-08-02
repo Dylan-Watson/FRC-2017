@@ -10,14 +10,13 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using Base;
+using Base.Config;
+using Tourniquet.ControlItems;
 using static Base.Config.Schemas;
 
 namespace Tourniquet
 {
-    using Base;
-    using Base.Config;
-    using Tourniquet.ControlItems;
-
     /// <summary>
     ///     Sets up everything required for teleop to run
     /// </summary>

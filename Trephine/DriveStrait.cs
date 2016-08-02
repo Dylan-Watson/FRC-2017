@@ -1,7 +1,7 @@
-﻿namespace Trephine
-{
-    using WPILib;
+﻿using WPILib;
 
+namespace Trephine
+{
     /// <summary>
     ///     Drives strait for x amount of time
     /// </summary>

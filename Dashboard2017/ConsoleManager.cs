@@ -1,21 +1,24 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
 namespace Dashboard2017
 {
-    using System.Drawing;
-
     public class ConsoleManager : TextWriter
     {
+        private static ConsoleManager instance;
+
+        private RichTextBox console;
+
         private ConsoleManager()
         {
         }
 
-        private static ConsoleManager instance;
+        public override Encoding Encoding => Encoding.UTF8;
 
-        private RichTextBox console;
+        public static ConsoleManager Instance => instance ?? (instance = new ConsoleManager());
 
         public void SetConsoleManager(RichTextBox consoleRichTextBox)
         {
@@ -48,51 +51,32 @@ namespace Dashboard2017
         public void AppendError(Exception ex, bool newLine = true)
         {
             if (!console.IsDisposed)
-                console.Invoke(new Action(() =>
-                {
-                    appendText(ex.Message, newLine, Color.Red);
-                }));
+                console.Invoke(new Action(() => { appendText(ex.Message, newLine, Color.Red); }));
         }
 
         public void AppendError(string ex, bool newLine = true)
         {
             if (!console.IsDisposed)
-                console.Invoke(new Action(() =>
-                {
-                    appendText(ex, newLine, Color.Red);
-                }));
+                console.Invoke(new Action(() => { appendText(ex, newLine, Color.Red); }));
         }
 
         public void AppendInfo(string info, Color clr, bool newLine = true)
         {
             if (!console.IsDisposed)
-                console.Invoke(new Action(() =>
-                {
-                    appendText(info, newLine, clr);
-                }));
+                console.Invoke(new Action(() => { appendText(info, newLine, clr); }));
         }
 
         public void AppendInfo(string info, bool newLine = true)
         {
             if (!console.IsDisposed)
-                console.Invoke(new Action(() =>
-                {
-                    appendText(info, newLine, Color.Black);
-                }));
+                console.Invoke(new Action(() => { appendText(info, newLine, Color.Black); }));
         }
 
         public override void Write(char value)
         {
             base.Write(value);
             if (!console.IsDisposed)
-                console.Invoke(new Action(() =>
-                {
-                    console.AppendText(value.ToString());
-                }));
+                console.Invoke(new Action(() => { console.AppendText(value.ToString()); }));
         }
-
-        public override Encoding Encoding => Encoding.UTF8;
-
-        public static ConsoleManager Instance => instance ?? (instance = new ConsoleManager());
     }
 }
