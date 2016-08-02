@@ -188,7 +188,7 @@ namespace Base.Config
             /// <param name="powerMultiplier">The multiplier to be applied before output to the IComponents</param>
             /// <param name="reversed">Defines if the control will be reversed</param>
             public ControlSchema(string name, ControlType controlType, List<CommonName> bindTo, int button,
-                double powerMultiplier = 1, bool reversed = false)
+                double powerMultiplier = 1, bool reversed = false, bool isEnabled = true)
             {
                 Name = name;
                 ControlType = controlType;
@@ -196,6 +196,7 @@ namespace Base.Config
                 ButtonA = button;
                 PowerMultiplier = powerMultiplier;
                 Reversed = reversed;
+                IsEnabled = isEnabled;
             }
 
             /// <summary>
@@ -209,7 +210,7 @@ namespace Base.Config
             /// <param name="powerMultiplier">The multiplier to be applied before output to the IComponents</param>
             /// <param name="reversed">Defines if the control will be reversed</param>
             public ControlSchema(string name, ControlType controlType, List<CommonName> bindTo, int buttona, int buttonb,
-                double powerMultiplier = 1, bool reversed = false)
+                double powerMultiplier = 1, bool reversed = false, bool isEnabled = true)
             {
                 Name = name;
                 ControlType = controlType;
@@ -218,6 +219,7 @@ namespace Base.Config
                 ButtonB = buttonb;
                 PowerMultiplier = powerMultiplier;
                 Reversed = reversed;
+                IsEnabled = isEnabled;
             }
 
             /// <summary>
@@ -231,7 +233,7 @@ namespace Base.Config
             /// <param name="powerMultiplier">The multiplier to be applied before output to the IComponents</param>
             /// <param name="reversed">Defines if the control will be reversed</param>
             public ControlSchema(string name, ControlType controlType, List<CommonName> bindTo, int axis,
-                double deadZone, double powerMultiplier = 1, bool reversed = false)
+                double deadZone, double powerMultiplier = 1, bool reversed = false, bool isEnabled = true)
             {
                 Name = name;
                 ControlType = controlType;
@@ -240,6 +242,7 @@ namespace Base.Config
                 DeadZone = deadZone;
                 PowerMultiplier = powerMultiplier;
                 Reversed = reversed;
+                IsEnabled = isEnabled;
             }
 
             #endregion Public Constructors
@@ -291,6 +294,11 @@ namespace Base.Config
             /// </summary>
             public bool Reversed { get; protected set; }
 
+            /// <summary>
+            ///     Defines if the control is enabled
+            /// </summary>
+            public bool IsEnabled { get; protected set; }
+
             #endregion Public Properties
         }
 
@@ -313,7 +321,7 @@ namespace Base.Config
             /// <param name="powerMultiplier">output power multiplier</param>
             /// <param name="reversed">if the control should be reversed</param>
             public DriverControlSchema(string name, MotorControlFitFunction fitFunction, double fitPower,
-                List<CommonName> bindTo, int axis, double deadZone, double powerMultiplier = 1, bool reversed = false)
+                List<CommonName> bindTo, int axis, double deadZone, double powerMultiplier = 1, bool reversed = false, bool isEnabled = true)
             {
                 Name = name;
                 ControlType = ControlType.Axis;
@@ -324,6 +332,7 @@ namespace Base.Config
                 Reversed = reversed;
                 FitFunction = fitFunction;
                 FitPower = fitPower;
+                IsEnabled = isEnabled;
             }
 
             #endregion Public Constructors
