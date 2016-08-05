@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="ActiveCollection.cs" />
     <Compile Include="CommonName.cs" />
+    <Compile Include="Components\DIO.cs" />
     <Compile Include="Components\TalonItem.cs" />
     <Compile Include="Components\VictorItem.cs" />
     <Compile Include="Config\Config.cs" />
