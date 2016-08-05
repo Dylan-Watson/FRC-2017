@@ -187,6 +187,7 @@ namespace Base.Config
             /// <param name="button">The address of the button on the controller that will be used by this control</param>
             /// <param name="powerMultiplier">The multiplier to be applied before output to the IComponents</param>
             /// <param name="reversed">Defines if the control will be reversed</param>
+            /// <param name="isEnabled">Defines if the control is enabled by default or not</param>
             public ControlSchema(string name, ControlType controlType, List<CommonName> bindTo, int button,
                 double powerMultiplier = 1, bool reversed = false, bool isEnabled = true)
             {
@@ -209,6 +210,7 @@ namespace Base.Config
             /// <param name="buttonb">The address of one of the buttons on the controller that will be used by this control</param>
             /// <param name="powerMultiplier">The multiplier to be applied before output to the IComponents</param>
             /// <param name="reversed">Defines if the control will be reversed</param>
+            /// <param name="isEnabled">Defines if the control is enabled by default or not</param>
             public ControlSchema(string name, ControlType controlType, List<CommonName> bindTo, int buttona, int buttonb,
                 double powerMultiplier = 1, bool reversed = false, bool isEnabled = true)
             {
@@ -232,6 +234,7 @@ namespace Base.Config
             /// <param name="deadZone">The deadzones (lower limits) on the axis that this shema represents</param>
             /// <param name="powerMultiplier">The multiplier to be applied before output to the IComponents</param>
             /// <param name="reversed">Defines if the control will be reversed</param>
+            /// <param name="isEnabled">Defines if the control is enabled by default or not</param>
             public ControlSchema(string name, ControlType controlType, List<CommonName> bindTo, int axis,
                 double deadZone, double powerMultiplier = 1, bool reversed = false, bool isEnabled = true)
             {
