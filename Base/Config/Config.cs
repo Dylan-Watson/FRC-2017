@@ -109,6 +109,8 @@ namespace Base.Config
             QuickLoad = Convert.ToBoolean(getAttributeValue("value", "QuickLoad"));
             if (QuickLoad) Report.Warning("I see QuickLoad is turned... This should only be used during practice!");
 
+            #region Victors
+
             try
             {
                 foreach (var element in getElements("RobotConfig", "Victors"))
@@ -151,6 +153,10 @@ namespace Base.Config
                     "There was an error loading one or more victors. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
                 Log.Write(ex);
             }
+
+            #endregion
+
+            #region Talons
 
             try
             {
@@ -231,6 +237,8 @@ namespace Base.Config
                     "There was an error loading one or more talons. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
                 Log.Write(ex);
             }
+
+            #endregion
 
             #endregion channel asignments
         }
