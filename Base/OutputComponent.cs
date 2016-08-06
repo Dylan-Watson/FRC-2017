@@ -3,10 +3,9 @@
 namespace Base
 {
     /// <summary>
-    ///     Abstract class for IO components (not including motors)
+    /// Abstract class for creating components that have physical output
     /// </summary>
-    // ReSharper disable once InconsistentNaming
-    public abstract class IO
+    public abstract class OutputComponent
     {
         /// <summary>
         ///     Set function that the inheriting component class must implement

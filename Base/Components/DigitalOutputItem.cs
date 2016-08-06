@@ -2,43 +2,21 @@
 using WPILib;
 
 namespace Base.Components
-{
-    /// <summary>
-    ///     Defines the type of DIO
-    /// </summary>
-    public enum DioType
+{/// <summary>
+/// Class to handle Digital Output Components
+/// </summary>
+    public class DigitalOutputItem : OutputComponent, IComponent
     {
-        /// <summary>
-        ///     Digital Input
-        /// </summary>
-        Input,
-
-        /// <summary>
-        ///     Digital Output
-        /// </summary>
-        Output
-    }
-
-    /// <summary>
-    ///     Class to handle Digital Input and Digital Output Components
-    /// </summary>
-    public class DioItem : IO, IComponent
-    {
-        private readonly DigitalSource dio;
+        private readonly DigitalOutput dout;
 
         /// <summary>
         ///     Constructor
         /// </summary>
-        /// <param name="type">type of DIO</param>
         /// <param name="channel">pwm channel the DIO is plugged into</param>
         /// <param name="commonName">CommonName the component will have</param>
-        public DioItem(DioType type, int channel, string commonName)
+        public DigitalOutputItem(int channel, string commonName)
         {
-            if (type == DioType.Input)
-                dio = new DigitalInput(channel);
-            else
-                dio = new DigitalOutput(channel);
-
+            dout = new DigitalOutput(channel);
             Name = commonName;
         }
 
@@ -58,23 +36,12 @@ namespace Base.Components
         public object Sender { get; private set; }
 
         /// <summary>
-        ///     returns dio
+        ///     returns dout
         /// </summary>
-        /// <returns>dio</returns>
+        /// <returns>dout</returns>
         public object GetRawComponent()
         {
-            return dio;
-        }
-
-        /// <summary>
-        ///     Gets the Input Value from the DigitalInput
-        /// </summary>
-        /// <returns>Double</returns>
-        public bool Get()
-        {
-            if (!(dio is DigitalOutput)) return ((DigitalInput) dio).Get();
-            Report.Error($"{Name} is a digital output, you cannot get values from this.");
-            throw new InvalidOperationException($"{Name} is a digital output, you cannot get values from this.");
+            return dout;
         }
 
         /// <summary>
@@ -85,18 +52,12 @@ namespace Base.Components
         protected override void set(double val, object sender)
         {
             Sender = sender;
-            lock (dio)
+            lock (dout)
             {
-                if (dio is DigitalInput)
-                {
-                    Report.Error($"{Name} is a digital input, you cannot input values to this.");
-                    throw new InvalidOperationException($"{Name} is a digital input, you cannot input values to this.");
-                }
-
                 if ((Convert.ToInt32(val) == 1) || (Convert.ToInt32(val) == 0))
                 {
                     InUse = true;
-                    ((DigitalOutput) dio).Set(Convert.ToBoolean(val));
+                    dout.Set(Convert.ToBoolean(val));
                 }
                 else
                 {
