@@ -18,19 +18,19 @@ namespace Base
         /// <summary>
         ///     Public set method that calls the inherited classes implementation of protected void set()
         /// </summary>
-        /// <param name="val">value to pass to the IO component -1 to +5 valid range</param>
+        /// <param name="val">value to pass to the IO component 0 to +5 valid range</param>
         /// <param name="sender">object calling the method</param>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     exception is thrown if the input value is out of the acceptable range -1
+        ///     exception is thrown if the input value is out of the acceptable range 0
         ///     to +5
         /// </exception>
         public void Set(double val, object sender)
         {
-            if ((val >= -1) && (val <= 5))
+            if ((val >= 0) && (val <= 5))
                 set(val, sender);
             else
                 throw new ArgumentOutOfRangeException(nameof(val),
-                    "The value provided to the IO device was not within the generalized allowed range (-1 to +5).");
+                    "The value provided to the IO device was not within the generalized allowed range (0 to +5).");
         }
 
         /// <summary>

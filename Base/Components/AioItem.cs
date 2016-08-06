@@ -24,7 +24,7 @@ namespace Base.Components
     /// </summary>
     public class AioItem : IO, IComponent
     {
-        private readonly AnalogSource aio;
+        private readonly SensorBase aio;
 
         /// <summary>
         ///     Constructor
@@ -67,12 +67,25 @@ namespace Base.Components
         }
 
         /// <summary>
-        ///     Gets the Input Value from the AnalogInput
+        ///     Gets the input voltage from the AnalogInput
         /// </summary>
         /// <returns>Double</returns>
-        public bool Get()
+        public double GetVoltage()
         {
-            return ((AnalogInput) aio).Get();
+            if (!(aio is AnalogOutput)) return ((AnalogInput)aio).GetVoltage();
+            Report.Error($"{Name} is a analog output, you cannot get values from this.");
+            throw new InvalidOperationException($"{Name} is a analog output, you cannot get values from this.");
+        }
+
+        /// <summary>
+        ///     Gets the input value from the AnalogInput
+        /// </summary>
+        /// <returns>Double</returns>
+        public double GetValue()
+        {
+            if (!(aio is AnalogOutput)) return ((AnalogInput) aio).GetValue();
+            Report.Error($"{Name} is a analog output, you cannot get values from this.");
+            throw  new InvalidOperationException($"{Name} is a analog output, you cannot get values from this.");
         }
 
         /// <summary>
@@ -87,18 +100,19 @@ namespace Base.Components
             {
                 if (aio is AnalogInput)
                 {
-                    Report.Error("This is a analog input, you cannot output to this.");
-                    return;
+                    Report.Error($"{Name} is a analog input, you cannot output to this.");
+                    throw new InvalidOperationException($"{Name} is a analog input, you cannot output to this.");
                 }
 
-                if ((val >= -1) && (val <= 5))
+                if ((val >= 0) && (val <= 5))
                 {
                     InUse = true;
-                    ((AnalogOutput) aio).Set(val);
+                    ((AnalogOutput) aio).SetVoltage(val);
                 }
                 else
                 {
-                    throw new ArgumentOutOfRangeException();
+                    Report.Error($"The valid range for AnalogOutput is 0 to 5. {sender} tried to set a value not in this range.");
+                    throw new ArgumentOutOfRangeException(nameof(val), $"The valid range for AnalogOutput is 0 to 5. {sender} tried to set a value not in this range.");
                 }
             }
 
