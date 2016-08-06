@@ -72,7 +72,7 @@ namespace Base.Components
         /// <returns>Double</returns>
         public double GetVoltage()
         {
-            if (!(aio is AnalogOutput)) return ((AnalogInput)aio).GetVoltage();
+            if (!(aio is AnalogOutput)) return ((AnalogInput) aio).GetVoltage();
             Report.Error($"{Name} is a analog output, you cannot get values from this.");
             throw new InvalidOperationException($"{Name} is a analog output, you cannot get values from this.");
         }
@@ -85,7 +85,7 @@ namespace Base.Components
         {
             if (!(aio is AnalogOutput)) return ((AnalogInput) aio).GetValue();
             Report.Error($"{Name} is a analog output, you cannot get values from this.");
-            throw  new InvalidOperationException($"{Name} is a analog output, you cannot get values from this.");
+            throw new InvalidOperationException($"{Name} is a analog output, you cannot get values from this.");
         }
 
         /// <summary>
@@ -111,8 +111,10 @@ namespace Base.Components
                 }
                 else
                 {
-                    Report.Error($"The valid range for AnalogOutput is 0 to 5. {sender} tried to set a value not in this range.");
-                    throw new ArgumentOutOfRangeException(nameof(val), $"The valid range for AnalogOutput is 0 to 5. {sender} tried to set a value not in this range.");
+                    Report.Error(
+                        $"The valid range for AnalogOutput is 0 to 5. {sender} tried to set a value not in this range.");
+                    throw new ArgumentOutOfRangeException(nameof(val),
+                        $"The valid range for AnalogOutput is 0 to 5. {sender} tried to set a value not in this range.");
                 }
             }
 

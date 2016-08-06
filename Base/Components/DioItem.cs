@@ -72,9 +72,9 @@ namespace Base.Components
         /// <returns>Double</returns>
         public bool Get()
         {
-            if (!(dio is DigitalOutput)) return ((DigitalInput)dio).Get();
+            if (!(dio is DigitalOutput)) return ((DigitalInput) dio).Get();
             Report.Error($"{Name} is a digital output, you cannot get values from this.");
-            throw new InvalidOperationException($"{ Name } is a digital output, you cannot get values from this.");
+            throw new InvalidOperationException($"{Name} is a digital output, you cannot get values from this.");
         }
 
         /// <summary>
@@ -100,8 +100,10 @@ namespace Base.Components
                 }
                 else
                 {
-                    Report.Error($"The valid range for DigitalOutput is 0 or 1 (false or true). {sender} tried to set a value not in this range.");
-                    throw new ArgumentOutOfRangeException(nameof(val), $"The valid range for DigitalOutput is 0 or 1 (false or true). {sender} tried to set a value not in this range.");
+                    Report.Error(
+                        $"The valid range for DigitalOutput is 0 or 1 (false or true). {sender} tried to set a value not in this range.");
+                    throw new ArgumentOutOfRangeException(nameof(val),
+                        $"The valid range for DigitalOutput is 0 or 1 (false or true). {sender} tried to set a value not in this range.");
                 }
             }
 
