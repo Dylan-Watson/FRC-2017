@@ -54,18 +54,23 @@ namespace Base.Components
             Sender = sender;
             lock (dout)
             {
-                if ((Convert.ToInt32(val) == 1) || (Convert.ToInt32(val) == 0))
+                if (val == 0)
                 {
                     InUse = true;
-                    dout.Set(Convert.ToBoolean(val));
+                    dout.Set(false);
                 }
                 else
+                {
+                    InUse = true;
+                    dout.Set(true);
+                }
+                /*else
                 {
                     Report.Error(
                         $"The valid range for DigitalOutput is 0 or 1 (false or true). {sender} tried to set a value not in this range.");
                     throw new ArgumentOutOfRangeException(nameof(val),
                         $"The valid range for DigitalOutput is 0 or 1 (false or true). {sender} tried to set a value not in this range.");
-                }
+                }*/
             }
 
             Sender = null;

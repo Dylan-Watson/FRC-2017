@@ -14,6 +14,7 @@ using Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Base.Components;
 using WPILib;
 
 namespace Tourniquet.ControlItems
@@ -121,9 +122,9 @@ namespace Tourniquet.ControlItems
         #region Protected Methods
 
         /// <summary>
-        ///     Sets a value to motor controllers in the control's bindings
+        ///     Sets a double value to components
         /// </summary>
-        /// <param name="val">motor controller speed</param>
+        /// <param name="val">value</param>
         protected void set(double val)
         {
             if (!IsEnabled)
@@ -134,9 +135,15 @@ namespace Tourniquet.ControlItems
 
             foreach (
                 var motor in
-                    components.Select(component => component as Motor)
+                    components.OfType<Motor>()
                         .Where(motor => !((IComponent) motor).InUse || (((IComponent) motor).Sender == this)))
                 motor?.Set(val, this);
+
+            foreach (
+                var output in
+                    components.OfType<OutputComponent>()
+                        .Where(output => !((IComponent)output).InUse || (((IComponent)output).Sender == this)))
+                output?.Set(Math.Abs(val*5), this);//times five to compensate for analog output, which has upto 5v output.
         }
 
         //TODO: Implement for button controls
@@ -158,7 +165,7 @@ namespace Tourniquet.ControlItems
         /// </summary>
         protected void setOnlyForward()
         {
-            foreach (var motor in components.Select(component => component as Motor)) motor?.SetAllowCc(false);
+            foreach (var motor in components.OfType<Motor>()) motor?.SetAllowCc(false);
         }
 
         /// <summary>
@@ -166,7 +173,7 @@ namespace Tourniquet.ControlItems
         /// </summary>
         protected void setOnlyReverse()
         {
-            foreach (var motor in components.Select(component => component as Motor)) motor?.SetAllowCc(false);
+            foreach (var motor in components.OfType<Motor>()) motor?.SetAllowCc(false);
         }
 
         /// <summary>
@@ -183,15 +190,36 @@ namespace Tourniquet.ControlItems
         }
 
         /// <summary>
+        /// Stops or zeros all components this control is bound to
+        /// </summary>
+        protected void stop()
+        {
+            stopMotors();
+            zeroOutputComponents();
+        }
+
+        /// <summary>
         ///     Stopps all motors in the control's bindings
         /// </summary>
         protected void stopMotors()
         {
             foreach (
                 var motor in
-                    components.Select(component => component as Motor)
+                    components.OfType<Motor>()
                         .Where(motor => ((IComponent) motor).Sender == this))
                 motor?.Stop();
+        }
+
+        /// <summary>
+        ///     Sets outputcomponents to zero
+        /// </summary>
+        protected void zeroOutputComponents()
+        {
+            foreach (
+                var output in
+                    components.OfType<OutputComponent>()
+                        .Where(output => !((IComponent)output).InUse || (((IComponent)output).Sender == this)))
+                output?.Set(0, this);
         }
 
         #endregion Protected Methods

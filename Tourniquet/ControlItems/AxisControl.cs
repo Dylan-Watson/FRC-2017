@@ -88,7 +88,7 @@ namespace Tourniquet.ControlItems
             }
             else if (IsRunning)
             {
-                stopMotors();
+                stop();
                 IsRunning = false;
             }
         }
