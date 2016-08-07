@@ -32,7 +32,12 @@ namespace Base
             /// <summary>
             ///     Right side of the drive train
             /// </summary>
-            Right
+            Right,
+
+            /// <summary>
+            ///     Default, not a member of the drive train.
+            /// </summary>
+            Na
         }
 
         #endregion Public Enums
@@ -62,7 +67,7 @@ namespace Base
         /// <summary>
         ///     Side of the drive train the motor is on, if it is on the drive train
         /// </summary>
-        public Side DriveSide { get; protected set; }
+        public Side DriveSide { get; protected set; } = Side.Na;
 
         /// <summary>
         ///     Boolean flag to determine if the motor is a drive train motor
