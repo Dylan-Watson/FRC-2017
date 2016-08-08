@@ -16,7 +16,7 @@ using WPILib;
 namespace Base.Components
 {
     /// <summary>
-    ///     Class to handle Double Solenoid Pneumatics
+    /// Class to handle Double Solenoid Pneumatics
     /// </summary>
     public class DoubleSolenoidItem : IComponent
     {
@@ -26,34 +26,27 @@ namespace Base.Components
 
         #endregion Private Fields
 
-        #region Public Properties
+        #region Public Constructors
 
         /// <summary>
-        /// Name of the component
+        /// Constructor
         /// </summary>
-        public string Name { get; }
+        /// <param name="commonName">CommonName the DoubleSolenoid will have</param>
+        /// <param name="forwardChannel">The forward channel number on the PCM [0..7]</param>
+        /// <param name="reverseChannel">The reverse channel number on the PCM [0..7]</param>
+        /// <param name="_default">Default position for when the Robot is initialized</param>
+        /// <param name="reversed">If the output is reversed for the forward and reversed states</param>
+        public DoubleSolenoidItem(string commonName, int forwardChannel, int reverseChannel,
+            DoubleSolenoid.Value _default = DoubleSolenoid.Value.Off, bool reversed = false)
+        {
+            solenoid = new DoubleSolenoid(forwardChannel, reverseChannel);
+            Name = commonName;
+            Default = _default;
+            IsReversed = reversed;
+            solenoid.Set(_default);
+        }
 
-        /// <summary>
-        /// Defines wether the component is in use or not
-        /// </summary>
-        public bool InUse { get; private set; }
-
-        /// <summary>
-        /// Defines the object issuing the commands
-        /// </summary>
-        public object Sender { get; private set; }
-
-        /// <summary>
-        /// Defines the default position of the solenoid
-        /// </summary>
-        private DoubleSolenoid.Value Default { get; }
-
-        /// <summary>
-        /// Defines if the output is reversed for forward and reverse states
-        /// </summary>
-        public bool IsReversed { get; private set; }
-
-        #endregion Public Properties
+        #endregion Public Constructors
 
         #region Public Events
 
@@ -75,30 +68,49 @@ namespace Base.Components
             ValueChanged?.Invoke(this, e);
         }
 
-        #endregion
+        #endregion Protected Methods
 
-        #region Public Constructors
+        #region Public Properties
 
         /// <summary>
-        /// Constructor
+        /// Defines wether the component is in use or not
         /// </summary>
-        /// <param name="commonName">CommonName the DoubleSolenoid will have</param>
-        /// <param name="forwardChannel">The forward channel number on the PCM [0..7]</param>
-        /// <param name="reverseChannel">The reverse channel number on the PCM [0..7]</param>
-        /// <param name="_default">Default position for when the Robot is initialized</param>
-        /// <param name="reversed">If the output is reversed for the forward and reversed states</param>
-        public DoubleSolenoidItem(string commonName, int forwardChannel, int reverseChannel, DoubleSolenoid.Value _default = DoubleSolenoid.Value.Off, bool reversed = false)
-        {
-            solenoid = new DoubleSolenoid(forwardChannel, reverseChannel);
-            Name = commonName;
-            Default = _default;
-            IsReversed = reversed;
-            solenoid.Set(_default);
-        }
+        public bool InUse { get; private set; }
 
-        #endregion Public Constructors
+        /// <summary>
+        /// Defines if the output is reversed for forward and reverse states
+        /// </summary>
+        public bool IsReversed { get; private set; }
+
+        /// <summary>
+        /// Name of the component
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        /// Defines the object issuing the commands
+        /// </summary>
+        public object Sender { get; private set; }
+
+        /// <summary>
+        /// Defines the default position of the solenoid
+        /// </summary>
+        private DoubleSolenoid.Value Default { get; }
+
+        #endregion Public Properties
 
         #region Public Methods
+
+        /// <summary>
+        /// Sets the DoubleSolenoid to its default position
+        /// </summary>
+        public void DefaultSet()
+        {
+            lock (solenoid)
+            {
+                solenoid.Set(Default);
+            }
+        }
 
         /// <summary>
         /// Gets the raw DoubleSolenoid object representing the Solenoid
@@ -107,9 +119,21 @@ namespace Base.Components
         public object GetRawComponent() => solenoid;
 
         /// <summary>
+        /// Sets the IsReversed flag/property to false
+        /// </summary>
+        public void RestoreDirection() => IsReversed = false;
+
+        /// <summary>
+        /// Sets the IsReversed flag/property to true
+        /// </summary>
+        public void ReverseDirection() => IsReversed = true;
+
+        /// <summary>
         /// Sets a value to the solenoid
         /// </summary>
-        /// <param name="val">Double, 0, 1, or 2, to set the DoubleSolenoid to Off, Forward, or Reverse, respectively</param>
+        /// <param name="val">
+        /// Double, 0, 1, or 2, to set the DoubleSolenoid to Off, Forward, or Reverse, respectively
+        /// </param>
         /// <param name="sender">the caller of this method</param>
         public void Set(double val, object sender)
         {
@@ -152,28 +176,6 @@ namespace Base.Components
             }
         }
 
-        private void setForward()
-        {
-            solenoid.Set(DoubleSolenoid.Value.Forward);
-            onValueChanged(new VirtualControlEventArgs(1, InUse));
-        }
-
-        private void setReverse()
-        {
-            solenoid.Set(DoubleSolenoid.Value.Reverse);
-            onValueChanged(new VirtualControlEventArgs(0, InUse));
-        }
-
-        /// <summary>
-        /// Sets the IsReversed flag/property to false
-        /// </summary>
-        public void RestoreDirection() => IsReversed = false;
-
-        /// <summary>
-        /// Sets the IsReversed flag/property to true
-        /// </summary>
-        public void ReverseDirection() => IsReversed = true;
-
         /// <summary>
         /// Calls the method to set the value to the solenoid
         /// </summary>
@@ -181,7 +183,7 @@ namespace Base.Components
         /// <param name="sender">the caller of this method</param>
         public void Set(DoubleSolenoid.Value value, object sender)
         {
-            Set(Convert.ToDouble(value)-1, sender);
+            Set(Convert.ToDouble(value) - 1, sender);
         }
 
         /// <summary>
@@ -194,15 +196,16 @@ namespace Base.Components
             Set(Convert.ToDouble(value), sender);
         }
 
-        /// <summary>
-        /// Sets the DoubleSolenoid to its default position
-        /// </summary>
-        public void DefaultSet()
+        private void setForward()
         {
-            lock (solenoid)
-            {
-                solenoid.Set(Default);
-            }
+            solenoid.Set(DoubleSolenoid.Value.Forward);
+            onValueChanged(new VirtualControlEventArgs(1, InUse));
+        }
+
+        private void setReverse()
+        {
+            solenoid.Set(DoubleSolenoid.Value.Reverse);
+            onValueChanged(new VirtualControlEventArgs(0, InUse));
         }
 
         #endregion Public Methods
