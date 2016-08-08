@@ -81,6 +81,7 @@
     <Compile Include="OutputComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Report.cs" />
+    <Compile Include="VirtualControlEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

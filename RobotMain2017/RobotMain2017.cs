@@ -18,15 +18,14 @@ using WPILib;
 namespace RobotMain2017
 {
     /// <summary>
-    ///     Class called by WPI for robot states (teleop, auto, test...)
+    /// Class called by WPI for robot states (teleop, auto, test...)
     /// </summary>
     public class RobotMain2017 : SampleRobot
     {
-        private const string CONFIG_FILE = @"robot.xml";
-        private readonly Config config = new Config();
+        #region Public Constructors
 
         /// <summary>
-        ///     Constructor
+        /// Constructor
         /// </summary>
         public RobotMain2017()
         {
@@ -35,13 +34,40 @@ namespace RobotMain2017
             DashboardComms.Instance.NotifyRobotState(Constants.STANDBY);
         }
 
+        #endregion Public Constructors
+
+        #region Protected Methods
+
         /// <summary>
-        ///     Called by WPI on robot initialization
+        /// Called by WPI on robot initialization
         /// </summary>
         protected override void RobotInit() => Initialize.BuildControlSchema(config);
 
+        #endregion Protected Methods
+
+        #region Private Methods
+
+        private void quickLoad()
+        {
+            if (!config.QuickLoad) return;
+
+            config.Load(CONFIG_FILE);
+            Initialize.BuildControlSchema(config);
+        }
+
+        #endregion Private Methods
+
+        #region Private Fields
+
+        private const string CONFIG_FILE = @"robot.xml";
+        private readonly Config config = new Config();
+
+        #endregion Private Fields
+
+        #region Public Methods
+
         /// <summary>
-        ///     Called when auton starts
+        /// Called when auton starts
         /// </summary>
         public override void Autonomous()
         {
@@ -52,7 +78,7 @@ namespace RobotMain2017
         }
 
         /// <summary>
-        ///     Called with teleop starts
+        /// Called with teleop starts
         /// </summary>
         public override void OperatorControl()
         {
@@ -65,18 +91,12 @@ namespace RobotMain2017
         }
 
         /// <summary>
-        ///     Called when Test is run
+        /// Called when Test is run
         /// </summary>
         public override void Test()
         {
         }
 
-        private void quickLoad()
-        {
-            if (!config.QuickLoad) return;
-
-            config.Load(CONFIG_FILE);
-            Initialize.BuildControlSchema(config);
-        }
+        #endregion Public Methods
     }
 }

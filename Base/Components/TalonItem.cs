@@ -1,21 +1,50 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WPILib;
 using WPILib.Interfaces;
 
 namespace Base.Components
 {
     /// <summary>
-    ///     Class to handle CanTalon motor controllers
+    /// Class to handle CanTalon motor controllers
     /// </summary>
     public class CanTalonItem : Motor, IComponent
     {
+        #region Public Events
+
+        /// <summary>
+        /// Event used for VirtualControlEvents
+        /// </summary>
+        public event EventHandler ValueChanged;
+
+        #endregion Public Events
+
+        #region Protected Methods
+
+        /// <summary>
+        /// Method to fire value changes for set/get values and InUse values
+        /// </summary>
+        /// <param name="e">VirtualControlEventArgs</param>
+        protected virtual void onValueChanged(VirtualControlEventArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
+        }
+
+        #endregion Protected Methods
+
+        #region Private Fields
+
         private readonly string master;
 
         private readonly List<CanTalonItem> slaves;
         private readonly CANTalon talon;
 
+        #endregion Private Fields
+
+        #region Public Constructors
+
         /// <summary>
-        ///     Constructor
+        /// Constructor
         /// </summary>
         /// <param name="channel">channel/address of the talon</param>
         /// <param name="commonName">CommonName the component will have</param>
@@ -30,7 +59,7 @@ namespace Base.Components
         }
 
         /// <summary>
-        ///     PID Constructor
+        /// PID Constructor
         /// </summary>
         /// <param name="channel">channel/address of the talon</param>
         /// <param name="commonName">CommonName the component will have</param>
@@ -52,7 +81,7 @@ namespace Base.Components
         }
 
         /// <summary>
-        ///     Slave Constructor
+        /// Slave Constructor
         /// </summary>
         /// <param name="channel">channel/address of the talon</param>
         /// <param name="commonName">CommonName the component will have</param>
@@ -70,45 +99,53 @@ namespace Base.Components
             this.master = master.Name;
         }
 
-        /// <summary>
-        ///     Defines if the talon is a master
-        /// </summary>
-        public bool Master { get; }
+        #endregion Public Constructors
+
+        #region Public Properties
 
         /// <summary>
-        ///     Defines if the talon is a slave
-        /// </summary>
-        public bool Slave { get; }
-
-        /// <summary>
-        ///     Defines if the talon is in use
+        /// Defines if the talon is in use
         /// </summary>
         public bool InUse { get; private set; }
 
         /// <summary>
-        ///     Defines the object issuing the commands
+        /// Defines if the talon is a master
         /// </summary>
-        public object Sender { get; private set; }
+        public bool Master { get; }
 
         /// <summary>
-        ///     Name of the component
+        /// Name of the component
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        ///     Gets the raw WPI CANTalon object
+        /// Defines the object issuing the commands
         /// </summary>
-        /// <returns></returns>
-        public object GetRawComponent() => talon;
+        public object Sender { get; private set; }
 
         /// <summary>
-        ///     Adds a slave to this controller
+        /// Defines if the talon is a slave
+        /// </summary>
+        public bool Slave { get; }
+
+        #endregion Public Properties
+
+        #region Public Methods
+
+        /// <summary>
+        /// Adds a slave to this controller
         /// </summary>
         /// <param name="slave"></param>
         public void AddSlave(CanTalonItem slave) => slaves.Add(slave);
 
         /// <summary>
-        ///     Sets a value to the talon
+        /// Gets the raw WPI CANTalon object
+        /// </summary>
+        /// <returns></returns>
+        public object GetRawComponent() => talon;
+
+        /// <summary>
+        /// Sets a value to the talon
         /// </summary>
         /// <param name="val">value to set the controller to</param>
         /// <param name="sender">the caller of this method</param>
@@ -129,19 +166,36 @@ namespace Base.Components
                     if ((val < -Constants.MINUMUM_JOYSTICK_RETURN) && AllowCc)
                     {
                         InUse = true;
-                        if (IsReversed) talon.Set(-val);
-                        else talon.Set(val);
+                        if (IsReversed)
+                        {
+                            talon.Set(-val);
+                            onValueChanged(new VirtualControlEventArgs(-val, InUse));
+                        }
+                        else
+                        {
+                            talon.Set(val);
+                            onValueChanged(new VirtualControlEventArgs(val, InUse));
+                        }
                     }
                     else if ((val > Constants.MINUMUM_JOYSTICK_RETURN) && AllowC)
                     {
                         InUse = true;
-                        if (IsReversed) talon.Set(-val);
-                        else talon.Set(val);
+                        if (IsReversed)
+                        {
+                            talon.Set(-val);
+                            onValueChanged(new VirtualControlEventArgs(-val, InUse));
+                        }
+                        else
+                        {
+                            talon.Set(val);
+                            onValueChanged(new VirtualControlEventArgs(val, InUse));
+                        }
                     }
                     else
                     {
                         talon.ControlEnabled = false;
                         InUse = false;
+                        onValueChanged(new VirtualControlEventArgs(val, InUse));
                     }
                 }
             if (!Master) return;
@@ -155,6 +209,7 @@ namespace Base.Components
                         talon.ControlEnabled = true;
                         InUse = true;
                         talon.Set(-val);
+                        onValueChanged(new VirtualControlEventArgs(-val, InUse));
                     }
                     foreach (var slave in slaves)
                         lock (slave)
@@ -170,6 +225,7 @@ namespace Base.Components
                         talon.ControlEnabled = true;
                         InUse = true;
                         talon.Set(val);
+                        onValueChanged(new VirtualControlEventArgs(val, InUse));
                     }
                     foreach (var slave in slaves)
                         lock (slave)
@@ -188,6 +244,7 @@ namespace Base.Components
                         talon.ControlEnabled = true;
                         InUse = true;
                         talon.Set(-val);
+                        onValueChanged(new VirtualControlEventArgs(-val, InUse));
                     }
                     foreach (var slave in slaves)
                         lock (slave)
@@ -203,6 +260,7 @@ namespace Base.Components
                         talon.ControlEnabled = true;
                         InUse = true;
                         talon.Set(val);
+                        onValueChanged(new VirtualControlEventArgs(val, InUse));
                     }
                     foreach (var slave in slaves)
                         lock (slave)
@@ -218,6 +276,7 @@ namespace Base.Components
                 {
                     talon.ControlEnabled = false;
                     InUse = false;
+                    onValueChanged(new VirtualControlEventArgs(-val, InUse));
                 }
                 foreach (var slave in slaves)
                     lock (slave)
@@ -228,7 +287,7 @@ namespace Base.Components
         }
 
         /// <summary>
-        ///     Stops the controller
+        /// Stops the controller
         /// </summary>
         public override void Stop()
         {
@@ -237,7 +296,10 @@ namespace Base.Components
                 talon.ControlEnabled = false;
                 InUse = false;
                 Sender = null;
+                onValueChanged(new VirtualControlEventArgs(0, InUse));
             }
         }
+
+        #endregion Public Methods
     }
 }

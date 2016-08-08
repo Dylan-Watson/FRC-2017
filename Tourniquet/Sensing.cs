@@ -15,15 +15,14 @@ using System;
 namespace Tourniquet
 {
     /// <summary>
-    ///     Class to handle sensors on the robot,
-    ///     this is a ControlLoop, see ControlLoop in Base
+    /// Class to handle sensors on the robot, this is a ControlLoop, see ControlLoop in Base
     /// </summary>
     public class Sensing : ControlLoop
     {
         #region Protected Methods
 
         /// <summary>
-        ///     Instruction to execute within the loop
+        /// Instruction to execute within the loop
         /// </summary>
         protected override void main()
         {

@@ -4,14 +4,20 @@ using Base.Config;
 namespace Trephine
 {
     /// <summary>
-    ///     Instance based utility class for calles to Base
+    /// Instance based utility class for calles to Base
     /// </summary>
     public class BaseCalls
     {
+        #region Private Fields
+
         private readonly Config config;
 
+        #endregion Private Fields
+
+        #region Public Constructors
+
         /// <summary>
-        ///     Constructor
+        /// Constructor
         /// </summary>
         /// <param name="config">instance of the config</param>
         public BaseCalls(Config config)
@@ -19,29 +25,21 @@ namespace Trephine
             this.config = config;
         }
 
-        /// <summary>
-        ///     Gets the instance of the config
-        /// </summary>
-        /// <returns></returns>
-        public Config GetConfig() => config;
+        #endregion Public Constructors
+
+        #region Public Methods
 
         /// <summary>
-        ///     Sets the right drive of the robot to a specified value
+        /// Full stop of the drive train
         /// </summary>
-        /// <param name="value">value to set</param>
-        public void SetRightDrive(double value)
-            => config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor) s).Set(value, this));
+        public void FullDriveStop()
+        {
+            config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor) s).Stop());
+            config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor) s).Stop());
+        }
 
         /// <summary>
-        ///     Sets the left drive of the robot to a specified value
-        /// </summary>
-        /// <param name="value">value to set</param>
-        public void SetLeftDrive(double value)
-            => config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor) s).Set(value, this));
-
-        //TODO: complete full stop of all components
-        /// <summary>
-        ///     Full stop of the robot
+        /// Full stop of the robot
         /// </summary>
         public void FullStop()
         {
@@ -50,12 +48,25 @@ namespace Trephine
         }
 
         /// <summary>
-        ///     Full stop of the drive train
+        /// Gets the instance of the config
         /// </summary>
-        public void FullDriveStop()
-        {
-            config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor) s).Stop());
-            config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor) s).Stop());
-        }
+        /// <returns></returns>
+        public Config GetConfig() => config;
+
+        /// <summary>
+        /// Sets the left drive of the robot to a specified value
+        /// </summary>
+        /// <param name="value">value to set</param>
+        public void SetLeftDrive(double value)
+            => config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor) s).Set(value, this));
+
+        /// <summary>
+        /// Sets the right drive of the robot to a specified value
+        /// </summary>
+        /// <param name="value">value to set</param>
+        public void SetRightDrive(double value)
+            => config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor) s).Set(value, this));
+
+        #endregion Public Methods
     }
 }

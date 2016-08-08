@@ -10,28 +10,29 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using System;
 using WPILib;
 
 namespace Base.Components
 {
     /// <summary>
-    ///     Defines the type of Victor
+    /// Defines the type of Victor
     /// </summary>
     public enum VictorType
     {
         /// <summary>
-        ///     Victor 888
+        /// Victor 888
         /// </summary>
         EightEightEight,
 
         /// <summary>
-        ///     VictorSP
+        /// VictorSP
         /// </summary>
         Sp
     }
 
     /// <summary>
-    ///     Class to handle Victor motor controllers
+    /// Class to handle Victor motor controllers
     /// </summary>
     public class VictorItem : Motor, IComponent
     {
@@ -44,22 +45,22 @@ namespace Base.Components
         #region Public Properties
 
         /// <summary>
-        ///     Name of the component
+        /// Name of the component
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        ///     Type of victor
+        /// Type of victor
         /// </summary>
         public VictorType VictorType { get; }
 
         /// <summary>
-        ///     Defines wether the component is in use or not
+        /// Defines wether the component is in use or not
         /// </summary>
         public bool InUse { get; private set; }
 
         /// <summary>
-        ///     Defines the object issuing the commands
+        /// Defines the object issuing the commands
         /// </summary>
         public object Sender { get; private set; }
 
@@ -68,7 +69,7 @@ namespace Base.Components
         #region Public Constructors
 
         /// <summary>
-        ///     Constructor
+        /// Constructor
         /// </summary>
         /// <param name="type">type of victor</param>
         /// <param name="channel">pwm channel the victor is plugged into</param>
@@ -87,7 +88,7 @@ namespace Base.Components
         }
 
         /// <summary>
-        ///     Constructor
+        /// Constructor
         /// </summary>
         /// <param name="type">type of victor</param>
         /// <param name="channel">pwm channel the victor is plugged into</param>
@@ -113,13 +114,27 @@ namespace Base.Components
         #region Public Methods
 
         /// <summary>
-        ///     Gets the raw WPI PWMSpeedController object representing the victor
+        /// Gets the raw WPI PWMSpeedController object representing the victor
         /// </summary>
         /// <returns></returns>
         public object GetRawComponent() => victor;
 
         /// <summary>
-        ///     Sets a value to the victor
+        /// Event used for VirtualControlEvents
+        /// </summary>
+        public event EventHandler ValueChanged;
+
+        /// <summary>
+        /// Method to fire value changes for set/get values and InUse values
+        /// </summary>
+        /// <param name="e">VirtualControlEventArgs</param>
+        protected virtual void onValueChanged(VirtualControlEventArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Sets a value to the victor
         /// </summary>
         /// <param name="val">value to set the controller to</param>
         /// <param name="sender">the caller of this method</param>
@@ -131,27 +146,43 @@ namespace Base.Components
                 if ((val < -Constants.MINUMUM_JOYSTICK_RETURN) && AllowCc)
                 {
                     InUse = true;
-                    if (IsReversed) victor.Set(-val);
-                    else victor.Set(val);
+                    if (IsReversed)
+                    {
+                        victor.Set(-val);
+                        onValueChanged(new VirtualControlEventArgs(-val, InUse));
+                    }
+                    else
+                    {
+                        victor.Set(val);
+                        onValueChanged(new VirtualControlEventArgs(val, InUse));
+                    }
                 }
                 else if ((val > Constants.MINUMUM_JOYSTICK_RETURN) && AllowC)
                 {
                     InUse = true;
-                    if (IsReversed) victor.Set(-val);
-                    else victor.Set(val);
+                    if (IsReversed)
+                    {
+                        victor.Set(-val);
+                        onValueChanged(new VirtualControlEventArgs(-val, InUse));
+                    }
+                    else
+                    {
+                        victor.Set(val);
+                        onValueChanged(new VirtualControlEventArgs(val, InUse));
+                    }
                 }
                 else if (InUse)
                 {
                     victor.StopMotor();
                     InUse = false;
+                    onValueChanged(new VirtualControlEventArgs(val, InUse));
                 }
             }
         }
 
         /// <summary>
-        ///     Stops the controller
+        /// Stops the controller
         /// </summary>
-//TODO: It says in the summary "Stops the controller". Is this stopping the actual joystick controller, or the Victor?
         public override void Stop()
         {
             lock (victor)
@@ -159,6 +190,7 @@ namespace Base.Components
                 victor.StopMotor();
                 InUse = false;
                 Sender = null;
+                onValueChanged(new VirtualControlEventArgs(0, InUse));
             }
         }
 

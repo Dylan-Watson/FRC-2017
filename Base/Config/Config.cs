@@ -21,14 +21,14 @@ using static Base.Motor;
 namespace Base.Config
 {
     /// <summary>
-    ///     Manages and loads the configuration file from XML.
+    /// Manages and loads the configuration file from XML.
     /// </summary>
     public class Config
     {
         #region Public Constructors
 
         /// <summary>
-        ///     Default constructor
+        /// Default constructor
         /// </summary>
         public Config()
         {
@@ -40,7 +40,7 @@ namespace Base.Config
         #region Public Methods
 
         /// <summary>
-        ///     Loads the config.
+        /// Loads the config.
         /// </summary>
         /// <param name="fileName">name of config on disk</param>
         public void Load(string fileName)
@@ -68,27 +68,27 @@ namespace Base.Config
         #region Public Properties
 
         /// <summary>
-        ///     Instance of the ActiveCollection to be used thoughout the program.
+        /// Instance of the ActiveCollection to be used thoughout the program.
         /// </summary>
         public ActiveCollection ActiveCollection { get; }
 
         /// <summary>
-        ///     Boolean flag to determin if autonomous should be enabled in any sence.
+        /// Boolean flag to determin if autonomous should be enabled in any sence.
         /// </summary>
         public bool AutonEnabled { get; private set; }
 
         /// <summary>
-        ///     Instance of the driver's control schema to be used thoughout the program.
+        /// Instance of the driver's control schema to be used thoughout the program.
         /// </summary>
         public DriverConfig DriverConfig { get; private set; }
 
         /// <summary>
-        ///     Instance of the operators's control schema to be used thoughout the program.
+        /// Instance of the operators's control schema to be used thoughout the program.
         /// </summary>
         public OperatorConfig OperatorConfig { get; private set; }
 
         /// <summary>
-        ///     Boolean flag to set QuickLoad mode, see reference manule for details.
+        /// Boolean flag to set QuickLoad mode, see reference manule for details.
         /// </summary>
         public bool QuickLoad { get; private set; }
 
@@ -154,7 +154,7 @@ namespace Base.Config
                 Log.Write(ex);
             }
 
-            #endregion
+            #endregion Victors
 
             #region Talons
 
@@ -238,7 +238,7 @@ namespace Base.Config
                 Log.Write(ex);
             }
 
-            #endregion
+            #endregion Talons
 
             #region DI
 
@@ -250,8 +250,8 @@ namespace Base.Config
                     Report.General(
                         $"Added Digital Input {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
                     ActiveCollection.AddComponent(
-                            new DigitalInputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString()));
+                        new DigitalInputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString()));
                 }
             }
             catch (Exception ex)
@@ -273,8 +273,8 @@ namespace Base.Config
                     Report.General(
                         $"Added Digital Output {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
                     ActiveCollection.AddComponent(
-                            new DigitalOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString()));
+                        new DigitalOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString()));
                 }
             }
             catch (Exception ex)
@@ -296,8 +296,8 @@ namespace Base.Config
                     Report.General(
                         $"Added Analog Input {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
                     ActiveCollection.AddComponent(
-                            new AnalogInputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString()));
+                        new AnalogInputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString()));
                 }
             }
             catch (Exception ex)
@@ -319,8 +319,8 @@ namespace Base.Config
                     Report.General(
                         $"Added Analog Output {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
                     ActiveCollection.AddComponent(
-                            new AnalogOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString()));
+                        new AnalogOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString()));
                 }
             }
             catch (Exception ex)
@@ -332,12 +332,64 @@ namespace Base.Config
 
             #endregion AO
 
-
             #endregion channel asignments
         }
 
+        private void constructVirtualControlEvents()
+        {
+            try
+            {
+                foreach (var element in getElements("VirtualControlEvents"))
+                    try
+                    {
+                        var type = VirtualControlEvent.VirtualControlEventType.Value;
+                        var setMethod = VirtualControlEvent.VirtualControlEventSetMethod.Passthrough;
+
+                        switch (element.Attribute("type").Value)
+                        {
+                            case "value":
+                                type = VirtualControlEvent.VirtualControlEventType.Value;
+                                break;
+
+                            case "usage":
+                                type = VirtualControlEvent.VirtualControlEventType.Usage;
+                                break;
+                        }
+
+                        switch (element.Attribute("setMethod").Value)
+                        {
+                            case "passthrough":
+                                setMethod = VirtualControlEvent.VirtualControlEventSetMethod.Passthrough;
+                                break;
+
+                            case "adjusted":
+                                setMethod = VirtualControlEvent.VirtualControlEventSetMethod.Adjusted;
+                                break;
+                        }
+
+                        var drivers = toBindCommonName(element.Attribute("drivers"));
+                        var actors = toBindCommonName(element.Attribute("actions"));
+
+                        var tmp = new VirtualControlEvent(type, setMethod,
+                            drivers.Select(driver => ActiveCollection.Get(driver)).ToArray());
+                        tmp.AddActionComponents(actors.Select(actor => ActiveCollection.Get(actor)).ToArray());
+                    }
+                    catch (Exception ex)
+                    {
+                        Report.Error(
+                            $"There was an error creating the VirtualControlEvent {element.Name}, see log for details.");
+                        Log.Write(ex);
+                    }
+            }
+            catch (Exception ex)
+            {
+                Report.Error("There was an error loading an Event from the config.");
+                Log.Write(ex);
+            }
+        }
+
         /// <summary>
-        ///     Returns the attribute of an XElement.
+        /// Returns the attribute of an XElement.
         /// </summary>
         /// <param name="attribute">The attribute from which to obtain the value.</param>
         /// <param name="elements">Name of elements to navigate.</param>
@@ -358,7 +410,7 @@ namespace Base.Config
         }
 
         /// <summary>
-        ///     Returns the attribute value of an XElement.
+        /// Returns the attribute value of an XElement.
         /// </summary>
         /// <param name="attribute">The attribute from which to obtain the value.</param>
         /// <param name="elements">Name of elements to navigate.</param>
@@ -380,14 +432,14 @@ namespace Base.Config
         }
 
         /// <summary>
-        ///     Returns the last nodes Elements from a path of XElements.
+        /// Returns the last nodes Elements from a path of XElements.
         /// </summary>
         /// <param name="elements">Name of elements to navigate.</param>
         /// <returns></returns>
         private IEnumerable<XElement> getElements(params string[] elements) => getNode(elements).Elements();
 
         /// <summary>
-        ///     Returns the last nodes from a path of XElements.
+        /// Returns the last nodes from a path of XElements.
         /// </summary>
         /// <param name="elements">Name of elements to navigate.</param>
         /// <returns></returns>
@@ -409,7 +461,7 @@ namespace Base.Config
         }
 
         /// <summary>
-        ///     Loads all relevant attributes and values from the config file.
+        /// Loads all relevant attributes and values from the config file.
         /// </summary>
         // ReSharper disable once InconsistentNaming
         private void load()
@@ -423,6 +475,7 @@ namespace Base.Config
                 allocateComponents();
                 retrieveDriverSchema();
                 retrieveOperatorSchema();
+                constructVirtualControlEvents();
             }
             catch (Exception ex)
             {

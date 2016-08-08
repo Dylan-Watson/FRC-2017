@@ -15,7 +15,7 @@ using System.IO;
 namespace Base
 {
     /// <summary>
-    ///     Utility class for logging functions
+    /// Utility class for logging functions
     /// </summary>
     public static class Log
     {
@@ -25,7 +25,7 @@ namespace Base
         private const string FULL_LOG_FILE = @"full_log.txt";
 
         /// <summary>
-        ///     Writes a string to the log file
+        /// Writes a string to the log file
         /// </summary>
         /// <param name="msg">A string for dubugging info</param>
         public static void Str(string msg)
@@ -40,7 +40,7 @@ namespace Base
         }
 
         /// <summary>
-        ///     Writes and exception to the log file
+        /// Writes and exception to the log file
         /// </summary>
         /// <param name="ex">Exception</param>
         public static void Write(Exception ex)
@@ -55,7 +55,7 @@ namespace Base
         }
 
         /// <summary>
-        ///     Clears the session log
+        /// Clears the session log
         /// </summary>
         public static void ClearSessionLog()
         {
@@ -64,7 +64,7 @@ namespace Base
         }
 
         /// <summary>
-        ///     Clears the full log
+        /// Clears the full log
         /// </summary>
         public static void ClearFullLog()
         {

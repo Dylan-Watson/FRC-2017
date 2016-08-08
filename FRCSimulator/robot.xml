@@ -49,10 +49,12 @@
     <!--  so DO NOT have matching channel numbers, that allocated drifferent resources in the same spot.-->
     <DI>
       <!--<xxxxxx channel="x" />-->
+      <test_di channel="0" />
     </DI>
 
     <DO>
       <!--<xxxxxx channel="x" />-->
+      <test_do channel="1" />
     </DO>
 
     <!-- Analog inputs/outputs -->
@@ -101,4 +103,10 @@
       <shooter type="axis" axis="5" reversed="false" deadZone="0" bindTo="shooter_1" />
     </Operator>
   </Controls>
+
+  <!-- Event assignments -->
+  <!-- types= 'value' or 'usage'; setMethods= 'passthrough' or 'adjusted'-->
+  <VirtualControlEvents>
+    <test_event type="value" drivers="shooter_1" actions="test_do" setMethod="passthrough" />
+  </VirtualControlEvents>
 </Robot>

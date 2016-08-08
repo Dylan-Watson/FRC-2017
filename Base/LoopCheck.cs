@@ -15,20 +15,20 @@ using WPILib;
 namespace Base
 {
     /// <summary>
-    ///     Utility class for custom WPI functions describing match states
+    /// Utility class for custom WPI functions describing match states
     /// </summary>
     public static class LoopCheck
     {
         #region Public Methods
 
         /// <summary>
-        ///     Checks to see if autonomous is in session and if the robot is enabled
+        /// Checks to see if autonomous is in session and if the robot is enabled
         /// </summary>
         /// <returns>state of autonomous</returns>
         public static bool _IsAutonomous() => DriverStation.Instance.Autonomous && DriverStation.Instance.Enabled;
 
         /// <summary>
-        ///     Checks to see if teleop is in session and if the robot is enabled
+        /// Checks to see if teleop is in session and if the robot is enabled
         /// </summary>
         /// <returns>state of teleop</returns>
         public static bool _IsTeleoporated() => DriverStation.Instance.OperatorControl && DriverStation.Instance.Enabled;

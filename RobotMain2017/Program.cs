@@ -14,11 +14,15 @@ using WPILib;
 namespace RobotMain2017
 {
     /// <summary>
-    ///     Entry point
+    /// Entry point
     /// </summary>
     public static class Program
     {
+        #region Private Methods
+
         // ReSharper disable once InconsistentNaming
         private static void Main() => RobotBase.Main(null, typeof(RobotMain2017));
+
+        #endregion Private Methods
     }
 }

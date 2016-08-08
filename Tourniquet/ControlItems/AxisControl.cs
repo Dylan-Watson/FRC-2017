@@ -19,14 +19,14 @@ namespace Tourniquet.ControlItems
     internal delegate double FitFunction(double x, double y, double z);
 
     /// <summary>
-    ///     Class to handle an axis control
+    /// Class to handle an axis control
     /// </summary>
     public class AxisControl : ControlItem
     {
         #region Public Constructors
 
         /// <summary>
-        ///     Constructor
+        /// Constructor
         /// </summary>
         /// <param name="name">name of the control</param>
         /// <param name="joystick">WPI joysick the control will use</param>
@@ -76,7 +76,7 @@ namespace Tourniquet.ControlItems
         #region Public Methods
 
         /// <summary>
-        ///     Update the control and its bindings
+        /// Update the control and its bindings
         /// </summary>
         public override void Update()
         {
@@ -88,7 +88,7 @@ namespace Tourniquet.ControlItems
             }
             else if (IsRunning)
             {
-                stopMotors();
+                stop();
                 IsRunning = false;
             }
         }

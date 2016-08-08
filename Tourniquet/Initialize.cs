@@ -18,14 +18,14 @@ using static Base.Config.Schemas;
 namespace Tourniquet
 {
     /// <summary>
-    ///     Sets up everything required for teleop to run
+    /// Sets up everything required for teleop to run
     /// </summary>
     public static class Initialize
     {
         #region Public Methods
 
         /// <summary>
-        ///     Builds the driver and operators controls based of off their ControlSchemas
+        /// Builds the driver and operators controls based of off their ControlSchemas
         /// </summary>
         /// <param name="config">The main program's instance of the config</param>
         public static void BuildControlSchema(Config config)

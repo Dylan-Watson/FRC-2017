@@ -6,34 +6,34 @@ using WPILib;
 namespace Base.Config
 {
     /// <summary>
-    ///     Class to store all relevant ControlSchemas
+    /// Class to store all relevant ControlSchemas
     /// </summary>
     public static class Schemas
     {
         #region Public Enums
 
         /// <summary>
-        ///     Defines the type of control that a control schema represents
+        /// Defines the type of control that a control schema represents
         /// </summary>
         public enum ControlType
         {
             /// <summary>
-            ///     Axis control
+            /// Axis control
             /// </summary>
             Axis,
 
             /// <summary>
-            ///     Button control
+            /// Button control
             /// </summary>
             Button,
 
             /// <summary>
-            ///     Two button control
+            /// Two button control
             /// </summary>
             DualButton,
 
             /// <summary>
-            ///     Toggle button control
+            /// Toggle button control
             /// </summary>
             ToggleButton
         }
@@ -43,20 +43,19 @@ namespace Base.Config
         #region Public Structs
 
         /// <summary>
-        ///     Structure to define all of the drivers control schemas.
+        /// Structure to define all of the drivers control schemas.
         /// </summary>
         public struct DriverConfig
         {
             #region Public Constructors
 
             /// <summary>
-            ///     Default contructor.
+            /// Default contructor.
             /// </summary>
             /// <param name="driver">WPIlib Joystick that the driver will use</param>
             /// <param name="leftSchema">DriverControlSchema for the left side of the drive train</param>
             /// <param name="rightSchema">DriverControlSchema for the right side of the drive train</param>
             /// <param name="controlsData">List of control schemas for auxillary driver controls</param>
-//TODO: does C# call its arrays "lists", or is it something different?
             public DriverConfig(Joystick driver, DriverControlSchema leftSchema, DriverControlSchema rightSchema,
                 List<ControlSchema> controlsData = null)
             {
@@ -71,22 +70,22 @@ namespace Base.Config
             #region Public Properties
 
             /// <summary>
-            ///     List to hold auxillary driver control schemas (aka not drive train controls)
+            /// List to hold auxillary driver control schemas (aka not drive train controls)
             /// </summary>
             public List<ControlSchema> ControlsData { get; private set; }
 
             /// <summary>
-            ///     The object to hold the WPIlib Joystick that the driver will use.
+            /// The object to hold the WPIlib Joystick that the driver will use.
             /// </summary>
             public Joystick Driver { get; private set; }
 
             /// <summary>
-            ///     Defines the left drive controls.
+            /// Defines the left drive controls.
             /// </summary>
             public DriverControlSchema LeftDriveControlSchema { get; private set; }
 
             /// <summary>
-            ///     Defines the right drive controls.
+            /// Defines the right drive controls.
             /// </summary>
             public DriverControlSchema RightDriveControlSchema { get; private set; }
 
@@ -94,14 +93,14 @@ namespace Base.Config
         }
 
         /// <summary>
-        ///     Structure to define all of the operators control schemas.
+        /// Structure to define all of the operators control schemas.
         /// </summary>
         public struct OperatorConfig
         {
             #region Public Constructors
 
             /// <summary>
-            ///     Default constructor.
+            /// Default constructor.
             /// </summary>
             /// <param name="operator_">WPIlib Joystick that the operator will use</param>
             /// <param name="controlsData">List of control schemas for the operator's controls</param>
@@ -116,12 +115,12 @@ namespace Base.Config
             #region Public Properties
 
             /// <summary>
-            ///     List to hold the operator's control schemas.
+            /// List to hold the operator's control schemas.
             /// </summary>
             public List<ControlSchema> ControlsData { get; private set; }
 
             /// <summary>
-            ///     The object to hold the WPIlib Joystick that the operator will use.
+            /// The object to hold the WPIlib Joystick that the operator will use.
             /// </summary>
             public Joystick Operator { get; private set; }
 
@@ -133,14 +132,14 @@ namespace Base.Config
         #region Public Classes
 
         /// <summary>
-        ///     Class to define the schema of a control.
+        /// Class to define the schema of a control.
         /// </summary>
         public class ControlSchema
         {
             #region Public Methods
 
             /// <summary>
-            ///     Gets the type of control that a schema would represent from an XAttribute object.
+            /// Gets the type of control that a schema would represent from an XAttribute object.
             /// </summary>
             /// <param name="attribute">XAttribute object loaded from XML</param>
             /// <returns></returns>
@@ -170,22 +169,27 @@ namespace Base.Config
 
             #region Public Constructors
 
-            //TODO: For future use?
             /// <summary>
-            ///     Default constructor.
+            /// Default constructor.
             /// </summary>
             public ControlSchema()
             {
             }
 
             /// <summary>
-            ///     Constructor.
+            /// Constructor.
             /// </summary>
             /// <param name="name">Name of the control schema</param>
             /// <param name="controlType">Type of control that the schema represents</param>
-            /// <param name="bindTo">List of CommonNames to represent what components the schema is bound to</param>
-            /// <param name="button">The address of the button on the controller that will be used by this control</param>
-            /// <param name="powerMultiplier">The multiplier to be applied before output to the IComponents</param>
+            /// <param name="bindTo">
+            /// List of CommonNames to represent what components the schema is bound to
+            /// </param>
+            /// <param name="button">
+            /// The address of the button on the controller that will be used by this control
+            /// </param>
+            /// <param name="powerMultiplier">
+            /// The multiplier to be applied before output to the IComponents
+            /// </param>
             /// <param name="reversed">Defines if the control will be reversed</param>
             /// <param name="isEnabled">Defines if the control is enabled by default or not</param>
             public ControlSchema(string name, ControlType controlType, List<CommonName> bindTo, int button,
@@ -201,14 +205,22 @@ namespace Base.Config
             }
 
             /// <summary>
-            ///     Constructor.
+            /// Constructor.
             /// </summary>
             /// <param name="name">Name of the control schema</param>
             /// <param name="controlType">Type of control that the schema represents</param>
-            /// <param name="bindTo">List of CommonNames to represent what components the schema is bound to</param>
-            /// <param name="buttona">The address of one of the buttons on the controller that will be used by this control</param>
-            /// <param name="buttonb">The address of one of the buttons on the controller that will be used by this control</param>
-            /// <param name="powerMultiplier">The multiplier to be applied before output to the IComponents</param>
+            /// <param name="bindTo">
+            /// List of CommonNames to represent what components the schema is bound to
+            /// </param>
+            /// <param name="buttona">
+            /// The address of one of the buttons on the controller that will be used by this control
+            /// </param>
+            /// <param name="buttonb">
+            /// The address of one of the buttons on the controller that will be used by this control
+            /// </param>
+            /// <param name="powerMultiplier">
+            /// The multiplier to be applied before output to the IComponents
+            /// </param>
             /// <param name="reversed">Defines if the control will be reversed</param>
             /// <param name="isEnabled">Defines if the control is enabled by default or not</param>
             public ControlSchema(string name, ControlType controlType, List<CommonName> bindTo, int buttona, int buttonb,
@@ -225,14 +237,22 @@ namespace Base.Config
             }
 
             /// <summary>
-            ///     Constructor.
+            /// Constructor.
             /// </summary>
             /// <param name="name">Name of the control schema</param>
             /// <param name="controlType">Type of control that the schema represents</param>
-            /// <param name="bindTo">List of CommonNames to represent what components the schema is bound to</param>
-            /// <param name="axis">The address of the axis on the controller that will be used by this control</param>
-            /// <param name="deadZone">The deadzones (lower limits) on the axis that this shema represents</param>
-            /// <param name="powerMultiplier">The multiplier to be applied before output to the IComponents</param>
+            /// <param name="bindTo">
+            /// List of CommonNames to represent what components the schema is bound to
+            /// </param>
+            /// <param name="axis">
+            /// The address of the axis on the controller that will be used by this control
+            /// </param>
+            /// <param name="deadZone">
+            /// The deadzones (lower limits) on the axis that this shema represents
+            /// </param>
+            /// <param name="powerMultiplier">
+            /// The multiplier to be applied before output to the IComponents
+            /// </param>
             /// <param name="reversed">Defines if the control will be reversed</param>
             /// <param name="isEnabled">Defines if the control is enabled by default or not</param>
             public ControlSchema(string name, ControlType controlType, List<CommonName> bindTo, int axis,
@@ -253,67 +273,67 @@ namespace Base.Config
             #region Public Properties
 
             /// <summary>
-            ///     Axis for this control
+            /// Axis for this control
             /// </summary>
             public int Axis { get; protected set; }
 
             /// <summary>
-            ///     CommonNames of components that are bound to this control
+            /// CommonNames of components that are bound to this control
             /// </summary>
             public List<CommonName> Bindings { get; protected set; }
 
             /// <summary>
-            ///     Button A in a dual button control
+            /// Button A in a dual button control
             /// </summary>
             public int ButtonA { get; private set; }
 
             /// <summary>
-            ///     Button B in a dual button control
+            /// Button B in a dual button control
             /// </summary>
             public int ButtonB { get; private set; }
 
             /// <summary>
-            ///     Type of control this schema represents
+            /// Type of control this schema represents
             /// </summary>
             public ControlType ControlType { get; protected set; }
 
             /// <summary>
-            ///     Deadzone of an axis control
+            /// Deadzone of an axis control
             /// </summary>
             public double DeadZone { get; protected set; }
 
             /// <summary>
-            ///     Name of the control this schema represents
+            /// Defines if the control is enabled
+            /// </summary>
+            public bool IsEnabled { get; protected set; }
+
+            /// <summary>
+            /// Name of the control this schema represents
             /// </summary>
             public string Name { get; protected set; }
 
             /// <summary>
-            ///     Output multiplier for control
+            /// Output multiplier for control
             /// </summary>
             public double PowerMultiplier { get; protected set; }
 
             /// <summary>
-            ///     Defines if the control will be reversed
+            /// Defines if the control will be reversed
             /// </summary>
             public bool Reversed { get; protected set; }
-
-            /// <summary>
-            ///     Defines if the control is enabled
-            /// </summary>
-            public bool IsEnabled { get; protected set; }
 
             #endregion Public Properties
         }
 
         /// <summary>
-        ///     Defines the driver's control schema
+        /// Defines the driver's control schema
         /// </summary>
         public sealed class DriverControlSchema : ControlSchema
         {
             #region Public Constructors
 
             /// <summary>
-            ///     Constructor
+            /// Constructor
             /// </summary>
             /// <param name="name">name of the control</param>
             /// <param name="fitFunction">fit function to use, see Filters class</param>
@@ -323,8 +343,10 @@ namespace Base.Config
             /// <param name="deadZone">deadzone on the axis</param>
             /// <param name="powerMultiplier">output power multiplier</param>
             /// <param name="reversed">if the control should be reversed</param>
+            /// <param name="isEnabled">Defines if the control is enabled by default or not</param>
             public DriverControlSchema(string name, MotorControlFitFunction fitFunction, double fitPower,
-                List<CommonName> bindTo, int axis, double deadZone, double powerMultiplier = 1, bool reversed = false, bool isEnabled = true)
+                List<CommonName> bindTo, int axis, double deadZone, double powerMultiplier = 1, bool reversed = false,
+                bool isEnabled = true)
             {
                 Name = name;
                 ControlType = ControlType.Axis;
@@ -343,12 +365,12 @@ namespace Base.Config
             #region Public Properties
 
             /// <summary>
-            ///     The fit function to use, see Filters class
+            /// The fit function to use, see Filters class
             /// </summary>
             public MotorControlFitFunction FitFunction { get; private set; }
 
             /// <summary>
-            ///     The power for the fit function, see Filters class
+            /// The power for the fit function, see Filters class
             /// </summary>
             public double FitPower { get; private set; }
 

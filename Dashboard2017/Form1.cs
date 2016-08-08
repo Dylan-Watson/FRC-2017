@@ -29,7 +29,7 @@ using System.Windows.Forms;
 namespace Dashboard2017
 {
     /// <summary>
-    ///     Main window of the dashboard
+    /// Main window of the dashboard
     /// </summary>
     public partial class Form1 : Form
     {
@@ -38,7 +38,7 @@ namespace Dashboard2017
         private bool pingSuccess;
 
         /// <summary>
-        ///     Constructor
+        /// Constructor
         /// </summary>
         public Form1()
         {
@@ -389,7 +389,7 @@ namespace Dashboard2017
         }
 
         /// <summary>
-        ///     Updates targetingLabel
+        /// Updates targetingLabel
         /// </summary>
         public void NoTarget()
         {
@@ -402,7 +402,7 @@ namespace Dashboard2017
         }
 
         /// <summary>
-        ///     Updates targetingLabel
+        /// Updates targetingLabel
         /// </summary>
         public void HasTarget()
         {
@@ -415,7 +415,7 @@ namespace Dashboard2017
         }
 
         /// <summary>
-        ///     Updates targetingLabel
+        /// Updates targetingLabel
         /// </summary>
         public void TargetAquired()
         {
@@ -457,8 +457,8 @@ namespace Dashboard2017
 
         private class TableActivityListener : ITableListener
         {
-            private string currentState;
             private readonly Form1 parent;
+            private string currentState;
 
             public TableActivityListener(Form1 parent)
             {
