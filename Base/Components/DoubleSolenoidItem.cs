@@ -11,10 +11,6 @@ Email: dylantrwatson@gmail.com, cooper.ryan@centaurisoft.org
 \********************************************************************/
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WPILib;
 
 namespace Base.Components
@@ -22,7 +18,7 @@ namespace Base.Components
     /// <summary>
     ///     Class to handle Double Solenoid Pneumatics
     /// </summary>
-    public class DoubleSolenoidItem: IComponent
+    public class DoubleSolenoidItem : IComponent
     {
         #region Private Fields
 
@@ -48,6 +44,28 @@ namespace Base.Components
         public object Sender { get; private set; }
 
         #endregion Public Properties
+
+        #region Public Events
+
+        /// <summary>
+        /// Event used for VirtualControlEvents
+        /// </summary>
+        public event EventHandler ValueChanged;
+
+        #endregion Public Events
+
+        #region Protected Methods
+
+        /// <summary>
+        /// Method to fire value changes for set/get values and InUse values
+        /// </summary>
+        /// <param name="e">VirtualControlEventArgs</param>
+        protected virtual void onValueChanged(VirtualControlEventArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
+        }
+
+        #endregion
 
         #region Public Constructors
 
