@@ -42,7 +42,8 @@
 
     <!-- Double solenoid locations-->
     <Solenoids>
-      <!--<xxxxxx forward="x" reverse="x" default="forward/reverse" />-->
+      <!--<xxxxxx forward="x" reverse="x" default="forward/reverse" reversed="false" />-->
+      <test_solenoid forward="0" reverse="1" default="forward" reversed="false" />
     </Solenoids>
 
     <!--  Digital input/outputs !!!!NOTE!!!! DI and DO are on the same line as the Encoders -->

@@ -37,7 +37,7 @@ namespace Base.Components
         /// <param name="_default">Default position for when the Robot is initialized</param>
         /// <param name="reversed">If the output is reversed for the forward and reversed states</param>
         public DoubleSolenoidItem(string commonName, int forwardChannel, int reverseChannel,
-            DoubleSolenoid.Value _default = DoubleSolenoid.Value.Off, bool reversed = false)
+            DoubleSolenoid.Value _default, bool reversed = false)
         {
             solenoid = new DoubleSolenoid(forwardChannel, reverseChannel);
             Name = commonName;

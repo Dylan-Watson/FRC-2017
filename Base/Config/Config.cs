@@ -240,6 +240,37 @@ namespace Base.Config
 
             #endregion Talons
 
+            #region DoubleSolenoids
+
+            try
+            {
+                foreach (var element in getElements("RobotConfig", "Solenoids"))
+                {
+                    var _default = element.Attribute("default").Value;
+
+                    var d = DoubleSolenoid.Value.Off;
+                    if (_default == "forward")
+                        d = DoubleSolenoid.Value.Forward;
+                    else if (_default == "reverse")
+                        d = DoubleSolenoid.Value.Reverse;
+
+                    componentNames.Add(new CommonName(element.Name.ToString()));
+                    Report.General(
+                        $"Added Double Solenoid {element.Name}, forward channel {Convert.ToInt32(element.Attribute("forward").Value)}, reverse channel {Convert.ToInt32(element.Attribute("reverse").Value)}, default position = {element.Attribute("default").Value}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
+                    ActiveCollection.AddComponent(
+                        new DoubleSolenoidItem(element.Name.ToString(), Convert.ToInt32(element.Attribute("forward").Value),
+                            Convert.ToInt32(element.Attribute("reverse").Value), d, Convert.ToBoolean(element.Attribute("reversed").Value)));
+                }
+            }
+            catch (Exception ex)
+            {
+                Report.Error(
+                    "There was an error loading one or more DoubleSolenoids. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
+                Log.Write(ex);
+            }
+
+            #endregion DoubleSolenoids
+
             #region DI
 
             try
