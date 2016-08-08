@@ -7,22 +7,43 @@ namespace Dashboard2017
 {
     public class VideoWriterManager : IDisposable
     {
-        private static Size size;
+        #region Private Constructors
+
+        private VideoWriterManager()
+        {
+        }
+
+        #endregion Private Constructors
+
+        #region Protected Methods
+
+        protected virtual void Dispose(bool disposing)
+        {
+            Writer?.Dispose();
+        }
+
+        #endregion Protected Methods
+
+        #region Private Fields
 
         private static VideoWriterManager instance;
+        private static Size size;
 
         private readonly VideoWriter Writer =
             new VideoWriter(
                 @"Dashboard_2017" + DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss", CultureInfo.CurrentCulture) + ".avi",
                 24, size, true);
 
-        private VideoWriterManager()
-        {
-        }
+        #endregion Private Fields
 
-        public bool Record { get; set; }
+        #region Public Properties
 
         public static VideoWriterManager Instance => instance ?? (instance = new VideoWriterManager());
+        public bool Record { get; set; }
+
+        #endregion Public Properties
+
+        #region Public Methods
 
         public void Dispose()
         {
@@ -37,9 +58,6 @@ namespace Dashboard2017
             Writer.Write(frame);
         }
 
-        protected virtual void Dispose(bool disposing)
-        {
-            Writer?.Dispose();
-        }
+        #endregion Public Methods
     }
 }

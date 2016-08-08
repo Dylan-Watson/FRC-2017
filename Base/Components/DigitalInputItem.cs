@@ -6,12 +6,12 @@ namespace Base.Components
     /// <summary>
     /// Class to handle Digital Input Components
     /// </summary>
-    public class DigitalInputItem: InputComponent, IComponent
+    public class DigitalInputItem : InputComponent, IComponent
     {
-        private readonly DigitalInput din;
+        #region Public Constructors
 
         /// <summary>
-        ///     Constructor
+        /// Constructor
         /// </summary>
         /// <param name="channel">pwm channel the DIO is plugged into</param>
         /// <param name="commonName">CommonName the component will have</param>
@@ -21,34 +21,18 @@ namespace Base.Components
             Name = commonName;
         }
 
-        /// <summary>
-        ///     Defines whether the component is in use or not
-        /// </summary>
-        public bool InUse { get; } = false;
+        #endregion Public Constructors
 
-        /// <summary>
-        ///     Name of the component
-        /// </summary>
-        public string Name { get; }
-
-        /// <summary>
-        ///     Defines the object issuing the commands
-        /// </summary>
-        public object Sender { get; } = null;
-
-        /// <summary>
-        ///     returns din
-        /// </summary>
-        /// <returns>din</returns>
-        public object GetRawComponent()
-        {
-            return din;
-        }
+        #region Public Events
 
         /// <summary>
         /// Event used for VirtualControlEvents
         /// </summary>
         public event EventHandler ValueChanged;
+
+        #endregion Public Events
+
+        #region Protected Methods
 
         /// <summary>
         /// Method to fire value changes for set/get values and InUse values
@@ -59,28 +43,41 @@ namespace Base.Components
             ValueChanged?.Invoke(this, e);
         }
 
+        #endregion Protected Methods
+
+        #region Private Fields
+
+        private readonly DigitalInput din;
+
         private bool previousBool;
-        /// <summary>
-        ///     Gets the Input Value from the DigitalInput
-        /// </summary>
-        /// <returns>Boolean</returns>
-        public bool GetBool()
-        {
-            lock (din)
-            {
-                var value = din.Get();
-
-                if(previousBool!=value)
-                    onValueChanged(new VirtualControlEventArgs(Convert.ToDouble(value), InUse));
-
-                previousBool = value;
-                return value;
-            }
-        }
 
         private double previousInput;
+
+        #endregion Private Fields
+
+        #region Public Properties
+
         /// <summary>
-        ///     Gets the Input Value from the DigitalInput
+        /// Defines whether the component is in use or not
+        /// </summary>
+        public bool InUse { get; } = false;
+
+        /// <summary>
+        /// Name of the component
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        /// Defines the object issuing the commands
+        /// </summary>
+        public object Sender { get; } = null;
+
+        #endregion Public Properties
+
+        #region Public Methods
+
+        /// <summary>
+        /// Gets the Input Value from the DigitalInput
         /// </summary>
         /// <returns>Boolean</returns>
         public override double Get()
@@ -89,12 +86,41 @@ namespace Base.Components
             {
                 var input = Convert.ToDouble(din.Get());
 
-                if (Math.Abs(previousInput - input) <= Math.Abs(previousInput * .00001))
+                if (Math.Abs(previousInput - input) <= Math.Abs(previousInput*.00001))
                     onValueChanged(new VirtualControlEventArgs(input, InUse));
 
                 previousInput = input;
                 return Convert.ToDouble(din.Get());
             }
         }
+
+        /// <summary>
+        /// Gets the Input Value from the DigitalInput
+        /// </summary>
+        /// <returns>Boolean</returns>
+        public bool GetBool()
+        {
+            lock (din)
+            {
+                var value = din.Get();
+
+                if (previousBool != value)
+                    onValueChanged(new VirtualControlEventArgs(Convert.ToDouble(value), InUse));
+
+                previousBool = value;
+                return value;
+            }
+        }
+
+        /// <summary>
+        /// returns din
+        /// </summary>
+        /// <returns>din</returns>
+        public object GetRawComponent()
+        {
+            return din;
+        }
+
+        #endregion Public Methods
     }
 }

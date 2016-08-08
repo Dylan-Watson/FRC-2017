@@ -8,45 +8,31 @@ namespace Dashboard2017
 {
     public class ConsoleManager : TextWriter
     {
-        private static ConsoleManager instance;
-
-        private RichTextBox console;
+        #region Private Constructors
 
         private ConsoleManager()
         {
         }
 
+        #endregion Private Constructors
+
+        #region Private Fields
+
+        private static ConsoleManager instance;
+
+        private RichTextBox console;
+
+        #endregion Private Fields
+
+        #region Public Properties
+
         public override Encoding Encoding => Encoding.UTF8;
 
         public static ConsoleManager Instance => instance ?? (instance = new ConsoleManager());
 
-        public void SetConsoleManager(RichTextBox consoleRichTextBox)
-        {
-            console = consoleRichTextBox;
-            console.TextChanged += Console_TextChanged;
-        }
+        #endregion Public Properties
 
-        private void Console_TextChanged(object sender, EventArgs e)
-        {
-            if (!console.IsDisposed)
-                console.Invoke(new Action(() =>
-                {
-                    console.SelectionStart = console.Text.Length;
-                    console.ScrollToCaret();
-                }));
-        }
-
-        private void appendText(string str, bool newLine, Color clr)
-        {
-            console.SelectionStart = console.TextLength;
-            console.SelectionLength = 0;
-            console.SelectionColor = clr;
-            if (newLine)
-                console.AppendText(str + "\n");
-            else
-                console.AppendText(str);
-            console.SelectionColor = Color.Black;
-        }
+        #region Public Methods
 
         public void AppendError(Exception ex, bool newLine = true)
         {
@@ -72,11 +58,45 @@ namespace Dashboard2017
                 console.Invoke(new Action(() => { appendText(info, newLine, Color.Black); }));
         }
 
+        public void SetConsoleManager(RichTextBox consoleRichTextBox)
+        {
+            console = consoleRichTextBox;
+            console.TextChanged += Console_TextChanged;
+        }
+
         public override void Write(char value)
         {
             base.Write(value);
             if (!console.IsDisposed)
                 console.Invoke(new Action(() => { console.AppendText(value.ToString()); }));
         }
+
+        #endregion Public Methods
+
+        #region Private Methods
+
+        private void appendText(string str, bool newLine, Color clr)
+        {
+            console.SelectionStart = console.TextLength;
+            console.SelectionLength = 0;
+            console.SelectionColor = clr;
+            if (newLine)
+                console.AppendText(str + "\n");
+            else
+                console.AppendText(str);
+            console.SelectionColor = Color.Black;
+        }
+
+        private void Console_TextChanged(object sender, EventArgs e)
+        {
+            if (!console.IsDisposed)
+                console.Invoke(new Action(() =>
+                {
+                    console.SelectionStart = console.Text.Length;
+                    console.ScrollToCaret();
+                }));
+        }
+
+        #endregion Private Methods
     }
 }

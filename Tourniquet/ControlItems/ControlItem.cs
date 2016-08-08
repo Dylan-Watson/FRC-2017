@@ -19,28 +19,28 @@ using WPILib;
 namespace Tourniquet.ControlItems
 {
     /// <summary>
-    ///     Defines a control type
+    /// Defines a control type
     /// </summary>
     public enum ControlItemType
     {
         /// <summary>
-        ///     Button based control
+        /// Button based control
         /// </summary>
         ButtonControl,
 
         /// <summary>
-        ///     Toggle based control
+        /// Toggle based control
         /// </summary>
         ToggleControl,
 
         /// <summary>
-        ///     Axis based control
+        /// Axis based control
         /// </summary>
         AxisControl
     }
 
     /// <summary>
-    ///     Abstract class to define different types of controls
+    /// Abstract class to define different types of controls
     /// </summary>
     public abstract class ControlItem
     {
@@ -53,7 +53,7 @@ namespace Tourniquet.ControlItems
         #region Protected Properties
 
         /// <summary>
-        ///     Joystick the control is to use
+        /// Joystick the control is to use
         /// </summary>
         protected Joystick joystick { get; set; }
 
@@ -62,22 +62,22 @@ namespace Tourniquet.ControlItems
         #region Public Properties
 
         /// <summary>
-        ///     The control's name
+        /// The control's name
         /// </summary>
         public string ControlName { get; protected set; }
 
         /// <summary>
-        ///     The control type
+        /// The control type
         /// </summary>
         public ControlItemType ControlType { get; protected set; }
 
         /// <summary>
-        ///     Defines if the control is running (outputting values)
+        /// Defines if the control is running (outputting values)
         /// </summary>
         public bool IsRunning { get; protected set; }
 
         /// <summary>
-        ///     Defines if the control is enabled
+        /// Defines if the control is enabled
         /// </summary>
         public bool IsEnabled { get; set; } = true;
 
@@ -86,24 +86,24 @@ namespace Tourniquet.ControlItems
         #region Public Methods
 
         /// <summary>
-        ///     Overrides ToString to return the control's name
+        /// Overrides ToString to return the control's name
         /// </summary>
         public override string ToString() => ControlName;
 
         /// <summary>
-        ///     Adds a IComponent to the control
+        /// Adds a IComponent to the control
         /// </summary>
         /// <param name="component"></param>
         public void AddComponent(IComponent component) => components.Add(component);
 
         /// <summary>
-        ///     Adds multiple IComponents to the control
+        /// Adds multiple IComponents to the control
         /// </summary>
         /// <param name="componentRange"></param>
         public void AddComponents(List<IComponent> componentRange) => components.AddRange(componentRange);
 
         /// <summary>
-        ///     Sets a solenoid value if there is a solenoid in the controls bindings
+        /// Sets a solenoid value if there is a solenoid in the controls bindings
         /// </summary>
         /// <param name="value">solenoid position</param>
         protected void set(DoubleSolenoid.Value value)
@@ -112,7 +112,7 @@ namespace Tourniquet.ControlItems
         }
 
         /// <summary>
-        ///     The control implements to update its state and values
+        /// The control implements to update its state and values
         /// </summary>
         public abstract void Update();
 
@@ -121,7 +121,7 @@ namespace Tourniquet.ControlItems
         #region Protected Methods
 
         /// <summary>
-        ///     Sets a double value to components
+        /// Sets a double value to components
         /// </summary>
         /// <param name="val">value</param>
         protected void set(double val)
@@ -141,12 +141,13 @@ namespace Tourniquet.ControlItems
             foreach (
                 var output in
                     components.OfType<OutputComponent>()
-                        .Where(output => !((IComponent)output).InUse || (((IComponent)output).Sender == this)))
-                output?.Set(Math.Abs(val*5), this);//times five to compensate for analog output, which has upto 5v output.
+                        .Where(output => !((IComponent) output).InUse || (((IComponent) output).Sender == this)))
+                output?.Set(Math.Abs(val*5), this);
+                    //times five to compensate for analog output, which has upto 5v output.
         }
 
         /// <summary>
-        ///     NotImplementedException
+        /// NotImplementedException
         /// </summary>
         /// <param name="val"></param>
         protected void set(bool val)
@@ -159,7 +160,7 @@ namespace Tourniquet.ControlItems
         }
 
         /// <summary>
-        ///     Sets the control's motor bindings to only forward motion
+        /// Sets the control's motor bindings to only forward motion
         /// </summary>
         protected void setOnlyForward()
         {
@@ -167,7 +168,7 @@ namespace Tourniquet.ControlItems
         }
 
         /// <summary>
-        ///     Sets the control's motor bindings to only reverse motion
+        /// Sets the control's motor bindings to only reverse motion
         /// </summary>
         protected void setOnlyReverse()
         {
@@ -175,7 +176,7 @@ namespace Tourniquet.ControlItems
         }
 
         /// <summary>
-        ///     Sets all the motor controllers in the control's bindings to reverse or not
+        /// Sets all the motor controllers in the control's bindings to reverse or not
         /// </summary>
         /// <param name="val">if the controllers should be reversed</param>
         protected void setReversed(bool val)
@@ -197,7 +198,7 @@ namespace Tourniquet.ControlItems
         }
 
         /// <summary>
-        ///     Stopps all motors in the control's bindings
+        /// Stopps all motors in the control's bindings
         /// </summary>
         protected void stopMotors()
         {
@@ -209,14 +210,14 @@ namespace Tourniquet.ControlItems
         }
 
         /// <summary>
-        ///     Sets outputcomponents to zero
+        /// Sets outputcomponents to zero
         /// </summary>
         protected void zeroOutputComponents()
         {
             foreach (
                 var output in
                     components.OfType<OutputComponent>()
-                        .Where(output => !((IComponent)output).InUse || (((IComponent)output).Sender == this)))
+                        .Where(output => !((IComponent) output).InUse || (((IComponent) output).Sender == this)))
                 output?.Set(0, this);
         }
 

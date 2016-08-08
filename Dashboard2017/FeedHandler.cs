@@ -34,6 +34,39 @@ namespace Dashboard2017
 
     public class FeedHandler : IDisposable
     {
+        #region Public Properties
+
+        /// <summary>
+        /// boolean to enable and disable targeting
+        /// </summary>
+        public bool Targeting { get; set; }
+
+        #endregion Public Properties
+
+        #region Private Destructors
+
+        ~FeedHandler()
+        {
+            dispose(false);
+        }
+
+        #endregion Private Destructors
+
+        #region Protected Methods
+
+        [HandleProcessCorruptedStateExceptions]
+        protected virtual void dispose(bool disposing)
+        {
+            if (!disposing) return;
+
+            bw.Dispose();
+            capture.Dispose();
+        }
+
+        #endregion Protected Methods
+
+        #region Private Fields
+
         private readonly BackgroundWorker bw;
         private readonly List<CircleF> circles = new List<CircleF>();
         private readonly ImageBox destCompositOutputImage;
@@ -51,6 +84,10 @@ namespace Dashboard2017
         private Tuple<Mat, Image<Gray, byte>> output;
         private Mat temp;
         private bool terminate, hasTarget;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         public FeedHandler(int source, ImageBox normal, ImageBox composit, Form1 parentForm1)
         {
@@ -78,10 +115,9 @@ namespace Dashboard2017
             bw.RunWorkerAsync();
         }
 
-        /// <summary>
-        ///     boolean to enable and disable targeting
-        /// </summary>
-        public bool Targeting { get; set; }
+        #endregion Public Constructors
+
+        #region Public Methods
 
         public void Dispose()
         {
@@ -99,45 +135,14 @@ namespace Dashboard2017
                 capture = new Capture((string) source);
         }
 
+        #endregion Public Methods
+
+        #region Private Methods
+
         private void Bw_DoWork(object sender, DoWorkEventArgs e)
         {
             while (!terminate)
                 update();
-        }
-
-        [HandleProcessCorruptedStateExceptions]
-        [SecurityCritical]
-        private void update()
-        {
-            try
-            {
-                temp = capture.QueryFrame();
-
-                if (Targeting && (temp != null))
-                {
-                    output = processImage(temp);
-                    destOutputImage.Invoke(new Action(() => destOutputImage.Image = output.Item1));
-                    destCompositOutputImage.Invoke(new Action(() => destCompositOutputImage.Image = output.Item2));
-                    if (VideoWriterManager.Instance.Record)
-                        VideoWriterManager.Instance.WriteFrame(temp);
-                }
-                else if (temp != null)
-                {
-                    destOutputImage.Invoke(new Action(() => destOutputImage.Image = temp));
-                    destCompositOutputImage.Invoke(new Action(() => destCompositOutputImage.Image = logo));
-                    if (VideoWriterManager.Instance.Record)
-                        VideoWriterManager.Instance.WriteFrame(temp);
-                }
-                else
-                {
-                    destOutputImage.Invoke(new Action(() => destOutputImage.Image = logo));
-                    destCompositOutputImage.Invoke(new Action(() => destCompositOutputImage.Image = logo));
-                }
-            }
-            catch (Exception)
-            {
-                temp?.Dispose();
-            }
         }
 
         //This is where frames are proccessed
@@ -232,18 +237,41 @@ namespace Dashboard2017
             return new Tuple<Mat, Image<Gray, byte>>(original, imageHsvDest);
         }
 
-        ~FeedHandler()
-        {
-            dispose(false);
-        }
-
         [HandleProcessCorruptedStateExceptions]
-        protected virtual void dispose(bool disposing)
+        [SecurityCritical]
+        private void update()
         {
-            if (!disposing) return;
+            try
+            {
+                temp = capture.QueryFrame();
 
-            bw.Dispose();
-            capture.Dispose();
+                if (Targeting && (temp != null))
+                {
+                    output = processImage(temp);
+                    destOutputImage.Invoke(new Action(() => destOutputImage.Image = output.Item1));
+                    destCompositOutputImage.Invoke(new Action(() => destCompositOutputImage.Image = output.Item2));
+                    if (VideoWriterManager.Instance.Record)
+                        VideoWriterManager.Instance.WriteFrame(temp);
+                }
+                else if (temp != null)
+                {
+                    destOutputImage.Invoke(new Action(() => destOutputImage.Image = temp));
+                    destCompositOutputImage.Invoke(new Action(() => destCompositOutputImage.Image = logo));
+                    if (VideoWriterManager.Instance.Record)
+                        VideoWriterManager.Instance.WriteFrame(temp);
+                }
+                else
+                {
+                    destOutputImage.Invoke(new Action(() => destOutputImage.Image = logo));
+                    destCompositOutputImage.Invoke(new Action(() => destCompositOutputImage.Image = logo));
+                }
+            }
+            catch (Exception)
+            {
+                temp?.Dispose();
+            }
         }
+
+        #endregion Private Methods
     }
 }

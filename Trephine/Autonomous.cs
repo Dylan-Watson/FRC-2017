@@ -12,12 +12,14 @@ Email: cooper.ryan@centaurisoft.org
 namespace Trephine
 {
     /// <summary>
-    ///     Abstract class to define an atonomous program
+    /// Abstract class to define an atonomous program
     /// </summary>
     public abstract class Autonomous
     {
+        #region Protected Constructors
+
         /// <summary>
-        ///     Constructor
+        /// Constructor
         /// </summary>
         /// <param name="baseCalls">auton base calls instance</param>
         protected Autonomous(BaseCalls baseCalls)
@@ -25,15 +27,21 @@ namespace Trephine
             this.baseCalls = baseCalls;
         }
 
+        #endregion Protected Constructors
+
+        #region Protected Properties
+
         /// <summary>
-        ///     Instance of BaseCalls
+        /// Instance of BaseCalls
         /// </summary>
         protected BaseCalls baseCalls { get; }
+
+        #endregion Protected Properties
 
         #region Public Methods
 
         /// <summary>
-        ///     Runs the auton program
+        /// Runs the auton program
         /// </summary>
         public abstract void Start();
 

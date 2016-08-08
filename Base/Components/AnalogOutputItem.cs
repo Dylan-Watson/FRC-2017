@@ -6,12 +6,18 @@ namespace Base.Components
     /// <summary>
     /// Class to handle Analog Output Components
     /// </summary>
-    public class AnalogOutputItem: OutputComponent, IComponent
+    public class AnalogOutputItem : OutputComponent, IComponent
     {
+        #region Private Fields
+
         private readonly AnalogOutput aout;
 
+        #endregion Private Fields
+
+        #region Public Constructors
+
         /// <summary>
-        ///     Constructor
+        /// Constructor
         /// </summary>
         /// <param name="channel">pwm channel the AIO is plugged into</param>
         /// <param name="commonName">CommonName the component will have</param>
@@ -21,23 +27,21 @@ namespace Base.Components
             Name = commonName;
         }
 
-        /// <summary>
-        ///     Defines whether the component is in use or not
-        /// </summary>
-        public bool InUse { get; private set; }
+        #endregion Public Constructors
+
+        #region Public Events
 
         /// <summary>
-        ///     Name of the component
+        /// Event used for VirtualControlEvents
         /// </summary>
-        public string Name { get; }
+        public event EventHandler ValueChanged;
+
+        #endregion Public Events
+
+        #region Public Methods
 
         /// <summary>
-        ///     Defines the object issuing the commands
-        /// </summary>
-        public object Sender { get; private set; }
-
-        /// <summary>
-        ///     returns aout
+        /// returns aout
         /// </summary>
         /// <returns>aout</returns>
         public object GetRawComponent()
@@ -45,10 +49,28 @@ namespace Base.Components
             return aout;
         }
 
+        #endregion Public Methods
+
+        #region Public Properties
+
         /// <summary>
-        /// Event used for VirtualControlEvents
+        /// Defines whether the component is in use or not
         /// </summary>
-        public event EventHandler ValueChanged;
+        public bool InUse { get; private set; }
+
+        /// <summary>
+        /// Name of the component
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        /// Defines the object issuing the commands
+        /// </summary>
+        public object Sender { get; private set; }
+
+        #endregion Public Properties
+
+        #region Protected Methods
 
         /// <summary>
         /// Method to fire value changes for set/get values and InUse values
@@ -60,7 +82,7 @@ namespace Base.Components
         }
 
         /// <summary>
-        ///     Sets a value to the AnalogInput
+        /// Sets a value to the AnalogInput
         /// </summary>
         /// <param name="val">value to set the controller to</param>
         /// <param name="sender">the caller of this method</param>
@@ -88,5 +110,7 @@ namespace Base.Components
             InUse = false;
             onValueChanged(new VirtualControlEventArgs(val, InUse));
         }
+
+        #endregion Protected Methods
     }
 }

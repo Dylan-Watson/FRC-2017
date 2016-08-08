@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Base.Components;
+using System;
 using System.Collections.Generic;
-using Base.Components;
 
 namespace Base
 {
@@ -9,6 +9,34 @@ namespace Base
     /// </summary>
     public class VirtualControlEvent
     {
+        #region Public Enums
+
+        /// <summary>
+        /// The way to pass values to the actors
+        /// </summary>
+        public enum VirtualControlEventSetMethod
+        {
+            #region Public Fields
+
+            /// <summary>
+            /// Direct pass, no changes to the values
+            /// </summary>
+            Passthrough
+
+            #endregion Public Fields
+
+            ,
+
+            /// <summary>
+            /// Adjusted to compensate for range differences
+            /// Example: If you want to run a motor based off of an analog voltage input, it adjusts
+            ///          the 0-5 range from the analog voltage to a 0-1 range for the motor
+            /// </summary>
+            Adjusted
+        }
+
+        #endregion Public Enums
+
         /// <summary>
         /// The type of value to pass to the actors
         /// </summary>
@@ -18,43 +46,23 @@ namespace Base
             /// A numeric or boolean value
             /// </summary>
             Value,
+
             /// <summary>
             /// The usage state of the component
             /// </summary>
             Usage
         }
 
-        /// <summary>
-        /// The way to pass values to the actors
-        /// </summary>
-        public enum VirtualControlEventSetMethod
-        {
-            /// <summary>
-            /// Direct pass, no changes to the values
-            /// </summary>
-            Passthrough,
-            /// <summary>
-            /// Adjusted to compensate for range differences
-            /// Example: If you want to run a motor based off of an analog voltage input,
-            /// it adjusts the 0-5 range from the analog voltage to a 0-1 range for the motor
-            /// </summary>
-            Adjusted
-        }
-
-        /// <summary>
-        /// Defines the type of VirtualControlEvent this is
-        /// </summary>
-        public VirtualControlEventType EventType { get; }
-
-        /// <summary>
-        /// Defines the type of VirtualControlEventSetMethod to use
-        /// </summary>
-        public VirtualControlEventSetMethod SetMethod { get; }
+        #region Private Fields
 
         /// <summary>
         /// Defines a list of actors; the IComponents affected by the drivers/event
         /// </summary>
         private readonly List<IComponent> actors = new List<IComponent>();
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         /// <summary>
         /// Default constructor
@@ -72,15 +80,17 @@ namespace Base
                 driver.ValueChanged += VirtualControlEvent_ValueChanged;
         }
 
+        #endregion Public Constructors
+
         /// <summary>
-        /// Adds an array of IComponents to the actors list
+        /// Defines the type of VirtualControlEvent this is
         /// </summary>
-        /// <param name="components">array of IComponents</param>
-        public void AddActionComponents(params IComponent[] components)
-        {
-            foreach (var component in components)
-                actors.Add(component);
-        }
+        public VirtualControlEventType EventType { get; }
+
+        /// <summary>
+        /// Defines the type of VirtualControlEventSetMethod to use
+        /// </summary>
+        public VirtualControlEventSetMethod SetMethod { get; }
 
         /// <summary>
         /// Adds an IComponents to the actors list
@@ -88,6 +98,16 @@ namespace Base
         /// <param name="component">IComponent</param>
         public void AddActionComponent(IComponent component)
         {
+            actors.Add(component);
+        }
+
+        /// <summary>
+        /// Adds an array of IComponents to the actors list
+        /// </summary>
+        /// <param name="components">array of IComponents</param>
+        public void AddActionComponents(params IComponent[] components)
+        {
+            foreach (var component in components)
                 actors.Add(component);
         }
 
@@ -122,7 +142,7 @@ namespace Base
                         {
                             (actor as Motor)?.Set(param.Value, this);
                             (actor as DigitalOutputItem)?.Set(param.Value, this);
-                            (actor as AnalogOutputItem)?.Set(Math.Abs(param.Value) * 5, this);
+                            (actor as AnalogOutputItem)?.Set(Math.Abs(param.Value)*5, this);
                         }
                     }
                     else if ((EventType == VirtualControlEventType.Usage) &&
@@ -143,7 +163,6 @@ namespace Base
                 Report.Error(ex.Message);
                 Log.Write(ex);
             }
-
         }
     }
 
@@ -152,15 +171,7 @@ namespace Base
     /// </summary>
     public class VirtualControlEventArgs : EventArgs
     {
-        /// <summary>
-        /// Defines the InUse value to pass to actors during the event
-        /// </summary>
-        public bool InUse { get; }
-
-        /// <summary>
-        /// Defines the double value to pass to actors during the event
-        /// </summary>
-        public double Value { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Default constructor
@@ -172,5 +183,21 @@ namespace Base
             InUse = inUse;
             Value = value;
         }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Defines the InUse value to pass to actors during the event
+        /// </summary>
+        public bool InUse { get; }
+
+        /// <summary>
+        /// Defines the double value to pass to actors during the event
+        /// </summary>
+        public double Value { get; }
+
+        #endregion Public Properties
     }
 }
