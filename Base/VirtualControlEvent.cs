@@ -129,6 +129,7 @@ namespace Base
                     {
                         (actor as Motor)?.Set(param.Value, this);
                         (actor as OutputComponent)?.Set(Math.Abs(param.Value), this);
+                        (actor as DoubleSolenoidItem)?.Set(Math.Abs(param.Value), this);
                     }
                     else if ((EventType == VirtualControlEventType.Value) &&
                              (SetMethod == VirtualControlEventSetMethod.Adjusted))
@@ -137,12 +138,14 @@ namespace Base
                         {
                             (actor as Motor)?.Set(param.Value/5, this);
                             (actor as OutputComponent)?.Set(Math.Abs(param.Value), this);
+                            (actor as DoubleSolenoidItem)?.Set(Math.Abs(param.Value), this);
                         }
                         else
                         {
                             (actor as Motor)?.Set(param.Value, this);
                             (actor as DigitalOutputItem)?.Set(param.Value, this);
                             (actor as AnalogOutputItem)?.Set(Math.Abs(param.Value)*5, this);
+                            (actor as DoubleSolenoidItem)?.Set(Math.Abs(param.Value), this);
                         }
                     }
                     else if ((EventType == VirtualControlEventType.Usage) &&
@@ -150,11 +153,13 @@ namespace Base
                     {
                         (actor as Motor)?.Set(Convert.ToDouble(param.InUse), this);
                         (actor as OutputComponent)?.Set(param.InUse, this);
+                        (actor as DoubleSolenoidItem)?.Set(param.InUse, this);
                     }
                     else
                     {
                         (actor as Motor)?.Set(Convert.ToDouble(param.InUse), this);
                         (actor as OutputComponent)?.Set(param.InUse, this);
+                        (actor as DoubleSolenoidItem)?.Set(param.InUse, this);
                     }
                 }
             }

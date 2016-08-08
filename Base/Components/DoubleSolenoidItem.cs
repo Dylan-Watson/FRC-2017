@@ -48,6 +48,11 @@ namespace Base.Components
         /// </summary>
         private DoubleSolenoid.Value Default { get; }
 
+        /// <summary>
+        /// Defines if the output is reversed for forward and reverse states
+        /// </summary>
+        public bool IsReversed { get; private set; }
+
         #endregion Public Properties
 
         #region Public Events
@@ -81,11 +86,13 @@ namespace Base.Components
         /// <param name="forwardChannel">The forward channel number on the PCM [0..7]</param>
         /// <param name="reverseChannel">The reverse channel number on the PCM [0..7]</param>
         /// <param name="_default">Default position for when the Robot is initialized</param>
-        public DoubleSolenoidItem(string commonName, int forwardChannel, int reverseChannel, DoubleSolenoid.Value _default)
+        /// <param name="reversed">If the output is reversed for the forward and reversed states</param>
+        public DoubleSolenoidItem(string commonName, int forwardChannel, int reverseChannel, DoubleSolenoid.Value _default = DoubleSolenoid.Value.Off, bool reversed = false)
         {
             solenoid = new DoubleSolenoid(forwardChannel, reverseChannel);
             Name = commonName;
             Default = _default;
+            IsReversed = reversed;
             solenoid.Set(_default);
         }
 
@@ -112,24 +119,60 @@ namespace Base.Components
                 if ((val >= 0) && (val <= 2))
                 {
                     InUse = true;
-                    if (val == 0)
+                    if (Math.Abs(val - 0) <= Math.Abs(val*.00001))
+                    {
                         solenoid.Set(DoubleSolenoid.Value.Off);
-                    else if (val == 1)
-                        solenoid.Set(DoubleSolenoid.Value.Forward);
-                    else if (val == 2)
-                        solenoid.Set(DoubleSolenoid.Value.Reverse);                     
+                        onValueChanged(new VirtualControlEventArgs(-1, InUse));
+                    }
+                    else if (Math.Abs(val - 2) <= Math.Abs(val*.00001))
+                    {
+                        if (!IsReversed)
+                            setForward();
+                        else
+                            setReverse();
+                    }
+                    else if (Math.Abs(val - 1) <= Math.Abs(val*.00001))
+                    {
+                        if (!IsReversed)
+                            setReverse();
+                        else
+                            setForward();
+                    }
                 }
                 else
                 {
                     Report.Error(
-                        $"The valid arguments for DoubleSolenoid is Off, Forward, and Reverse. {sender} tried to set a value not in this range.");
+                        $"The valid arguments for DoubleSolenoid {Name} is Off, Forward, and Reverse (-1, 1, 0). {sender} tried to set a value not in this range.");
                     throw new ArgumentOutOfRangeException(nameof(val),
-                        $"The valid arguments for DoubleSolenoid is Off, Forward, and Reverse. {sender} tried to set a value not in this range.");
+                        $"The valid arguments for DoubleSolenoid {Name} is Off, Forward, and Reverse (-1, 1, 0). {sender} tried to set a value not in this range.");
                 }
                 Sender = null;
                 InUse = false;
+                onValueChanged(new VirtualControlEventArgs(-1, InUse));
             }
         }
+
+        private void setForward()
+        {
+            solenoid.Set(DoubleSolenoid.Value.Forward);
+            onValueChanged(new VirtualControlEventArgs(1, InUse));
+        }
+
+        private void setReverse()
+        {
+            solenoid.Set(DoubleSolenoid.Value.Reverse);
+            onValueChanged(new VirtualControlEventArgs(0, InUse));
+        }
+
+        /// <summary>
+        /// Sets the IsReversed flag/property to false
+        /// </summary>
+        public void RestoreDirection() => IsReversed = false;
+
+        /// <summary>
+        /// Sets the IsReversed flag/property to true
+        /// </summary>
+        public void ReverseDirection() => IsReversed = true;
 
         /// <summary>
         /// Calls the method to set the value to the solenoid
@@ -138,15 +181,28 @@ namespace Base.Components
         /// <param name="sender">the caller of this method</param>
         public void Set(DoubleSolenoid.Value value, object sender)
         {
+            Set(Convert.ToDouble(value)-1, sender);
+        }
+
+        /// <summary>
+        /// Boolean setter, true = forward, false = reverse
+        /// </summary>
+        /// <param name="value">boolean to set the solenoid position</param>
+        /// <param name="sender">the caller of this method</param>
+        public void Set(bool value, object sender)
+        {
             Set(Convert.ToDouble(value), sender);
         }
 
         /// <summary>
         /// Sets the DoubleSolenoid to its default position
         /// </summary>
-        public void defaultSet()
+        public void DefaultSet()
         {
-            solenoid.Set(Default);
+            lock (solenoid)
+            {
+                solenoid.Set(Default);
+            }
         }
 
         #endregion Public Methods
