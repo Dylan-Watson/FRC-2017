@@ -10,6 +10,7 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using System;
 using WPILib;
 
 namespace Base.Components
@@ -119,6 +120,20 @@ namespace Base.Components
         public object GetRawComponent() => victor;
 
         /// <summary>
+        /// Event used for VirtualControlEvents
+        /// </summary>
+        public event EventHandler ValueChanged;
+
+        /// <summary>
+        /// Method to fire value changes for set/get values and InUse values
+        /// </summary>
+        /// <param name="e">VirtualControlEventArgs</param>
+        protected virtual void onValueChanged(VirtualControlEventArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
+        }
+
+        /// <summary>
         ///     Sets a value to the victor
         /// </summary>
         /// <param name="val">value to set the controller to</param>
@@ -131,19 +146,20 @@ namespace Base.Components
                 if ((val < -Constants.MINUMUM_JOYSTICK_RETURN) && AllowCc)
                 {
                     InUse = true;
-                    if (IsReversed) victor.Set(-val);
-                    else victor.Set(val);
+                    if (IsReversed) { victor.Set(-val); onValueChanged(new VirtualControlEventArgs(-val, InUse)); }
+                    else { victor.Set(val); onValueChanged(new VirtualControlEventArgs(val, InUse)); }
                 }
                 else if ((val > Constants.MINUMUM_JOYSTICK_RETURN) && AllowC)
                 {
                     InUse = true;
-                    if (IsReversed) victor.Set(-val);
-                    else victor.Set(val);
+                    if (IsReversed) { victor.Set(-val); onValueChanged(new VirtualControlEventArgs(-val, InUse)); }
+                    else { victor.Set(val); onValueChanged(new VirtualControlEventArgs(val, InUse)); }
                 }
                 else if (InUse)
                 {
                     victor.StopMotor();
                     InUse = false;
+                    onValueChanged(new VirtualControlEventArgs(val, InUse));
                 }
             }
         }
@@ -151,7 +167,6 @@ namespace Base.Components
         /// <summary>
         ///     Stops the controller
         /// </summary>
-//TODO: It says in the summary "Stops the controller". Is this stopping the actual joystick controller, or the Victor?
         public override void Stop()
         {
             lock (victor)
@@ -159,6 +174,7 @@ namespace Base.Components
                 victor.StopMotor();
                 InUse = false;
                 Sender = null;
+                onValueChanged(new VirtualControlEventArgs(0, InUse));
             }
         }
 

@@ -250,8 +250,8 @@ namespace Base.Config
                     Report.General(
                         $"Added Digital Input {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
                     ActiveCollection.AddComponent(
-                            new DigitalInputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString()));
+                        new DigitalInputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString()));
                 }
             }
             catch (Exception ex)
@@ -273,8 +273,8 @@ namespace Base.Config
                     Report.General(
                         $"Added Digital Output {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
                     ActiveCollection.AddComponent(
-                            new DigitalOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString()));
+                        new DigitalOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString()));
                 }
             }
             catch (Exception ex)
@@ -296,8 +296,8 @@ namespace Base.Config
                     Report.General(
                         $"Added Analog Input {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
                     ActiveCollection.AddComponent(
-                            new AnalogInputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString()));
+                        new AnalogInputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString()));
                 }
             }
             catch (Exception ex)
@@ -319,8 +319,8 @@ namespace Base.Config
                     Report.General(
                         $"Added Analog Output {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
                     ActiveCollection.AddComponent(
-                            new AnalogOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString()));
+                        new AnalogOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString()));
                 }
             }
             catch (Exception ex)
@@ -423,6 +423,7 @@ namespace Base.Config
                 allocateComponents();
                 retrieveDriverSchema();
                 retrieveOperatorSchema();
+                constructVirtualControlEvents();
             }
             catch (Exception ex)
             {
@@ -728,6 +729,56 @@ namespace Base.Config
             }
 
             #endregion operator control schema
+        }
+
+        private void constructVirtualControlEvents()
+        {
+            try
+            {
+                foreach (var element in getElements("VirtualControlEvents"))
+                    try
+                    {
+                        var type = VirtualControlEvent.VirtualControlEventType.Value;
+                        var setMethod = VirtualControlEvent.VirtualControlEventSetMethod.Passthrough;
+
+                        switch (element.Attribute("type").Value)
+                        {
+                            case "value":
+                                type = VirtualControlEvent.VirtualControlEventType.Value;
+                                break;
+                            case "usage":
+                                type = VirtualControlEvent.VirtualControlEventType.Usage;
+                                break;
+                        }
+
+                        switch (element.Attribute("setMethod").Value)
+                        {
+                            case "passthrough":
+                                setMethod = VirtualControlEvent.VirtualControlEventSetMethod.Passthrough;
+                                break;
+                            case "adjusted":
+                                setMethod = VirtualControlEvent.VirtualControlEventSetMethod.Adjusted;
+                                break;
+                        }
+
+                        var drivers = toBindCommonName(element.Attribute("drivers"));
+                        var actors = toBindCommonName(element.Attribute("actions"));
+
+                        var tmp = new VirtualControlEvent(type, setMethod, drivers.Select(driver => ActiveCollection.Get(driver)).ToArray());
+                        tmp.AddActionComponents(actors.Select(actor => ActiveCollection.Get(actor)).ToArray());
+                    }
+                    catch (Exception ex)
+                    {
+                        Report.Error(
+                            $"There was an error creating the VirtualControlEvent {element.Name}, see log for details.");
+                        Log.Write(ex);
+                    }
+            }
+            catch (Exception ex)
+            {
+                Report.Error("There was an error loading an Event from the config.");
+                Log.Write(ex);
+            }
         }
 
         private List<CommonName> toBindCommonName(XAttribute attribute)

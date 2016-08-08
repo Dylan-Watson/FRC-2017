@@ -1,4 +1,5 @@
-﻿using WPILib;
+﻿using System;
+using WPILib;
 
 namespace Base.Components
 {
@@ -36,6 +37,20 @@ namespace Base.Components
         public object Sender { get; } = null;
 
         /// <summary>
+        /// Event used for VirtualControlEvents
+        /// </summary>
+        public event EventHandler ValueChanged;
+
+        /// <summary>
+        /// Method to fire value changes for set/get values and InUse values
+        /// </summary>
+        /// <param name="e">VirtualControlEventArgs</param>
+        protected virtual void onValueChanged(VirtualControlEventArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
+        }
+
+        /// <summary>
         ///     returns ain
         /// </summary>
         /// <returns>ain</returns>
@@ -44,6 +59,7 @@ namespace Base.Components
             return ain;
         }
 
+        private double previousVoltage;
         /// <summary>
         ///     Gets the input voltage from the AnalogInput
         /// </summary>
@@ -51,7 +67,15 @@ namespace Base.Components
         public override double Get()
         {
             lock (ain)
-                return ain.GetVoltage();
+            {
+                var voltage = ain.GetVoltage();
+
+                if (Math.Abs(previousVoltage - voltage) <= Math.Abs(previousVoltage * .00001))
+                    onValueChanged(new VirtualControlEventArgs(voltage, InUse));
+
+                previousVoltage = voltage;
+                return previousVoltage;
+            }
         }
     }
 }

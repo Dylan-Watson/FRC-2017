@@ -39,7 +39,6 @@ namespace Trephine
         public void SetLeftDrive(double value)
             => config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor) s).Set(value, this));
 
-        //TODO: complete full stop of all components
         /// <summary>
         ///     Full stop of the robot
         /// </summary>

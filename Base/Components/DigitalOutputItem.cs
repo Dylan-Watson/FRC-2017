@@ -45,24 +45,42 @@ namespace Base.Components
         }
 
         /// <summary>
+        /// Event used for VirtualControlEvents
+        /// </summary>
+        public event EventHandler ValueChanged;
+
+        /// <summary>
+        /// Method to fire value changes for set/get values and InUse values
+        /// </summary>
+        /// <param name="e">VirtualControlEventArgs</param>
+        protected virtual void onValueChanged(VirtualControlEventArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
+        }
+
+        /// <summary>
         ///     Sets a value to the DigitalOutput
         /// </summary>
         /// <param name="val">value to set the controller to</param>
         /// <param name="sender">the caller of this method</param>
         protected override void set(double val, object sender)
         {
+            var value = false;
             Sender = sender;
             lock (dout)
             {
-                if (val == 0)
+                if (Math.Abs(val - 0) <= Math.Abs(val * .00001))
                 {
                     InUse = true;
                     dout.Set(false);
+                    onValueChanged(new VirtualControlEventArgs(0, InUse));
                 }
                 else
                 {
                     InUse = true;
                     dout.Set(true);
+                    value = true;
+                    onValueChanged(new VirtualControlEventArgs(1, InUse));
                 }
                 /*else
                 {
@@ -75,6 +93,7 @@ namespace Base.Components
 
             Sender = null;
             InUse = false;
+            onValueChanged(new VirtualControlEventArgs(Convert.ToDouble(value), InUse));
         }
     }
 }

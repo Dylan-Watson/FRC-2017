@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WPILib;
 using WPILib.Interfaces;
 
@@ -108,6 +109,20 @@ namespace Base.Components
         public void AddSlave(CanTalonItem slave) => slaves.Add(slave);
 
         /// <summary>
+        /// Event used for VirtualControlEvents
+        /// </summary>
+        public event EventHandler ValueChanged;
+
+        /// <summary>
+        /// Method to fire value changes for set/get values and InUse values
+        /// </summary>
+        /// <param name="e">VirtualControlEventArgs</param>
+        protected virtual void onValueChanged(VirtualControlEventArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
+        }
+
+        /// <summary>
         ///     Sets a value to the talon
         /// </summary>
         /// <param name="val">value to set the controller to</param>
@@ -129,19 +144,20 @@ namespace Base.Components
                     if ((val < -Constants.MINUMUM_JOYSTICK_RETURN) && AllowCc)
                     {
                         InUse = true;
-                        if (IsReversed) talon.Set(-val);
-                        else talon.Set(val);
+                        if (IsReversed) { talon.Set(-val); onValueChanged(new VirtualControlEventArgs(-val, InUse)); }
+                        else { talon.Set(val); onValueChanged(new VirtualControlEventArgs(val, InUse)); }
                     }
                     else if ((val > Constants.MINUMUM_JOYSTICK_RETURN) && AllowC)
                     {
                         InUse = true;
-                        if (IsReversed) talon.Set(-val);
-                        else talon.Set(val);
+                        if (IsReversed) { talon.Set(-val); onValueChanged(new VirtualControlEventArgs(-val, InUse)); }
+                        else { talon.Set(val); onValueChanged(new VirtualControlEventArgs(val, InUse)); }
                     }
                     else
                     {
                         talon.ControlEnabled = false;
                         InUse = false;
+                        onValueChanged(new VirtualControlEventArgs(val, InUse));
                     }
                 }
             if (!Master) return;
@@ -155,6 +171,7 @@ namespace Base.Components
                         talon.ControlEnabled = true;
                         InUse = true;
                         talon.Set(-val);
+                        onValueChanged(new VirtualControlEventArgs(-val, InUse));
                     }
                     foreach (var slave in slaves)
                         lock (slave)
@@ -170,6 +187,7 @@ namespace Base.Components
                         talon.ControlEnabled = true;
                         InUse = true;
                         talon.Set(val);
+                        onValueChanged(new VirtualControlEventArgs(val, InUse));
                     }
                     foreach (var slave in slaves)
                         lock (slave)
@@ -188,6 +206,7 @@ namespace Base.Components
                         talon.ControlEnabled = true;
                         InUse = true;
                         talon.Set(-val);
+                        onValueChanged(new VirtualControlEventArgs(-val, InUse));
                     }
                     foreach (var slave in slaves)
                         lock (slave)
@@ -203,6 +222,7 @@ namespace Base.Components
                         talon.ControlEnabled = true;
                         InUse = true;
                         talon.Set(val);
+                        onValueChanged(new VirtualControlEventArgs(val, InUse));
                     }
                     foreach (var slave in slaves)
                         lock (slave)
@@ -218,6 +238,7 @@ namespace Base.Components
                 {
                     talon.ControlEnabled = false;
                     InUse = false;
+                    onValueChanged(new VirtualControlEventArgs(-val, InUse));
                 }
                 foreach (var slave in slaves)
                     lock (slave)
@@ -237,6 +258,7 @@ namespace Base.Components
                 talon.ControlEnabled = false;
                 InUse = false;
                 Sender = null;
+                onValueChanged(new VirtualControlEventArgs(0, InUse));
             }
         }
     }

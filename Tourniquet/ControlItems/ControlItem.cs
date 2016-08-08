@@ -14,7 +14,6 @@ using Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Base.Components;
 using WPILib;
 
 namespace Tourniquet.ControlItems
@@ -146,7 +145,6 @@ namespace Tourniquet.ControlItems
                 output?.Set(Math.Abs(val*5), this);//times five to compensate for analog output, which has upto 5v output.
         }
 
-        //TODO: Implement for button controls
         /// <summary>
         ///     NotImplementedException
         /// </summary>

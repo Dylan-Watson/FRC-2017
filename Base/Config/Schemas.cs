@@ -56,7 +56,6 @@ namespace Base.Config
             /// <param name="leftSchema">DriverControlSchema for the left side of the drive train</param>
             /// <param name="rightSchema">DriverControlSchema for the right side of the drive train</param>
             /// <param name="controlsData">List of control schemas for auxillary driver controls</param>
-//TODO: does C# call its arrays "lists", or is it something different?
             public DriverConfig(Joystick driver, DriverControlSchema leftSchema, DriverControlSchema rightSchema,
                 List<ControlSchema> controlsData = null)
             {
@@ -170,7 +169,6 @@ namespace Base.Config
 
             #region Public Constructors
 
-            //TODO: For future use?
             /// <summary>
             ///     Default constructor.
             /// </summary>
@@ -323,6 +321,7 @@ namespace Base.Config
             /// <param name="deadZone">deadzone on the axis</param>
             /// <param name="powerMultiplier">output power multiplier</param>
             /// <param name="reversed">if the control should be reversed</param>
+            /// <param name="isEnabled">Defines if the control is enabled by default or not</param>
             public DriverControlSchema(string name, MotorControlFitFunction fitFunction, double fitPower,
                 List<CommonName> bindTo, int axis, double deadZone, double powerMultiplier = 1, bool reversed = false, bool isEnabled = true)
             {

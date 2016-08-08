@@ -46,6 +46,20 @@ namespace Base.Components
         }
 
         /// <summary>
+        /// Event used for VirtualControlEvents
+        /// </summary>
+        public event EventHandler ValueChanged;
+
+        /// <summary>
+        /// Method to fire value changes for set/get values and InUse values
+        /// </summary>
+        /// <param name="e">VirtualControlEventArgs</param>
+        protected virtual void onValueChanged(VirtualControlEventArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
+        }
+
+        /// <summary>
         ///     Sets a value to the AnalogInput
         /// </summary>
         /// <param name="val">value to set the controller to</param>
@@ -59,6 +73,7 @@ namespace Base.Components
                 {
                     InUse = true;
                     aout.SetVoltage(val);
+                    onValueChanged(new VirtualControlEventArgs(val, InUse));
                 }
                 else
                 {
@@ -71,6 +86,7 @@ namespace Base.Components
 
             Sender = null;
             InUse = false;
+            onValueChanged(new VirtualControlEventArgs(val, InUse));
         }
     }
 }

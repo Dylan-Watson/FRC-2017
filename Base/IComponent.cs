@@ -22,6 +22,11 @@ namespace Base
         #region Public Methods
 
         /// <summary>
+        /// Event used for VirtualControlEvents
+        /// </summary>
+        event EventHandler ValueChanged;
+
+        /// <summary>
         ///     Returns the WPI object that this component wraps.
         /// </summary>
         /// <returns></returns>

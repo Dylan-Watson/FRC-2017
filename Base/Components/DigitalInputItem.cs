@@ -46,15 +46,39 @@ namespace Base.Components
         }
 
         /// <summary>
+        /// Event used for VirtualControlEvents
+        /// </summary>
+        public event EventHandler ValueChanged;
+
+        /// <summary>
+        /// Method to fire value changes for set/get values and InUse values
+        /// </summary>
+        /// <param name="e">VirtualControlEventArgs</param>
+        protected virtual void onValueChanged(VirtualControlEventArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
+        }
+
+        private bool previousBool;
+        /// <summary>
         ///     Gets the Input Value from the DigitalInput
         /// </summary>
         /// <returns>Boolean</returns>
         public bool GetBool()
         {
             lock (din)
-                return din.Get();
+            {
+                var value = din.Get();
+
+                if(previousBool!=value)
+                    onValueChanged(new VirtualControlEventArgs(Convert.ToDouble(value), InUse));
+
+                previousBool = value;
+                return value;
+            }
         }
 
+        private double previousInput;
         /// <summary>
         ///     Gets the Input Value from the DigitalInput
         /// </summary>
@@ -62,7 +86,15 @@ namespace Base.Components
         public override double Get()
         {
             lock (din)
+            {
+                var input = Convert.ToDouble(din.Get());
+
+                if (Math.Abs(previousInput - input) <= Math.Abs(previousInput * .00001))
+                    onValueChanged(new VirtualControlEventArgs(input, InUse));
+
+                previousInput = input;
                 return Convert.ToDouble(din.Get());
+            }
         }
     }
 }

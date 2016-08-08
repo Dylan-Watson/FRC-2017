@@ -15,18 +15,27 @@ using DriverStation = DriverStationGUI.DriverStation;
 
 namespace FRCSimulator
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class Program
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public static void Main() => RobotBase.Main(null, typeof(RobotMain2017.RobotMain2017));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class Simulator : ISimulator
     {
-        public void Initialize()
+        void ISimulator.Initialize()
         {
         }
 
-        public void Start()
+        void ISimulator.Start()
         {
             SimHooks.WaitForProgramStart();
             DriverStation.StartDriverStationGui();
@@ -34,6 +43,9 @@ namespace FRCSimulator
             //  game.Run();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public string Name => "Mono Game Simulator";
     }
 }
