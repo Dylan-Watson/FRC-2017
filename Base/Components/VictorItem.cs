@@ -74,10 +74,10 @@ namespace Base.Components
         /// <param name="type">type of victor</param>
         /// <param name="channel">pwm channel the victor is plugged into</param>
         /// <param name="commonName">CommonName the component will have</param>
+        /// <param name="isReversed">if the controller output should be reversed</param>
         /// <param name="upperLimit">Limit switch to prevent the motor from moving forward</param>
         ///<param name="lowerLimit">Limit switch to prevent the motor from moving reverse</param>
-        /// <param name="isReversed">if the controller output should be reversed</param>
-        public VictorItem(VictorType type, int channel, string commonName, DigitalInputItem upperLimit = null, DigitalInputItem lowerLimit = null, bool isReversed = false)
+        public VictorItem(VictorType type, int channel, string commonName, bool isReversed = false, DigitalInputItem upperLimit = null, DigitalInputItem lowerLimit = null)
         {
             VictorType = type;
             if (type == VictorType.Sp)
