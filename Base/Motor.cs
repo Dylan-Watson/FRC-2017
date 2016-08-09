@@ -90,14 +90,14 @@ namespace Base
         #region Protected Properties
 
         /// <summary>
+        /// DigitalInput to stop the motor from going reverse when true
+        /// </summary>
+        protected DigitalInputItem LowerLimit { get; set; }
+
+        /// <summary>
         /// DigitalInput to stop the motor from going forward when true
         /// </summary>
         protected DigitalInputItem UpperLimit { get; set; }
-
-        /// <summary>
-        /// DigitalInput to stop the motor from going reverse when true 
-        /// </summary>
-        protected DigitalInputItem LowerLimit { get; set; }
 
         #endregion Protected Properties
 

@@ -38,14 +38,14 @@ namespace Base
         #region Public Properties
 
         /// <summary>
-        /// The name of the component
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
         /// Boolean flag to determin if the component is in use
         /// </summary>
         bool InUse { get; }
+
+        /// <summary>
+        /// The name of the component
+        /// </summary>
+        string Name { get; }
 
         /// <summary>
         /// Returns the object that is currently using the component

@@ -42,17 +42,29 @@ namespace Base.Components
 
         #endregion Private Fields
 
+        /// <summary>
+        /// Disposes of this IComponent and its managed resources
+        /// </summary>
+        public void Dispose()
+        {
+            dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Releases managed and native resources
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void dispose(bool disposing)
+        {
+            if (!disposing) return;
+            lock (victor)
+            {
+                victor?.Dispose();
+            }
+        }
+
         #region Public Properties
-
-        /// <summary>
-        /// Name of the component
-        /// </summary>
-        public string Name { get; }
-
-        /// <summary>
-        /// Type of victor
-        /// </summary>
-        public VictorType VictorType { get; }
 
         /// <summary>
         /// Defines wether the component is in use or not
@@ -60,9 +72,19 @@ namespace Base.Components
         public bool InUse { get; private set; }
 
         /// <summary>
+        /// Name of the component
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
         /// Defines the object issuing the commands
         /// </summary>
         public object Sender { get; private set; }
+
+        /// <summary>
+        /// Type of victor
+        /// </summary>
+        public VictorType VictorType { get; }
 
         #endregion Public Properties
 
@@ -76,8 +98,9 @@ namespace Base.Components
         /// <param name="commonName">CommonName the component will have</param>
         /// <param name="isReversed">if the controller output should be reversed</param>
         /// <param name="upperLimit">Limit switch to prevent the motor from moving forward</param>
-        ///<param name="lowerLimit">Limit switch to prevent the motor from moving reverse</param>
-        public VictorItem(VictorType type, int channel, string commonName, bool isReversed = false, DigitalInputItem upperLimit = null, DigitalInputItem lowerLimit = null)
+        /// <param name="lowerLimit">Limit switch to prevent the motor from moving reverse</param>
+        public VictorItem(VictorType type, int channel, string commonName, bool isReversed = false,
+            DigitalInputItem upperLimit = null, DigitalInputItem lowerLimit = null)
         {
             VictorType = type;
             if (type == VictorType.Sp)
@@ -118,24 +141,15 @@ namespace Base.Components
         #region Public Methods
 
         /// <summary>
-        /// Gets the raw WPI PWMSpeedController object representing the victor
-        /// </summary>
-        /// <returns></returns>
-        public object GetRawComponent() => victor;
-
-        /// <summary>
         /// Event used for VirtualControlEvents
         /// </summary>
         public event EventHandler ValueChanged;
 
         /// <summary>
-        /// Method to fire value changes for set/get values and InUse values
+        /// Gets the raw WPI PWMSpeedController object representing the victor
         /// </summary>
-        /// <param name="e">VirtualControlEventArgs</param>
-        protected virtual void onValueChanged(VirtualControlEventArgs e)
-        {
-            ValueChanged?.Invoke(this, e);
-        }
+        /// <returns></returns>
+        public object GetRawComponent() => victor;
 
         /// <summary>
         /// Sets a value to the victor
@@ -200,29 +214,15 @@ namespace Base.Components
             }
         }
 
+        /// <summary>
+        /// Method to fire value changes for set/get values and InUse values
+        /// </summary>
+        /// <param name="e">VirtualControlEventArgs</param>
+        protected virtual void onValueChanged(VirtualControlEventArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
+        }
+
         #endregion Public Methods
-
-
-        /// <summary>
-        /// Disposes of this IComponent and its managed resources
-        /// </summary>
-        public void Dispose()
-        {
-            dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Releases managed and native resources
-        /// </summary>
-        /// <param name="disposing"></param>
-        protected virtual void dispose(bool disposing)
-        {
-            if (!disposing) return;
-            lock (victor)
-            {
-                victor?.Dispose();
-            }
-        }
     }
 }

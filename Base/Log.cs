@@ -21,8 +21,26 @@ namespace Base
     {
         #region Public Methods
 
-        private const string SESSION_LOG_FILE = @"session_log.txt";
         private const string FULL_LOG_FILE = @"full_log.txt";
+        private const string SESSION_LOG_FILE = @"session_log.txt";
+
+        /// <summary>
+        /// Clears the full log
+        /// </summary>
+        public static void ClearFullLog()
+        {
+            if (File.Exists(FULL_LOG_FILE))
+                File.Delete(FULL_LOG_FILE);
+        }
+
+        /// <summary>
+        /// Clears the session log
+        /// </summary>
+        public static void ClearSessionLog()
+        {
+            if (File.Exists(SESSION_LOG_FILE))
+                File.Delete(SESSION_LOG_FILE);
+        }
 
         /// <summary>
         /// Writes a string to the log file
@@ -52,24 +70,6 @@ namespace Base
             fullLog.WriteLine(ex + "   ::" + DateTime.Now.ToString("dd/MM/yy HH:mm:ss"));
             sessionLog.Close();
             fullLog.Close();
-        }
-
-        /// <summary>
-        /// Clears the session log
-        /// </summary>
-        public static void ClearSessionLog()
-        {
-            if (File.Exists(SESSION_LOG_FILE))
-                File.Delete(SESSION_LOG_FILE);
-        }
-
-        /// <summary>
-        /// Clears the full log
-        /// </summary>
-        public static void ClearFullLog()
-        {
-            if (File.Exists(FULL_LOG_FILE))
-                File.Delete(FULL_LOG_FILE);
         }
 
         #endregion Public Methods

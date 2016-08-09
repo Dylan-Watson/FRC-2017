@@ -8,19 +8,33 @@ namespace Base
     /// </summary>
     public sealed class DashboardComms
     {
-        private static readonly Lazy<DashboardComms> _lazy =
-            new Lazy<DashboardComms>(() => new DashboardComms());
-
-        private readonly NetworkTable dashboard = NetworkTable.GetTable(Constants.PRIMARY_NETWORK_TABLE);
+        #region Private Constructors
 
         private DashboardComms()
         {
         }
 
+        #endregion Private Constructors
+
+        #region Public Properties
+
         /// <summary>
         /// The instance of the singleton
         /// </summary>
         public static DashboardComms Instance => _lazy.Value;
+
+        #endregion Public Properties
+
+        #region Private Fields
+
+        private static readonly Lazy<DashboardComms> _lazy =
+            new Lazy<DashboardComms>(() => new DashboardComms());
+
+        private readonly NetworkTable dashboard = NetworkTable.GetTable(Constants.PRIMARY_NETWORK_TABLE);
+
+        #endregion Private Fields
+
+        #region Public Methods
 
         /// <summary>
         /// Sends data to the dashboard regarding the state of the robot
@@ -45,5 +59,7 @@ namespace Base
             else
                 dashboard.PutValue($"{key}", value);
         }
+
+        #endregion Public Methods
     }
 }

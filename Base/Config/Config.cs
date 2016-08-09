@@ -96,6 +96,11 @@ namespace Base.Config
 
         #region Private Methods
 
+        /// <summary>
+        /// Defines if all exception messages should be output to the console in addition to the log.
+        /// </summary>
+        public bool VerboseOutput { get; private set; }
+
         private void allocateComponents()
         {
             #region channel asignments
@@ -122,9 +127,10 @@ namespace Base.Config
                     }
                     catch (Exception ex)
                     {
-                        Report.Error($"Failed to load DigitalInput {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                        Report.Error(
+                            $"Failed to load DigitalInput {element?.Name}. This may cause a fatal runtime error! See log for details.");
                         Log.Write(ex);
-                        if(VerboseOutput)
+                        if (VerboseOutput)
                             Report.Error(ex.Message);
                     }
             }
@@ -155,7 +161,8 @@ namespace Base.Config
                     }
                     catch (Exception ex)
                     {
-                        Report.Error($"Failed to load DigitalOutput {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                        Report.Error(
+                            $"Failed to load DigitalOutput {element?.Name}. This may cause a fatal runtime error! See log for details.");
                         Log.Write(ex);
                         if (VerboseOutput)
                             Report.Error(ex.Message);
@@ -171,7 +178,7 @@ namespace Base.Config
             }
 
             #endregion DO
-            
+
             #region AI
 
             try
@@ -263,7 +270,6 @@ namespace Base.Config
                             lowerLimit =
                                 (DigitalInputItem)
                                     ActiveCollection.Get(toBindCommonName(element.Attribute("lowerLimit"))[0]);
-
 
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
@@ -602,11 +608,6 @@ namespace Base.Config
         }
 
         /// <summary>
-        /// Defines if all exception messages should be output to the console in addition to the log.
-        /// </summary>
-        public bool VerboseOutput { get; private set; }
-            
-        /// <summary>
         /// Loads all relevant attributes and values from the config file.
         /// </summary>
         // ReSharper disable once InconsistentNaming
@@ -617,7 +618,7 @@ namespace Base.Config
                 Report.General($"Version: {Convert.ToDouble(getAttributeValue("version", "Version"))}");
                 Report.General($"Comment: {getAttributeValue("comment", "Comment")}");
                 VerboseOutput = Convert.ToBoolean(getAttributeValue("value", "VerboseOutput"));
-                if(VerboseOutput)
+                if (VerboseOutput)
                     Report.General("Verbose error reporting enabled.");
                 AutonEnabled = Convert.ToBoolean(getAttributeValue("value", "EnableAuton"));
                 Report.General($"Auton Enabled: {AutonEnabled}");

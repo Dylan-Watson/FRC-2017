@@ -46,26 +46,13 @@ namespace Base
 
         #endregion Public Constructors
 
+        #region Private Methods
+
         private bool equals(CommonName other) => string.Equals(name, other.name);
 
-        /// <summary>
-        /// Overrides the Equals method for CommonNames
-        /// </summary>
-        /// <param name="obj">object of interest</param>
-        /// <returns>comparison result</returns>
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
+        #endregion Private Methods
 
-            return obj is CommonName && equals((CommonName) obj);
-        }
-
-        /// <summary>
-        /// Returns the hash of the CommonName's string value
-        /// </summary>
-        /// <returns>Hash value as int</returns>
-        public override int GetHashCode() => name.GetHashCode();
+        #region Public Methods
 
         /// <summary>
         /// Binds a config file value to a CommonName
@@ -113,6 +100,27 @@ namespace Base
 
             return bindings;
         }
+
+        /// <summary>
+        /// Overrides the Equals method for CommonNames
+        /// </summary>
+        /// <param name="obj">object of interest</param>
+        /// <returns>comparison result</returns>
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+
+            return obj is CommonName && equals((CommonName) obj);
+        }
+
+        /// <summary>
+        /// Returns the hash of the CommonName's string value
+        /// </summary>
+        /// <returns>Hash value as int</returns>
+        public override int GetHashCode() => name.GetHashCode();
+
+        #endregion Public Methods
 
         #region Public Methods
 

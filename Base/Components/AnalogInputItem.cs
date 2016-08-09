@@ -32,6 +32,15 @@ namespace Base.Components
 
         #endregion Public Events
 
+        /// <summary>
+        /// Disposes of this IComponent and its managed resources
+        /// </summary>
+        public void Dispose()
+        {
+            dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
         #region Protected Methods
 
         /// <summary>
@@ -44,6 +53,19 @@ namespace Base.Components
         }
 
         #endregion Protected Methods
+
+        /// <summary>
+        /// Releases managed and native resources
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void dispose(bool disposing)
+        {
+            if (!disposing) return;
+            lock (ain)
+            {
+                ain?.Dispose();
+            }
+        }
 
         #region Private Fields
 
@@ -59,7 +81,6 @@ namespace Base.Components
         /// Defines whether the component is in use or not
         /// </summary>
         public bool InUse { get; } = false;
-
 
         /// <summary>
         /// Name of the component
@@ -103,28 +124,5 @@ namespace Base.Components
         }
 
         #endregion Public Methods
-
-
-        /// <summary>
-        /// Disposes of this IComponent and its managed resources
-        /// </summary>
-        public void Dispose()
-        {
-            dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Releases managed and native resources
-        /// </summary>
-        /// <param name="disposing"></param>
-        protected virtual void dispose(bool disposing)
-        {
-            if (!disposing) return;
-            lock (ain)
-            {
-                ain?.Dispose();
-            }
-        }
     }
 }

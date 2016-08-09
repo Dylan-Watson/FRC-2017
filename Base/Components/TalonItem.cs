@@ -19,6 +19,15 @@ namespace Base.Components
 
         #endregion Public Events
 
+        /// <summary>
+        /// Disposes of this IComponent and its managed resources
+        /// </summary>
+        public void Dispose()
+        {
+            dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
         #region Protected Methods
 
         /// <summary>
@@ -31,6 +40,19 @@ namespace Base.Components
         }
 
         #endregion Protected Methods
+
+        /// <summary>
+        /// Releases managed and native resources
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void dispose(bool disposing)
+        {
+            if (!disposing) return;
+            lock (talon)
+            {
+                talon?.Dispose();
+            }
+        }
 
         #region Private Fields
 
@@ -51,7 +73,8 @@ namespace Base.Components
         /// <param name="isReversed">if the controller output should be reversed</param>
         /// <param name="upperLimit">Limit switch to prevent the motor from moving forward</param>
         /// <param name="lowerLimit">Limit switch to prevent the motor from moving reverse</param>
-        public CanTalonItem(int channel, string commonName, bool isReversed = false, DigitalInputItem upperLimit = null, DigitalInputItem lowerLimit = null)
+        public CanTalonItem(int channel, string commonName, bool isReversed = false, DigitalInputItem upperLimit = null,
+            DigitalInputItem lowerLimit = null)
         {
             talon = new CANTalon(channel);
             Name = commonName;
@@ -73,7 +96,8 @@ namespace Base.Components
         /// <param name="isReversed">if the controller output should be reversed</param>
         /// <param name="upperLimit">Limit switch to prevent the motor from moving forward</param>
         /// <param name="lowerLimit">Limit switch to prevent the motor from moving reverse</param>
-        public CanTalonItem(int channel, string commonName, double p, double i, double d, bool isReversed = false, DigitalInputItem upperLimit = null, DigitalInputItem lowerLimit = null)
+        public CanTalonItem(int channel, string commonName, double p, double i, double d, bool isReversed = false,
+            DigitalInputItem upperLimit = null, DigitalInputItem lowerLimit = null)
         {
             talon = new CANTalon(channel);
             Name = commonName;
@@ -159,7 +183,6 @@ namespace Base.Components
         /// <param name="sender">the caller of this method</param>
         public override void Set(double val, object sender)
         {
-
             Sender = sender;
             SetAllowC(UpperLimit?.GetBool() ?? true);
             SetAllowCc(LowerLimit?.GetBool() ?? true);
@@ -312,28 +335,5 @@ namespace Base.Components
         }
 
         #endregion Public Methods
-
-
-        /// <summary>
-        /// Disposes of this IComponent and its managed resources
-        /// </summary>
-        public void Dispose()
-        {
-            dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Releases managed and native resources
-        /// </summary>
-        /// <param name="disposing"></param>
-        protected virtual void dispose(bool disposing)
-        {
-            if (!disposing) return;
-            lock (talon)
-            {
-                talon?.Dispose();
-            }
-        }
     }
 }

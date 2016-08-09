@@ -6,7 +6,7 @@
   <Comment comment="Configured for roboRio deployment." />
 
   <!-- If true, will dump full exception methods to the console and driverstation. -->
-  <VerboseOutput value="true" />
+  <VerboseOutput value="false" />
   
   <!-- Absolutely do not change QuickLoad to true, only Ryan should do this. -->
   <QuickLoad value="false" />

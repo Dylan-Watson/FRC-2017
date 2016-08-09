@@ -51,6 +51,28 @@ namespace Base.Components
 
         #endregion Public Methods
 
+        /// <summary>
+        /// Disposes of this IComponent and its managed resources
+        /// </summary>
+        public void Dispose()
+        {
+            dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Releases managed and native resources
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void dispose(bool disposing)
+        {
+            if (!disposing) return;
+            lock (dout)
+            {
+                dout?.Dispose();
+            }
+        }
+
         #region Public Properties
 
         /// <summary>
@@ -120,28 +142,5 @@ namespace Base.Components
         }
 
         #endregion Protected Methods
-
-
-        /// <summary>
-        /// Disposes of this IComponent and its managed resources
-        /// </summary>
-        public void Dispose()
-        {
-            dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Releases managed and native resources
-        /// </summary>
-        /// <param name="disposing"></param>
-        protected virtual void dispose(bool disposing)
-        {
-            if (!disposing) return;
-            lock (dout)
-            {
-                dout?.Dispose();
-            }
-        }
     }
 }
