@@ -111,20 +111,30 @@ namespace Base.Config
             try
             {
                 foreach (var element in getElements("RobotConfig", "DI"))
-                {
-                    componentNames.Add(new CommonName(element.Name.ToString()));
-                    Report.General(
-                        $"Added Digital Input {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
-                    ActiveCollection.AddComponent(
-                        new DigitalInputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                            element.Name.ToString()));
-                }
+                    try
+                    {
+                        componentNames.Add(new CommonName(element.Name.ToString()));
+                        Report.General(
+                            $"Added Digital Input {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
+                        ActiveCollection.AddComponent(
+                            new DigitalInputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                                element.Name.ToString()));
+                    }
+                    catch (Exception ex)
+                    {
+                        Report.Error($"Failed to load DigitalInput {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                        Log.Write(ex);
+                        if(VerboseOutput)
+                            Report.Error(ex.Message);
+                    }
             }
             catch (Exception ex)
             {
                 Report.Error(
-                    "There was an error loading one or more digital inputs. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
+                    "There was an error loading one or more digital inputs. This may cause a fatal runtime error! See log for details.");
                 Log.Write(ex);
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
             }
 
             #endregion DI
@@ -134,20 +144,30 @@ namespace Base.Config
             try
             {
                 foreach (var element in getElements("RobotConfig", "DO"))
-                {
-                    componentNames.Add(new CommonName(element.Name.ToString()));
-                    Report.General(
-                        $"Added Digital Output {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
-                    ActiveCollection.AddComponent(
-                        new DigitalOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                            element.Name.ToString()));
-                }
+                    try
+                    {
+                        componentNames.Add(new CommonName(element.Name.ToString()));
+                        Report.General(
+                            $"Added Digital Output {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
+                        ActiveCollection.AddComponent(
+                            new DigitalOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                                element.Name.ToString()));
+                    }
+                    catch (Exception ex)
+                    {
+                        Report.Error($"Failed to load DigitalOutput {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                        Log.Write(ex);
+                        if (VerboseOutput)
+                            Report.Error(ex.Message);
+                    }
             }
             catch (Exception ex)
             {
                 Report.Error(
-                    "There was an error loading one or more digital outputs. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
+                    "There was an error loading one or more digital outputs. This may cause a fatal runtime error! See log for details.");
                 Log.Write(ex);
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
             }
 
             #endregion DO
@@ -157,20 +177,31 @@ namespace Base.Config
             try
             {
                 foreach (var element in getElements("RobotConfig", "AI"))
-                {
-                    componentNames.Add(new CommonName(element.Name.ToString()));
-                    Report.General(
-                        $"Added Analog Input {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
-                    ActiveCollection.AddComponent(
-                        new AnalogInputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                            element.Name.ToString()));
-                }
+                    try
+                    {
+                        componentNames.Add(new CommonName(element.Name.ToString()));
+                        Report.General(
+                            $"Added Analog Input {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
+                        ActiveCollection.AddComponent(
+                            new AnalogInputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                                element.Name.ToString()));
+                    }
+                    catch (Exception ex)
+                    {
+                        Report.Error(
+                            $"Failed to load AnalogInput {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                        Log.Write(ex);
+                        if (VerboseOutput)
+                            Report.Error(ex.Message);
+                    }
             }
             catch (Exception ex)
             {
                 Report.Error(
-                    "There was an error loading one or more analog inputs. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
+                    "There was an error loading one or more analog inputs. This may cause a fatal runtime error! See log for details.");
                 Log.Write(ex);
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
             }
 
             #endregion AI
@@ -180,20 +211,31 @@ namespace Base.Config
             try
             {
                 foreach (var element in getElements("RobotConfig", "AO"))
-                {
-                    componentNames.Add(new CommonName(element.Name.ToString()));
-                    Report.General(
-                        $"Added Analog Output {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
-                    ActiveCollection.AddComponent(
-                        new AnalogOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                            element.Name.ToString()));
-                }
+                    try
+                    {
+                        componentNames.Add(new CommonName(element.Name.ToString()));
+                        Report.General(
+                            $"Added Analog Output {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
+                        ActiveCollection.AddComponent(
+                            new AnalogOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                                element.Name.ToString()));
+                    }
+                    catch (Exception ex)
+                    {
+                        Report.Error(
+                            $"Failed to load AnalogOutput {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                        Log.Write(ex);
+                        if (VerboseOutput)
+                            Report.Error(ex.Message);
+                    }
             }
             catch (Exception ex)
             {
                 Report.Error(
-                    "There was an error loading one or more analog outputs. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
+                    "There was an error loading one or more analog outputs. This may cause a fatal runtime error! See log for details.");
                 Log.Write(ex);
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
             }
 
             #endregion AO
@@ -203,52 +245,68 @@ namespace Base.Config
             try
             {
                 foreach (var element in getElements("RobotConfig", "Victors"))
-                {
-                    var type = element.Attribute("type").Value;
-              
-                    var t = VictorType.Sp;
-                    if (type == "888")
-                        t = VictorType.EightEightEight;
+                    try
+                    {
+                        var type = element.Attribute("type").Value;
 
-                    DigitalInputItem upperLimit = null;
-                    DigitalInputItem lowerLimit = null;
-                    if (element.Attribute("upperLimit") != null)
-                         upperLimit = (DigitalInputItem)ActiveCollection.Get(toBindCommonName(element.Attribute("upperLimit"))[0]);
-                    if (element.Attribute("lowerLimit") != null)
-                        lowerLimit = (DigitalInputItem)ActiveCollection.Get(toBindCommonName(element.Attribute("lowerLimit"))[0]);
+                        var t = VictorType.Sp;
+                        if (type == "888")
+                            t = VictorType.EightEightEight;
+
+                        DigitalInputItem upperLimit = null;
+                        DigitalInputItem lowerLimit = null;
+                        if (element.Attribute("upperLimit") != null)
+                            upperLimit =
+                                (DigitalInputItem)
+                                    ActiveCollection.Get(toBindCommonName(element.Attribute("upperLimit"))[0]);
+                        if (element.Attribute("lowerLimit") != null)
+                            lowerLimit =
+                                (DigitalInputItem)
+                                    ActiveCollection.Get(toBindCommonName(element.Attribute("lowerLimit"))[0]);
 
 
-                    componentNames.Add(new CommonName(element.Name.ToString()));
-                    Report.General(
-                        $"Added Victor{type} {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
-                    if (!Convert.ToBoolean(element.Attribute("drive").Value))
-                        ActiveCollection.AddComponent(
-                            new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value), upperLimit, lowerLimit));
-                    else
-                        switch (element.Attribute("side").Value)
-                        {
-                            case "right":
-                                ActiveCollection.AddComponent(
-                                    new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
-                                        element.Name.ToString(), Side.Right,
-                                        Convert.ToBoolean(element.Attribute("reversed").Value)));
-                                break;
+                        componentNames.Add(new CommonName(element.Name.ToString()));
+                        Report.General(
+                            $"Added Victor{type} {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
+                        if (!Convert.ToBoolean(element.Attribute("drive").Value))
+                            ActiveCollection.AddComponent(
+                                new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
+                                    element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value),
+                                    upperLimit, lowerLimit));
+                        else
+                            switch (element.Attribute("side").Value)
+                            {
+                                case "right":
+                                    ActiveCollection.AddComponent(
+                                        new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
+                                            element.Name.ToString(), Side.Right,
+                                            Convert.ToBoolean(element.Attribute("reversed").Value)));
+                                    break;
 
-                            case "left":
-                                ActiveCollection.AddComponent(
-                                    new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
-                                        element.Name.ToString(), Side.Left,
-                                        Convert.ToBoolean(element.Attribute("reversed").Value)));
-                                break;
-                        }
-                }
+                                case "left":
+                                    ActiveCollection.AddComponent(
+                                        new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
+                                            element.Name.ToString(), Side.Left,
+                                            Convert.ToBoolean(element.Attribute("reversed").Value)));
+                                    break;
+                            }
+                    }
+                    catch (Exception ex)
+                    {
+                        Report.Error(
+                            $"Failed to load Victor {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                        Log.Write(ex);
+                        if (VerboseOutput)
+                            Report.Error(ex.Message);
+                    }
             }
             catch (Exception ex)
             {
                 Report.Error(
-                    "There was an error loading one or more victors. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
+                    "There was an error loading one or more victors. This may cause a fatal runtime error! See log for details.");
                 Log.Write(ex);
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
             }
 
             #endregion Victors
@@ -258,89 +316,105 @@ namespace Base.Config
             try
             {
                 foreach (var element in getElements("RobotConfig", "Talons"))
-                {
+                    try
+                    {
+                        DigitalInputItem upperLimit = null;
+                        DigitalInputItem lowerLimit = null;
+                        if (element.Attribute("upperLimit") != null)
+                            upperLimit =
+                                (DigitalInputItem)
+                                    ActiveCollection.Get(toBindCommonName(element.Attribute("upperLimit"))[0]);
+                        if (element.Attribute("lowerLimit") != null)
+                            lowerLimit =
+                                (DigitalInputItem)
+                                    ActiveCollection.Get(toBindCommonName(element.Attribute("lowerLimit"))[0]);
 
-                    DigitalInputItem upperLimit = null;
-                    DigitalInputItem lowerLimit = null;
-                    if (element.Attribute("upperLimit") != null)
-                        upperLimit = (DigitalInputItem)ActiveCollection.Get(toBindCommonName(element.Attribute("upperLimit"))[0]);
-                    if (element.Attribute("lowerLimit") != null)
-                        lowerLimit = (DigitalInputItem)ActiveCollection.Get(toBindCommonName(element.Attribute("lowerLimit"))[0]);
+                        componentNames.Add(new CommonName(element.Name.ToString()));
+                        Report.General(
+                            $"Added Talon {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
 
-                    componentNames.Add(new CommonName(element.Name.ToString()));
-                    Report.General(
-                        $"Added Talon {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
+                        if (element.Attribute("type").Value == "pwm")
+                            ActiveCollection.AddComponent(
+                                new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
+                                    element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value),
+                                    upperLimit, lowerLimit));
+                        else
+                            switch (element.Attribute("type").Value)
+                            {
+                                case "master":
+                                    double p = .5, i = .001, d = 0;
 
-                    if (element.Attribute("type").Value == "pwm")
-                        ActiveCollection.AddComponent(
-                            new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value), upperLimit, lowerLimit));
-                    else
-                        switch (element.Attribute("type").Value)
-                        {
-                            case "master":
-                                double p = .5, i = .001, d = 0;
-
-                                try
-                                {
-                                    p = Convert.ToDouble(element.Attribute("p").Value);
-                                }
-                                catch
-                                {
-                                    Report.Warning($"Failed to set P for {element.Name}");
-                                }
-                                try
-                                {
-                                    i = Convert.ToDouble(element.Attribute("i").Value);
-                                }
-                                catch
-                                {
-                                    Report.Warning($"Failed to set I for {element.Name}");
-                                }
-                                try
-                                {
-                                    d = Convert.ToDouble(element.Attribute("d").Value);
-                                }
-                                catch
-                                {
-                                    Report.Warning($"Failed to set D for {element.Name}");
-                                }
-
-                                ActiveCollection.AddComponent(
-                                    new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                        element.Name.ToString(), p, i, d,
-                                        Convert.ToBoolean(element.Attribute("reversed").Value), upperLimit, lowerLimit));
-                                Report.General($"{element.Name} is a master with PID set to {p}, {i}, {d}");
-                                break;
-
-                            case "slave":
-                                try
-                                {
-                                    var master = element.Attribute("master").Value;
+                                    try
+                                    {
+                                        p = Convert.ToDouble(element.Attribute("p").Value);
+                                    }
+                                    catch
+                                    {
+                                        Report.Warning($"Failed to set P for {element.Name}");
+                                    }
+                                    try
+                                    {
+                                        i = Convert.ToDouble(element.Attribute("i").Value);
+                                    }
+                                    catch
+                                    {
+                                        Report.Warning($"Failed to set I for {element.Name}");
+                                    }
+                                    try
+                                    {
+                                        d = Convert.ToDouble(element.Attribute("d").Value);
+                                    }
+                                    catch
+                                    {
+                                        Report.Warning($"Failed to set D for {element.Name}");
+                                    }
 
                                     ActiveCollection.AddComponent(
-                                        new CanTalonItem(
-                                            Convert.ToInt32(element.Attribute("channel").Value),
-                                            element.Name.ToString(),
-                                            (CanTalonItem) ActiveCollection.Get(new CommonName(master)),
-                                            Convert.ToBoolean(element.Attribute("reversed").Value)));
-                                    Report.General($"{element.Name} is a slave whose master is {master}");
-                                }
-                                catch (Exception ex)
-                                {
-                                    Report.Error(
-                                        "Error binding slave CANTalon to its master, check spelling in the config.");
-                                    Log.Write(ex);
-                                }
-                                break;
-                        }
-                }
+                                        new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
+                                            element.Name.ToString(), p, i, d,
+                                            Convert.ToBoolean(element.Attribute("reversed").Value), upperLimit,
+                                            lowerLimit));
+                                    Report.General($"{element.Name} is a master with PID set to {p}, {i}, {d}");
+                                    break;
+
+                                case "slave":
+                                    try
+                                    {
+                                        var master = element.Attribute("master").Value;
+
+                                        ActiveCollection.AddComponent(
+                                            new CanTalonItem(
+                                                Convert.ToInt32(element.Attribute("channel").Value),
+                                                element.Name.ToString(),
+                                                (CanTalonItem) ActiveCollection.Get(new CommonName(master)),
+                                                Convert.ToBoolean(element.Attribute("reversed").Value)));
+                                        Report.General($"{element.Name} is a slave whose master is {master}");
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Report.Error(
+                                            "Error binding slave CANTalon to its master, check spelling in the config.");
+                                        Log.Write(ex);
+                                    }
+                                    break;
+                            }
+                    }
+                    catch (Exception ex)
+                    {
+                        Report.Error(
+                            $"Failed to load Talon {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                        Log.Write(ex);
+                        if (VerboseOutput)
+                            Report.Error(ex.Message);
+                    }
             }
             catch (Exception ex)
             {
                 Report.Error(
-                    "There was an error loading one or more talons. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
+                    "There was an error loading one or more talons. This may cause a fatal runtime error! See log for details.");
                 Log.Write(ex);
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
             }
 
             #endregion Talons
@@ -350,28 +424,41 @@ namespace Base.Config
             try
             {
                 foreach (var element in getElements("RobotConfig", "Solenoids"))
-                {
-                    var _default = element.Attribute("default").Value;
+                    try
+                    {
+                        var _default = element.Attribute("default").Value;
 
-                    var d = DoubleSolenoid.Value.Off;
-                    if (_default == "forward")
-                        d = DoubleSolenoid.Value.Forward;
-                    else if (_default == "reverse")
-                        d = DoubleSolenoid.Value.Reverse;
+                        var d = DoubleSolenoid.Value.Off;
+                        if (_default == "forward")
+                            d = DoubleSolenoid.Value.Forward;
+                        else if (_default == "reverse")
+                            d = DoubleSolenoid.Value.Reverse;
 
-                    componentNames.Add(new CommonName(element.Name.ToString()));
-                    Report.General(
-                        $"Added Double Solenoid {element.Name}, forward channel {Convert.ToInt32(element.Attribute("forward").Value)}, reverse channel {Convert.ToInt32(element.Attribute("reverse").Value)}, default position = {element.Attribute("default").Value}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
-                    ActiveCollection.AddComponent(
-                        new DoubleSolenoidItem(element.Name.ToString(), Convert.ToInt32(element.Attribute("forward").Value),
-                            Convert.ToInt32(element.Attribute("reverse").Value), d, Convert.ToBoolean(element.Attribute("reversed").Value)));
-                }
+                        componentNames.Add(new CommonName(element.Name.ToString()));
+                        Report.General(
+                            $"Added Double Solenoid {element.Name}, forward channel {Convert.ToInt32(element.Attribute("forward").Value)}, reverse channel {Convert.ToInt32(element.Attribute("reverse").Value)}, default position = {element.Attribute("default").Value}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
+                        ActiveCollection.AddComponent(
+                            new DoubleSolenoidItem(element.Name.ToString(),
+                                Convert.ToInt32(element.Attribute("forward").Value),
+                                Convert.ToInt32(element.Attribute("reverse").Value), d,
+                                Convert.ToBoolean(element.Attribute("reversed").Value)));
+                    }
+                    catch (Exception ex)
+                    {
+                        Report.Error(
+                            $"Failed to load DoubleSolenoid {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                        Log.Write(ex);
+                        if (VerboseOutput)
+                            Report.Error(ex.Message);
+                    }
             }
             catch (Exception ex)
             {
                 Report.Error(
-                    "There was an error loading one or more DoubleSolenoids. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
+                    "There was an error loading one or more DoubleSolenoids. This may cause a fatal runtime error! See log for details.");
                 Log.Write(ex);
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
             }
 
             #endregion DoubleSolenoids
@@ -423,12 +510,16 @@ namespace Base.Config
                         Report.Error(
                             $"There was an error creating the VirtualControlEvent {element.Name}, see log for details.");
                         Log.Write(ex);
+                        if (VerboseOutput)
+                            Report.Error(ex.Message);
                     }
             }
             catch (Exception ex)
             {
-                Report.Error("There was an error loading an Event from the config.");
+                Report.Error("There was an error loading one or more Events from the config.");
                 Log.Write(ex);
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
             }
         }
 
@@ -448,6 +539,8 @@ namespace Base.Config
             {
                 Log.Write(ex);
                 Report.Error($"There was an error obtaining the attribute '{attribute}'. See log for details.");
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
             }
 
             return null;
@@ -470,6 +563,8 @@ namespace Base.Config
                 Log.Write(ex);
                 Report.Error(
                     $"There was an error obtaining the value from the attribute '{attribute}'. See log for details.");
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
             }
 
             return null;
@@ -500,10 +595,17 @@ namespace Base.Config
                 Log.Write(ex);
                 Report.Error(
                     $"There was an error navigating to the specified node '{elements[elements.Length]}'. See log for details.");
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
             }
             return node;
         }
 
+        /// <summary>
+        /// Defines if all exception messages should be output to the console in addition to the log.
+        /// </summary>
+        public bool VerboseOutput { get; private set; }
+            
         /// <summary>
         /// Loads all relevant attributes and values from the config file.
         /// </summary>
@@ -514,6 +616,9 @@ namespace Base.Config
             {
                 Report.General($"Version: {Convert.ToDouble(getAttributeValue("version", "Version"))}");
                 Report.General($"Comment: {getAttributeValue("comment", "Comment")}");
+                VerboseOutput = Convert.ToBoolean(getAttributeValue("value", "VerboseOutput"));
+                if(VerboseOutput)
+                    Report.General("Verbose error reporting enabled.");
                 AutonEnabled = Convert.ToBoolean(getAttributeValue("value", "EnableAuton"));
                 Report.General($"Auton Enabled: {AutonEnabled}");
                 allocateComponents();
@@ -525,6 +630,8 @@ namespace Base.Config
             {
                 Report.Error("The config file could not be found or there was an error reading it. See log for details.");
                 Log.Write(ex);
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
             }
         }
 
@@ -556,6 +663,8 @@ namespace Base.Config
                 catch (Exception ex)
                 {
                     Log.Write(ex);
+                    if (VerboseOutput)
+                        Report.Error(ex.Message);
                 }
                 try
                 {
@@ -564,6 +673,8 @@ namespace Base.Config
                 catch (Exception ex)
                 {
                     Log.Write(ex);
+                    if (VerboseOutput)
+                        Report.Error(ex.Message);
                 }
 
                 var left = new DriverControlSchema("leftDrive", (MotorControlFitFunction) driveFit, driveFitPower,
@@ -608,6 +719,8 @@ namespace Base.Config
                             catch (Exception ex)
                             {
                                 Log.Write(ex);
+                                if (VerboseOutput)
+                                    Report.Error(ex.Message);
                             }
                             temp.Add(new ControlSchema(element.Name.ToString(), ControlType.Axis,
                                 toBindCommonName(element.Attribute("bindTo")),
@@ -643,6 +756,8 @@ namespace Base.Config
             {
                 Report.Error("There was an error loading the driver config. This may cause fatal runtime error!");
                 Log.Write(ex);
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
             }
 
             #endregion driver control schema
@@ -688,6 +803,8 @@ namespace Base.Config
                             catch (Exception ex)
                             {
                                 Log.Write(ex);
+                                if (VerboseOutput)
+                                    Report.Error(ex.Message);
                             }
                             temp.Add(new ControlSchema(element.Name.ToString(), ControlType.Axis,
                                 toBindCommonName(element.Attribute("bindTo")),
@@ -809,6 +926,8 @@ namespace Base.Config
                     Log.Write(ex);
                     Report.Warning(
                         "There was an error running the validity check for all controls. See log for details.");
+                    if (VerboseOutput)
+                        Report.Error(ex.Message);
                 }
 
                 #endregion Warning checkes
@@ -822,6 +941,8 @@ namespace Base.Config
             {
                 Report.Error("There was an error loading the operator config. This may cause fatal runtime error!");
                 Log.Write(ex);
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
             }
 
             #endregion operator control schema
