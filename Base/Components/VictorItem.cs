@@ -74,8 +74,10 @@ namespace Base.Components
         /// <param name="type">type of victor</param>
         /// <param name="channel">pwm channel the victor is plugged into</param>
         /// <param name="commonName">CommonName the component will have</param>
+        /// <param name="upperLimit">Limit switch to prevent the motor from moving forward</param>
+        ///<param name="lowerLimit">Limit switch to prevent the motor from moving reverse</param>
         /// <param name="isReversed">if the controller output should be reversed</param>
-        public VictorItem(VictorType type, int channel, string commonName, bool isReversed = false)
+        public VictorItem(VictorType type, int channel, string commonName, DigitalInputItem upperLimit = null, DigitalInputItem lowerLimit = null, bool isReversed = false)
         {
             VictorType = type;
             if (type == VictorType.Sp)
@@ -85,6 +87,8 @@ namespace Base.Components
 
             Name = commonName;
             IsReversed = isReversed;
+            UpperLimit = upperLimit;
+            LowerLimit = lowerLimit;
         }
 
         /// <summary>
@@ -141,6 +145,8 @@ namespace Base.Components
         public override void Set(double val, object sender)
         {
             Sender = sender;
+            SetAllowC(UpperLimit?.GetBool() ?? true);
+            SetAllowCc(LowerLimit?.GetBool() ?? true);
             lock (victor)
             {
                 if ((val < -Constants.MINUMUM_JOYSTICK_RETURN) && AllowCc)

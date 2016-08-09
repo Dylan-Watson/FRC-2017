@@ -109,6 +109,98 @@ namespace Base.Config
             QuickLoad = Convert.ToBoolean(getAttributeValue("value", "QuickLoad"));
             if (QuickLoad) Report.Warning("I see QuickLoad is turned... This should only be used during practice!");
 
+            #region DI
+
+            try
+            {
+                foreach (var element in getElements("RobotConfig", "DI"))
+                {
+                    componentNames.Add(new CommonName(element.Name.ToString()));
+                    Report.General(
+                        $"Added Digital Input {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
+                    ActiveCollection.AddComponent(
+                        new DigitalInputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString()));
+                }
+            }
+            catch (Exception ex)
+            {
+                Report.Error(
+                    "There was an error loading one or more digital inputs. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
+                Log.Write(ex);
+            }
+
+            #endregion DI
+
+            #region DO
+
+            try
+            {
+                foreach (var element in getElements("RobotConfig", "DO"))
+                {
+                    componentNames.Add(new CommonName(element.Name.ToString()));
+                    Report.General(
+                        $"Added Digital Output {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
+                    ActiveCollection.AddComponent(
+                        new DigitalOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString()));
+                }
+            }
+            catch (Exception ex)
+            {
+                Report.Error(
+                    "There was an error loading one or more digital outputs. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
+                Log.Write(ex);
+            }
+
+            #endregion DO
+            
+            #region AI
+
+            try
+            {
+                foreach (var element in getElements("RobotConfig", "AI"))
+                {
+                    componentNames.Add(new CommonName(element.Name.ToString()));
+                    Report.General(
+                        $"Added Analog Input {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
+                    ActiveCollection.AddComponent(
+                        new AnalogInputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString()));
+                }
+            }
+            catch (Exception ex)
+            {
+                Report.Error(
+                    "There was an error loading one or more analog inputs. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
+                Log.Write(ex);
+            }
+
+            #endregion AI
+
+            #region AO
+
+            try
+            {
+                foreach (var element in getElements("RobotConfig", "AO"))
+                {
+                    componentNames.Add(new CommonName(element.Name.ToString()));
+                    Report.General(
+                        $"Added Analog Output {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
+                    ActiveCollection.AddComponent(
+                        new AnalogOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString()));
+                }
+            }
+            catch (Exception ex)
+            {
+                Report.Error(
+                    "There was an error loading one or more analog outputs. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
+                Log.Write(ex);
+            }
+
+            #endregion AO
+
             #region Victors
 
             try
@@ -270,98 +362,6 @@ namespace Base.Config
             }
 
             #endregion DoubleSolenoids
-
-            #region DI
-
-            try
-            {
-                foreach (var element in getElements("RobotConfig", "DI"))
-                {
-                    componentNames.Add(new CommonName(element.Name.ToString()));
-                    Report.General(
-                        $"Added Digital Input {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
-                    ActiveCollection.AddComponent(
-                        new DigitalInputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                            element.Name.ToString()));
-                }
-            }
-            catch (Exception ex)
-            {
-                Report.Error(
-                    "There was an error loading one or more digital inputs. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
-                Log.Write(ex);
-            }
-
-            #endregion DI
-
-            #region DO
-
-            try
-            {
-                foreach (var element in getElements("RobotConfig", "DO"))
-                {
-                    componentNames.Add(new CommonName(element.Name.ToString()));
-                    Report.General(
-                        $"Added Digital Output {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
-                    ActiveCollection.AddComponent(
-                        new DigitalOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                            element.Name.ToString()));
-                }
-            }
-            catch (Exception ex)
-            {
-                Report.Error(
-                    "There was an error loading one or more digital outputs. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
-                Log.Write(ex);
-            }
-
-            #endregion DO
-
-            #region AI
-
-            try
-            {
-                foreach (var element in getElements("RobotConfig", "AI"))
-                {
-                    componentNames.Add(new CommonName(element.Name.ToString()));
-                    Report.General(
-                        $"Added Analog Input {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
-                    ActiveCollection.AddComponent(
-                        new AnalogInputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                            element.Name.ToString()));
-                }
-            }
-            catch (Exception ex)
-            {
-                Report.Error(
-                    "There was an error loading one or more analog inputs. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
-                Log.Write(ex);
-            }
-
-            #endregion AI
-
-            #region AO
-
-            try
-            {
-                foreach (var element in getElements("RobotConfig", "AO"))
-                {
-                    componentNames.Add(new CommonName(element.Name.ToString()));
-                    Report.General(
-                        $"Added Analog Output {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
-                    ActiveCollection.AddComponent(
-                        new AnalogOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                            element.Name.ToString()));
-                }
-            }
-            catch (Exception ex)
-            {
-                Report.Error(
-                    "There was an error loading one or more analog outputs. This may cause a fatal runtime error! CHECK CONFIG AND LOGS!");
-                Log.Write(ex);
-            }
-
-            #endregion AO
 
             #endregion channel asignments
         }

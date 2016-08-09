@@ -48,14 +48,18 @@ namespace Base.Components
         /// </summary>
         /// <param name="channel">channel/address of the talon</param>
         /// <param name="commonName">CommonName the component will have</param>
+        /// <param name="upperLimit">Limit switch to prevent the motor from moving forward</param>
+        /// <param name="lowerLimit">Limit switch to prevent the motor from moving reverse</param>
         /// <param name="isReversed">if the controller output should be reversed</param>
-        public CanTalonItem(int channel, string commonName, bool isReversed = false)
+        public CanTalonItem(int channel, string commonName, DigitalInputItem upperLimit = null, DigitalInputItem lowerLimit = null, bool isReversed = false)
         {
             talon = new CANTalon(channel);
             Name = commonName;
             IsReversed = isReversed;
             talon.MotorControlMode = ControlMode.PercentVbus;
             talon.ControlEnabled = true;
+            UpperLimit = upperLimit;
+            LowerLimit = lowerLimit;
         }
 
         /// <summary>
@@ -66,8 +70,10 @@ namespace Base.Components
         /// <param name="p">proportion</param>
         /// <param name="i">integral</param>
         /// <param name="d">derivative</param>
+        /// <param name="upperLimit">Limit switch to prevent the motor from moving forward</param>
+        /// <param name="lowerLimit">Limit switch to prevent the motor from moving reverse</param>
         /// <param name="isReversed">if the controller output should be reversed</param>
-        public CanTalonItem(int channel, string commonName, double p, double i, double d, bool isReversed = false)
+        public CanTalonItem(int channel, string commonName, double p, double i, double d, DigitalInputItem upperLimit = null, DigitalInputItem lowerLimit = null, bool isReversed = false)
         {
             talon = new CANTalon(channel);
             Name = commonName;
@@ -78,6 +84,8 @@ namespace Base.Components
             talon.FeedBackDevice = CANTalon.FeedbackDevice.QuadEncoder;
             talon.SetPID(p, i, d);
             talon.ControlEnabled = true;
+            UpperLimit = upperLimit;
+            LowerLimit = lowerLimit;
         }
 
         /// <summary>
@@ -151,7 +159,10 @@ namespace Base.Components
         /// <param name="sender">the caller of this method</param>
         public override void Set(double val, object sender)
         {
+
             Sender = sender;
+            SetAllowC(UpperLimit?.GetBool() ?? true);
+            SetAllowCc(LowerLimit?.GetBool() ?? true);
             if (Slave)
             {
                 Report.Warning(
