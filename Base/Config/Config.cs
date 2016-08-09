@@ -101,10 +101,7 @@ namespace Base.Config
             #region channel asignments
 
             if (QuickLoad)
-            {
-                Report.Warning("I see QuickLoad is turned... This should only be used during practice!");
-                return;
-            }
+                ActiveCollection.ReleaseActiveCollection();
 
             QuickLoad = Convert.ToBoolean(getAttributeValue("value", "QuickLoad"));
             if (QuickLoad) Report.Warning("I see QuickLoad is turned... This should only be used during practice!");

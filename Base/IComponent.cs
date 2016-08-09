@@ -17,7 +17,7 @@ namespace Base
     /// <summary>
     /// Interface that all components [physical devices on the robot] implement.
     /// </summary>
-    public interface IComponent
+    public interface IComponent : IDisposable
     {
         #region Public Methods
 
@@ -27,7 +27,7 @@ namespace Base
         event EventHandler ValueChanged;
 
         /// <summary>
-        /// Returns the WPI object that this component wraps.
+        /// Returns the WPI object that this component wraps
         /// </summary>
         /// <returns></returns>
         [Obsolete("Not thread safe! Be sure to lock if you are using this method.")]

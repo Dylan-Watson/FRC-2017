@@ -72,6 +72,16 @@ namespace Base
         }
 
         /// <summary>
+        /// Disposes of all IComponents within the Active Collection, and then clears the collection
+        /// </summary>
+        public void ReleaseActiveCollection()
+        {
+            foreach (var component in componentCollection)
+                component.Value.Dispose();
+            componentCollection.Clear();
+        }
+
+        /// <summary>
         /// Gets a IComponent from the active colletion by it's name. Reports any errors and returns
         /// null should there be any.
         /// </summary>
