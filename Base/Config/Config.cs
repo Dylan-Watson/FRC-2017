@@ -208,10 +208,18 @@ namespace Base.Config
                 foreach (var element in getElements("RobotConfig", "Victors"))
                 {
                     var type = element.Attribute("type").Value;
-
+              
                     var t = VictorType.Sp;
                     if (type == "888")
                         t = VictorType.EightEightEight;
+
+                    DigitalInputItem upperLimit = null;
+                    DigitalInputItem lowerLimit = null;
+                    if (element.Attribute("upperLimit") != null)
+                         upperLimit = (DigitalInputItem)ActiveCollection.Get(toBindCommonName(element.Attribute("upperLimit"))[0]);
+                    if (element.Attribute("lowerLimit") != null)
+                        lowerLimit = (DigitalInputItem)ActiveCollection.Get(toBindCommonName(element.Attribute("lowerLimit"))[0]);
+
 
                     componentNames.Add(new CommonName(element.Name.ToString()));
                     Report.General(
@@ -219,7 +227,7 @@ namespace Base.Config
                     if (!Convert.ToBoolean(element.Attribute("drive").Value))
                         ActiveCollection.AddComponent(
                             new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value)));
+                                element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value), upperLimit, lowerLimit));
                     else
                         switch (element.Attribute("side").Value)
                         {
@@ -254,6 +262,14 @@ namespace Base.Config
             {
                 foreach (var element in getElements("RobotConfig", "Talons"))
                 {
+
+                    DigitalInputItem upperLimit = null;
+                    DigitalInputItem lowerLimit = null;
+                    if (element.Attribute("upperLimit") != null)
+                        upperLimit = (DigitalInputItem)ActiveCollection.Get(toBindCommonName(element.Attribute("upperLimit"))[0]);
+                    if (element.Attribute("lowerLimit") != null)
+                        lowerLimit = (DigitalInputItem)ActiveCollection.Get(toBindCommonName(element.Attribute("lowerLimit"))[0]);
+
                     componentNames.Add(new CommonName(element.Name.ToString()));
                     Report.General(
                         $"Added Talon {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
@@ -261,7 +277,7 @@ namespace Base.Config
                     if (element.Attribute("type").Value == "pwm")
                         ActiveCollection.AddComponent(
                             new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value)));
+                                element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value), upperLimit, lowerLimit));
                     else
                         switch (element.Attribute("type").Value)
                         {
@@ -296,7 +312,7 @@ namespace Base.Config
                                 ActiveCollection.AddComponent(
                                     new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
                                         element.Name.ToString(), p, i, d,
-                                        Convert.ToBoolean(element.Attribute("reversed").Value)));
+                                        Convert.ToBoolean(element.Attribute("reversed").Value), upperLimit, lowerLimit));
                                 Report.General($"{element.Name} is a master with PID set to {p}, {i}, {d}");
                                 break;
 
