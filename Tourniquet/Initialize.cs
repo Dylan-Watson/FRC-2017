@@ -40,7 +40,7 @@ namespace Tourniquet
             var leftDriverConfig = config.DriverConfig.LeftDriveControlSchema;
             var leftDriveControl = new AxisControl(leftDriverConfig.Name, config.DriverConfig.Driver,
                 leftDriverConfig.Axis, leftDriverConfig.FitFunction, leftDriverConfig.Reversed,
-                leftDriverConfig.DeadZone,
+                leftDriverConfig.DeadZone, config.DriverConfig.LeftDriveControlSchema.IsEnabled,
                 leftDriverConfig.PowerMultiplier, leftDriverConfig.FitPower);
 
             foreach (var binding in leftDriverConfig.Bindings)
@@ -51,7 +51,7 @@ namespace Tourniquet
             var rightDriverConfig = config.DriverConfig.RightDriveControlSchema;
             var rightDriveControl = new AxisControl(rightDriverConfig.Name, config.DriverConfig.Driver,
                 rightDriverConfig.Axis, rightDriverConfig.FitFunction, rightDriverConfig.Reversed,
-                rightDriverConfig.DeadZone,
+                rightDriverConfig.DeadZone, config.DriverConfig.RightDriveControlSchema.IsEnabled,
                 rightDriverConfig.PowerMultiplier, rightDriverConfig.FitPower);
 
             foreach (var binding in rightDriverConfig.Bindings)
@@ -65,7 +65,7 @@ namespace Tourniquet
                 {
                     case ControlType.Axis:
                         var control = new AxisControl(s.Name, config.DriverConfig.Driver,
-                            s.Axis, MotorControlFitFunction.Linear, s.Reversed, s.DeadZone, s.PowerMultiplier);
+                            s.Axis, MotorControlFitFunction.Linear, s.Reversed, s.DeadZone, s.IsEnabled, s.PowerMultiplier);
 
                         foreach (var binding in s.Bindings)
                             control.AddComponent(config.ActiveCollection.Get(binding));
@@ -84,8 +84,8 @@ namespace Tourniquet
                     case ControlType.Axis:
                         var control = new AxisControl(s.Name,
                             config.OperatorConfig.Operator,
-                            s.Axis, MotorControlFitFunction.Linear, s.Reversed, s.DeadZone, s.PowerMultiplier);
-
+                            s.Axis, MotorControlFitFunction.Linear, s.Reversed, s.DeadZone, s.IsEnabled, s.PowerMultiplier);
+                        
                         foreach (var binding in s.Bindings)
                             control.AddComponent(config.ActiveCollection.Get(binding));
 
