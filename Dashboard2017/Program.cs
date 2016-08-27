@@ -16,6 +16,8 @@ namespace Dashboard2017
 {
     internal static class Program
     {
+        #region Private Methods
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -27,5 +29,7 @@ namespace Dashboard2017
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
         }
+
+        #endregion Private Methods
     }
 }

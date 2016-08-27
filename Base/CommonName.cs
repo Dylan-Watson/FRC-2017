@@ -24,6 +24,7 @@ namespace Base
     /// </summary>
     public sealed class CommonName
     {
+        //TODO: Declaire static references for auton
         //declaired for use in auton
         //public static readonly CommonName Gear_switch = new CommonName("gearShift");
 

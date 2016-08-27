@@ -72,23 +72,18 @@ namespace Tourniquet.ControlItems
         public ControlItemType ControlType { get; protected set; }
 
         /// <summary>
-        /// Defines if the control is running (outputting values)
-        /// </summary>
-        public bool IsRunning { get; protected set; }
-
-        /// <summary>
         /// Defines if the control is enabled
         /// </summary>
         public bool IsEnabled { get; set; } = true;
 
+        /// <summary>
+        /// Defines if the control is running (outputting values)
+        /// </summary>
+        public bool IsRunning { get; protected set; }
+
         #endregion Public Properties
 
         #region Public Methods
-
-        /// <summary>
-        /// Overrides ToString to return the control's name
-        /// </summary>
-        public override string ToString() => ControlName;
 
         /// <summary>
         /// Adds a IComponent to the control
@@ -103,6 +98,16 @@ namespace Tourniquet.ControlItems
         public void AddComponents(List<IComponent> componentRange) => components.AddRange(componentRange);
 
         /// <summary>
+        /// Overrides ToString to return the control's name
+        /// </summary>
+        public override string ToString() => ControlName;
+
+        /// <summary>
+        /// The control implements to update its state and values
+        /// </summary>
+        public abstract void Update();
+
+        /// <summary>
         /// Sets a solenoid value if there is a solenoid in the controls bindings
         /// </summary>
         /// <param name="value">solenoid position</param>
@@ -110,11 +115,6 @@ namespace Tourniquet.ControlItems
         {
             if (!IsEnabled) return;
         }
-
-        /// <summary>
-        /// The control implements to update its state and values
-        /// </summary>
-        public abstract void Update();
 
         #endregion Public Methods
 
@@ -143,7 +143,7 @@ namespace Tourniquet.ControlItems
                     components.OfType<OutputComponent>()
                         .Where(output => !((IComponent) output).InUse || (((IComponent) output).Sender == this)))
                 output?.Set(Math.Abs(val*5), this);
-                    //times five to compensate for analog output, which has upto 5v output.
+            //times five to compensate for analog output, which has upto 5v output.
         }
 
         /// <summary>

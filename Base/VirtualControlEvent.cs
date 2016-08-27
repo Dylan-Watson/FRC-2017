@@ -72,13 +72,15 @@ namespace Base
         /// <param name="eventType">type of VirtualControlEvent</param>
         /// <param name="setMethod">the SetMethod to use</param>
         /// <param name="drivers">the drivers; IComponents that fire this event</param>
-        public VirtualControlEvent(Config.Config config, VirtualControlEventType eventType, VirtualControlEventSetMethod setMethod,
+        public VirtualControlEvent(Config.Config config, VirtualControlEventType eventType,
+            VirtualControlEventSetMethod setMethod,
             params IComponent[] drivers)
         {
             EventType = eventType;
             SetMethod = setMethod;
 
-            if ((eventType == VirtualControlEventType.Value) && (drivers.Where(d => d is InputComponent).ToList().Count!=0))
+            if ((eventType == VirtualControlEventType.Value) &&
+                (drivers.Where(d => d is InputComponent).ToList().Count != 0))
                 config.ActiveCollection.AddVirutalControlEventStatusLoop(new VirutalControlEventStatusLoop(drivers));
 
             foreach (var driver in drivers)
@@ -177,33 +179,6 @@ namespace Base
     }
 
     /// <summary>
-    /// Loop to check status of input components (value based)
-    /// </summary>
-    public sealed class VirutalControlEventStatusLoop : ControlLoop
-    {
-        private readonly List<IComponent> components;
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="valueDrivers">all drivers for the event</param>
-        public VirutalControlEventStatusLoop(IEnumerable<IComponent> valueDrivers)
-        {
-            components = valueDrivers.Where(d => d is InputComponent).ToList();
-            OverrideCycleTime(.05);
-            //StartWhenReady();
-        }
-
-        /// <summary>
-        /// Method for the implimentor to implement, this is what is called withing the loop
-        /// </summary>
-        protected override void main()
-        {
-            foreach (var driver in components)
-                ((InputComponent) driver).Get();
-        }
-    }
-
-    /// <summary>
     /// EventArgs for the EventHandler of IComponents
     /// </summary>
     public class VirtualControlEventArgs : EventArgs
@@ -236,5 +211,45 @@ namespace Base
         public double Value { get; }
 
         #endregion Public Properties
+    }
+
+    /// <summary>
+    /// Loop to check status of input components (value based)
+    /// </summary>
+    public sealed class VirutalControlEventStatusLoop : ControlLoop
+    {
+        #region Private Fields
+
+        private readonly List<IComponent> components;
+
+        #endregion Private Fields
+
+        #region Public Constructors
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="valueDrivers">all drivers for the event</param>
+        public VirutalControlEventStatusLoop(IEnumerable<IComponent> valueDrivers)
+        {
+            components = valueDrivers.Where(d => d is InputComponent).ToList();
+            OverrideCycleTime(.05);
+            //StartWhenReady();
+        }
+
+        #endregion Public Constructors
+
+        #region Protected Methods
+
+        /// <summary>
+        /// Method for the implimentor to implement, this is what is called withing the loop
+        /// </summary>
+        protected override void main()
+        {
+            foreach (var driver in components)
+                ((InputComponent) driver).Get();
+        }
+
+        #endregion Protected Methods
     }
 }

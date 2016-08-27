@@ -7,8 +7,7 @@ namespace Trephine
     /// </summary>
     public class Initialize
     {
-        private readonly BaseCalls baseCalls;
-        private readonly Config config;
+        #region Public Constructors
 
         /// <summary>
         /// Constructor
@@ -20,6 +19,10 @@ namespace Trephine
             baseCalls = new BaseCalls(config);
         }
 
+        #endregion Public Constructors
+
+        #region Public Methods
+
         /// <summary>
         /// Run autonomous
         /// </summary>
@@ -27,5 +30,14 @@ namespace Trephine
         {
             new DriveStrait(baseCalls, .5, 1).Start();
         }
+
+        #endregion Public Methods
+
+        #region Private Fields
+
+        private readonly BaseCalls baseCalls;
+        private readonly Config config;
+
+        #endregion Private Fields
     }
 }

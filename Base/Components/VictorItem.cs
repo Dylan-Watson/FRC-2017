@@ -42,6 +42,8 @@ namespace Base.Components
 
         #endregion Private Fields
 
+        #region Public Methods
+
         /// <summary>
         /// Disposes of this IComponent and its managed resources
         /// </summary>
@@ -50,6 +52,10 @@ namespace Base.Components
             dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        #endregion Public Methods
+
+        #region Protected Methods
 
         /// <summary>
         /// Releases managed and native resources
@@ -63,6 +69,8 @@ namespace Base.Components
                 victor?.Dispose();
             }
         }
+
+        #endregion Protected Methods
 
         #region Public Properties
 

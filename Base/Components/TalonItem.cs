@@ -19,6 +19,8 @@ namespace Base.Components
 
         #endregion Public Events
 
+        #region Public Methods
+
         /// <summary>
         /// Disposes of this IComponent and its managed resources
         /// </summary>
@@ -27,6 +29,8 @@ namespace Base.Components
             dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        #endregion Public Methods
 
         #region Protected Methods
 
@@ -53,6 +57,8 @@ namespace Base.Components
                 talon?.Dispose();
             }
         }
+
+
 
         #region Private Fields
 

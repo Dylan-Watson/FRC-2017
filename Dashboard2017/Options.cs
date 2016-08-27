@@ -8,7 +8,13 @@ namespace Dashboard2017
 {
     public partial class Options : Form
     {
+        #region Private Fields
+
         private string rioIP;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         public Options()
         {
@@ -20,6 +26,24 @@ namespace Dashboard2017
             IPAddress ipAddress;
             if (IPAddress.TryParse(Settings.Default.rioAddress, out ipAddress))
                 addressBox.Text = Settings.Default.rioAddress;
+        }
+
+        #endregion Public Constructors
+
+        #region Private Methods
+
+        private void ok_Click(object sender, EventArgs e)
+        {
+            IPAddress ipAddress;
+            if (IPAddress.TryParse(addressBox.Text, out ipAddress))
+            {
+                Settings.Default.rioAddress = addressBox.Text;
+                Settings.Default.Save();
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            else
+                MessageBox.Show(@"The RIO address is not a valid IPv4 or IPv6 address.", @"Invalid Input");
         }
 
         private void OverrideAddress_CheckedChanged(object sender, EventArgs e)
@@ -58,18 +82,6 @@ namespace Dashboard2017
             }
         }
 
-        private void ok_Click(object sender, EventArgs e)
-        {
-            IPAddress ipAddress;
-            if (IPAddress.TryParse(addressBox.Text, out ipAddress))
-            {
-                Settings.Default.rioAddress = addressBox.Text;
-                Settings.Default.Save();
-                DialogResult = DialogResult.OK;
-                Close();
-            }
-            else
-                MessageBox.Show(@"The RIO address is not a valid IPv4 or IPv6 address.", @"Invalid Input");
-        }
+        #endregion Private Methods
     }
 }

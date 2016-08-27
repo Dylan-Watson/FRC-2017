@@ -12,7 +12,6 @@ Email: cooper.ryan@centaurisoft.org
 
 using Base;
 using Base.Config;
-using HAL.Simulator.Data;
 using Tourniquet;
 using WPILib;
 
@@ -74,11 +73,9 @@ namespace RobotMain2017
         {
             quickLoad();
             DashboardComms.Instance.NotifyRobotState(Constants.AUTON);
-            if (config.AutonEnabled)
-            {
-                new Trephine.Initialize(config).Run();
-                config.ActiveCollection.StartVirutalControlEventStatusLoops();
-            }
+            if (!config.AutonEnabled) return;
+            new Trephine.Initialize(config).Run();
+            config.ActiveCollection.StartVirutalControlEventStatusLoops();
         }
 
         /// <summary>

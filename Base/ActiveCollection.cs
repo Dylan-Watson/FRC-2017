@@ -24,7 +24,9 @@ namespace Base
         #region Private Fields
 
         private readonly Dictionary<string, IComponent> componentCollection = new Dictionary<string, IComponent>();
-        private readonly List<VirutalControlEventStatusLoop> virutalControlEventStatusLoops = new List<VirutalControlEventStatusLoop>();
+
+        private readonly List<VirutalControlEventStatusLoop> virutalControlEventStatusLoops =
+            new List<VirutalControlEventStatusLoop>();
 
         #endregion Private Fields
 
@@ -72,21 +74,13 @@ namespace Base
             }
         }
 
+        /// <summary>
+        /// Adds a virtual control event loop to the active collection
+        /// </summary>
+        /// <param name="loop">the VirutalControlEventStatusLoop object to add</param>
         public void AddVirutalControlEventStatusLoop(VirutalControlEventStatusLoop loop)
         {
             virutalControlEventStatusLoops.Add(loop);
-        }
-
-        public void StartVirutalControlEventStatusLoops()
-        {
-            foreach (var loop in virutalControlEventStatusLoops)
-                loop.Start();
-        }
-
-        public void StopVirutalControlEventStatusLoops()
-        {
-            foreach (var loop in virutalControlEventStatusLoops)
-                loop.Kill();
         }
 
         /// <summary>
@@ -140,6 +134,24 @@ namespace Base
             foreach (var component in componentCollection)
                 component.Value.Dispose();
             componentCollection.Clear();
+        }
+
+        /// <summary>
+        /// Starts all of the VirutalControlEventStatusLoops within th active collection
+        /// </summary>
+        public void StartVirutalControlEventStatusLoops()
+        {
+            foreach (var loop in virutalControlEventStatusLoops)
+                loop.Start();
+        }
+
+        /// <summary>
+        /// Stops all of the VirutalControlEventStatusLoops within th active collection
+        /// </summary>
+        public void StopVirutalControlEventStatusLoops()
+        {
+            foreach (var loop in virutalControlEventStatusLoops)
+                loop.Kill();
         }
 
         #endregion Public Methods

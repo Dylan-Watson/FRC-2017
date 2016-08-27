@@ -65,7 +65,8 @@ namespace Tourniquet
                 {
                     case ControlType.Axis:
                         var control = new AxisControl(s.Name, config.DriverConfig.Driver,
-                            s.Axis, MotorControlFitFunction.Linear, s.Reversed, s.DeadZone, s.IsEnabled, s.PowerMultiplier);
+                            s.Axis, MotorControlFitFunction.Linear, s.Reversed, s.DeadZone, s.IsEnabled,
+                            s.PowerMultiplier);
 
                         foreach (var binding in s.Bindings)
                             control.AddComponent(config.ActiveCollection.Get(binding));
@@ -84,8 +85,9 @@ namespace Tourniquet
                     case ControlType.Axis:
                         var control = new AxisControl(s.Name,
                             config.OperatorConfig.Operator,
-                            s.Axis, MotorControlFitFunction.Linear, s.Reversed, s.DeadZone, s.IsEnabled, s.PowerMultiplier);
-                        
+                            s.Axis, MotorControlFitFunction.Linear, s.Reversed, s.DeadZone, s.IsEnabled,
+                            s.PowerMultiplier);
+
                         foreach (var binding in s.Bindings)
                             control.AddComponent(config.ActiveCollection.Get(binding));
 

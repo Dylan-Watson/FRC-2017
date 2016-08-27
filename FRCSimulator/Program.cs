@@ -32,9 +32,13 @@ namespace FRCSimulator
     /// </summary>
     public class Simulator : ISimulator
     {
+        #region Public Properties
+
         /// <summary>
         /// </summary>
         public string Name => "Mono Game Simulator";
+
+        #endregion Public Properties
 
         #region Public Methods
 

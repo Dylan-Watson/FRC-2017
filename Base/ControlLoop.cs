@@ -32,15 +32,6 @@ namespace Base
 
         #region Private Methods
 
-        private void loop()
-        {
-            while (!kill && (LoopCheck._IsAutonomous() || LoopCheck._IsTeleoporated()))
-            {
-                main();
-                Timer.Delay(cycleTime);
-            }
-        }
-
         private void backgroundLoop()
         {
             while (true)
@@ -48,9 +39,18 @@ namespace Base
                 if (kill)
                     break;
 
-                if(LoopCheck._IsAutonomous() || LoopCheck._IsTeleoporated())
+                if (LoopCheck._IsAutonomous() || LoopCheck._IsTeleoporated())
                     main();
 
+                Timer.Delay(cycleTime);
+            }
+        }
+
+        private void loop()
+        {
+            while (!kill && (LoopCheck._IsAutonomous() || LoopCheck._IsTeleoporated()))
+            {
+                main();
                 Timer.Delay(cycleTime);
             }
         }
@@ -94,10 +94,12 @@ namespace Base
         }
 
         /// <summary>
-        /// Starts a continuous background loop that only calls the abstract main method if the robot is enabled.
-        /// This differs from Start() because it is continuous, Start will only run the loop when called. Start is recomemnded.
+        /// Starts a continuous background loop that only calls the abstract main method if the robot
+        /// is enabled. This differs from Start() because this loop is always running, so it may not
+        /// be performance friendly, Start will only run the loop when called. Start is recomemnded.
         /// </summary>
-        [Obsolete("This method _CONTINUOUSLY_ runs the loop; however does not call abtract main if the robot is disabled")]
+        [Obsolete(
+            "This method _CONTINUOUSLY_ runs the loop; however does not call abtract main if the robot is disabled")]
         public void StartWhenReady()
         {
             //Report.General($"Spinning up the {GetType()} system.");
