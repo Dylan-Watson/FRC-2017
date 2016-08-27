@@ -10,6 +10,7 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using System.CodeDom;
 using WPILib;
 
 namespace Base

@@ -10,6 +10,7 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using System;
 using System.Threading.Tasks;
 using WPILib;
 
@@ -92,6 +93,11 @@ namespace Base
             thread.Start();
         }
 
+        /// <summary>
+        /// Starts a continuous background loop that only calls the abstract main method if the robot is enabled.
+        /// This differs from Start() because it is continuous, Start will only run the loop when called. Start is recomemnded.
+        /// </summary>
+        [Obsolete("This method _CONTINUOUSLY_ runs the loop; however does not call abtract main if the robot is disabled")]
         public void StartWhenReady()
         {
             //Report.General($"Spinning up the {GetType()} system.");
