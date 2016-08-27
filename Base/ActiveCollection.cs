@@ -24,6 +24,7 @@ namespace Base
         #region Private Fields
 
         private readonly Dictionary<string, IComponent> componentCollection = new Dictionary<string, IComponent>();
+        private readonly List<VirutalControlEventStatusLoop> virutalControlEventStatusLoops = new List<VirutalControlEventStatusLoop>();
 
         #endregion Private Fields
 
@@ -69,6 +70,23 @@ namespace Base
                 //TODO: report errors or throw new one, I haven't decided yet.
                 Log.Write(ex);
             }
+        }
+
+        public void AddVirutalControlEventStatusLoop(VirutalControlEventStatusLoop loop)
+        {
+            virutalControlEventStatusLoops.Add(loop);
+        }
+
+        public void StartVirutalControlEventStatusLoops()
+        {
+            foreach (var loop in virutalControlEventStatusLoops)
+                loop.Start();
+        }
+
+        public void StopVirutalControlEventStatusLoops()
+        {
+            foreach (var loop in virutalControlEventStatusLoops)
+                loop.Kill();
         }
 
         /// <summary>

@@ -507,7 +507,7 @@ namespace Base.Config
                         var drivers = toBindCommonName(element.Attribute("drivers"));
                         var actors = toBindCommonName(element.Attribute("actions"));
 
-                        var tmp = new VirtualControlEvent(type, setMethod,
+                        var tmp = new VirtualControlEvent(this, type, setMethod,
                             drivers.Select(driver => ActiveCollection.Get(driver)).ToArray());
                         tmp.AddActionComponents(actors.Select(actor => ActiveCollection.Get(actor)).ToArray());
                     }

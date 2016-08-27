@@ -40,6 +40,20 @@ namespace Base
             }
         }
 
+        private void backgroundLoop()
+        {
+            while (true)
+            {
+                if (kill)
+                    break;
+
+                if(LoopCheck._IsAutonomous() || LoopCheck._IsTeleoporated())
+                    main();
+
+                Timer.Delay(cycleTime);
+            }
+        }
+
         #endregion Private Methods
 
         #region Private Fields
@@ -75,6 +89,13 @@ namespace Base
         {
             Report.General($"Spinning up the {GetType()} system.");
             thread = new Task(loop);
+            thread.Start();
+        }
+
+        public void StartWhenReady()
+        {
+            //Report.General($"Spinning up the {GetType()} system.");
+            thread = new Task(backgroundLoop);
             thread.Start();
         }
 
