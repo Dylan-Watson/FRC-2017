@@ -21,8 +21,8 @@
       <rightDrive_1 type="888" channel="0" reversed="true" drive="true" side="right" />
       <rightDrive_2 type="888" channel="1" reversed="true" drive="true" side="right" />
       <!--<rightDrive_3 type="888" channel="2" reversed="false" type="drive" side="right" />-->
-      <leftDrive_1 type="888" channel="2" reversed="false" drive="true" side="left" />
-      <leftDrive_2 type="888" channel="3" reversed="false" drive="true" side="left" />
+      <leftDrive_1 type="888" channel="2" reversed="true" drive="true" side="left" />
+      <leftDrive_2 type="888" channel="3" reversed="true" drive="true" side="left" />
       <!--<leftDrive_3 type="888" channel="5" reversed="false" type="drive" side="left" />-->
     </Victors>
 
@@ -33,7 +33,7 @@
       <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="master" optional PID p="double" i="double" d="double" />-->
       <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="slave" master="binding name (name of master talon)" />-->
 
-      <shooter_1 channel="22" reversed="false" type="pwm" />
+      <!-- <shooter_1 channel="22" reversed="false" type="pwm" /> -->
       <!--<shooter_1 channel="24" reversed="false" type="master" p=".5" i=".001" d="0" />-->
       <!-- <shooter_2 channel="22" reversed="false" type="slave" master="shooter_1" />-->
     </Talons>
@@ -46,19 +46,21 @@
     <!-- Double solenoid locations-->
     <Solenoids>
       <!--<xxxxxx forward="x" reverse="x" default="forward/reverse" reversed="false" />-->
-      <test_solenoid forward="0" reverse="1" default="forward" reversed="false" />
+       <test_solenoid forward="0" reverse="1" default="forward" reversed="true" />
+      <test_solenoid1 forward="2" reverse="3" default="forward" reversed="true" />
+      <test_solenoid2 forward="4" reverse="5" default="forward" reversed="true" />
     </Solenoids>
 
     <!--  Digital input/outputs !!!!NOTE!!!! DI and DO are on the same line as the Encoders -->
     <!--  so DO NOT have matching channel numbers, that allocated drifferent resources in the same spot.-->
     <DI>
       <!--<xxxxxx channel="x" />-->
-      <test_di channel="0" />
+       <test_di channel="0" />
     </DI>
 
     <DO>
       <!--<xxxxxx channel="x" />-->
-      <test_do channel="1" />
+      <!--  <test_do channel="1" />-->
     </DO>
 
     <!-- Analog inputs/outputs -->
@@ -94,7 +96,7 @@
 
       <powerMultiplier powerMultiplier="1" />
 
-      <leftDrive axis="1" reversed="false" deadZone=".02" bindTo="leftDrive_1, leftDrive_2" />
+      <leftDrive axis="1" reversed="true" deadZone=".02" bindTo="leftDrive_1, leftDrive_2" />
       <rightDrive axis="5" reversed="false" deadZone=".02" bindTo="rightDrive_1, rightDrive_2" />
     </Driver>
 
@@ -111,6 +113,6 @@
   <!-- Event assignments -->
   <!-- types= 'value' or 'usage'; setMethods= 'passthrough' or 'adjusted'-->
   <VirtualControlEvents>
-    <test_event type="value" drivers="shooter_1" actions="test_do" setMethod="passthrough" />
+     <test_event type="value" drivers="test_di" actions="test_solenoid, test_solenoid1, test_solenoid2" setMethod="passthrough" />
   </VirtualControlEvents>
 </Robot>

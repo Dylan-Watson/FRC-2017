@@ -113,6 +113,7 @@ namespace Base
 
         private void VirtualControlEvent_ValueChanged(object sender, EventArgs e)
         {
+            Console.WriteLine("TEST!");
             try
             {
                 var param = e as VirtualControlEventArgs;

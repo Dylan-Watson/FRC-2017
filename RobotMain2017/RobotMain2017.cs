@@ -59,7 +59,7 @@ namespace RobotMain2017
 
         #region Private Fields
 
-        private const string CONFIG_FILE = @"robot.xml";
+        private const string CONFIG_FILE = @"/robot.xml";
         private readonly Config config = new Config();
 
         #endregion Private Fields
