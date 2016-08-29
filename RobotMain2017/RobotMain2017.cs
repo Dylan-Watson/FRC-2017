@@ -14,6 +14,7 @@ using Base;
 using Base.Config;
 using Tourniquet;
 using WPILib;
+using RobotState = Base.RobotState;
 
 namespace RobotMain2017
 {
@@ -31,7 +32,6 @@ namespace RobotMain2017
         {
             Log.ClearSessionLog();
             config.Load(CONFIG_FILE);
-            DashboardComms.Instance.NotifyRobotState(Constants.STANDBY);
         }
 
         #endregion Public Constructors
@@ -72,10 +72,9 @@ namespace RobotMain2017
         public override void Autonomous()
         {
             quickLoad();
-            DashboardComms.Instance.NotifyRobotState(Constants.AUTON);
+            RobotStatus.Instance.NotifyState(RobotState.Auton);
             if (!config.AutonEnabled) return;
             new Trephine.Initialize(config).Run();
-            config.ActiveCollection.StartVirutalControlEventStatusLoops();
         }
 
         /// <summary>
@@ -84,11 +83,9 @@ namespace RobotMain2017
         public override void OperatorControl()
         {
             quickLoad();
-            DashboardComms.Instance.NotifyRobotState(Constants.TELEOP);
+            RobotStatus.Instance.NotifyState(RobotState.Teleop);
             new Driver().Start();
             new Operator().Start();
-            config.ActiveCollection.StartVirutalControlEventStatusLoops();
-
             //while (IsOperatorControl && IsEnabled) { }
         }
 
@@ -97,6 +94,13 @@ namespace RobotMain2017
         /// </summary>
         public override void Test()
         {
+            RobotStatus.Instance.NotifyState(RobotState.Test);
+        }
+
+        protected override void Disabled()
+        {
+            base.Disabled();
+            RobotStatus.Instance.NotifyState(RobotState.Disabled);
         }
 
         #endregion Public Methods

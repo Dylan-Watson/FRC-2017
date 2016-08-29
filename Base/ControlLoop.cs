@@ -10,7 +10,6 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-using System;
 using System.Threading.Tasks;
 using WPILib;
 
@@ -88,23 +87,17 @@ namespace Base
         /// </summary>
         public void Start()
         {
+            kill = false;
             Report.General($"Spinning up the {GetType()} system.");
             thread = new Task(loop);
             thread.Start();
         }
 
         /// <summary>
-        /// Starts a continuous background loop that only calls the abstract main method if the robot
-        /// is enabled. This differs from Start() because this loop is always running, so it may not
-        /// be performance friendly, Start will only run the loop when called. Start is recomemnded.
         /// </summary>
-        [Obsolete(
-            "This method _CONTINUOUSLY_ runs the loop; however does not call abtract main if the robot is disabled")]
         public void StartWhenReady()
         {
-            //Report.General($"Spinning up the {GetType()} system.");
-            thread = new Task(backgroundLoop);
-            thread.Start();
+            RobotStatus.Instance.RobotStatusChanged += Instance_RobotStatusChanged;
         }
 
         /// <summary>
@@ -112,6 +105,20 @@ namespace Base
         /// </summary>
         /// <returns></returns>
         public TaskStatus Status() => thread.Status;
+
+        private void Instance_RobotStatusChanged(object sender, RobotStatusChangedEventArgs e)
+        {
+            if ((e.CurrentRobotState == RobotState.Auton) || (e.CurrentRobotState == RobotState.Teleop))
+            {
+                kill = false;
+                thread = new Task(backgroundLoop);
+                thread.Start();
+            }
+            else
+            {
+                Kill();
+            }
+        }
 
         #endregion Public Methods
     }

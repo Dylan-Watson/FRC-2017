@@ -19,14 +19,39 @@ namespace Base
     /// <summary>
     /// Class that stores the currently active collection of components on the robot.
     /// </summary>
-    public class ActiveCollection
+    public sealed class ActiveCollection
     {
+        #region Private Fields
+
+        private static readonly Lazy<ActiveCollection> _lazy =
+            new Lazy<ActiveCollection>(() => new ActiveCollection());
+
+        #endregion Private Fields
+
+        #region Private Constructors
+
+        private ActiveCollection()
+        {
+        }
+
+        #endregion Private Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Instance of the singleton
+        /// </summary>
+        public static ActiveCollection Instance => _lazy.Value;
+
+        #endregion Public Properties
+
+
+
         #region Private Fields
 
         private readonly Dictionary<string, IComponent> componentCollection = new Dictionary<string, IComponent>();
 
-        private readonly List<VirutalControlEventStatusLoop> virutalControlEventStatusLoops =
-            new List<VirutalControlEventStatusLoop>();
+        private readonly InputComponentUpdateLoop inputComponentUpdateLoop = new InputComponentUpdateLoop();
 
         #endregion Private Fields
 
@@ -58,6 +83,10 @@ namespace Base
                     throw new AllocationException(
                         $"Attempting to allocate two components with the same name - {component.Name}");
                 componentCollection.Add(component.Name, component);
+
+                var input = component as InputComponent;
+                if (input != null)
+                    inputComponentUpdateLoop.AddInputComponent(input);
             }
             catch (AllocationException ex)
             {
@@ -72,15 +101,6 @@ namespace Base
                 //TODO: report errors or throw new one, I haven't decided yet.
                 Log.Write(ex);
             }
-        }
-
-        /// <summary>
-        /// Adds a virtual control event loop to the active collection
-        /// </summary>
-        /// <param name="loop">the VirutalControlEventStatusLoop object to add</param>
-        public void AddVirutalControlEventStatusLoop(VirutalControlEventStatusLoop loop)
-        {
-            virutalControlEventStatusLoops.Add(loop);
         }
 
         /// <summary>
@@ -131,30 +151,60 @@ namespace Base
         /// </summary>
         public void ReleaseActiveCollection()
         {
+            inputComponentUpdateLoop.ClearInputComponents();
             foreach (var component in componentCollection)
                 component.Value.Dispose();
             componentCollection.Clear();
-
-            StopVirutalControlEventStatusLoops();
-            virutalControlEventStatusLoops.Clear();
         }
 
-        /// <summary>
-        /// Starts all of the VirutalControlEventStatusLoops within th active collection
-        /// </summary>
-        public void StartVirutalControlEventStatusLoops()
+        #endregion Public Methods
+    }
+
+    public class InputComponentUpdateLoop : ControlLoop
+    {
+        #region Private Fields
+
+        private readonly List<InputComponent> inputComponents = new List<InputComponent>();
+
+        #endregion Private Fields
+
+        #region Public Constructors
+
+        public InputComponentUpdateLoop()
         {
-            foreach (var loop in virutalControlEventStatusLoops)
-                loop.Start();
+            OverrideCycleTime(.05);
+            StartWhenReady();
         }
 
-        /// <summary>
-        /// Stops all of the VirutalControlEventStatusLoops within th active collection
-        /// </summary>
-        public void StopVirutalControlEventStatusLoops()
+        #endregion Public Constructors
+
+        #region Protected Methods
+
+        protected override void main()
         {
-            foreach (var loop in virutalControlEventStatusLoops)
-                loop.Kill();
+            if (inputComponents.Count == 0) return;
+            lock (inputComponents)
+            {
+                foreach (var input in inputComponents)
+                    input.Get();
+            }
+        }
+
+        #endregion Protected Methods
+
+        #region Public Methods
+
+        public void AddInputComponent(InputComponent input)
+        {
+            lock (inputComponents)
+            {
+                inputComponents.Add(input);
+            }
+        }
+
+        public void ClearInputComponents()
+        {
+            inputComponents.Clear();
         }
 
         #endregion Public Methods

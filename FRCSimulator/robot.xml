@@ -111,6 +111,6 @@
   <!-- Event assignments -->
   <!-- types= 'value' or 'usage'; setMethods= 'passthrough' or 'adjusted'-->
   <VirtualControlEvents>
-    <test_event type="value" drivers="test_di" actions="test_do" setMethod="passthrough" />
+    <test_event type="value" drivers="test_di" actions="test_do" setMethod="passthrough" teleop="true" auton="true" />
   </VirtualControlEvents>
 </Robot>

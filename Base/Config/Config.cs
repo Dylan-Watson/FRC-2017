@@ -32,7 +32,8 @@ namespace Base.Config
         /// </summary>
         public Config()
         {
-            ActiveCollection = new ActiveCollection();
+            //ActiveCollection = new ActiveCollection();
+            ActiveCollection = ActiveCollection.Instance;
         }
 
         #endregion Public Constructors
@@ -504,10 +505,12 @@ namespace Base.Config
                                 break;
                         }
 
+                        var enInAuton = Convert.ToBoolean(element.Attribute("auton").Value);
+                        var enInTeleop = Convert.ToBoolean(element.Attribute("teleop").Value);
                         var drivers = toBindCommonName(element.Attribute("drivers"));
                         var actors = toBindCommonName(element.Attribute("actions"));
 
-                        var tmp = new VirtualControlEvent(this, type, setMethod,
+                        var tmp = new VirtualControlEvent(this, type, setMethod, enInAuton, enInTeleop,
                             drivers.Select(driver => ActiveCollection.Get(driver)).ToArray());
                         tmp.AddActionComponents(actors.Select(actor => ActiveCollection.Get(actor)).ToArray());
                     }

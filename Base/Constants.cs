@@ -9,6 +9,8 @@
 
         public const string AUTON = @"AUTON";
 
+        public const string DISABLED = @"DISABLED";
+
         /// <summary>
         /// The minimum value before we start accepting joystick input values
         /// </summary>
@@ -19,7 +21,6 @@
         /// </summary>
         public const string PRIMARY_NETWORK_TABLE = @"DASHBOARD_2017";
 
-        public const string STANDBY = @"STANDBY";
         public const string TELEOP = @"TELEOP";
 
         #endregion Public Fields

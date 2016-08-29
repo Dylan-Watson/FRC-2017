@@ -8,14 +8,6 @@ namespace Base
     /// </summary>
     public sealed class DashboardComms
     {
-        #region Private Constructors
-
-        private DashboardComms()
-        {
-        }
-
-        #endregion Private Constructors
-
         #region Public Properties
 
         /// <summary>
@@ -24,6 +16,33 @@ namespace Base
         public static DashboardComms Instance => _lazy.Value;
 
         #endregion Public Properties
+
+        #region Private Constructors
+
+        private DashboardComms()
+        {
+            RobotStatus.Instance.RobotStatusChanged += Instance_RobotStatusChanged;
+        }
+
+        private void Instance_RobotStatusChanged(object sender, RobotStatusChangedEventArgs e)
+        {
+            switch (e.CurrentRobotState)
+            {
+                case RobotState.Auton:
+                    notifyRobotState(Constants.AUTON);
+                    break;
+
+                case RobotState.Teleop:
+                    notifyRobotState(Constants.TELEOP);
+                    break;
+
+                default:
+                    notifyRobotState(Constants.DISABLED);
+                    break;
+            }
+        }
+
+        #endregion Private Constructors
 
         #region Private Fields
 
@@ -35,15 +54,6 @@ namespace Base
         #endregion Private Fields
 
         #region Public Methods
-
-        /// <summary>
-        /// Sends data to the dashboard regarding the state of the robot
-        /// </summary>
-        /// <param name="value">the state of the robot (string)</param>
-        public void NotifyRobotState(object value)
-        {
-            dashboard.PutValue(@"ROBOT_STATE", value);
-        }
 
         /// <summary>
         /// Sends data to the dashboard
@@ -58,6 +68,15 @@ namespace Base
                 dashboard.PutValue($"AUTON_{key}", value);
             else
                 dashboard.PutValue($"{key}", value);
+        }
+
+        /// <summary>
+        /// Sends data to the dashboard regarding the state of the robot
+        /// </summary>
+        /// <param name="value">the state of the robot (string)</param>
+        private void notifyRobotState(object value)
+        {
+            dashboard.PutValue(@"ROBOT_STATE", value);
         }
 
         #endregion Public Methods

@@ -1,7 +1,6 @@
 ﻿using Base.Components;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Base
 {
@@ -73,21 +72,26 @@ namespace Base
         /// <param name="setMethod">the SetMethod to use</param>
         /// <param name="drivers">the drivers; IComponents that fire this event</param>
         public VirtualControlEvent(Config.Config config, VirtualControlEventType eventType,
-            VirtualControlEventSetMethod setMethod,
+            VirtualControlEventSetMethod setMethod, bool enabledDuringAuton, bool enabledDuringTeleop,
             params IComponent[] drivers)
         {
             EventType = eventType;
             SetMethod = setMethod;
+            EnabledDuringAuton = enabledDuringAuton;
+            EnabledDuringTeleop = enabledDuringTeleop;
 
-            if ((eventType == VirtualControlEventType.Value) &&
+            /*if ((eventType == VirtualControlEventType.Value) &&
                 (drivers.Where(d => d is InputComponent).ToList().Count != 0))
-                config.ActiveCollection.AddVirutalControlEventStatusLoop(new VirutalControlEventStatusLoop(drivers));
+                config.ActiveCollection.AddVirutalControlEventStatusLoop(new VirutalControlEventStatusLoop(drivers));*/
 
             foreach (var driver in drivers)
                 driver.ValueChanged += VirtualControlEvent_ValueChanged;
         }
 
         #endregion Public Constructors
+
+        public bool EnabledDuringAuton { get; }
+        public bool EnabledDuringTeleop { get; }
 
         /// <summary>
         /// Defines the type of VirtualControlEvent this is
@@ -120,6 +124,8 @@ namespace Base
 
         private void VirtualControlEvent_ValueChanged(object sender, EventArgs e)
         {
+            if ((!EnabledDuringAuton || !LoopCheck._IsAutonomous()) &&
+                (!EnabledDuringTeleop || !LoopCheck._IsTeleoporated())) return;
             try
             {
                 var param = e as VirtualControlEventArgs;
@@ -213,9 +219,8 @@ namespace Base
         #endregion Public Properties
     }
 
-    /// <summary>
-    /// Loop to check status of input components (value based)
-    /// </summary>
+    /*/// <summary>
+    /// Loop to check status of input components (value based) </summary>
     public sealed class VirutalControlEventStatusLoop : ControlLoop
     {
         #region Private Fields
@@ -251,5 +256,5 @@ namespace Base
         }
 
         #endregion Protected Methods
-    }
+    }*/
 }
