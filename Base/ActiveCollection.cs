@@ -134,6 +134,9 @@ namespace Base
             foreach (var component in componentCollection)
                 component.Value.Dispose();
             componentCollection.Clear();
+
+            StopVirutalControlEventStatusLoops();
+            virutalControlEventStatusLoops.Clear();
         }
 
         /// <summary>

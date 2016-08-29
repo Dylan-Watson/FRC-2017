@@ -16,7 +16,7 @@ namespace Dashboard2017
 
         #region Public Properties
 
-        public string Name { get; private set; }
+        public new string Name { get; private set; }
 
         #endregion Public Properties
 
