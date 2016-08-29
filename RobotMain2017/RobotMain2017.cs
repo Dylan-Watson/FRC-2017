@@ -11,6 +11,7 @@ Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
 using Base;
+using Base.Components;
 using Base.Config;
 using Tourniquet;
 using WPILib;
@@ -95,6 +96,41 @@ namespace RobotMain2017
         public override void Test()
         {
             RobotStatus.Instance.NotifyState(RobotState.Test);
+            foreach (var component in config.ActiveCollection.GetActiveCollection())
+            {
+
+                Report.General($"Testing {component.Value.Name}");
+
+                if (component.Value is Motor)
+                    (component.Value as Motor).Set(1, this);
+                else if (component.Value is OutputComponent)
+                    (component.Value as OutputComponent).Set(1, this);
+                else if (component.Value is DoubleSolenoidItem)
+                {
+                    if ((component.Value as DoubleSolenoidItem).GetCurrentPosition() == DoubleSolenoid.Value.Forward)
+                        (component.Value as DoubleSolenoidItem).Set(DoubleSolenoid.Value.Reverse, this);
+                    else
+                        (component.Value as DoubleSolenoidItem).Set(DoubleSolenoid.Value.Forward, this);
+                }
+
+                Timer.Delay(.5);
+
+                if (component.Value is Motor)
+                    (component.Value as Motor).Stop();
+                else if (component.Value is OutputComponent)
+                    (component.Value as OutputComponent).Set(0, this);
+                else if (component.Value is DoubleSolenoidItem)
+                {
+                    if ((component.Value as DoubleSolenoidItem).GetCurrentPosition() == DoubleSolenoid.Value.Forward)
+                        (component.Value as DoubleSolenoidItem).Set(DoubleSolenoid.Value.Reverse, this);
+                    else
+                        (component.Value as DoubleSolenoidItem).Set(DoubleSolenoid.Value.Forward, this);
+                }
+
+                Timer.Delay(.5);
+            }
+
+            Disabled();
         }
 
         protected override void Disabled()

@@ -146,6 +146,8 @@ namespace Base.Components
         /// <returns></returns>
         public object GetRawComponent() => solenoid;
 
+        public DoubleSolenoid.Value GetCurrentPosition() { lock (solenoid) { return solenoid.Get(); } }
+
         /// <summary>
         /// Sets the IsReversed flag/property to false
         /// </summary>
@@ -171,12 +173,11 @@ namespace Base.Components
                 if ((val >= 0) && (val <= 2))
                 {
                     InUse = true;
-                    if (Math.Abs(val - 0) <= Math.Abs(val*.00001))
+                    if (Math.Abs(val - 2) <= Math.Abs(val*.00001))
                     {
                         solenoid.Set(DoubleSolenoid.Value.Off);
-                        onValueChanged(new VirtualControlEventArgs(-1, InUse));
                     }
-                    else if (Math.Abs(val - 2) <= Math.Abs(val*.00001))
+                    else if (Math.Abs(val - 0) <= Math.Abs(val*.00001))
                     {
                         if (!IsReversed)
                             setForward();
@@ -211,7 +212,10 @@ namespace Base.Components
         /// <param name="sender">the caller of this method</param>
         public void Set(DoubleSolenoid.Value value, object sender)
         {
-            Set(Convert.ToDouble(value) - 1, sender);
+            Sender = sender;
+            lock(solenoid)
+            solenoid.Set(value);
+            Sender = null;
         }
 
         /// <summary>

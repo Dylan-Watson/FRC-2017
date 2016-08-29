@@ -81,6 +81,8 @@ namespace Tourniquet.ControlItems
         /// </summary>
         public bool IsRunning { get; protected set; }
 
+        public bool IsReversed { get; protected set; }
+
         #endregion Public Properties
 
         #region Public Methods
@@ -136,7 +138,10 @@ namespace Tourniquet.ControlItems
                 var motor in
                     components.OfType<Motor>()
                         .Where(motor => !((IComponent) motor).InUse || (((IComponent) motor).Sender == this)))
-                motor?.Set(val, this);
+                if(!IsReversed)
+                    motor?.Set(val, this);
+                else
+                    motor?.Set(-val, this);
 
             foreach (
                 var output in

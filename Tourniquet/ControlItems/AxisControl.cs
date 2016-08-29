@@ -47,7 +47,7 @@ namespace Tourniquet.ControlItems
             this.power = power;
             this.axis = axis;
             this.joystick = joystick;
-            setReversed(reversed);
+            IsReversed = reversed;
 
             switch (fitFunction)
             {

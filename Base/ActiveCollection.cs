@@ -124,6 +124,11 @@ namespace Base
             return null;
         }
 
+        public Dictionary<string, IComponent> GetActiveCollection()
+        {
+            return componentCollection;
+        }
+
         /// <summary>
         /// Gets and casts an IComponents item to a Motor by it's CommonName. Reports any errors and
         /// returns null should there be any.
