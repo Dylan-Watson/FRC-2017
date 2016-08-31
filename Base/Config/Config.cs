@@ -32,8 +32,8 @@ namespace Base.Config
         /// </summary>
         public Config()
         {
-            //ActiveCollection = new ActiveCollection();
-            ActiveCollection = ActiveCollection.Instance;
+            ActiveCollection = new ActiveCollection();
+            //ActiveCollection = ActiveCollection.Instance;
         }
 
         #endregion Public Constructors

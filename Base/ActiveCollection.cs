@@ -23,25 +23,32 @@ namespace Base
     {
         #region Private Fields
 
-        private static readonly Lazy<ActiveCollection> _lazy =
-            new Lazy<ActiveCollection>(() => new ActiveCollection());
+        /*private static readonly Lazy<ActiveCollection> _lazy =
+            new Lazy<ActiveCollection>(() => new ActiveCollection());*/
 
         #endregion Private Fields
 
         #region Private Constructors
 
-        private ActiveCollection()
+        /*private ActiveCollection()
         {
-        }
+        }*/
 
         #endregion Private Constructors
+
+        #region Public Constructors
+            /// <summary>
+            /// Default constructor
+            /// </summary>
+            public ActiveCollection() { }
+        #endregion
 
         #region Public Properties
 
         /// <summary>
         /// Instance of the singleton
         /// </summary>
-        public static ActiveCollection Instance => _lazy.Value;
+        //public static ActiveCollection Instance => _lazy.Value;
 
         #endregion Public Properties
 
