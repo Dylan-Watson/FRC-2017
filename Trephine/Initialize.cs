@@ -1,4 +1,4 @@
-﻿using Base.Config;
+﻿using Base;
 
 namespace Trephine
 {

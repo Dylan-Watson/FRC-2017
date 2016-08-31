@@ -15,10 +15,16 @@ using Microsoft.Xna.Framework.Input;
 
 namespace FRCSimulator
 {
+    /// <summary>
+    /// Simulator for testing
+    /// </summary>
     public class FrcSimulator : Game
     {
         #region Public Constructors
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public FrcSimulator()
         {
             graphics = new GraphicsDeviceManager(this);

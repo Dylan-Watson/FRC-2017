@@ -73,6 +73,7 @@
     <Compile Include="ControlLoop.cs" />
     <Compile Include="DashboardComms.cs" />
     <Compile Include="Filters.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IComponent.cs" />
     <Compile Include="InputComponent.cs" />
     <Compile Include="Log.cs" />

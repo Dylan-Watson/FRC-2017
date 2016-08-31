@@ -6,7 +6,7 @@ namespace Base.Components
     /// <summary>
     /// Class to handle Digital Input Components
     /// </summary>
-    public class DigitalInputItem : InputComponent, IComponent
+    public sealed class DigitalInputItem : InputComponent, IComponent
     {
         #region Public Constructors
 
@@ -51,7 +51,7 @@ namespace Base.Components
         /// Method to fire value changes for set/get values and InUse values
         /// </summary>
         /// <param name="e">VirtualControlEventArgs</param>
-        protected virtual void onValueChanged(VirtualControlEventArgs e)
+        private void onValueChanged(VirtualControlEventArgs e)
         {
             ValueChanged?.Invoke(this, e);
         }
@@ -62,7 +62,7 @@ namespace Base.Components
         /// Releases managed and native resources
         /// </summary>
         /// <param name="disposing"></param>
-        protected virtual void dispose(bool disposing)
+        private void dispose(bool disposing)
         {
             if (!disposing) return;
             lock (din)

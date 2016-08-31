@@ -12,7 +12,6 @@ Email: cooper.ryan@centaurisoft.org
 
 using Base;
 using Base.Components;
-using Base.Config;
 using Tourniquet;
 using WPILib;
 using RobotState = Base.RobotState;
@@ -133,6 +132,9 @@ namespace RobotMain2017
             Disabled();
         }
 
+        /// <summary>
+        /// Called when the robot is disabled
+        /// </summary>
         protected override void Disabled()
         {
             base.Disabled();

@@ -8,7 +8,7 @@ namespace Base.Components
     /// <summary>
     /// Class to handle CanTalon motor controllers
     /// </summary>
-    public class CanTalonItem : Motor, IComponent
+    public sealed class CanTalonItem : Motor, IComponent
     {
         #region Public Events
 
@@ -38,7 +38,7 @@ namespace Base.Components
         /// Method to fire value changes for set/get values and InUse values
         /// </summary>
         /// <param name="e">VirtualControlEventArgs</param>
-        protected virtual void onValueChanged(VirtualControlEventArgs e)
+        private void onValueChanged(VirtualControlEventArgs e)
         {
             ValueChanged?.Invoke(this, e);
         }
@@ -49,7 +49,7 @@ namespace Base.Components
         /// Releases managed and native resources
         /// </summary>
         /// <param name="disposing"></param>
-        protected virtual void dispose(bool disposing)
+        private void dispose(bool disposing)
         {
             if (!disposing) return;
             lock (talon)

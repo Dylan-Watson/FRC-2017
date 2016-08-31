@@ -19,7 +19,7 @@ namespace Base
     /// <summary>
     /// Class that stores the currently active collection of components on the robot.
     /// </summary>
-    public sealed class ActiveCollection
+    public sealed class ActiveCollection : IDisposable
     {
         #region Private Fields
 
@@ -36,11 +36,33 @@ namespace Base
 
         #endregion Private Constructors
 
+        /// <summary>
+        /// Releases managed and native resources
+        /// </summary>
+        /// <param name="disposing"></param>
+        private void dispose(bool disposing)
+        {
+            if (!disposing) return;
+            lock (inputComponentUpdateLoop)
+            {
+                inputComponentUpdateLoop?.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Disposes of this IComponent and its managed resources
+        /// </summary>
+        public void Dispose()
+        {
+            dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
         #region Public Constructors
-            /// <summary>
-            /// Default constructor
-            /// </summary>
-            public ActiveCollection() { }
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public ActiveCollection() { }
         #endregion
 
         #region Public Properties
@@ -131,6 +153,10 @@ namespace Base
             return null;
         }
 
+        /// <summary>
+        /// Returns the dictionary containing all the active IComponent objects
+        /// </summary>
+        /// <returns>"</returns>
         public Dictionary<string, IComponent> GetActiveCollection()
         {
             return componentCollection;
@@ -172,6 +198,9 @@ namespace Base
         #endregion Public Methods
     }
 
+    /// <summary>
+    /// Class to handle periodic updating of InputComponents
+    /// </summary>
     public class InputComponentUpdateLoop : ControlLoop
     {
         #region Private Fields
@@ -182,6 +211,9 @@ namespace Base
 
         #region Public Constructors
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public InputComponentUpdateLoop()
         {
             OverrideCycleTime(.05);
@@ -192,6 +224,9 @@ namespace Base
 
         #region Protected Methods
 
+        /// <summary>
+        /// Method called by the ControlLoop 
+        /// </summary>
         protected override void main()
         {
             if (inputComponents.Count == 0) return;
@@ -206,6 +241,10 @@ namespace Base
 
         #region Public Methods
 
+        /// <summary>
+        /// Adds an InputComponent to the list of InputComponent to be updated within the loop
+        /// </summary>
+        /// <param name="input"></param>
         public void AddInputComponent(InputComponent input)
         {
             lock (inputComponents)
@@ -214,6 +253,9 @@ namespace Base
             }
         }
 
+        /// <summary>
+        /// Clears the list of InputComponents
+        /// </summary>
         public void ClearInputComponents()
         {
             inputComponents.Clear();

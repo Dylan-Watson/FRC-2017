@@ -6,7 +6,7 @@ namespace Base.Components
     /// <summary>
     /// Class to handle Analog Output Components
     /// </summary>
-    public class AnalogOutputItem : OutputComponent, IComponent
+    public sealed class AnalogOutputItem : OutputComponent, IComponent
     {
         #region Private Fields
 
@@ -64,7 +64,7 @@ namespace Base.Components
         /// Releases managed and native resources
         /// </summary>
         /// <param name="disposing"></param>
-        protected virtual void dispose(bool disposing)
+        private void dispose(bool disposing)
         {
             if (!disposing) return;
             lock (aout)
@@ -100,7 +100,7 @@ namespace Base.Components
         /// Method to fire value changes for set/get values and InUse values
         /// </summary>
         /// <param name="e">VirtualControlEventArgs</param>
-        protected virtual void onValueChanged(VirtualControlEventArgs e)
+        private void onValueChanged(VirtualControlEventArgs e)
         {
             ValueChanged?.Invoke(this, e);
         }

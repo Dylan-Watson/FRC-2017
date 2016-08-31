@@ -7,8 +7,14 @@
     {
         #region Public Fields
 
+        /// <summary>
+        /// Constant used during communications with the dashboard
+        /// </summary>
         public const string AUTON = @"AUTON";
 
+        /// <summary>
+        /// Constant used during communications with the dashboard
+        /// </summary>
         public const string DISABLED = @"DISABLED";
 
         /// <summary>
@@ -21,6 +27,9 @@
         /// </summary>
         public const string PRIMARY_NETWORK_TABLE = @"DASHBOARD_2017";
 
+        /// <summary>
+        /// Constant used during communications with the dashboard
+        /// </summary>
         public const string TELEOP = @"TELEOP";
 
         #endregion Public Fields

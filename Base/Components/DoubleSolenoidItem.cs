@@ -18,7 +18,7 @@ namespace Base.Components
     /// <summary>
     /// Class to handle Double Solenoid Pneumatics
     /// </summary>
-    public class DoubleSolenoidItem : IComponent
+    public sealed class DoubleSolenoidItem : IComponent
     {
         #region Private Fields
 
@@ -76,7 +76,7 @@ namespace Base.Components
         /// Method to fire value changes for set/get values and InUse values
         /// </summary>
         /// <param name="e">VirtualControlEventArgs</param>
-        protected virtual void onValueChanged(VirtualControlEventArgs e)
+        private void onValueChanged(VirtualControlEventArgs e)
         {
             ValueChanged?.Invoke(this, e);
         }
@@ -87,7 +87,7 @@ namespace Base.Components
         /// Releases managed and native resources
         /// </summary>
         /// <param name="disposing"></param>
-        protected virtual void dispose(bool disposing)
+        private void dispose(bool disposing)
         {
             if (!disposing) return;
             lock (solenoid)
@@ -146,6 +146,10 @@ namespace Base.Components
         /// <returns></returns>
         public object GetRawComponent() => solenoid;
 
+        /// <summary>
+        /// Gets the current position that the solenoid is supposed to be in
+        /// </summary>
+        /// <returns></returns>
         public DoubleSolenoid.Value GetCurrentPosition() { lock (solenoid) { return solenoid.Get(); } }
 
         /// <summary>

@@ -36,6 +36,7 @@ namespace Tourniquet.ControlItems
         /// <param name="deadZone">the deadzone of the axis</param>
         /// <param name="multiplier">the output multiplier</param>
         /// <param name="power">the power for the fit function, see Filters class in Base</param>
+        /// <param name="isEnabled">determins whether the control is enabled or not</param>
         public AxisControl(string name, Joystick joystick, int axis, MotorControlFitFunction fitFunction, bool reversed,
             double deadZone, bool isEnabled, double multiplier = 1, double power = 2)
         {

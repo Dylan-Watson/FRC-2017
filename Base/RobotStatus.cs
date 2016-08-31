@@ -2,14 +2,32 @@
 
 namespace Base
 {
+    /// <summary>
+    /// Defines the current state of the robot
+    /// </summary>
     public enum RobotState
     {
+        /// <summary>
+        /// Code is currently in the teleoperational period
+        /// </summary>
         Teleop,
+        /// <summary>
+        /// Code is currently in the autonomous period
+        /// </summary>
         Auton,
+        /// <summary>
+        /// Code is currently in the test period
+        /// </summary>
         Test,
+        /// <summary>
+        /// Code is currently disabled
+        /// </summary>
         Disabled
     }
 
+    /// <summary>
+    /// Singleton to manage and notify the current status of the robot and robot code
+    /// </summary>
     public sealed class RobotStatus
     {
         #region Private Fields
@@ -38,6 +56,10 @@ namespace Base
 
         #region Public Methods
 
+        /// <summary>
+        /// Method used to change the robot state and fire respective events
+        /// </summary>
+        /// <param name="state">the robot state</param>
         public void NotifyState(RobotState state)
         {
             CurrentRobotState = state;
@@ -48,6 +70,9 @@ namespace Base
 
         #region Public Properties
 
+        /// <summary>
+        /// Holds the current robot state
+        /// </summary>
         public RobotState CurrentRobotState { get; private set; }
 
         /// <summary>

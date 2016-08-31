@@ -15,15 +15,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using WPILib;
-using static Base.Config.Schemas;
 using static Base.Motor;
+using static Base.Schemas;
 
-namespace Base.Config
+namespace Base
 {
     /// <summary>
     /// Manages and loads the configuration file from XML.
     /// </summary>
-    public class Config
+    public sealed class Config : IDisposable
     {
         #region Public Constructors
 
@@ -38,6 +38,27 @@ namespace Base.Config
 
         #endregion Public Constructors
 
+        /// <summary>
+        /// Disposes of this IComponent and its managed resources
+        /// </summary>
+        public void Dispose()
+        {
+            dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Releases managed and native resources
+        /// </summary>
+        /// <param name="disposing"></param>
+        private void dispose(bool disposing)
+        {
+            if (!disposing) return;
+            lock (ActiveCollection)
+            {
+                ActiveCollection?.Dispose();
+            }
+        }
         #region Public Methods
 
         /// <summary>

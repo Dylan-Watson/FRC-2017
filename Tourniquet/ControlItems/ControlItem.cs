@@ -80,7 +80,9 @@ namespace Tourniquet.ControlItems
         /// Defines if the control is running (outputting values)
         /// </summary>
         public bool IsRunning { get; protected set; }
-
+        /// <summary>
+        /// Determins if the control is reversed or not
+        /// </summary>
         public bool IsReversed { get; protected set; }
 
         #endregion Public Properties

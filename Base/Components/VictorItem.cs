@@ -34,7 +34,7 @@ namespace Base.Components
     /// <summary>
     /// Class to handle Victor motor controllers
     /// </summary>
-    public class VictorItem : Motor, IComponent
+    public sealed class VictorItem : Motor, IComponent
     {
         #region Private Fields
 
@@ -61,7 +61,7 @@ namespace Base.Components
         /// Releases managed and native resources
         /// </summary>
         /// <param name="disposing"></param>
-        protected virtual void dispose(bool disposing)
+        private void dispose(bool disposing)
         {
             if (!disposing) return;
             lock (victor)
@@ -226,7 +226,7 @@ namespace Base.Components
         /// Method to fire value changes for set/get values and InUse values
         /// </summary>
         /// <param name="e">VirtualControlEventArgs</param>
-        protected virtual void onValueChanged(VirtualControlEventArgs e)
+        private void onValueChanged(VirtualControlEventArgs e)
         {
             ValueChanged?.Invoke(this, e);
         }

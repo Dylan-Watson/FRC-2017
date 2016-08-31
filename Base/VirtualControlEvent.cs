@@ -71,7 +71,9 @@ namespace Base
         /// <param name="eventType">type of VirtualControlEvent</param>
         /// <param name="setMethod">the SetMethod to use</param>
         /// <param name="drivers">the drivers; IComponents that fire this event</param>
-        public VirtualControlEvent(Config.Config config, VirtualControlEventType eventType,
+        /// <param name="enabledDuringAuton">determins whether action will be taken during auton</param>
+        /// <param name="enabledDuringTeleop">determins whether action will be taken during teleop</param>
+        public VirtualControlEvent(Config config, VirtualControlEventType eventType,
             VirtualControlEventSetMethod setMethod, bool enabledDuringAuton, bool enabledDuringTeleop,
             params IComponent[] drivers)
         {
@@ -90,7 +92,13 @@ namespace Base
 
         #endregion Public Constructors
 
+        /// <summary>
+        /// Stores whether this VCE should act during auton
+        /// </summary>
         public bool EnabledDuringAuton { get; }
+        /// <summary>
+        /// Stores whether this VCE should act during teleop
+        /// </summary>
         public bool EnabledDuringTeleop { get; }
 
         /// <summary>

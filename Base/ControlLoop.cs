@@ -10,6 +10,7 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using System;
 using System.Threading.Tasks;
 using WPILib;
 
@@ -18,7 +19,7 @@ namespace Base
     /// <summary>
     /// Abstract class to create and manage a loop for robot functions
     /// </summary>
-    public abstract class ControlLoop
+    public abstract class ControlLoop : IDisposable
     {
         #region Protected Methods
 
@@ -118,6 +119,28 @@ namespace Base
             {
                 Kill();
             }
+        }
+
+        /// <summary>
+        /// Releases managed and native resources
+        /// </summary>
+        /// <param name="disposing"></param>
+        private void dispose(bool disposing)
+        {
+            if (!disposing) return;
+            lock (thread)
+            {
+                thread?.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Disposes of this IComponent and its managed resources
+        /// </summary>
+        public void Dispose()
+        {
+            dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         #endregion Public Methods
