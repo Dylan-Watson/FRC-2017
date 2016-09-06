@@ -346,7 +346,7 @@ namespace Base
                 foreach (var element in getElements("RobotConfig", "Talons"))
                     try
                     {
-                        DigitalInputItem upperLimit = null;
+                        DigitalInputItem upperLimit = null; 
                         DigitalInputItem lowerLimit = null;
                         if (element.Attribute("upperLimit") != null)
                             upperLimit =

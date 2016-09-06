@@ -114,11 +114,11 @@ namespace Base.Components
             {
                 var input = Convert.ToDouble(din.Get());
 
-                if (Math.Abs(previousInput - input) <= Math.Abs(previousInput*.00001))
+                if (previousInput != input)
                     onValueChanged(new VirtualControlEventArgs(input, InUse));
 
                 previousInput = input;
-                return Convert.ToDouble(din.Get());
+                return input;
             }
         }
 
