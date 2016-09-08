@@ -17,7 +17,7 @@ using WPILib.Exceptions;
 namespace Base
 {
     /// <summary>
-    /// Class that stores the currently active collection of components on the robot.
+    /// Class that stores the currently active collection of components on the robot
     /// </summary>
     public sealed class ActiveCollection : IDisposable
     {
