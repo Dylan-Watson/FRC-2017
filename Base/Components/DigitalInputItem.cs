@@ -71,8 +71,6 @@ namespace Base.Components
             }
         }
 
-
-
         #region Private Fields
 
         private readonly DigitalInput din;
