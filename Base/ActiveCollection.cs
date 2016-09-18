@@ -258,7 +258,10 @@ namespace Base
         /// </summary>
         public void ClearInputComponents()
         {
-            inputComponents.Clear();
+            lock (inputComponents)
+            {
+                inputComponents.Clear();
+            }
         }
 
         #endregion Public Methods
