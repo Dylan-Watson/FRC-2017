@@ -99,6 +99,11 @@ namespace Base
         /// </summary>
         protected DigitalInputItem UpperLimit { get; set; }
 
+        /// <summary>
+        /// Encoder to read the value of the motor
+        /// </summary>
+        protected EncoderItem Encoder { get; set; }
+
         #endregion Protected Properties
 
         #region Public Methods

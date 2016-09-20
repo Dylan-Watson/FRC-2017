@@ -18,6 +18,8 @@
 
     <!-- All victor assignments type="SP" or type="888"-->
     <Victors>
+      <!-- Examples -->
+      <!--<xxxxxxxx type="SP" channel="x ID from roboRio" reversed="x" drive="false" optional encoder="xxxxxx" upperLimit="Name of DI" optional lowerLimit="Name of DI"/>-->
       <rightDrive_1 type="888" channel="0" reversed="true" drive="true" side="right" />
       <rightDrive_2 type="888" channel="1" reversed="true" drive="true" side="right" />
       <!--<rightDrive_3 type="888" channel="2" reversed="false" type="drive" side="right" />-->
@@ -30,9 +32,9 @@
     <!-- All CANTalon assignments -->
     <Talons>
       <!-- Examples -->
-      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="pwm" />-->
-      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="master" optional PID p="double" i="double" d="double" />-->
-      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="slave" master="binding name (name of master talon)" />-->
+      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="pwm" encoder="xxxxxx"/>-->
+      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="master" encoder="xxxxxx" optional PID p="double" i="double" d="double" />-->
+      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="slave" encoder="xxxxxx" master="binding name (name of master talon)" />-->
 
        <!--<shooter_1 channel="22" reversed="false" type="pwm" />-->
 

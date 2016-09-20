@@ -133,6 +133,41 @@ namespace Base
             QuickLoad = Convert.ToBoolean(getAttributeValue("value", "QuickLoad"));
             if (QuickLoad) Report.Warning("I see QuickLoad is turned... This should only be used during practice!");
 
+            #region Encoders
+
+            try
+            {
+                foreach (var element in getElements("RobotConfig", "Encoders"))
+                {
+                    try
+                    {
+                        componentNames.Add(new CommonName(element.Name.ToString()));
+                        Report.General(
+                            $"Added Digital Input {element.Name}, aChannel = {Convert.ToInt32(element.Attribute("aChannel").Value)}, bChannel = {Convert.ToInt32(element.Attribute("bChannel").Value)}");
+                        ActiveCollection.AddComponent(
+                            new EncoderItem(element.Name.ToString(), Convert.ToInt32(element.Attribute("aChannel").Value), Convert.ToInt32(element.Attribute("bChannel").Value)));
+                    }
+                    catch (Exception ex)
+                    {
+                        Report.Error(
+                            $"Failed to load Encoder {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                        Log.Write(ex);
+                        if (VerboseOutput)
+                            Report.Error(ex.Message);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Report.Error(
+                    "There was an error loading one or more encoders. This may cause a fatal runtime error! See log for details.");
+                Log.Write(ex);
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
+            }
+
+            #endregion Encoders
+
             #region DI
 
             try
@@ -292,6 +327,13 @@ namespace Base
                             lowerLimit =
                                 (DigitalInputItem)
                                     ActiveCollection.Get(toBindCommonName(element.Attribute("lowerLimit"))[0]);
+                        EncoderItem motorEncoder = null;
+                        if (element.Attribute("encoder").Value != null)
+                        {
+                            motorEncoder = 
+                                (EncoderItem) 
+                                    ActiveCollection.Get(toBindCommonName(element.Attribute("encoder"))[0]);
+                        }
 
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
@@ -300,7 +342,7 @@ namespace Base
                             ActiveCollection.AddComponent(
                                 new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
                                     element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value),
-                                    upperLimit, lowerLimit));
+                                    motorEncoder, upperLimit, lowerLimit));
                         else
                             switch (element.Attribute("side").Value)
                             {
@@ -356,6 +398,13 @@ namespace Base
                             lowerLimit =
                                 (DigitalInputItem)
                                     ActiveCollection.Get(toBindCommonName(element.Attribute("lowerLimit"))[0]);
+                        EncoderItem motorEncoder = null;
+                        if (element.Attribute("encoder") != null)
+                        {
+                            motorEncoder =
+                                (EncoderItem)
+                                    ActiveCollection.Get(toBindCommonName(element.Attribute("encoder"))[0]);
+                        }
 
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
@@ -365,7 +414,7 @@ namespace Base
                             ActiveCollection.AddComponent(
                                 new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
                                     element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value),
-                                    upperLimit, lowerLimit));
+                                    motorEncoder, upperLimit, lowerLimit));
                         else
                             switch (element.Attribute("type").Value)
                             {
@@ -400,7 +449,7 @@ namespace Base
                                     ActiveCollection.AddComponent(
                                         new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
                                             element.Name.ToString(), p, i, d,
-                                            Convert.ToBoolean(element.Attribute("reversed").Value), upperLimit,
+                                            Convert.ToBoolean(element.Attribute("reversed").Value), motorEncoder, upperLimit,
                                             lowerLimit));
                                     Report.General($"{element.Name} is a master with PID set to {p}, {i}, {d}");
                                     break;
