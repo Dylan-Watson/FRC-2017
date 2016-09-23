@@ -107,8 +107,7 @@ namespace Base.Components
         /// <param name="isReversed">if the controller output should be reversed</param>
         /// <param name="upperLimit">Limit switch to prevent the motor from moving forward</param>
         /// <param name="lowerLimit">Limit switch to prevent the motor from moving reverse</param>
-        public VictorItem(VictorType type, int channel, string commonName, bool isReversed = false,
-            EncoderItem encoder = null, DigitalInputItem upperLimit = null, DigitalInputItem lowerLimit = null)
+        public VictorItem(VictorType type, int channel, string commonName, bool isReversed = false)
         {
             VictorType = type;
             if (type == VictorType.Sp)
@@ -118,9 +117,6 @@ namespace Base.Components
 
             Name = commonName;
             IsReversed = isReversed;
-            Encoder = encoder;
-            UpperLimit = upperLimit;
-            LowerLimit = lowerLimit;
         }
 
         /// <summary>
@@ -230,6 +226,13 @@ namespace Base.Components
                 onValueChanged(new VirtualControlEventArgs(0, InUse));
             }
         }
+
+        public void setUpperLimit(DigitalInputItem upperLimit) { UpperLimit = upperLimit; }
+
+        public void setLowerLimit(DigitalInputItem lowerLimit) { LowerLimit = lowerLimit; }
+
+        public void setEncoder(EncoderItem encoder) { Encoder = encoder; }
+
 
         /// <summary>
         /// Method to fire value changes for set/get values and InUse values

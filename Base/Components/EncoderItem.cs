@@ -1,4 +1,17 @@
-﻿using System;
+﻿/****************************** Header ******************************\
+Class Name: EncoderItem inherits IComponent and InputComponent
+Summary: Abstraction for the WPIlib Encoder that extends to include
+some helper and reading methods.
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Dylan Watson, Ryan S. Cooper, Matthew Ring
+Email: dylantrwatson@gmail.com, cooper.ryan@centaurisoft.org, matthewzring@gmail.com
+\********************************************************************/
+
+
+using System;
 using WPILib;
 namespace Base.Components
 {

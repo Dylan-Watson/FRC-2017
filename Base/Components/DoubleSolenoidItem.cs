@@ -1,5 +1,5 @@
 ﻿/****************************** Header ******************************\
-Class Name: DoubleSolenoidItem inherits and IComponent
+Class Name: DoubleSolenoidItem inherits IComponent
 Summary: Abstraction for the WPIlib DoubleSolenoid that extends to include
 some helper and control methods.
 Project:     FRC2017
@@ -95,8 +95,6 @@ namespace Base.Components
                 solenoid?.Dispose();
             }
         }
-
-
 
         #region Public Properties
 

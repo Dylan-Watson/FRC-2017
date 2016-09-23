@@ -66,6 +66,7 @@
     <Compile Include="Components\DoubleSolenoidItem.cs" />
     <Compile Include="Components\DigitalInputItem.cs" />
     <Compile Include="Components\DigitalOutputItem.cs" />
+    <Compile Include="Components\RelayItem.cs" />
     <Compile Include="Components\TalonItem.cs" />
     <Compile Include="Components\VictorItem.cs" />
     <Compile Include="Config\Config.cs" />

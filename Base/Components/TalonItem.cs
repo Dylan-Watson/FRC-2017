@@ -79,16 +79,13 @@ namespace Base.Components
         /// <param name="isReversed">if the controller output should be reversed</param>
         /// <param name="upperLimit">Limit switch to prevent the motor from moving forward</param>
         /// <param name="lowerLimit">Limit switch to prevent the motor from moving reverse</param>
-        public CanTalonItem(int channel, string commonName, bool isReversed = false, EncoderItem encoder = null, DigitalInputItem upperLimit = null, DigitalInputItem lowerLimit = null)
+        public CanTalonItem(int channel, string commonName, bool isReversed = false)
         {
             talon = new CANTalon(channel);
             Name = commonName;
             IsReversed = isReversed;
             talon.MotorControlMode = ControlMode.PercentVbus;
             talon.ControlEnabled = true;
-            Encoder = encoder;
-            UpperLimit = upperLimit;
-            LowerLimit = lowerLimit;
         }
 
         /// <summary>
@@ -102,8 +99,7 @@ namespace Base.Components
         /// <param name="isReversed">if the controller output should be reversed</param>
         /// <param name="upperLimit">Limit switch to prevent the motor from moving forward</param>
         /// <param name="lowerLimit">Limit switch to prevent the motor from moving reverse</param>
-        public CanTalonItem(int channel, string commonName, double p, double i, double d, bool isReversed = false,
-            EncoderItem encoder = null, DigitalInputItem upperLimit = null, DigitalInputItem lowerLimit = null)
+        public CanTalonItem(int channel, string commonName, double p, double i, double d, bool isReversed = false)
         {
             talon = new CANTalon(channel);
             Name = commonName;
@@ -114,9 +110,6 @@ namespace Base.Components
             talon.FeedBackDevice = CANTalon.FeedbackDevice.QuadEncoder;
             talon.SetPID(p, i, d);
             talon.ControlEnabled = true;
-            Encoder = encoder;
-            UpperLimit = upperLimit;
-            LowerLimit = lowerLimit;
         }
 
         /// <summary>
@@ -349,6 +342,12 @@ namespace Base.Components
                 onValueChanged(new VirtualControlEventArgs(0, InUse));
             }
         }
+
+        public void setUpperLimit(DigitalInputItem upperLimit) { UpperLimit = upperLimit; }
+
+        public void setLowerLimit(DigitalInputItem lowerLimit) { LowerLimit = lowerLimit; }
+
+        public void setEncoder(EncoderItem encoder) { Encoder = encoder; }
 
         #endregion Public Methods
     }

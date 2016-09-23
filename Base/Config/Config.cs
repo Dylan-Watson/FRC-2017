@@ -143,7 +143,7 @@ namespace Base
                     {
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
-                            $"Added Digital Input {element.Name}, aChannel = {Convert.ToInt32(element.Attribute("aChannel").Value)}, bChannel = {Convert.ToInt32(element.Attribute("bChannel").Value)}");
+                            $"Added Encoder {element.Name}, aChannel = {Convert.ToInt32(element.Attribute("aChannel").Value)}, bChannel = {Convert.ToInt32(element.Attribute("bChannel").Value)}");
                         ActiveCollection.AddComponent(
                             new EncoderItem(element.Name.ToString(), Convert.ToInt32(element.Attribute("aChannel").Value), Convert.ToInt32(element.Attribute("bChannel").Value)));
                     }
@@ -339,10 +339,16 @@ namespace Base
                         Report.General(
                             $"Added Victor{type} {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
                         if (!Convert.ToBoolean(element.Attribute("drive").Value))
-                            ActiveCollection.AddComponent(
-                                new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
-                                    element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value),
-                                    motorEncoder, upperLimit, lowerLimit));
+                        {
+                            var temp = new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
+                                    element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value));
+
+                            ActiveCollection.AddComponent(temp);
+                            temp.setUpperLimit(upperLimit);
+                            temp.setLowerLimit(lowerLimit);
+                            temp.setEncoder(motorEncoder);
+
+                        }
                         else
                             switch (element.Attribute("side").Value)
                             {
@@ -411,10 +417,13 @@ namespace Base
                             $"Added Talon {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
 
                         if (element.Attribute("type").Value == "pwm")
-                            ActiveCollection.AddComponent(
-                                new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                    element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value),
-                                    motorEncoder, upperLimit, lowerLimit));
+                        {
+                            var temp = new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value), element.Name.ToString());
+                            ActiveCollection.AddComponent(temp);
+                            temp.setUpperLimit(upperLimit);
+                            temp.setLowerLimit(lowerLimit);
+                            temp.setEncoder(motorEncoder);
+                        }
                         else
                             switch (element.Attribute("type").Value)
                             {
@@ -446,11 +455,14 @@ namespace Base
                                         Report.Warning($"Failed to set D for {element.Name}");
                                     }
 
-                                    ActiveCollection.AddComponent(
-                                        new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
+                                    
+                                    var temp = new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
                                             element.Name.ToString(), p, i, d,
-                                            Convert.ToBoolean(element.Attribute("reversed").Value), motorEncoder, upperLimit,
-                                            lowerLimit));
+                                            Convert.ToBoolean(element.Attribute("reversed").Value));
+                                    ActiveCollection.AddComponent(temp);
+                                    temp.setUpperLimit(upperLimit);
+                                    temp.setLowerLimit(lowerLimit);
+                                    temp.setEncoder(motorEncoder);
                                     Report.General($"{element.Name} is a master with PID set to {p}, {i}, {d}");
                                     break;
 
@@ -463,7 +475,7 @@ namespace Base
                                             new CanTalonItem(
                                                 Convert.ToInt32(element.Attribute("channel").Value),
                                                 element.Name.ToString(),
-                                                (CanTalonItem) ActiveCollection.Get(new CommonName(master)),
+                                                (CanTalonItem)ActiveCollection.Get(new CommonName(master)),
                                                 Convert.ToBoolean(element.Attribute("reversed").Value)));
                                         Report.General($"{element.Name} is a slave whose master is {master}");
                                     }
@@ -539,6 +551,51 @@ namespace Base
             }
 
             #endregion DoubleSolenoids
+
+            #region Relays
+
+            try
+            {
+                foreach (var element in getElements("RobotConfig", "Relays"))
+                    try
+                    {
+                        componentNames.Add(new CommonName(element.Name.ToString()));
+
+                        var _default = element.Attribute("default").Value; 
+                        var d = Relay.Value.Off;
+                        if (_default == "on")
+                            d = Relay.Value.On;
+                        else if (_default == "forward")
+                            d = Relay.Value.Forward;
+                        else if (_default == "reverse")
+                            d = Relay.Value.Reverse;
+
+                        Report.General(
+                            $"Added Relay {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}, default position {d.ToString()}");
+                        ActiveCollection.AddComponent(
+                            new RelayItem(Convert.ToInt32(element.Attribute("channel").Value),
+                                element.Name.ToString(), d));
+                    }
+                    catch (Exception ex)
+                    {
+                        Report.Error(
+                            $"Failed to load Relay {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                        Log.Write(ex);
+                        if (VerboseOutput)
+                            Report.Error(ex.Message);
+                    }
+            }
+            catch (Exception ex)
+            {
+                Report.Error(
+                    "There was an error loading one or more relays. This may cause a fatal runtime error! See log for details.");
+                Log.Write(ex);
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
+            }
+
+
+            #endregion Relays
 
             #endregion channel asignments
         }

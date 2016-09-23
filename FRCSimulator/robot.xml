@@ -77,7 +77,7 @@
     </AO>
 
     <Relays>
-      <!--<xxxxxx channel="x" />-->
+      <!--<xxxxxx channel="x" optional default="off/on/reverse/forward"/>-->
     </Relays>
   </RobotConfig>
 
