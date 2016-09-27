@@ -166,6 +166,7 @@ namespace Base.Components
             Sender = sender;
             SetAllowC(UpperLimit?.GetBool() ?? true);
             SetAllowCc(LowerLimit?.GetBool() ?? true);
+
             lock (victor)
             {
                 if ((val < -Constants.MINUMUM_JOYSTICK_RETURN) && AllowCc)

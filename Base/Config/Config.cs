@@ -11,6 +11,7 @@ Email: cooper.ryan@centaurisoftware.co
 
 using Base.Components;
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -328,7 +329,7 @@ namespace Base
                                 (DigitalInputItem)
                                     ActiveCollection.Get(toBindCommonName(element.Attribute("lowerLimit"))[0]);
                         EncoderItem motorEncoder = null;
-                        if (element.Attribute("encoder").Value != null)
+                        if (element.Attribute("encoder") != null)
                         {
                             motorEncoder = 
                                 (EncoderItem) 
@@ -353,17 +354,28 @@ namespace Base
                             switch (element.Attribute("side").Value)
                             {
                                 case "right":
-                                    ActiveCollection.AddComponent(
+                                    var temp =
                                         new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
                                             element.Name.ToString(), Side.Right,
-                                            Convert.ToBoolean(element.Attribute("reversed").Value)));
+                                            Convert.ToBoolean(element.Attribute("reversed").Value));
+
+                                    ActiveCollection.AddComponent(temp);
+                                    temp.setUpperLimit(upperLimit);
+                                    temp.setLowerLimit(lowerLimit);
+                                    temp.setEncoder(motorEncoder);
+
                                     break;
 
                                 case "left":
-                                    ActiveCollection.AddComponent(
+                                     temp =
                                         new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
                                             element.Name.ToString(), Side.Left,
-                                            Convert.ToBoolean(element.Attribute("reversed").Value)));
+                                            Convert.ToBoolean(element.Attribute("reversed").Value));
+
+                                    ActiveCollection.AddComponent(temp);
+                                    temp.setUpperLimit(upperLimit);
+                                    temp.setLowerLimit(lowerLimit);
+                                    temp.setEncoder(motorEncoder);
                                     break;
                             }
                     }
@@ -610,7 +622,7 @@ namespace Base
                         var type = VirtualControlEvent.VirtualControlEventType.Value;
                         var setMethod = VirtualControlEvent.VirtualControlEventSetMethod.Passthrough;
 
-                        switch (element.Attribute("type").Value)
+                        switch (element.Attribute("type")?.Value)
                         {
                             case "value":
                                 type = VirtualControlEvent.VirtualControlEventType.Value;
@@ -621,7 +633,7 @@ namespace Base
                                 break;
                         }
 
-                        switch (element.Attribute("setMethod").Value)
+                        switch (element.Attribute("setMethod")?.Value)
                         {
                             case "passthrough":
                                 setMethod = VirtualControlEvent.VirtualControlEventSetMethod.Passthrough;
@@ -632,8 +644,8 @@ namespace Base
                                 break;
                         }
 
-                        var enInAuton = Convert.ToBoolean(element.Attribute("auton").Value);
-                        var enInTeleop = Convert.ToBoolean(element.Attribute("teleop").Value);
+                        var enInAuton = Convert.ToBoolean(element.Attribute("auton")?.Value);
+                        var enInTeleop = Convert.ToBoolean(element.Attribute("teleop")?.Value);
                         var drivers = toBindCommonName(element.Attribute("drivers"));
                         var actors = toBindCommonName(element.Attribute("actions"));
 

@@ -123,9 +123,11 @@ namespace Base.Components
             lock (relay)
             {
                 relay.Set(val);
-                Sender = null;
-                InUse = false;
+                onValueChanged(new VirtualControlEventArgs(Convert.ToDouble(val), InUse));
             }
+
+            Sender = null;
+            InUse = false;
         }
 
         /// <summary>

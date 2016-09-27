@@ -96,6 +96,8 @@ namespace Base.Components
             GC.SuppressFinalize(this);
         }
 
+        private double previousInput;
+
         /// <summary>
         /// Gets the current value of the encoder
         /// </summary>
@@ -104,9 +106,23 @@ namespace Base.Components
         {
             lock (encoder)
             {
-                int encoderVal = encoder.Get();
-                return encoderVal;
+                double input = Convert.ToDouble(encoder.Get());
+
+                if (previousInput != input)
+                    onValueChanged(new VirtualControlEventArgs(input, InUse));
+
+                previousInput = input;
+                return input;
             }
+        }
+
+        /// <summary>
+        /// Method to fire value changes for set/get values and InUse values
+        /// </summary>
+        /// <param name="e">VirtualControlEventArgs</param>
+        private void onValueChanged(VirtualControlEventArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
         }
 
         /// <summary>
