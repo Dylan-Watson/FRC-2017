@@ -139,6 +139,12 @@
     </Content>
     <Content Include="License-LGPL.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Base\Base.csproj">
+      <Project>{3AE27981-E03B-4E39-848C-FCA7D0B3FCEE}</Project>
+      <Name>Base</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

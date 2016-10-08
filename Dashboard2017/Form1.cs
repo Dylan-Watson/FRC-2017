@@ -25,6 +25,7 @@ using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using Base;
 
 namespace Dashboard2017
 {
@@ -394,34 +395,31 @@ namespace Dashboard2017
 
             try
             {
+                if (Settings.Default.videoSource.Contains("://"))
+                {
+                    if ((bw != null) && bw.IsBusy)
+                    {
+                        bw.Abort();
+                        bw.Dispose();
+                        bw = null;
+                    }
+
+                    bw = new AbortableBackgroundWorker();
+                    bw.DoWork += Bw_DoWork;
+                    bw.RunWorkerCompleted += Bw_RunWorkerCompleted;
+                    bw.RunWorkerAsync();
+                }
+
                 var source = Convert.ToInt32(Settings.Default.videoSource);
                 feedHandler = new FeedHandler(source, mainVideoBox, compositVideoBox, this);
                 ConsoleManager.Instance.AppendInfo("FeedHandler created for source at : " + source);
                 feedHandler.Targeting = true;
             }
-            catch (Exception)
-            {
-                // ignored
-            }
-
-            if (Settings.Default.videoSource.Contains("://"))
-            {
-                if ((bw != null) && bw.IsBusy)
-                {
-                    bw.Abort();
-                    bw.Dispose();
-                    bw = null;
-                }
-
-                bw = new AbortableBackgroundWorker();
-                bw.DoWork += Bw_DoWork;
-                bw.RunWorkerCompleted += Bw_RunWorkerCompleted;
-                bw.RunWorkerAsync();
-            }
-            else
+            catch (Exception ex)
             {
                 ConsoleManager.Instance.AppendError(
                     $"Error creating a feed handler for {Settings.Default.videoSource}. Check to make sure the source is valid.");
+                Log.Write(ex);
             }
         }
 
