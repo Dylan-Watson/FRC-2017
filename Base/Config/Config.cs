@@ -11,7 +11,6 @@ Email: cooper.ryan@centaurisoftware.co
 
 using Base.Components;
 using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -133,6 +132,10 @@ namespace Base
 
             QuickLoad = Convert.ToBoolean(getAttributeValue("value", "QuickLoad"));
             if (QuickLoad) Report.Warning("I see QuickLoad is turned... This should only be used during practice!");
+
+            //TODO: allow different ports to be used when initializing NavX
+            if (Convert.ToBoolean(getAttributeValue("value", "UseNavX")))
+                    ActiveCollection.AddComponent(NavX.InitializeNavX(SPI.Port.MXP));
 
             #region Encoders
 

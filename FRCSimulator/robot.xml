@@ -9,9 +9,12 @@
   <VerboseOutput value="false" />
 
   <!-- Absolutely do not change QuickLoad to true, only Ryan should do this. -->
-  <QuickLoad value="false" />
+  <QuickLoad value="true" />
 
   <EnableAuton value="true" />
+
+  <!-- Sets whether or not to initialize the NavX-->
+  <UseNavX value="true" port="default"/>
 
   <!-- Contains assignments to ports and robot dimensions -->
   <RobotConfig>
