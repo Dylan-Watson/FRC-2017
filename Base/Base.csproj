@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="ActiveCollection.cs" />
     <Compile Include="CommonName.cs" />
+    <Compile Include="Components\AccelerometerItem.cs" />
     <Compile Include="Components\AnalogInputItem.cs" />
     <Compile Include="Components\AnalogOutputItem.cs" />
     <Compile Include="Components\EncoderItem.cs" />
