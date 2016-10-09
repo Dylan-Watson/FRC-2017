@@ -107,9 +107,9 @@ namespace Base.Components
             lock (encoder)
             {
                 var input = Convert.ToDouble(encoder.Get());
-
+                
                 if (previousInput != input)
-                    onValueChanged(new VirtualControlEventArgs(input, InUse));
+                    onValueChanged(new VirtualControlEventArgs(input, true));
 
                 previousInput = input;
                 return input;

@@ -1,6 +1,7 @@
 ﻿using Base.Components;
 using System;
 using System.Collections.Generic;
+using WPILib;
 
 namespace Base
 {
@@ -151,15 +152,25 @@ namespace Base
                         (actor as Motor)?.Set(param.Value, this);
                         (actor as OutputComponent)?.Set(Math.Abs(param.Value), this);
                         (actor as DoubleSolenoidItem)?.Set(Math.Abs(param.Value), this);
+                        (actor as RelayItem)?.Set((Relay.Value)Math.Abs(param.Value), this);
                     }
                     else if ((EventType == VirtualControlEventType.Value) &&
                              (SetMethod == VirtualControlEventSetMethod.Adjusted))
                     {
-                        if (sender is AnalogInputItem)
+                        if (sender is AnalogInputItem || sender is PotentiometerItem)
                         {
                             (actor as Motor)?.Set(param.Value/5, this);
                             (actor as OutputComponent)?.Set(Math.Abs(param.Value), this);
                             (actor as DoubleSolenoidItem)?.Set(Math.Abs(param.Value), this);
+                            (actor as RelayItem)?.Set((Relay.Value)Math.Abs(param.Value), this);
+                        }
+                        else if (sender is EncoderItem)
+                        {
+                            var tmp = (EncoderItem) sender;
+                            (actor as Motor)?.Set(param.Value / ((Encoder)tmp.GetRawComponent()).EncodingScale, this);
+                            (actor as OutputComponent)?.Set(Math.Abs(param.Value / ((Encoder)tmp.GetRawComponent()).EncodingScale), this);
+                            (actor as DoubleSolenoidItem)?.Set(Math.Abs(param.Value / ((Encoder)tmp.GetRawComponent()).EncodingScale), this);
+                            (actor as RelayItem)?.Set((Relay.Value)(Math.Abs(param.Value) / ((Encoder)tmp.GetRawComponent()).EncodingScale), this);
                         }
                         else
                         {
@@ -167,6 +178,7 @@ namespace Base
                             (actor as DigitalOutputItem)?.Set(param.Value, this);
                             (actor as AnalogOutputItem)?.Set(Math.Abs(param.Value)*5, this);
                             (actor as DoubleSolenoidItem)?.Set(Math.Abs(param.Value), this);
+                            (actor as RelayItem)?.Set((Relay.Value)Math.Abs(param.Value), this);
                         }
                     }
                     else if ((EventType == VirtualControlEventType.Usage) &&
@@ -175,12 +187,14 @@ namespace Base
                         (actor as Motor)?.Set(Convert.ToDouble(param.InUse), this);
                         (actor as OutputComponent)?.Set(param.InUse, this);
                         (actor as DoubleSolenoidItem)?.Set(param.InUse, this);
+                        (actor as RelayItem)?.Set((Relay.Value)Convert.ToDouble(param.InUse), this);
                     }
                     else
                     {
                         (actor as Motor)?.Set(Convert.ToDouble(param.InUse), this);
                         (actor as OutputComponent)?.Set(param.InUse, this);
                         (actor as DoubleSolenoidItem)?.Set(param.InUse, this);
+                        (actor as RelayItem)?.Set((Relay.Value)Convert.ToDouble(param.InUse), this);
                     }
                 }
             }
