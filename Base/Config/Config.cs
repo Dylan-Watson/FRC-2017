@@ -135,7 +135,7 @@ namespace Base
 
             //TODO: allow different ports to be used when initializing NavX
             if (Convert.ToBoolean(getAttributeValue("value", "UseNavX")))
-                    ActiveCollection.AddComponent(NavX.InitializeNavX(SPI.Port.MXP));
+                ActiveCollection.AddComponent(NavX.InitializeNavX(SPI.Port.MXP));
 
             #region Encoders
 
@@ -161,7 +161,7 @@ namespace Base
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Report.Error(
                     "There was an error loading one or more encoders. This may cause a fatal runtime error! See log for details.");
@@ -334,8 +334,8 @@ namespace Base
                         EncoderItem motorEncoder = null;
                         if (element.Attribute("encoder") != null)
                         {
-                            motorEncoder = 
-                                (EncoderItem) 
+                            motorEncoder =
+                                (EncoderItem)
                                     ActiveCollection.Get(toBindCommonName(element.Attribute("encoder"))[0]);
                         }
 
@@ -370,10 +370,10 @@ namespace Base
                                     break;
 
                                 case "left":
-                                     temp =
-                                        new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
-                                            element.Name.ToString(), Side.Left,
-                                            Convert.ToBoolean(element.Attribute("reversed").Value));
+                                    temp =
+                                       new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
+                                           element.Name.ToString(), Side.Left,
+                                           Convert.ToBoolean(element.Attribute("reversed").Value));
 
                                     ActiveCollection.AddComponent(temp);
                                     temp.setUpperLimit(upperLimit);
@@ -409,7 +409,7 @@ namespace Base
                 foreach (var element in getElements("RobotConfig", "Talons"))
                     try
                     {
-                        DigitalInputItem upperLimit = null; 
+                        DigitalInputItem upperLimit = null;
                         DigitalInputItem lowerLimit = null;
                         if (element.Attribute("upperLimit") != null)
                             upperLimit =
@@ -470,7 +470,7 @@ namespace Base
                                         Report.Warning($"Failed to set D for {element.Name}");
                                     }
 
-                                    
+
                                     var temp = new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
                                             element.Name.ToString(), p, i, d,
                                             Convert.ToBoolean(element.Attribute("reversed").Value));
@@ -530,7 +530,7 @@ namespace Base
                 foreach (var element in getElements("RobotConfig", "Solenoids"))
                     try
                     {
-                        var _default = element.Attribute("default").Value;
+                        var _default = element.Attribute("default")?.Value;
 
                         var d = DoubleSolenoid.Value.Off;
                         if (_default == "forward")
@@ -540,7 +540,7 @@ namespace Base
 
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
-                            $"Added Double Solenoid {element.Name}, forward channel {Convert.ToInt32(element.Attribute("forward").Value)}, reverse channel {Convert.ToInt32(element.Attribute("reverse").Value)}, default position = {element.Attribute("default").Value}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
+                            $"Added Double Solenoid {element.Name}, forward channel {Convert.ToInt32(element.Attribute("forward").Value)}, reverse channel {Convert.ToInt32(element.Attribute("reverse").Value)}, default position = {d.ToString()}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
                         ActiveCollection.AddComponent(
                             new DoubleSolenoidItem(element.Name.ToString(),
                                 Convert.ToInt32(element.Attribute("forward").Value),
@@ -576,7 +576,7 @@ namespace Base
                     {
                         componentNames.Add(new CommonName(element.Name.ToString()));
 
-                        var _default = element.Attribute("default").Value; 
+                        var _default = element.Attribute("default")?.Value;
                         var d = Relay.Value.Off;
                         if (_default == "on")
                             d = Relay.Value.On;
@@ -612,8 +612,42 @@ namespace Base
 
             #endregion Relays
 
-            #endregion channel asignments
-        }
+            #region Potentiometers
+
+            try
+            {
+                foreach (var element in getElements("RobotConfig","Potentiometers"))
+                    try
+                    {
+                        componentNames.Add(new CommonName(element.Name.ToString()));
+
+                        Report.General(
+                            $"Added Potentiometer {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}" );
+                        ActiveCollection.AddComponent(
+                            new PotentiometerItem(Convert.ToInt32(element.Attribute("channel").Value), element.Name.ToString()));
+                    }
+                    catch (Exception ex)
+                    {
+                        Report.Error(
+                            $"Failed to load Potentiometer {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                        Log.Write(ex);
+                        if (VerboseOutput)
+                            Report.Error(ex.Message);
+                    } 
+            }
+            catch (Exception ex)
+            {
+                Report.Error(
+                    "There was an error loading one or more potentiometers. This may cause a fatal runtime error! See log for details.");
+                Log.Write(ex);
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
+            }
+
+    #endregion Potentiometers
+
+    #endregion channel asignments
+}
 
         private void constructVirtualControlEvents()
         {

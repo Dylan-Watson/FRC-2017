@@ -13,7 +13,7 @@ namespace Base.Components
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="channel">pwm channel the AIO is plugged into</param>
+        /// <param name="channel">Analog Input channel the AnalogInput is plugged into</param>
         /// <param name="commonName">CommonName the component will have</param>
         public AnalogInputItem(int channel, string commonName)
         {
@@ -70,9 +70,7 @@ namespace Base.Components
                 ain?.Dispose();
             }
         }
-
-
-
+        
         #region Private Fields
 
         private readonly AnalogInput ain;

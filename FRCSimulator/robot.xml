@@ -9,7 +9,7 @@
   <VerboseOutput value="false" />
 
   <!-- Absolutely do not change QuickLoad to true, only Ryan should do this. -->
-  <QuickLoad value="true" />
+  <QuickLoad value="false" />
 
   <EnableAuton value="true" />
 
@@ -54,6 +54,7 @@
     <!-- Double solenoid locations-->
     <Solenoids>
       <!--<xxxxxx forward="x" reverse="x" default="forward/reverse" reversed="false" />-->
+      <!-- default is optional, reversed is not. -->
       <intake forward="2" reverse="3" default="reverse" reversed="true" />
       <shifters forward="0" reverse="1" default="reverse" reversed="true" />
       <hood forward="4" reverse="5" default="reverse" reversed="true" />
@@ -84,6 +85,12 @@
       <!--<xxxxxx channel="x" optional default="off/on/reverse/forward"/>-->
     <test_relay channel="0" default="on"/>
     </Relays>
+
+    <Potentiometers>
+      <!--<xxxxxx channel="x">-->
+      <test_potentiometer channel="0"/>
+    </Potentiometers>
+    
   </RobotConfig>
 
   <!-- Control assignments -->

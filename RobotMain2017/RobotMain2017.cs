@@ -87,7 +87,6 @@ namespace RobotMain2017
             RobotStatus.Instance.NotifyState(RobotState.Teleop);
             new Driver().Start();
             new Operator().Start();
-            //while (IsOperatorControl && IsEnabled) { }
         }
 
         /// <summary>
