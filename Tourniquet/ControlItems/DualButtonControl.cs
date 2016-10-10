@@ -4,8 +4,10 @@ namespace Tourniquet.ControlItems
 {
     public class DualButtonControl : ControlItem
     {
+        #region Public Constructors
+
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         public DualButtonControl(string name, Joystick joystick, int buttonA, int buttonB, bool reversed,
             bool isEnabled, double multiplier = 1)
@@ -20,12 +22,9 @@ namespace Tourniquet.ControlItems
             this.buttonB = buttonB;
         }
 
-        public bool ButtonA { get; private set; }
-        public bool ButtonB { get; private set; }
+        #endregion Public Constructors
 
-        private readonly double multiplier;
-        private readonly int buttonA;
-        private readonly int buttonB;
+        #region Public Methods
 
         public override void Update()
         {
@@ -35,8 +34,8 @@ namespace Tourniquet.ControlItems
                 ButtonB = false;
                 if (!IsReversed)
                 {
-                    set(1 * multiplier);
-                    IsRunning = true; 
+                    set(1*multiplier);
+                    IsRunning = true;
                 }
                 else
                 {
@@ -57,10 +56,29 @@ namespace Tourniquet.ControlItems
                 }
                 else
                 {
-                    set(1 * multiplier);
+                    set(1*multiplier);
                     IsRunning = true;
                 }
             }
         }
+
+        #endregion Public Methods
+
+        #region Private Fields
+
+        private readonly int buttonA;
+
+        private readonly int buttonB;
+
+        private readonly double multiplier;
+
+        #endregion Private Fields
+
+        #region Public Properties
+
+        public bool ButtonA { get; private set; }
+        public bool ButtonB { get; private set; }
+
+        #endregion Public Properties
     }
 }

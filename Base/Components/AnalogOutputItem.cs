@@ -4,7 +4,7 @@ using WPILib;
 namespace Base.Components
 {
     /// <summary>
-    /// Class to handle Analog Output Components
+    ///     Class to handle Analog Output Components
     /// </summary>
     public sealed class AnalogOutputItem : OutputComponent, IComponent
     {
@@ -17,7 +17,7 @@ namespace Base.Components
         #region Public Constructors
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="channel">pwm channel the AIO is plugged into</param>
         /// <param name="commonName">CommonName the component will have</param>
@@ -32,81 +32,16 @@ namespace Base.Components
         #region Public Events
 
         /// <summary>
-        /// Event used for VirtualControlEvents
+        ///     Event used for VirtualControlEvents
         /// </summary>
         public event EventHandler ValueChanged;
 
         #endregion Public Events
 
-        #region Public Methods
-
-        /// <summary>
-        /// returns aout
-        /// </summary>
-        /// <returns>aout</returns>
-        public object GetRawComponent()
-        {
-            return aout;
-        }
-
-        #endregion Public Methods
-
-        /// <summary>
-        /// Disposes of this IComponent and its managed resources
-        /// </summary>
-        public void Dispose()
-        {
-            dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Releases managed and native resources
-        /// </summary>
-        /// <param name="disposing"></param>
-        private void dispose(bool disposing)
-        {
-            if (!disposing) return;
-            lock (aout)
-            {
-                aout?.Dispose();
-            }
-        }
-
-
-
-        #region Public Properties
-
-        /// <summary>
-        /// Defines whether the component is in use or not
-        /// </summary>
-        public bool InUse { get; private set; }
-
-        /// <summary>
-        /// Name of the component
-        /// </summary>
-        public string Name { get; }
-
-        /// <summary>
-        /// Defines the object issuing the commands
-        /// </summary>
-        public object Sender { get; private set; }
-
-        #endregion Public Properties
-
         #region Protected Methods
 
         /// <summary>
-        /// Method to fire value changes for set/get values and InUse values
-        /// </summary>
-        /// <param name="e">VirtualControlEventArgs</param>
-        private void onValueChanged(VirtualControlEventArgs e)
-        {
-            ValueChanged?.Invoke(this, e);
-        }
-
-        /// <summary>
-        /// Sets a value to the AnalogInput
+        ///     Sets a value to the AnalogInput
         /// </summary>
         /// <param name="val">value to set the controller to</param>
         /// <param name="sender">the caller of this method</param>
@@ -136,5 +71,72 @@ namespace Base.Components
         }
 
         #endregion Protected Methods
+
+        #region Public Properties
+
+        /// <summary>
+        ///     Defines whether the component is in use or not
+        /// </summary>
+        public bool InUse { get; private set; }
+
+        /// <summary>
+        ///     Name of the component
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        ///     Defines the object issuing the commands
+        /// </summary>
+        public object Sender { get; private set; }
+
+        #endregion Public Properties
+
+        #region Public Methods
+
+        /// <summary>
+        ///     Disposes of this IComponent and its managed resources
+        /// </summary>
+        public void Dispose()
+        {
+            dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        ///     returns aout
+        /// </summary>
+        /// <returns>aout</returns>
+        public object GetRawComponent()
+        {
+            return aout;
+        }
+
+        #endregion Public Methods
+
+        #region Private Methods
+
+        /// <summary>
+        ///     Releases managed and native resources
+        /// </summary>
+        /// <param name="disposing"></param>
+        private void dispose(bool disposing)
+        {
+            if (!disposing) return;
+            lock (aout)
+            {
+                aout?.Dispose();
+            }
+        }
+
+        /// <summary>
+        ///     Method to fire value changes for set/get values and InUse values
+        /// </summary>
+        /// <param name="e">VirtualControlEventArgs</param>
+        private void onValueChanged(VirtualControlEventArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
+        }
+
+        #endregion Private Methods
     }
 }

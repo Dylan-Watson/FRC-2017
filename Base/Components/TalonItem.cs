@@ -6,65 +6,25 @@ using WPILib.Interfaces;
 namespace Base.Components
 {
     /// <summary>
-    /// Class to handle CanTalon motor controllers
+    ///     Class to handle CanTalon motor controllers
     /// </summary>
     public sealed class CanTalonItem : Motor, IComponent
     {
         #region Public Events
 
         /// <summary>
-        /// Event used for VirtualControlEvents
+        ///     Event used for VirtualControlEvents
         /// </summary>
         public event EventHandler ValueChanged;
 
         #endregion Public Events
-
-        #region Public Methods
-
-        /// <summary>
-        /// Disposes of this IComponent and its managed resources
-        /// </summary>
-        public void Dispose()
-        {
-            dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion Public Methods
-
-        #region Protected Methods
-
-        /// <summary>
-        /// Method to fire value changes for set/get values and InUse values
-        /// </summary>
-        /// <param name="e">VirtualControlEventArgs</param>
-        private void onValueChanged(VirtualControlEventArgs e)
-        {
-            ValueChanged?.Invoke(this, e);
-        }
-
-        #endregion Protected Methods
-
-        /// <summary>
-        /// Releases managed and native resources
-        /// </summary>
-        /// <param name="disposing"></param>
-        private void dispose(bool disposing)
-        {
-            if (!disposing) return;
-            lock (talon)
-            {
-                talon?.Dispose();
-            }
-        }
-
-
 
         #region Private Fields
 
         private readonly string master;
 
         private readonly List<CanTalonItem> slaves;
+
         private readonly CANTalon talon;
 
         #endregion Private Fields
@@ -72,7 +32,7 @@ namespace Base.Components
         #region Public Constructors
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="channel">channel/address of the talon</param>
         /// <param name="commonName">CommonName the component will have</param>
@@ -89,7 +49,7 @@ namespace Base.Components
         }
 
         /// <summary>
-        /// PID Constructor
+        ///     PID Constructor
         /// </summary>
         /// <param name="channel">channel/address of the talon</param>
         /// <param name="commonName">CommonName the component will have</param>
@@ -113,7 +73,7 @@ namespace Base.Components
         }
 
         /// <summary>
-        /// Slave Constructor
+        ///     Slave Constructor
         /// </summary>
         /// <param name="channel">channel/address of the talon</param>
         /// <param name="commonName">CommonName the component will have</param>
@@ -136,27 +96,27 @@ namespace Base.Components
         #region Public Properties
 
         /// <summary>
-        /// Defines if the talon is in use
+        ///     Defines if the talon is in use
         /// </summary>
         public bool InUse { get; private set; }
 
         /// <summary>
-        /// Defines if the talon is a master
+        ///     Defines if the talon is a master
         /// </summary>
         public bool Master { get; }
 
         /// <summary>
-        /// Name of the component
+        ///     Name of the component
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// Defines the object issuing the commands
+        ///     Defines the object issuing the commands
         /// </summary>
         public object Sender { get; private set; }
 
         /// <summary>
-        /// Defines if the talon is a slave
+        ///     Defines if the talon is a slave
         /// </summary>
         public bool Slave { get; }
 
@@ -165,19 +125,37 @@ namespace Base.Components
         #region Public Methods
 
         /// <summary>
-        /// Adds a slave to this controller
+        ///     Adds a slave to this controller
         /// </summary>
         /// <param name="slave"></param>
         public void AddSlave(CanTalonItem slave) => slaves.Add(slave);
 
         /// <summary>
-        /// Gets the raw WPI CANTalon object
+        ///     Disposes of this IComponent and its managed resources
+        /// </summary>
+        public void Dispose()
+        {
+            dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        ///     Returns the current value of the encoder
+        /// </summary>
+        /// <returns></returns>
+        public double GetEncoderValue()
+        {
+            return Encoder.Get();
+        }
+
+        /// <summary>
+        ///     Gets the raw WPI CANTalon object
         /// </summary>
         /// <returns></returns>
         public object GetRawComponent() => talon;
 
         /// <summary>
-        /// Sets a value to the talon
+        ///     Sets a value to the talon
         /// </summary>
         /// <param name="val">value to set the controller to</param>
         /// <param name="sender">the caller of this method</param>
@@ -320,17 +298,23 @@ namespace Base.Components
             }
         }
 
-        /// <summary>
-        /// Returns the current value of the encoder
-        /// </summary>
-        /// <returns></returns>
-        public double GetEncoderValue()
+        public void setEncoder(EncoderItem encoder)
         {
-            return Encoder.Get();
+            Encoder = encoder;
+        }
+
+        public void setLowerLimit(DigitalInputItem lowerLimit)
+        {
+            LowerLimit = lowerLimit;
+        }
+
+        public void setUpperLimit(DigitalInputItem upperLimit)
+        {
+            UpperLimit = upperLimit;
         }
 
         /// <summary>
-        /// Stops the controller
+        ///     Stops the controller
         /// </summary>
         public override void Stop()
         {
@@ -343,12 +327,32 @@ namespace Base.Components
             }
         }
 
-        public void setUpperLimit(DigitalInputItem upperLimit) { UpperLimit = upperLimit; }
-
-        public void setLowerLimit(DigitalInputItem lowerLimit) { LowerLimit = lowerLimit; }
-
-        public void setEncoder(EncoderItem encoder) { Encoder = encoder; }
-
         #endregion Public Methods
+
+        #region Private Methods
+
+        /// <summary>
+        ///     Releases managed and native resources
+        /// </summary>
+        /// <param name="disposing"></param>
+        private void dispose(bool disposing)
+        {
+            if (!disposing) return;
+            lock (talon)
+            {
+                talon?.Dispose();
+            }
+        }
+
+        /// <summary>
+        ///     Method to fire value changes for set/get values and InUse values
+        /// </summary>
+        /// <param name="e">VirtualControlEventArgs</param>
+        private void onValueChanged(VirtualControlEventArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
+        }
+
+        #endregion Private Methods
     }
 }

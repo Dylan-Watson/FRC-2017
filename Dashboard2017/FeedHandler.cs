@@ -37,7 +37,7 @@ namespace Dashboard2017
         #region Public Properties
 
         /// <summary>
-        /// boolean to enable and disable targeting
+        ///     boolean to enable and disable targeting
         /// </summary>
         public bool Targeting { get; set; }
 
@@ -68,21 +68,33 @@ namespace Dashboard2017
         #region Private Fields
 
         private readonly BackgroundWorker bw;
+
         private readonly List<CircleF> circles = new List<CircleF>();
+
         private readonly ImageBox destCompositOutputImage;
+
         private readonly ImageBox destOutputImage;
+
         private readonly HsvTargetingSettings hsvSettings = HsvTargetingSettings.Instance;
+
         private readonly Mat logo = CvInvoke.Imread(@"defaultFeed.jpg", LoadImageType.Color);
+
         private readonly Form1 parent;
+
         private readonly object source;
+
         private Capture capture;
 
         private Image<Hsv, byte> hsvImage;
+
         private Image<Gray, byte> imageHsvDest;
+
         private Hsv lowerLimit, upperLimit;
 
         private Tuple<Mat, Image<Gray, byte>> output;
+
         private Mat temp;
+
         private bool terminate, hasTarget;
 
         #endregion Private Fields

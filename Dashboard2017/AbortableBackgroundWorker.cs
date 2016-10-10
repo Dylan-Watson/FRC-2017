@@ -4,7 +4,7 @@ using System.Threading;
 namespace Dashboard2017
 {
     /// <summary>
-    /// A background worker that can be aborted
+    ///     A background worker that can be aborted
     /// </summary>
     public class AbortableBackgroundWorker : BackgroundWorker
     {
@@ -17,7 +17,7 @@ namespace Dashboard2017
         #region Public Methods
 
         /// <summary>
-        /// Aborts the worker
+        ///     Aborts the worker
         /// </summary>
         public void Abort()
         {
@@ -31,7 +31,7 @@ namespace Dashboard2017
         #region Protected Methods
 
         /// <summary>
-        /// Method called by the worker
+        ///     Method called by the worker
         /// </summary>
         /// <param name="e">DoWorkEventArgs</param>
         protected override void OnDoWork(DoWorkEventArgs e)

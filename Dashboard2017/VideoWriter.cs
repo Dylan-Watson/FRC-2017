@@ -27,6 +27,7 @@ namespace Dashboard2017
         #region Private Fields
 
         private static VideoWriterManager instance;
+
         private static Size size;
 
         private readonly VideoWriter Writer =
@@ -39,6 +40,7 @@ namespace Dashboard2017
         #region Public Properties
 
         public static VideoWriterManager Instance => instance ?? (instance = new VideoWriterManager());
+
         public bool Record { get; set; }
 
         #endregion Public Properties

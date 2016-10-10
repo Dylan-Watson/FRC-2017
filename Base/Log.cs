@@ -15,17 +15,21 @@ using System.IO;
 namespace Base
 {
     /// <summary>
-    /// Utility class for logging functions
+    ///     Utility class for logging functions
     /// </summary>
     public static class Log
     {
-        #region Public Methods
+        #region Private Fields
 
         private const string FULL_LOG_FILE = @"full_log.txt";
         private const string SESSION_LOG_FILE = @"session_log.txt";
 
+        #endregion Private Fields
+
+        #region Public Methods
+
         /// <summary>
-        /// Clears the full log
+        ///     Clears the full log
         /// </summary>
         public static void ClearFullLog()
         {
@@ -34,7 +38,7 @@ namespace Base
         }
 
         /// <summary>
-        /// Clears the session log
+        ///     Clears the session log
         /// </summary>
         public static void ClearSessionLog()
         {
@@ -43,7 +47,7 @@ namespace Base
         }
 
         /// <summary>
-        /// Writes a string to the log file
+        ///     Writes a string to the log file
         /// </summary>
         /// <param name="msg">A string for dubugging info</param>
         public static void Str(string msg)
@@ -58,7 +62,7 @@ namespace Base
         }
 
         /// <summary>
-        /// Writes and exception to the log file
+        ///     Writes and exception to the log file
         /// </summary>
         /// <param name="ex">Exception</param>
         public static void Write(Exception ex)

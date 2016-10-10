@@ -17,14 +17,14 @@ using static Base.Schemas;
 namespace Tourniquet
 {
     /// <summary>
-    /// Sets up everything required for teleop to run
+    ///     Sets up everything required for teleop to run
     /// </summary>
     public static class Initialize
     {
         #region Public Methods
 
         /// <summary>
-        /// Builds the driver and operators controls based of off their ControlSchemas
+        ///     Builds the driver and operators controls based of off their ControlSchemas
         /// </summary>
         /// <param name="config">The main program's instance of the config</param>
         public static void BuildControlSchema(Config config)
@@ -74,7 +74,7 @@ namespace Tourniquet
                         break;
 
                     case ControlType.Button:
-                           var btn_control = new ButtonControl(s.Name, config.DriverConfig.Driver,
+                        var btn_control = new ButtonControl(s.Name, config.DriverConfig.Driver,
                             s.ButtonA, s.Reversed, s.IsEnabled, s.PowerMultiplier);
 
                         foreach (var binding in s.Bindings)
@@ -85,7 +85,7 @@ namespace Tourniquet
 
                     case ControlType.DualButton:
                         var dual_btn_control = new DualButtonControl(s.Name, config.DriverConfig.Driver,
-                         s.ButtonA, s.ButtonB, s.Reversed, s.IsEnabled, s.PowerMultiplier);
+                            s.ButtonA, s.ButtonB, s.Reversed, s.IsEnabled, s.PowerMultiplier);
 
                         foreach (var binding in s.Bindings)
                             dual_btn_control.AddComponent(config.ActiveCollection.Get(binding));
@@ -95,7 +95,7 @@ namespace Tourniquet
 
                     case ControlType.ToggleButton:
                         var toggle_btn_control = new ToggleButtonControl(s.Name, config.DriverConfig.Driver,
-                         s.ButtonA, s.Reversed, s.IsEnabled, s.PowerMultiplier);
+                            s.ButtonA, s.Reversed, s.IsEnabled, s.PowerMultiplier);
 
                         foreach (var binding in s.Bindings)
                             toggle_btn_control.AddComponent(config.ActiveCollection.Get(binding));
@@ -125,7 +125,7 @@ namespace Tourniquet
 
                     case ControlType.Button:
                         var btn_control = new ButtonControl(s.Name, config.OperatorConfig.Operator,
-                         s.ButtonA, s.Reversed, s.IsEnabled, s.PowerMultiplier);
+                            s.ButtonA, s.Reversed, s.IsEnabled, s.PowerMultiplier);
 
                         foreach (var binding in s.Bindings)
                             btn_control.AddComponent(config.ActiveCollection.Get(binding));
@@ -135,7 +135,7 @@ namespace Tourniquet
 
                     case ControlType.DualButton:
                         var dual_btn_control = new DualButtonControl(s.Name, config.OperatorConfig.Operator,
-                         s.ButtonA, s.ButtonB, s.Reversed, s.IsEnabled, s.PowerMultiplier);
+                            s.ButtonA, s.ButtonB, s.Reversed, s.IsEnabled, s.PowerMultiplier);
 
                         foreach (var binding in s.Bindings)
                             dual_btn_control.AddComponent(config.ActiveCollection.Get(binding));
@@ -145,7 +145,7 @@ namespace Tourniquet
 
                     case ControlType.ToggleButton:
                         var toggle_btn_control = new ToggleButtonControl(s.Name, config.OperatorConfig.Operator,
-                         s.ButtonA, s.Reversed, s.IsEnabled, s.PowerMultiplier);
+                            s.ButtonA, s.Reversed, s.IsEnabled, s.PowerMultiplier);
 
                         foreach (var binding in s.Bindings)
                             toggle_btn_control.AddComponent(config.ActiveCollection.Get(binding));

@@ -2,11 +2,12 @@
 
 namespace Tourniquet.ControlItems
 {
-
     public class ButtonControl : ControlItem
     {
+        #region Public Constructors
+
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         public ButtonControl(string name, Joystick joystick, int buttonA, bool reversed,
             bool isEnabled, double multiplier = 1)
@@ -17,16 +18,16 @@ namespace Tourniquet.ControlItems
             this.joystick = joystick;
             IsReversed = reversed;
             this.multiplier = multiplier;
-            this.button = buttonA;
+            button = buttonA;
         }
 
-        private readonly double multiplier;
-        private readonly int button;
+        #endregion Public Constructors
+
+        #region Public Methods
 
         public override void Update()
         {
             if (joystick.GetRawButton(button))
-            {
                 if (!IsReversed)
                 {
                     set(1*multiplier);
@@ -38,9 +39,7 @@ namespace Tourniquet.ControlItems
                     stop();
                     IsRunning = false;
                 }
-            }
             else if (IsRunning)
-            {
                 if (!IsReversed)
                 {
                     set(0);
@@ -52,7 +51,16 @@ namespace Tourniquet.ControlItems
                     set(1*multiplier);
                     IsRunning = true;
                 }
-            }
         }
+
+        #endregion Public Methods
+
+        #region Private Fields
+
+        private readonly int button;
+
+        private readonly double multiplier;
+
+        #endregion Private Fields
     }
 }

@@ -19,8 +19,8 @@ using System.Xml.Linq;
 namespace Base
 {
     /// <summary>
-    /// Class to define the way IComponents are found and bound to controls, via their CommonNames,
-    /// basically a string wrapper with utilities
+    ///     Class to define the way IComponents are found and bound to controls, via their CommonNames,
+    ///     basically a string wrapper with utilities
     /// </summary>
     public sealed class CommonName
     {
@@ -37,7 +37,7 @@ namespace Base
         #region Public Constructors
 
         /// <summary>
-        /// Default constructor
+        ///     Default constructor
         /// </summary>
         /// <param name="name">vaule of the CommonName (the name)</param>
         public CommonName(string name)
@@ -56,7 +56,23 @@ namespace Base
         #region Public Methods
 
         /// <summary>
-        /// Binds a config file value to a CommonName
+        ///     != operator for CommonNames
+        /// </summary>
+        /// <param name="x">object of interest</param>
+        /// <param name="y">object of interest</param>
+        /// <returns>comparison result</returns>
+        public static bool operator !=(CommonName x, CommonName y) => x?.name != y?.name;
+
+        /// <summary>
+        ///     == operator for CommonNames
+        /// </summary>
+        /// <param name="x">object of interest</param>
+        /// <param name="y">object of interest</param>
+        /// <returns>comparison result</returns>
+        public static bool operator ==(CommonName x, CommonName y) => x?.name == y?.name;
+
+        /// <summary>
+        ///     Binds a config file value to a CommonName
         /// </summary>
         /// <param name="attribute">attribute of interest from config</param>
         /// <returns>List of bindings</returns>
@@ -103,7 +119,7 @@ namespace Base
         }
 
         /// <summary>
-        /// Overrides the Equals method for CommonNames
+        ///     Overrides the Equals method for CommonNames
         /// </summary>
         /// <param name="obj">object of interest</param>
         /// <returns>comparison result</returns>
@@ -116,33 +132,13 @@ namespace Base
         }
 
         /// <summary>
-        /// Returns the hash of the CommonName's string value
+        ///     Returns the hash of the CommonName's string value
         /// </summary>
         /// <returns>Hash value as int</returns>
         public override int GetHashCode() => name.GetHashCode();
 
-        #endregion Public Methods
-
-        #region Public Methods
-
         /// <summary>
-        /// != operator for CommonNames
-        /// </summary>
-        /// <param name="x">object of interest</param>
-        /// <param name="y">object of interest</param>
-        /// <returns>comparison result</returns>
-        public static bool operator !=(CommonName x, CommonName y) => x?.name != y?.name;
-
-        /// <summary>
-        /// == operator for CommonNames
-        /// </summary>
-        /// <param name="x">object of interest</param>
-        /// <param name="y">object of interest</param>
-        /// <returns>comparison result</returns>
-        public static bool operator ==(CommonName x, CommonName y) => x?.name == y?.name;
-
-        /// <summary>
-        /// Overrides ToString for CommonName
+        ///     Overrides ToString for CommonName
         /// </summary>
         /// <returns>string value of the CommonName</returns>
         public override string ToString() => name;

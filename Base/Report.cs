@@ -4,14 +4,14 @@ using WPILib;
 namespace Base
 {
     /// <summary>
-    /// Utility class for reporting information to the log and driver station
+    ///     Utility class for reporting information to the log and driver station
     /// </summary>
     public static class Report
     {
         #region Public Methods
 
         /// <summary>
-        /// Reports a error message to the log and driver station
+        ///     Reports a error message to the log and driver station
         /// </summary>
         /// <param name="message">message to send</param>
         public static void Error(string message)
@@ -22,7 +22,7 @@ namespace Base
         }
 
         /// <summary>
-        /// Reports a general message to the log and or driver station
+        ///     Reports a general message to the log and or driver station
         /// </summary>
         /// <param name="message">message to send</param>
         /// <param name="sendToDriverstation">wether to send it to the driverstation</param>
@@ -35,7 +35,7 @@ namespace Base
         }
 
         /// <summary>
-        /// Reports a warning message to the log and driver station
+        ///     Reports a warning message to the log and driver station
         /// </summary>
         /// <param name="message">message to send</param>
         public static void Warning(string message)

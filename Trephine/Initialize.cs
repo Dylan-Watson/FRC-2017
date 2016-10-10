@@ -3,14 +3,14 @@
 namespace Trephine
 {
     /// <summary>
-    /// Initializes the autonomous period
+    ///     Initializes the autonomous period
     /// </summary>
     public class Initialize
     {
         #region Public Constructors
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="config">instance of the config</param>
         public Initialize(Config config)
@@ -24,7 +24,7 @@ namespace Trephine
         #region Public Methods
 
         /// <summary>
-        /// Run autonomous
+        ///     Run autonomous
         /// </summary>
         public void Run()
         {
@@ -36,6 +36,7 @@ namespace Trephine
         #region Private Fields
 
         private readonly BaseCalls baseCalls;
+
         private readonly Config config;
 
         #endregion Private Fields

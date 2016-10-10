@@ -3,30 +3,33 @@
 namespace Base
 {
     /// <summary>
-    /// Defines the current state of the robot
+    ///     Defines the current state of the robot
     /// </summary>
     public enum RobotState
     {
         /// <summary>
-        /// Code is currently in the teleoperational period
+        ///     Code is currently in the teleoperational period
         /// </summary>
         Teleop,
+
         /// <summary>
-        /// Code is currently in the autonomous period
+        ///     Code is currently in the autonomous period
         /// </summary>
         Auton,
+
         /// <summary>
-        /// Code is currently in the test period
+        ///     Code is currently in the test period
         /// </summary>
         Test,
+
         /// <summary>
-        /// Code is currently disabled
+        ///     Code is currently disabled
         /// </summary>
         Disabled
     }
 
     /// <summary>
-    /// Singleton to manage and notify the current status of the robot and robot code
+    ///     Singleton to manage and notify the current status of the robot and robot code
     /// </summary>
     public sealed class RobotStatus
     {
@@ -48,7 +51,7 @@ namespace Base
         #region Public Events
 
         /// <summary>
-        /// Event used for RobotStatusChanged
+        ///     Event used for RobotStatusChanged
         /// </summary>
         public event EventHandler<RobotStatusChangedEventArgs> RobotStatusChanged;
 
@@ -57,7 +60,7 @@ namespace Base
         #region Public Methods
 
         /// <summary>
-        /// Method used to change the robot state and fire respective events
+        ///     Method used to change the robot state and fire respective events
         /// </summary>
         /// <param name="state">the robot state</param>
         public void NotifyState(RobotState state)
@@ -71,12 +74,12 @@ namespace Base
         #region Public Properties
 
         /// <summary>
-        /// Holds the current robot state
+        ///     Holds the current robot state
         /// </summary>
         public RobotState CurrentRobotState { get; private set; }
 
         /// <summary>
-        /// Instance of the singleton
+        ///     Instance of the singleton
         /// </summary>
         public static RobotStatus Instance => _lazy.Value;
 
@@ -84,14 +87,14 @@ namespace Base
     }
 
     /// <summary>
-    /// EventArgs for the EventHandler of IComponents
+    ///     EventArgs for the EventHandler of IComponents
     /// </summary>
     public class RobotStatusChangedEventArgs : EventArgs
     {
         #region Public Constructors
 
         /// <summary>
-        /// Default constructor
+        ///     Default constructor
         /// </summary>
         /// <param name="state">current state of the robot passed to the event</param>
         public RobotStatusChangedEventArgs(RobotState state)
@@ -104,7 +107,7 @@ namespace Base
         #region Public Properties
 
         /// <summary>
-        /// Defines the RobotState to pass to registered events
+        ///     Defines the RobotState to pass to registered events
         /// </summary>
         public RobotState CurrentRobotState { get; }
 

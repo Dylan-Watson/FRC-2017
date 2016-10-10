@@ -3,7 +3,7 @@
 namespace Trephine
 {
     /// <summary>
-    /// Drives strait for x amount of time
+    ///     Drives strait for x amount of time
     /// </summary>
     internal class DriveStrait : Autonomous
     {

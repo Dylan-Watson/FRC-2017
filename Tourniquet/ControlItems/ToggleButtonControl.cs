@@ -4,8 +4,10 @@ namespace Tourniquet.ControlItems
 {
     internal class ToggleButtonControl : ControlItem
     {
+        #region Public Constructors
+
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         public ToggleButtonControl(string name, Joystick joystick, int buttonA, bool reversed,
             bool isEnabled, double multiplier = 1)
@@ -19,11 +21,10 @@ namespace Tourniquet.ControlItems
             this.buttonA = buttonA;
         }
 
-        private readonly double multiplier;
-        private readonly int buttonA;
+        #endregion Public Constructors
 
-        private bool toggle;
-        private bool previousState, currentState;
+        #region Public Methods
+
         public override void Update()
         {
             currentState = joystick.GetRawButton(buttonA);
@@ -55,7 +56,7 @@ namespace Tourniquet.ControlItems
                     }
                     else
                     {
-                        set(1 * multiplier);
+                        set(1*multiplier);
                         IsRunning = true;
                     }
                 }
@@ -63,5 +64,19 @@ namespace Tourniquet.ControlItems
 
             previousState = currentState;
         }
+
+        #endregion Public Methods
+
+        #region Private Fields
+
+        private readonly int buttonA;
+
+        private readonly double multiplier;
+
+        private bool previousState, currentState;
+
+        private bool toggle;
+
+        #endregion Private Fields
     }
 }

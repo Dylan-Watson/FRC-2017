@@ -26,6 +26,12 @@ namespace Tourniquet
 
         #endregion Private Constructors
 
+        #region Public Properties
+
+        public static ControlCollection Instance => _lazy.Value;
+
+        #endregion Public Properties
+
         #region Private Fields
 
         private static readonly Lazy<ControlCollection> _lazy =
@@ -39,8 +45,6 @@ namespace Tourniquet
 
         #region Public Methods
 
-        public static ControlCollection Instance => _lazy.Value;
-
         public void AddDriverControl(ControlItem item) => driverControlItems.Add(item);
 
         public void AddOperatorControl(ControlItem item) => operatorControlItems.Add(item);
@@ -51,28 +55,36 @@ namespace Tourniquet
             operatorControlItems.Clear();
         }
 
-        public List<ControlItem> GetDriverControls()
-        {
-            lock (driverControlItems)
-                return driverControlItems;
-        }
-
-        public List<ControlItem> GetOperatorControls()
-        {
-            lock (operatorControlItems)
-                return operatorControlItems;
-        }
-
         public ControlItem GetDriverControl(string name)
         {
             lock (driverControlItems)
+            {
                 return driverControlItems.FirstOrDefault(x => x.ControlName == name);
+            }
+        }
+
+        public List<ControlItem> GetDriverControls()
+        {
+            lock (driverControlItems)
+            {
+                return driverControlItems;
+            }
         }
 
         public ControlItem GetOperatorControl(string name)
         {
             lock (operatorControlItems)
+            {
                 return operatorControlItems.FirstOrDefault(x => x.ControlName == name);
+            }
+        }
+
+        public List<ControlItem> GetOperatorControls()
+        {
+            lock (operatorControlItems)
+            {
+                return operatorControlItems;
+            }
         }
 
         #endregion Public Methods

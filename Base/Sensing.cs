@@ -1,14 +1,10 @@
-﻿
-using HAL.Simulator.Data;
-using WPILib;
-using WPILib.Extras.AttributedCommandModel;
+﻿using WPILib;
 
 namespace Base
 {
     internal class Sensing : ControlLoop
     {
-        DashboardComms comms = DashboardComms.Instance;
-        PowerDistributionPanel pdb = new PowerDistributionPanel();
+        #region Protected Methods
 
         protected override void main()
         {
@@ -32,5 +28,14 @@ namespace Base
             comms.SendHealthData("RIO 5V Voltage", ControllerPower.GetVoltage5V());
             comms.SendHealthData("RIO 5V Voltage", ControllerPower.GetVoltage6V());*/
         }
+
+        #endregion Protected Methods
+
+        #region Private Fields
+
+        private DashboardComms comms = DashboardComms.Instance;
+        private PowerDistributionPanel pdb = new PowerDistributionPanel();
+
+        #endregion Private Fields
     }
 }

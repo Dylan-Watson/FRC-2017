@@ -17,50 +17,25 @@ using WPILib;
 namespace Base
 {
     /// <summary>
-    /// Abstract class to create and manage a loop for robot functions
+    ///     Abstract class to create and manage a loop for robot functions
     /// </summary>
     public abstract class ControlLoop : IDisposable
     {
         #region Protected Methods
 
         /// <summary>
-        /// Method for the implimentor to implement, this is what is called withing the loop
+        ///     Method for the implimentor to implement, this is what is called withing the loop
         /// </summary>
         protected abstract void main();
 
         #endregion Protected Methods
 
-        #region Private Methods
-
-        private void backgroundLoop()
-        {
-            while (true)
-            {
-                if (kill)
-                    break;
-
-                if (LoopCheck._IsAutonomous() || LoopCheck._IsTeleoporated())
-                    main();
-
-                Timer.Delay(cycleTime);
-            }
-        }
-
-        private void loop()
-        {
-            while (!kill && (LoopCheck._IsAutonomous() || LoopCheck._IsTeleoporated()))
-            {
-                main();
-                Timer.Delay(cycleTime);
-            }
-        }
-
-        #endregion Private Methods
-
         #region Private Fields
 
         private double cycleTime = .05;
+
         private bool kill;
+
         private Task thread;
 
         #endregion Private Fields
@@ -68,23 +43,32 @@ namespace Base
         #region Public Methods
 
         /// <summary>
-        /// Sets the time in miliseconds that the loop will wait to its default value, .005 seconds
+        ///     Disposes of this IComponent and its managed resources
         /// </summary>
-        public void SetToDefaultCycleTime() => cycleTime = .05;
+        public void Dispose()
+        {
+            dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
-        /// Kills or aborts the loop at next possible time
+        ///     Kills or aborts the loop at next possible time
         /// </summary>
         public void Kill() => kill = true;
 
         /// <summary>
-        /// Sets the time in miliseconds that the loop will wait each iteration, the default is .005 seconds
+        ///     Sets the time in miliseconds that the loop will wait each iteration, the default is .005 seconds
         /// </summary>
         /// <param name="seconds">time in seconds that the loop will wait each iteration</param>
         public void OverrideCycleTime(double seconds) => cycleTime = seconds;
 
         /// <summary>
-        /// Starts the loop in a new thread
+        ///     Sets the time in miliseconds that the loop will wait to its default value, .005 seconds
+        /// </summary>
+        public void SetToDefaultCycleTime() => cycleTime = .05;
+
+        /// <summary>
+        ///     Starts the loop in a new thread
         /// </summary>
         public void Start()
         {
@@ -102,10 +86,41 @@ namespace Base
         }
 
         /// <summary>
-        /// Returns the status of the thread that the loop is in
+        ///     Returns the status of the thread that the loop is in
         /// </summary>
         /// <returns></returns>
         public TaskStatus Status() => thread.Status;
+
+        #endregion Public Methods
+
+        #region Private Methods
+
+        private void backgroundLoop()
+        {
+            while (true)
+            {
+                if (kill)
+                    break;
+
+                if (LoopCheck._IsAutonomous() || LoopCheck._IsTeleoporated())
+                    main();
+
+                Timer.Delay(cycleTime);
+            }
+        }
+
+        /// <summary>
+        ///     Releases managed and native resources
+        /// </summary>
+        /// <param name="disposing"></param>
+        private void dispose(bool disposing)
+        {
+            if (!disposing) return;
+            lock (thread)
+            {
+                thread?.Dispose();
+            }
+        }
 
         private void Instance_RobotStatusChanged(object sender, RobotStatusChangedEventArgs e)
         {
@@ -121,28 +136,15 @@ namespace Base
             }
         }
 
-        /// <summary>
-        /// Releases managed and native resources
-        /// </summary>
-        /// <param name="disposing"></param>
-        private void dispose(bool disposing)
+        private void loop()
         {
-            if (!disposing) return;
-            lock (thread)
+            while (!kill && (LoopCheck._IsAutonomous() || LoopCheck._IsTeleoporated()))
             {
-                thread?.Dispose();
+                main();
+                Timer.Delay(cycleTime);
             }
         }
 
-        /// <summary>
-        /// Disposes of this IComponent and its managed resources
-        /// </summary>
-        public void Dispose()
-        {
-            dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion Public Methods
+        #endregion Private Methods
     }
 }

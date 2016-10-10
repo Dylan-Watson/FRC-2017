@@ -21,14 +21,14 @@ using static Base.Schemas;
 namespace Base
 {
     /// <summary>
-    /// Manages and loads the configuration file from XML.
+    ///     Manages and loads the configuration file from XML.
     /// </summary>
     public sealed class Config : IDisposable
     {
         #region Public Constructors
 
         /// <summary>
-        /// Default constructor
+        ///     Default constructor
         /// </summary>
         public Config()
         {
@@ -38,8 +38,52 @@ namespace Base
 
         #endregion Public Constructors
 
+        #region Private Fields
+
+        private readonly List<CommonName> componentNames = new List<CommonName>();
+
+        private XDocument doc;
+
+        #endregion Private Fields
+
+        #region Public Properties
+
         /// <summary>
-        /// Disposes of this IComponent and its managed resources
+        ///     Instance of the ActiveCollection to be used thoughout the program.
+        /// </summary>
+        public ActiveCollection ActiveCollection { get; }
+
+        /// <summary>
+        ///     Boolean flag to determin if autonomous should be enabled in any sence.
+        /// </summary>
+        public bool AutonEnabled { get; private set; }
+
+        /// <summary>
+        ///     Instance of the driver's control schema to be used thoughout the program.
+        /// </summary>
+        public DriverConfig DriverConfig { get; private set; }
+
+        /// <summary>
+        ///     Instance of the operators's control schema to be used thoughout the program.
+        /// </summary>
+        public OperatorConfig OperatorConfig { get; private set; }
+
+        /// <summary>
+        ///     Boolean flag to set QuickLoad mode, see reference manule for details.
+        /// </summary>
+        public bool QuickLoad { get; private set; }
+
+        /// <summary>
+        ///     Defines if all exception messages should be output to the console in addition to the log.
+        /// </summary>
+        public bool VerboseOutput { get; private set; }
+
+        #endregion Public Properties
+
+        #region Public Methods
+
+        /// <summary>
+        ///     Disposes of this IComponent and its managed resources
         /// </summary>
         public void Dispose()
         {
@@ -48,21 +92,7 @@ namespace Base
         }
 
         /// <summary>
-        /// Releases managed and native resources
-        /// </summary>
-        /// <param name="disposing"></param>
-        private void dispose(bool disposing)
-        {
-            if (!disposing) return;
-            lock (ActiveCollection)
-            {
-                ActiveCollection?.Dispose();
-            }
-        }
-        #region Public Methods
-
-        /// <summary>
-        /// Loads the config.
+        ///     Loads the config.
         /// </summary>
         /// <param name="fileName">name of config on disk</param>
         public void Load(string fileName)
@@ -80,48 +110,7 @@ namespace Base
 
         #endregion Public Methods
 
-        #region Private Fields
-
-        private readonly List<CommonName> componentNames = new List<CommonName>();
-        private XDocument doc;
-
-        #endregion Private Fields
-
-        #region Public Properties
-
-        /// <summary>
-        /// Instance of the ActiveCollection to be used thoughout the program.
-        /// </summary>
-        public ActiveCollection ActiveCollection { get; }
-
-        /// <summary>
-        /// Boolean flag to determin if autonomous should be enabled in any sence.
-        /// </summary>
-        public bool AutonEnabled { get; private set; }
-
-        /// <summary>
-        /// Instance of the driver's control schema to be used thoughout the program.
-        /// </summary>
-        public DriverConfig DriverConfig { get; private set; }
-
-        /// <summary>
-        /// Instance of the operators's control schema to be used thoughout the program.
-        /// </summary>
-        public OperatorConfig OperatorConfig { get; private set; }
-
-        /// <summary>
-        /// Boolean flag to set QuickLoad mode, see reference manule for details.
-        /// </summary>
-        public bool QuickLoad { get; private set; }
-
-        #endregion Public Properties
-
         #region Private Methods
-
-        /// <summary>
-        /// Defines if all exception messages should be output to the console in addition to the log.
-        /// </summary>
-        public bool VerboseOutput { get; private set; }
 
         private void allocateComponents()
         {
@@ -142,14 +131,15 @@ namespace Base
             try
             {
                 foreach (var element in getElements("RobotConfig", "Encoders"))
-                {
                     try
                     {
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
                             $"Added Encoder {element.Name}, aChannel = {Convert.ToInt32(element.Attribute("aChannel").Value)}, bChannel = {Convert.ToInt32(element.Attribute("bChannel").Value)}");
                         ActiveCollection.AddComponent(
-                            new EncoderItem(element.Name.ToString(), Convert.ToInt32(element.Attribute("aChannel").Value), Convert.ToInt32(element.Attribute("bChannel").Value)));
+                            new EncoderItem(element.Name.ToString(),
+                                Convert.ToInt32(element.Attribute("aChannel").Value),
+                                Convert.ToInt32(element.Attribute("bChannel").Value)));
                     }
                     catch (Exception ex)
                     {
@@ -159,7 +149,6 @@ namespace Base
                         if (VerboseOutput)
                             Report.Error(ex.Message);
                     }
-                }
             }
             catch (Exception ex)
             {
@@ -327,18 +316,16 @@ namespace Base
                         if (element.Attribute("upperLimit") != null)
                             upperLimit =
                                 (DigitalInputItem)
-                                    ActiveCollection.Get(toBindCommonName(element.Attribute("upperLimit"))[0]);
+                                ActiveCollection.Get(toBindCommonName(element.Attribute("upperLimit"))[0]);
                         if (element.Attribute("lowerLimit") != null)
                             lowerLimit =
                                 (DigitalInputItem)
-                                    ActiveCollection.Get(toBindCommonName(element.Attribute("lowerLimit"))[0]);
+                                ActiveCollection.Get(toBindCommonName(element.Attribute("lowerLimit"))[0]);
                         EncoderItem motorEncoder = null;
                         if (element.Attribute("encoder") != null)
-                        {
                             motorEncoder =
                                 (EncoderItem)
-                                    ActiveCollection.Get(toBindCommonName(element.Attribute("encoder"))[0]);
-                        }
+                                ActiveCollection.Get(toBindCommonName(element.Attribute("encoder"))[0]);
 
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
@@ -346,13 +333,12 @@ namespace Base
                         if (!Convert.ToBoolean(element.Attribute("drive").Value))
                         {
                             var temp = new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
-                                    element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value));
+                                element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value));
 
                             ActiveCollection.AddComponent(temp);
                             temp.setUpperLimit(upperLimit);
                             temp.setLowerLimit(lowerLimit);
                             temp.setEncoder(motorEncoder);
-
                         }
                         else
                             switch (element.Attribute("side").Value)
@@ -372,9 +358,9 @@ namespace Base
 
                                 case "left":
                                     temp =
-                                       new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
-                                           element.Name.ToString(), Side.Left,
-                                           Convert.ToBoolean(element.Attribute("reversed").Value));
+                                        new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
+                                            element.Name.ToString(), Side.Left,
+                                            Convert.ToBoolean(element.Attribute("reversed").Value));
 
                                     ActiveCollection.AddComponent(temp);
                                     temp.setUpperLimit(upperLimit);
@@ -415,18 +401,16 @@ namespace Base
                         if (element.Attribute("upperLimit") != null)
                             upperLimit =
                                 (DigitalInputItem)
-                                    ActiveCollection.Get(toBindCommonName(element.Attribute("upperLimit"))[0]);
+                                ActiveCollection.Get(toBindCommonName(element.Attribute("upperLimit"))[0]);
                         if (element.Attribute("lowerLimit") != null)
                             lowerLimit =
                                 (DigitalInputItem)
-                                    ActiveCollection.Get(toBindCommonName(element.Attribute("lowerLimit"))[0]);
+                                ActiveCollection.Get(toBindCommonName(element.Attribute("lowerLimit"))[0]);
                         EncoderItem motorEncoder = null;
                         if (element.Attribute("encoder") != null)
-                        {
                             motorEncoder =
                                 (EncoderItem)
-                                    ActiveCollection.Get(toBindCommonName(element.Attribute("encoder"))[0]);
-                        }
+                                ActiveCollection.Get(toBindCommonName(element.Attribute("encoder"))[0]);
 
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
@@ -434,7 +418,8 @@ namespace Base
 
                         if (element.Attribute("type").Value == "pwm")
                         {
-                            var temp = new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value), element.Name.ToString());
+                            var temp = new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
+                                element.Name.ToString());
                             ActiveCollection.AddComponent(temp);
                             temp.setUpperLimit(upperLimit);
                             temp.setLowerLimit(lowerLimit);
@@ -471,10 +456,9 @@ namespace Base
                                         Report.Warning($"Failed to set D for {element.Name}");
                                     }
 
-
                                     var temp = new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                            element.Name.ToString(), p, i, d,
-                                            Convert.ToBoolean(element.Attribute("reversed").Value));
+                                        element.Name.ToString(), p, i, d,
+                                        Convert.ToBoolean(element.Attribute("reversed").Value));
                                     ActiveCollection.AddComponent(temp);
                                     temp.setUpperLimit(upperLimit);
                                     temp.setLowerLimit(lowerLimit);
@@ -491,7 +475,7 @@ namespace Base
                                             new CanTalonItem(
                                                 Convert.ToInt32(element.Attribute("channel").Value),
                                                 element.Name.ToString(),
-                                                (CanTalonItem)ActiveCollection.Get(new CommonName(master)),
+                                                (CanTalonItem) ActiveCollection.Get(new CommonName(master)),
                                                 Convert.ToBoolean(element.Attribute("reversed").Value)));
                                         Report.General($"{element.Name} is a slave whose master is {master}");
                                     }
@@ -541,7 +525,7 @@ namespace Base
 
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
-                            $"Added Double Solenoid {element.Name}, forward channel {Convert.ToInt32(element.Attribute("forward").Value)}, reverse channel {Convert.ToInt32(element.Attribute("reverse").Value)}, default position = {d.ToString()}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
+                            $"Added Double Solenoid {element.Name}, forward channel {Convert.ToInt32(element.Attribute("forward").Value)}, reverse channel {Convert.ToInt32(element.Attribute("reverse").Value)}, default position = {d}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
                         ActiveCollection.AddComponent(
                             new DoubleSolenoidItem(element.Name.ToString(),
                                 Convert.ToInt32(element.Attribute("forward").Value),
@@ -587,7 +571,7 @@ namespace Base
                             d = Relay.Value.Reverse;
 
                         Report.General(
-                            $"Added Relay {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}, default position {d.ToString()}");
+                            $"Added Relay {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}, default position {d}");
                         ActiveCollection.AddComponent(
                             new RelayItem(Convert.ToInt32(element.Attribute("channel").Value),
                                 element.Name.ToString(), d));
@@ -610,21 +594,21 @@ namespace Base
                     Report.Error(ex.Message);
             }
 
-
             #endregion Relays
 
             #region Potentiometers
 
             try
             {
-                foreach (var element in getElements("RobotConfig","Potentiometers"))
+                foreach (var element in getElements("RobotConfig", "Potentiometers"))
                     try
                     {
                         componentNames.Add(new CommonName(element.Name.ToString()));
 
                         Report.General(
-                            $"Added Potentiometer {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}" );
-                            var tmp = new PotentiometerItem(Convert.ToInt32(element.Attribute("channel").Value), element.Name.ToString());
+                            $"Added Potentiometer {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
+                        var tmp = new PotentiometerItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString());
                         ActiveCollection.AddComponent(tmp);
                     }
                     catch (Exception ex)
@@ -634,7 +618,7 @@ namespace Base
                         Log.Write(ex);
                         if (VerboseOutput)
                             Report.Error(ex.Message);
-                    } 
+                    }
             }
             catch (Exception ex)
             {
@@ -645,10 +629,10 @@ namespace Base
                     Report.Error(ex.Message);
             }
 
-    #endregion Potentiometers
+            #endregion Potentiometers
 
-    #endregion channel asignments
-}
+            #endregion channel asignments
+        }
 
         private void constructVirtualControlEvents()
         {
@@ -710,7 +694,20 @@ namespace Base
         }
 
         /// <summary>
-        /// Returns the attribute of an XElement.
+        ///     Releases managed and native resources
+        /// </summary>
+        /// <param name="disposing"></param>
+        private void dispose(bool disposing)
+        {
+            if (!disposing) return;
+            lock (ActiveCollection)
+            {
+                ActiveCollection?.Dispose();
+            }
+        }
+
+        /// <summary>
+        ///     Returns the attribute of an XElement.
         /// </summary>
         /// <param name="attribute">The attribute from which to obtain the value.</param>
         /// <param name="elements">Name of elements to navigate.</param>
@@ -733,7 +730,7 @@ namespace Base
         }
 
         /// <summary>
-        /// Returns the attribute value of an XElement.
+        ///     Returns the attribute value of an XElement.
         /// </summary>
         /// <param name="attribute">The attribute from which to obtain the value.</param>
         /// <param name="elements">Name of elements to navigate.</param>
@@ -757,14 +754,14 @@ namespace Base
         }
 
         /// <summary>
-        /// Returns the last nodes Elements from a path of XElements.
+        ///     Returns the last nodes Elements from a path of XElements.
         /// </summary>
         /// <param name="elements">Name of elements to navigate.</param>
         /// <returns></returns>
         private IEnumerable<XElement> getElements(params string[] elements) => getNode(elements).Elements();
 
         /// <summary>
-        /// Returns the last nodes from a path of XElements.
+        ///     Returns the last nodes from a path of XElements.
         /// </summary>
         /// <param name="elements">Name of elements to navigate.</param>
         /// <returns></returns>
@@ -788,7 +785,7 @@ namespace Base
         }
 
         /// <summary>
-        /// Loads all relevant attributes and values from the config file.
+        ///     Loads all relevant attributes and values from the config file.
         /// </summary>
         // ReSharper disable once InconsistentNaming
         private void load()

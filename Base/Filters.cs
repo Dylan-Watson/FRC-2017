@@ -14,40 +14,40 @@ using System;
 namespace Base
 {
     /// <summary>
-    /// Defines types of fit functions for drive trains
+    ///     Defines types of fit functions for drive trains
     /// </summary>
     public enum MotorControlFitFunction
     {
         /// <summary>
-        /// Linear fit for axis to deadzone proportion
+        ///     Linear fit for axis to deadzone proportion
         /// </summary>
         Linear,
 
         /// <summary>
-        /// Quadratic fit for axis to deadzone proportion
+        ///     Quadratic fit for axis to deadzone proportion
         /// </summary>
         Quadratic,
 
         /// <summary>
-        /// Exponential fit for axis to deadzone proportion
+        ///     Exponential fit for axis to deadzone proportion
         /// </summary>
         Exponential,
 
         /// <summary>
-        /// Polynomial fit for axis to deadzone proportion
+        ///     Polynomial fit for axis to deadzone proportion
         /// </summary>
         Polynomial
     }
 
     /// <summary>
-    /// Utility class to define filters
+    ///     Utility class to define filters
     /// </summary>
     public static class Filters
     {
         #region Public Methods
 
         /// <summary>
-        /// Function that returns an output proportional (exponentially) to the axis and deadzone inputs
+        ///     Function that returns an output proportional (exponentially) to the axis and deadzone inputs
         /// </summary>
         /// <param name="x">input from axis/controller</param>
         /// <param name="dz">deadzone value</param>
@@ -66,7 +66,7 @@ namespace Base
         }
 
         /// <summary>
-        /// Function that returns an output proportional (linearly) to the axis and deadzone inputs
+        ///     Function that returns an output proportional (linearly) to the axis and deadzone inputs
         /// </summary>
         /// <param name="x">input from axis/controller</param>
         /// <param name="dz">deadzone value</param>
@@ -79,7 +79,7 @@ namespace Base
         }
 
         /// <summary>
-        /// Function that returns an output proportional (polynomial) to the axis and deadzone inputs
+        ///     Function that returns an output proportional (polynomial) to the axis and deadzone inputs
         /// </summary>
         /// <param name="x">input from axis/controller</param>
         /// <param name="dz">deadzone value</param>
@@ -98,7 +98,7 @@ namespace Base
         }
 
         /// <summary>
-        /// Function that returns an output proportional (quadratically) to the axis and deadzone inputs
+        ///     Function that returns an output proportional (quadratically) to the axis and deadzone inputs
         /// </summary>
         /// <param name="x">input from axis/controller</param>
         /// <param name="dz">deadzone value</param>

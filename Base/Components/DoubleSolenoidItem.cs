@@ -16,7 +16,7 @@ using WPILib;
 namespace Base.Components
 {
     /// <summary>
-    /// Class to handle Double Solenoid Pneumatics
+    ///     Class to handle Double Solenoid Pneumatics
     /// </summary>
     public sealed class DoubleSolenoidItem : IComponent
     {
@@ -29,7 +29,7 @@ namespace Base.Components
         #region Public Constructors
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="commonName">CommonName the DoubleSolenoid will have</param>
         /// <param name="forwardChannel">The forward channel number on the PCM [0..7]</param>
@@ -48,87 +48,52 @@ namespace Base.Components
 
         #endregion Public Constructors
 
+        #region Private Properties
+
+        /// <summary>
+        ///     Defines the default position of the solenoid
+        /// </summary>
+        private DoubleSolenoid.Value Default { get; }
+
+        #endregion Private Properties
+
         #region Public Events
 
         /// <summary>
-        /// Event used for VirtualControlEvents
+        ///     Event used for VirtualControlEvents
         /// </summary>
         public event EventHandler ValueChanged;
 
         #endregion Public Events
 
-        #region Public Methods
-
-        /// <summary>
-        /// Disposes of this IComponent and its managed resources
-        /// </summary>
-        public void Dispose()
-        {
-            dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion Public Methods
-
-        #region Protected Methods
-
-        /// <summary>
-        /// Method to fire value changes for set/get values and InUse values
-        /// </summary>
-        /// <param name="e">VirtualControlEventArgs</param>
-        private void onValueChanged(VirtualControlEventArgs e)
-        {
-            ValueChanged?.Invoke(this, e);
-        }
-
-        #endregion Protected Methods
-
-        /// <summary>
-        /// Releases managed and native resources
-        /// </summary>
-        /// <param name="disposing"></param>
-        private void dispose(bool disposing)
-        {
-            if (!disposing) return;
-            lock (solenoid)
-            {
-                solenoid?.Dispose();
-            }
-        }
-
         #region Public Properties
 
         /// <summary>
-        /// Defines wether the component is in use or not
+        ///     Defines wether the component is in use or not
         /// </summary>
         public bool InUse { get; private set; }
 
         /// <summary>
-        /// Defines if the output is reversed for forward and reverse states
+        ///     Defines if the output is reversed for forward and reverse states
         /// </summary>
         public bool IsReversed { get; private set; }
 
         /// <summary>
-        /// Name of the component
+        ///     Name of the component
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// Defines the object issuing the commands
+        ///     Defines the object issuing the commands
         /// </summary>
         public object Sender { get; private set; }
-
-        /// <summary>
-        /// Defines the default position of the solenoid
-        /// </summary>
-        private DoubleSolenoid.Value Default { get; }
 
         #endregion Public Properties
 
         #region Public Methods
 
         /// <summary>
-        /// Sets the DoubleSolenoid to its default position
+        ///     Sets the DoubleSolenoid to its default position
         /// </summary>
         public void DefaultSet()
         {
@@ -139,60 +104,69 @@ namespace Base.Components
         }
 
         /// <summary>
-        /// Gets the raw DoubleSolenoid object representing the Solenoid
+        ///     Disposes of this IComponent and its managed resources
+        /// </summary>
+        public void Dispose()
+        {
+            dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        ///     Gets the current position that the solenoid is supposed to be in
+        /// </summary>
+        /// <returns></returns>
+        public DoubleSolenoid.Value GetCurrentPosition()
+        {
+            lock (solenoid)
+            {
+                return solenoid.Get();
+            }
+        }
+
+        /// <summary>
+        ///     Gets the raw DoubleSolenoid object representing the Solenoid
         /// </summary>
         /// <returns></returns>
         public object GetRawComponent() => solenoid;
 
         /// <summary>
-        /// Gets the current position that the solenoid is supposed to be in
-        /// </summary>
-        /// <returns></returns>
-        public DoubleSolenoid.Value GetCurrentPosition() { lock (solenoid) { return solenoid.Get(); } }
-
-        /// <summary>
-        /// Sets the IsReversed flag/property to false
+        ///     Sets the IsReversed flag/property to false
         /// </summary>
         public void RestoreDirection() => IsReversed = false;
 
         /// <summary>
-        /// Sets the IsReversed flag/property to true
+        ///     Sets the IsReversed flag/property to true
         /// </summary>
         public void ReverseDirection() => IsReversed = true;
 
         /// <summary>
-        /// Sets a value to the solenoid
+        ///     Sets a value to the solenoid
         /// </summary>
         /// <param name="val">
-        /// Double, 0, 1, or 2, to set the DoubleSolenoid to Off, Forward, or Reverse, respectively
+        ///     Double, 0, 1, or 2, to set the DoubleSolenoid to Off, Forward, or Reverse, respectively
         /// </param>
         /// <param name="sender">the caller of this method</param>
         public void Set(double val, object sender)
         {
             Sender = sender;
             lock (solenoid)
-            { 
+            {
                 if ((val >= 0) && (val <= 2))
                 {
                     InUse = true;
                     if (Math.Abs(val - 2) <= Math.Abs(val*.00001))
-                    {
                         solenoid.Set(DoubleSolenoid.Value.Off);
-                    }
                     else if (Math.Abs(val - 0) <= Math.Abs(val*.00001))
-                    {
                         if (!IsReversed)
                             setForward();
                         else
                             setReverse();
-                    }
                     else if (Math.Abs(val - 1) <= Math.Abs(val*.00001))
-                    {
                         if (!IsReversed)
                             setReverse();
                         else
                             setForward();
-                    }
                 }
                 else
                 {
@@ -208,26 +182,54 @@ namespace Base.Components
         }
 
         /// <summary>
-        /// Calls the method to set the value to the solenoid
+        ///     Calls the method to set the value to the solenoid
         /// </summary>
         /// <param name="value">The enum variable to set the solenoid to</param>
         /// <param name="sender">the caller of this method</param>
         public void Set(DoubleSolenoid.Value value, object sender)
         {
             Sender = sender;
-            lock(solenoid)
-            solenoid.Set(value);
+            lock (solenoid)
+            {
+                solenoid.Set(value);
+            }
             Sender = null;
         }
 
         /// <summary>
-        /// Boolean setter, true = forward, false = reverse
+        ///     Boolean setter, true = forward, false = reverse
         /// </summary>
         /// <param name="value">boolean to set the solenoid position</param>
         /// <param name="sender">the caller of this method</param>
         public void Set(bool value, object sender)
         {
             Set(Convert.ToDouble(value), sender);
+        }
+
+        #endregion Public Methods
+
+        #region Private Methods
+
+        /// <summary>
+        ///     Releases managed and native resources
+        /// </summary>
+        /// <param name="disposing"></param>
+        private void dispose(bool disposing)
+        {
+            if (!disposing) return;
+            lock (solenoid)
+            {
+                solenoid?.Dispose();
+            }
+        }
+
+        /// <summary>
+        ///     Method to fire value changes for set/get values and InUse values
+        /// </summary>
+        /// <param name="e">VirtualControlEventArgs</param>
+        private void onValueChanged(VirtualControlEventArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
         }
 
         private void setForward()
@@ -242,6 +244,6 @@ namespace Base.Components
             onValueChanged(new VirtualControlEventArgs(0, InUse));
         }
 
-        #endregion Public Methods
+        #endregion Private Methods
     }
 }

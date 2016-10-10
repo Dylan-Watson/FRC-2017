@@ -17,27 +17,14 @@ using WPILib.Exceptions;
 namespace Base
 {
     /// <summary>
-    /// Class that stores the currently active collection of components on the robot
+    ///     Class that stores the currently active collection of components on the robot
     /// </summary>
     public sealed class ActiveCollection : IDisposable
     {
-        #region Private Fields
-
-        /*private static readonly Lazy<ActiveCollection> _lazy =
-            new Lazy<ActiveCollection>(() => new ActiveCollection());*/
-
-        #endregion Private Fields
-
-        #region Private Constructors
-
-        /*private ActiveCollection()
-        {
-        }*/
-
-        #endregion Private Constructors
+        #region Private Methods
 
         /// <summary>
-        /// Releases managed and native resources
+        ///     Releases managed and native resources
         /// </summary>
         /// <param name="disposing"></param>
         private void dispose(bool disposing)
@@ -49,59 +36,49 @@ namespace Base
             }
         }
 
-        /// <summary>
-        /// Disposes of this IComponent and its managed resources
-        /// </summary>
-        public void Dispose()
+        #endregion Private Methods
+
+        /*private static readonly Lazy<ActiveCollection> _lazy =
+            new Lazy<ActiveCollection>(() => new ActiveCollection());*/
+
+        /*private ActiveCollection()
         {
-            dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        #region Public Constructors
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public ActiveCollection() { }
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// Instance of the singleton
-        /// </summary>
-        //public static ActiveCollection Instance => _lazy.Value;
-
-        #endregion Public Properties
-
-
+        }*/
 
         #region Private Fields
 
         private readonly Dictionary<string, IComponent> componentCollection = new Dictionary<string, IComponent>();
 
+        /// <summary>
+        ///     Instance of the singleton
+        /// </summary>
+        //public static ActiveCollection Instance => _lazy.Value;
         private readonly InputComponentUpdateLoop inputComponentUpdateLoop = new InputComponentUpdateLoop();
 
         #endregion Private Fields
 
-        #region Public Methods
+        #region Public Properties
 
         /// <summary>
-        /// Gets the motors that were flagged to be on the left side fo the drive train.
+        ///     Gets the motors that were flagged to be on the left side fo the drive train.
         /// </summary>
         public List<IComponent> GetLeftDriveMotors
             => (from t in componentCollection.Values where t is Motor select t as Motor).ToList().Where
                 (t => t.DriveSide == Motor.Side.Left).ToList().Cast<IComponent>().ToList();
 
         /// <summary>
-        /// Gets the motors that were flagged to be on the right side fo the drive train.
+        ///     Gets the motors that were flagged to be on the right side fo the drive train.
         /// </summary>
         public List<IComponent> GetRightDriveMotors
             => (from t in componentCollection.Values where t is Motor select t as Motor).ToList().Where
                 (t => t.DriveSide == Motor.Side.Right).ToList().Cast<IComponent>().ToList();
 
+        #endregion Public Properties
+
+        #region Public Methods
+
         /// <summary>
-        /// Adds a component to the active collection, and reports and errors in doing so.
+        ///     Adds a component to the active collection, and reports and errors in doing so.
         /// </summary>
         /// <param name="component">The IComponent to add</param>
         public void AddComponent(IComponent component)
@@ -133,8 +110,17 @@ namespace Base
         }
 
         /// <summary>
-        /// Gets a IComponent from the active colletion by it's name. Reports any errors and returns
-        /// null should there be any.
+        ///     Disposes of this IComponent and its managed resources
+        /// </summary>
+        public void Dispose()
+        {
+            dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        ///     Gets a IComponent from the active colletion by it's name. Reports any errors and returns
+        ///     null should there be any.
         /// </summary>
         /// <param name="commonName">CommonName of the component</param>
         /// <returns></returns>
@@ -154,7 +140,7 @@ namespace Base
         }
 
         /// <summary>
-        /// Returns the dictionary containing all the active IComponent objects
+        ///     Returns the dictionary containing all the active IComponent objects
         /// </summary>
         /// <returns>"</returns>
         public Dictionary<string, IComponent> GetActiveCollection()
@@ -163,8 +149,8 @@ namespace Base
         }
 
         /// <summary>
-        /// Gets and casts an IComponents item to a Motor by it's CommonName. Reports any errors and
-        /// returns null should there be any.
+        ///     Gets and casts an IComponents item to a Motor by it's CommonName. Reports any errors and
+        ///     returns null should there be any.
         /// </summary>
         /// <param name="commonName">CommonName of the component/motor</param>
         /// <returns></returns>
@@ -185,7 +171,7 @@ namespace Base
         }
 
         /// <summary>
-        /// Disposes of all IComponents within the Active Collection, and then clears the collection
+        ///     Disposes of all IComponents within the Active Collection, and then clears the collection
         /// </summary>
         public void ReleaseActiveCollection()
         {
@@ -199,7 +185,7 @@ namespace Base
     }
 
     /// <summary>
-    /// Class to handle periodic updating of InputComponents
+    ///     Class to handle periodic updating of InputComponents
     /// </summary>
     public class InputComponentUpdateLoop : ControlLoop
     {
@@ -212,7 +198,7 @@ namespace Base
         #region Public Constructors
 
         /// <summary>
-        /// Default constructor
+        ///     Default constructor
         /// </summary>
         public InputComponentUpdateLoop()
         {
@@ -225,7 +211,7 @@ namespace Base
         #region Protected Methods
 
         /// <summary>
-        /// Method called by the ControlLoop 
+        ///     Method called by the ControlLoop
         /// </summary>
         protected override void main()
         {
@@ -242,7 +228,7 @@ namespace Base
         #region Public Methods
 
         /// <summary>
-        /// Adds an InputComponent to the list of InputComponent to be updated within the loop
+        ///     Adds an InputComponent to the list of InputComponent to be updated within the loop
         /// </summary>
         /// <param name="input"></param>
         public void AddInputComponent(InputComponent input)
@@ -254,7 +240,7 @@ namespace Base
         }
 
         /// <summary>
-        /// Clears the list of InputComponents
+        ///     Clears the list of InputComponents
         /// </summary>
         public void ClearInputComponents()
         {

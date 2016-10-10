@@ -4,14 +4,14 @@ using WPILib;
 namespace Base.Components
 {
     /// <summary>
-    /// Class to handle Digital Input Components
+    ///     Class to handle Digital Input Components
     /// </summary>
     public sealed class DigitalInputItem : InputComponent, IComponent
     {
         #region Public Constructors
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="channel">pwm channel the DIO is plugged into</param>
         /// <param name="commonName">CommonName the component will have</param>
@@ -26,50 +26,11 @@ namespace Base.Components
         #region Public Events
 
         /// <summary>
-        /// Event used for VirtualControlEvents
+        ///     Event used for VirtualControlEvents
         /// </summary>
         public event EventHandler ValueChanged;
 
         #endregion Public Events
-
-        #region Public Methods
-
-        /// <summary>
-        /// Disposes of this IComponent and its managed resources
-        /// </summary>
-        public void Dispose()
-        {
-            dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion Public Methods
-
-        #region Protected Methods
-
-        /// <summary>
-        /// Method to fire value changes for set/get values and InUse values
-        /// </summary>
-        /// <param name="e">VirtualControlEventArgs</param>
-        private void onValueChanged(VirtualControlEventArgs e)
-        {
-            ValueChanged?.Invoke(this, e);
-        }
-
-        #endregion Protected Methods
-
-        /// <summary>
-        /// Releases managed and native resources
-        /// </summary>
-        /// <param name="disposing"></param>
-        private void dispose(bool disposing)
-        {
-            if (!disposing) return;
-            lock (din)
-            {
-                din?.Dispose();
-            }
-        }
 
         #region Private Fields
 
@@ -84,17 +45,17 @@ namespace Base.Components
         #region Public Properties
 
         /// <summary>
-        /// Defines whether the component is in use or not
+        ///     Defines whether the component is in use or not
         /// </summary>
         public bool InUse { get; } = false;
 
         /// <summary>
-        /// Name of the component
+        ///     Name of the component
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// Defines the object issuing the commands
+        ///     Defines the object issuing the commands
         /// </summary>
         public object Sender { get; } = null;
 
@@ -103,7 +64,16 @@ namespace Base.Components
         #region Public Methods
 
         /// <summary>
-        /// Gets the Input Value from the DigitalInput
+        ///     Disposes of this IComponent and its managed resources
+        /// </summary>
+        public void Dispose()
+        {
+            dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        ///     Gets the Input Value from the DigitalInput
         /// </summary>
         /// <returns>Boolean</returns>
         public override double Get()
@@ -121,7 +91,7 @@ namespace Base.Components
         }
 
         /// <summary>
-        /// Gets the Input Value from the DigitalInput
+        ///     Gets the Input Value from the DigitalInput
         /// </summary>
         /// <returns>Boolean</returns>
         public bool GetBool()
@@ -139,7 +109,7 @@ namespace Base.Components
         }
 
         /// <summary>
-        /// returns din
+        ///     returns din
         /// </summary>
         /// <returns>din</returns>
         public object GetRawComponent()
@@ -148,5 +118,31 @@ namespace Base.Components
         }
 
         #endregion Public Methods
+
+        #region Private Methods
+
+        /// <summary>
+        ///     Releases managed and native resources
+        /// </summary>
+        /// <param name="disposing"></param>
+        private void dispose(bool disposing)
+        {
+            if (!disposing) return;
+            lock (din)
+            {
+                din?.Dispose();
+            }
+        }
+
+        /// <summary>
+        ///     Method to fire value changes for set/get values and InUse values
+        /// </summary>
+        /// <param name="e">VirtualControlEventArgs</param>
+        private void onValueChanged(VirtualControlEventArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
+        }
+
+        #endregion Private Methods
     }
 }

@@ -11,7 +11,6 @@ Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
 using Base;
-using Base.Components;
 using Tourniquet;
 using WPILib;
 using RobotState = Base.RobotState;
@@ -19,14 +18,14 @@ using RobotState = Base.RobotState;
 namespace RobotMain2017
 {
     /// <summary>
-    /// Class called by WPI for robot states (teleop, auto, test...)
+    ///     Class called by WPI for robot states (teleop, auto, test...)
     /// </summary>
     public class RobotMain2017 : SampleRobot
     {
         #region Public Constructors
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         public RobotMain2017()
         {
@@ -35,15 +34,6 @@ namespace RobotMain2017
         }
 
         #endregion Public Constructors
-
-        #region Protected Methods
-
-        /// <summary>
-        /// Called by WPI on robot initialization
-        /// </summary>
-        protected override void RobotInit() => Initialize.BuildControlSchema(config);
-
-        #endregion Protected Methods
 
         #region Private Methods
 
@@ -60,6 +50,7 @@ namespace RobotMain2017
         #region Private Fields
 
         private const string CONFIG_FILE = @"robot.xml";
+
         private readonly Config config = new Config();
 
         #endregion Private Fields
@@ -67,7 +58,7 @@ namespace RobotMain2017
         #region Public Methods
 
         /// <summary>
-        /// Called when auton starts
+        ///     Called when auton starts
         /// </summary>
         public override void Autonomous()
         {
@@ -78,7 +69,7 @@ namespace RobotMain2017
         }
 
         /// <summary>
-        /// Called with teleop starts
+        ///     Called with teleop starts
         /// </summary>
         public override void OperatorControl()
         {
@@ -90,7 +81,7 @@ namespace RobotMain2017
         }
 
         /// <summary>
-        /// Called when Test is run
+        ///     Called when Test is run
         /// </summary>
         public override void Test()
         {
@@ -99,8 +90,12 @@ namespace RobotMain2017
             Disabled();
         }
 
+        #endregion Public Methods
+
+        #region Protected Methods
+
         /// <summary>
-        /// Called when the robot is disabled
+        ///     Called when the robot is disabled
         /// </summary>
         protected override void Disabled()
         {
@@ -108,6 +103,11 @@ namespace RobotMain2017
             RobotStatus.Instance.NotifyState(RobotState.Disabled);
         }
 
-        #endregion Public Methods
+        /// <summary>
+        ///     Called by WPI on robot initialization
+        /// </summary>
+        protected override void RobotInit() => Initialize.BuildControlSchema(config);
+
+        #endregion Protected Methods
     }
 }

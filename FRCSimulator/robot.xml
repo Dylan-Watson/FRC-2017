@@ -14,7 +14,7 @@
   <EnableAuton value="true" />
 
   <!-- Sets whether or not to initialize the NavX-->
-  <UseNavX value="true" port="default"/>
+  <UseNavX value="true" port="default" />
 
   <!-- Contains assignments to ports and robot dimensions -->
   <RobotConfig>
@@ -22,20 +22,20 @@
     <!-- All victor assignments type="SP" or type="888"-->
     <Victors>
       <!-- Examples -->
-      <!--<xxxxxxxx type="SP" channel="x ID from roboRio" reversed="x" drive="false" optional encoder="xxxxxx" upperLimit="Name of DI" optional lowerLimit="Name of DI"/>-->
-      <rightDrive_1 type="888" channel="0" reversed="true" drive="true" side="right" encoder="test_encoder"/>
+      <!--<xxxxxxxx type="SP" channel="x ID from roboRio" reversed="x" drive="false" optional encoder="xxxxxx" upperLimit="Name of DI" optional lowerLimit="Name of DI" />-->
+      <rightDrive_1 type="888" channel="0" reversed="true" drive="true" side="right" encoder="test_encoder" />
       <rightDrive_2 type="888" channel="1" reversed="true" drive="true" side="right" />
       <!--<rightDrive_3 type="888" channel="2" reversed="false" type="drive" side="right" />-->
       <leftDrive_1 type="888" channel="2" reversed="false" drive="true" side="left" />
       <leftDrive_2 type="888" channel="3" reversed="false" drive="true" side="left" />
-      <indexer type="888" channel="10" reversed="false" drive="false"/>
+      <indexer type="888" channel="10" reversed="false" drive="false" />
       <!--<leftDrive_3 type="888" channel="5" reversed="false" type="drive" side="left" />-->
     </Victors>
 
     <!-- All CANTalon assignments -->
     <Talons>
       <!-- Examples -->
-      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="pwm" encoder="xxxxxx"/>-->
+      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="pwm" encoder="xxxxxx" />-->
       <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="master" encoder="xxxxxx" optional PID p="double" i="double" d="double" />-->
       <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="slave" encoder="xxxxxx" master="binding name (name of master talon)" />-->
 
@@ -48,7 +48,7 @@
     <!-- Encoder locations -->
     <Encoders>
       <!--<xxxxxx aChannel="x" bChannel="x" />-->
-    <test_encoder aChannel="8" bChannel="9"/>
+    <test_encoder aChannel="8" bChannel="9" />
     </Encoders>
 
     <!-- Double solenoid locations-->
@@ -74,8 +74,8 @@
 
     <!-- Analog inputs/outputs -->
     <AI>
-      <!--<xxxxxx channel="x"/>-->
-      <p_pad channel="1"/>
+      <!--<xxxxxx channel="x" />-->
+      <p_pad channel="1" />
     </AI>
 
     <AO>
@@ -83,15 +83,14 @@
     </AO>
 
     <Relays>
-      <!--<xxxxxx channel="x" optional default="off/on/reverse/forward"/>-->
-    <test_relay channel="0" default="off"/>
+      <!--<xxxxxx channel="x" optional default="off/on/reverse/forward" />-->
+    <test_relay channel="0" default="off" />
     </Relays>
 
     <Potentiometers>
       <!--<xxxxxx channel="x">-->
-      <!--<test_potentiometer channel="0"/>-->
+      <!--<test_potentiometer channel="0" />-->
     </Potentiometers>
-    
   </RobotConfig>
 
   <!-- Control assignments -->
@@ -118,7 +117,7 @@
     </Driver>
 
     <DriverAux>
-      <shiftGears type="dualButton" buttonA="5" buttonB="6" reversed ="false" bindTo="shifters"/>
+      <shiftGears type="dualButton" buttonA="5" buttonB="6" reversed ="false" bindTo="shifters" />
     </DriverAux>
 
     <!-- Operator assignments -->
@@ -127,8 +126,8 @@
       <shooter type="axis" axis="3" reversed="false" deadZone=".02" bindTo="shooter_1" />
       <hoodToggle type="toggle" button="7" reversed="true" bindTo="hood" />
       <intakeToggle type="toggle" button="8" reversed="true" bindTo="intake" />
-      <intakeIn type ="button" button="2" reversed="false" powerMultiplier=".75" bindTo="indexer"/>
-      <intakeOut type ="button" button="4" reversed="false" powerMultiplier="-.75" bindTo="indexer"/>
+      <intakeIn type ="button" button="2" reversed="false" powerMultiplier=".75" bindTo="indexer" />
+      <intakeOut type ="button" button="4" reversed="false" powerMultiplier="-.75" bindTo="indexer" />
     </Operator>
   </Controls>
 

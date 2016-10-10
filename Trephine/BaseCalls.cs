@@ -3,7 +3,7 @@
 namespace Trephine
 {
     /// <summary>
-    /// Instance based utility class for calles to Base
+    ///     Instance based utility class for calles to Base
     /// </summary>
     public class BaseCalls
     {
@@ -16,7 +16,7 @@ namespace Trephine
         #region Public Constructors
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="config">instance of the config</param>
         public BaseCalls(Config config)
@@ -29,7 +29,7 @@ namespace Trephine
         #region Public Methods
 
         /// <summary>
-        /// Full stop of the drive train
+        ///     Full stop of the drive train
         /// </summary>
         public void FullDriveStop()
         {
@@ -38,7 +38,7 @@ namespace Trephine
         }
 
         /// <summary>
-        /// Full stop of the robot
+        ///     Full stop of the robot
         /// </summary>
         public void FullStop()
         {
@@ -47,20 +47,20 @@ namespace Trephine
         }
 
         /// <summary>
-        /// Gets the instance of the config
+        ///     Gets the instance of the config
         /// </summary>
         /// <returns></returns>
         public Config GetConfig() => config;
 
         /// <summary>
-        /// Sets the left drive of the robot to a specified value
+        ///     Sets the left drive of the robot to a specified value
         /// </summary>
         /// <param name="value">value to set</param>
         public void SetLeftDrive(double value)
             => config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor) s).Set(value, this));
 
         /// <summary>
-        /// Sets the right drive of the robot to a specified value
+        ///     Sets the right drive of the robot to a specified value
         /// </summary>
         /// <param name="value">value to set</param>
         public void SetRightDrive(double value)
