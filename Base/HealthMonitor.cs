@@ -2,7 +2,7 @@
 
 namespace Base
 {
-    internal class Sensing : ControlLoop
+    internal class HealthMonitor : ControlLoop
     {
         #region Protected Methods
 
