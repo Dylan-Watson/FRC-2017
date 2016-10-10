@@ -10,10 +10,11 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-using Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Base;
+using Base.Components;
 using WPILib;
 
 namespace Tourniquet.ControlItems
@@ -27,6 +28,11 @@ namespace Tourniquet.ControlItems
         /// Button based control
         /// </summary>
         ButtonControl,
+
+        /// <summary>
+        /// Dual Button based control
+        /// </summary>
+        DualButtonControl,
 
         /// <summary>
         /// Toggle based control
@@ -111,15 +117,6 @@ namespace Tourniquet.ControlItems
         /// </summary>
         public abstract void Update();
 
-        /// <summary>
-        /// Sets a solenoid value if there is a solenoid in the controls bindings
-        /// </summary>
-        /// <param name="value">solenoid position</param>
-        protected void set(DoubleSolenoid.Value value)
-        {
-            if (!IsEnabled) return;
-        }
-
         #endregion Public Methods
 
         #region Protected Methods
@@ -150,20 +147,20 @@ namespace Tourniquet.ControlItems
                     components.OfType<OutputComponent>()
                         .Where(output => !((IComponent) output).InUse || (((IComponent) output).Sender == this)))
                 output?.Set(Math.Abs(val*5), this);
-            //times five to compensate for analog output, which has upto 5v output.
-        }
 
-        /// <summary>
-        /// NotImplementedException
-        /// </summary>
-        /// <param name="val"></param>
-        protected void set(bool val)
-        {
-            throw new NotImplementedException();
-            /*
-                        if (IsEnabled) return;
-                        StopMotors(); return;
-            */
+            foreach (
+               var output in
+                   components.OfType<DoubleSolenoidItem>()
+                       .Where(output => !output.InUse || (output.Sender == this)))
+                output.Set(val, this);
+
+            foreach (
+               var output in
+                   components.OfType<RelayItem>()
+                       .Where(output => !output.InUse || (output.Sender == this)))
+                output.Set(val, this);
+
+            //times five to compensate for analog output, which has upto 5v output.
         }
 
         /// <summary>

@@ -409,11 +409,13 @@ namespace Dashboard2017
                     bw.RunWorkerCompleted += Bw_RunWorkerCompleted;
                     bw.RunWorkerAsync();
                 }
-
-                var source = Convert.ToInt32(Settings.Default.videoSource);
-                feedHandler = new FeedHandler(source, mainVideoBox, compositVideoBox, this);
-                ConsoleManager.Instance.AppendInfo("FeedHandler created for source at : " + source);
-                feedHandler.Targeting = true;
+                else
+                {
+                    var source = Convert.ToInt32(Settings.Default.videoSource);
+                    feedHandler = new FeedHandler(source, mainVideoBox, compositVideoBox, this);
+                    ConsoleManager.Instance.AppendInfo("FeedHandler created for source at : " + source);
+                    feedHandler.Targeting = true;
+                }
             }
             catch (Exception ex)
             {
@@ -503,9 +505,22 @@ namespace Dashboard2017
                 {
                     var newState = source.GetValue(key).ToString();
                     if (currentState != newState)
+                    {
                         parent.debugControlLayoutPanel.Invoke(
                             new Action(() => parent.debugControlLayoutPanel.Controls.Clear()));
+
+                        parent.messageGroup.Invoke(new Action(() =>
+                        {
+                            parent.messageGroup.Text = newState;
+                            parent.messageGroup.Controls.Clear();
+                            parent.messageGroup.Refresh();
+                        }));
+                    }
                     currentState = newState;
+                }
+                else if (key.StartsWith(@"HEALTH_"))
+                {
+
                 }
 
                 parent.debugControlLayoutPanel.Invoke(new Action(() =>

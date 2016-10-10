@@ -74,7 +74,8 @@
 
     <!-- Analog inputs/outputs -->
     <AI>
-      <!--<xxxxxx channel="x" />-->
+      <!--<xxxxxx channel="x"/>-->
+      <p_pad channel="1"/>
     </AI>
 
     <AO>
@@ -83,12 +84,12 @@
 
     <Relays>
       <!--<xxxxxx channel="x" optional default="off/on/reverse/forward"/>-->
-    <test_relay channel="0" default="on"/>
+    <test_relay channel="0" default="off"/>
     </Relays>
 
     <Potentiometers>
       <!--<xxxxxx channel="x">-->
-      <test_potentiometer channel="0"/>
+      <!--<test_potentiometer channel="0"/>-->
     </Potentiometers>
     
   </RobotConfig>
@@ -117,18 +118,22 @@
     </Driver>
 
     <DriverAux>
+      <shiftGears type="dualButton" buttonA="5" buttonB="6" reversed ="false" bindTo="shifters"/>
     </DriverAux>
 
     <!-- Operator assignments -->
     <Operator>
       <slot controllerSlot="1" />
       <shooter type="axis" axis="3" reversed="false" deadZone=".02" bindTo="shooter_1" />
+      <hoodToggle type="toggle" button="7" reversed="true" bindTo="hood" />
+      <intakeToggle type="toggle" button="8" reversed="true" bindTo="intake" />
+      <intakeIn type ="button" button="2" reversed="false" powerMultiplier=".75" bindTo="indexer"/>
+      <intakeOut type ="button" button="4" reversed="false" powerMultiplier="-.75" bindTo="indexer"/>
     </Operator>
   </Controls>
 
   <!-- Event assignments -->
   <!-- types= 'value' or 'usage'; setMethods= 'passthrough' or 'adjusted'-->
   <VirtualControlEvents>
-    <test_event type="value" drivers="test_di" actions="hood" setMethod="passthrough" teleop="true" auton="false" />
   </VirtualControlEvents>
 </Robot>

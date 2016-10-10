@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using WPILib;
 using WPILib.Extras.NavX;
 

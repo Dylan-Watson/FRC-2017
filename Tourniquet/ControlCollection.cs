@@ -11,6 +11,7 @@ Email: cooper.ryan@centaurisoft.org
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Tourniquet.ControlItems;
 
 namespace Tourniquet
@@ -60,6 +61,18 @@ namespace Tourniquet
         {
             lock (operatorControlItems)
                 return operatorControlItems;
+        }
+
+        public ControlItem GetDriverControl(string name)
+        {
+            lock (driverControlItems)
+                return driverControlItems.FirstOrDefault(x => x.ControlName == name);
+        }
+
+        public ControlItem GetOperatorControl(string name)
+        {
+            lock (operatorControlItems)
+                return operatorControlItems.FirstOrDefault(x => x.ControlName == name);
         }
 
         #endregion Public Methods

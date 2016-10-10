@@ -40,7 +40,7 @@ namespace Tourniquet.ControlItems
         public AxisControl(string name, Joystick joystick, int axis, MotorControlFitFunction fitFunction, bool reversed,
             double deadZone, bool isEnabled, double multiplier = 1, double power = 2)
         {
-            IsEnabled = IsEnabled;
+            IsEnabled = isEnabled;
             ControlName = name;
             ControlType = ControlItemType.AxisControl;
             this.deadZone = deadZone;

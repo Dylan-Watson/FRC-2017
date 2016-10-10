@@ -250,9 +250,10 @@ namespace Base
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
                             $"Added Analog Input {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
-                        ActiveCollection.AddComponent(
-                            new AnalogInputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString()));
+                        var tmp = new AnalogInputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString());
+
+                        ActiveCollection.AddComponent(tmp);
                     }
                     catch (Exception ex)
                     {
@@ -623,8 +624,8 @@ namespace Base
 
                         Report.General(
                             $"Added Potentiometer {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}" );
-                        ActiveCollection.AddComponent(
-                            new PotentiometerItem(Convert.ToInt32(element.Attribute("channel").Value), element.Name.ToString()));
+                            var tmp = new PotentiometerItem(Convert.ToInt32(element.Attribute("channel").Value), element.Name.ToString());
+                        ActiveCollection.AddComponent(tmp);
                     }
                     catch (Exception ex)
                     {

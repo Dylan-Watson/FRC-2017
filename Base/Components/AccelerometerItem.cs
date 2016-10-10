@@ -1,5 +1,5 @@
 ﻿/****************************** Header ******************************\
-Class Name: AccelerometerItem, inherits IComponent
+Class Name: RioAccelerometerItem, inherits IComponent and WPI BuiltinAccelerometer, this is a singleton
 Summary: Abstraction for the WPIlib BuiltInAccelerometer that extends to include
 some helper and reading methods.
 Project:     FRC2017
@@ -18,21 +18,19 @@ namespace Base.Components
     /// <summary>
     ///     Class to handle the RoboRio's Built In Accelerometer
     /// </summary>
-    public class AccelerometerItem : IComponent
+    public class RioAccelerometerItem : BuiltInAccelerometer, IComponent
     {
-        #region Public Constructors
+        private static readonly Lazy<RioAccelerometerItem> _lazy = new Lazy<RioAccelerometerItem>(() => new RioAccelerometerItem());
 
-        /// <summary>
-        ///     Constructor
-        /// </summary>
-        /// <param name="commonName">CommonName the component will have</param>
-        public AccelerometerItem(string commonName)
+
+        private RioAccelerometerItem()
         {
-            aa = new BuiltInAccelerometer();
-            Name = commonName;
         }
 
-        #endregion Public Constructors
+        /// <summary>
+        ///     Gets the instance (if any) of the builtin accelerometer
+        /// </summary>
+        public static RioAccelerometerItem Instance => _lazy?.Value;
 
         #region Public Events
 
@@ -43,13 +41,21 @@ namespace Base.Components
 
         #endregion Public Events
 
-        #region Private Fields
+        #region Public Methods
 
-        private readonly BuiltInAccelerometer aa;
+        [Obsolete("This object does not need to be disposed of, as it is a standard singleton.")]
+        public void Dispose()
+        {
+        }
 
-        #endregion Private Fields
+        #endregion Public Methods
 
         #region Public Properties
+
+        public object GetRawComponent()
+        {
+            return this;
+        }
 
         /// <summary>
         ///     Defines whether the component is in use or not
@@ -59,7 +65,7 @@ namespace Base.Components
         /// <summary>
         ///     Name of the component
         /// </summary>
-        public string Name { get; }
+        public string Name { get; } = "BuiltInAccelerometer";
 
         /// <summary>
         ///     Defines the object issuing the commands
@@ -67,68 +73,5 @@ namespace Base.Components
         public object Sender { get; } = null;
 
         #endregion Public Properties
-
-        #region Public Methods
-
-        public void Dispose() {}
-
-        /// <summary>
-        ///     Return the WPILib BuiltInAccelerometer
-        /// </summary>
-        /// <returns>WPILib.BuiltInAccelerometer aa</returns>
-        public object GetRawComponent()
-        {
-            return aa;
-        }
-
-        /// <summary>
-        ///     Return the X, Y, Z axes of the BuiltInAccelerometer
-        /// </summary>
-        /// <returns>WPILib.Interfaces.AllAxes</returns>
-        public WPILib.Interfaces.AllAxes GetAllAxes()
-        {
-            lock (aa)
-            {
-                return aa.GetAllAxes();
-            }
-        }
-
-        /// <summary>
-        ///     Gets the X Axis of the BuiltInAccelerometer
-        /// </summary>
-        /// <returns></returns>
-        public double GetX()
-        {
-            lock (aa)
-            {
-                return aa.GetX();
-            }
-        }
-
-        /// <summary>
-        ///     Gets the Y Axis of the BuiltInAccelerometer
-        /// </summary>
-        /// <returns></returns>
-        public double GetY()
-        {
-            lock (aa)
-            {
-                return aa.GetY();
-            }
-        }
-
-        /// <summary>
-        ///     Gets the Z Axis of the BuiltInAccelerometer
-        /// </summary>
-        /// <returns></returns>
-        public double GetZ()
-        {
-            lock (aa)
-            {
-                return aa.GetZ();
-            }
-        }
-
-        #endregion Public Methods
     }
 }

@@ -13,6 +13,7 @@ Email: dylantrwatson@gmail.com, cooper.ryan@centaurisoft.org
 
 using System;
 using WPILib;
+
 namespace Base.Components
 {
     /// <summary>
@@ -130,6 +131,36 @@ namespace Base.Components
             InUse = false;
         }
 
+        public void Set(double val, object sender)
+        {
+            if ((val >= 0) && (val <= 2))
+            {
+                InUse = true;
+                if (Math.Abs(val - 2) <= Math.Abs(val*.00001))
+                {
+                    Set(Relay.Value.Off, sender);
+                }
+                else if (Math.Abs(val - 0) <= Math.Abs(val*.00001))
+                {
+                    Set(!IsReversed ? Relay.Value.Forward : Relay.Value.Reverse, sender);
+                }
+                else if (Math.Abs(val - 1) <= Math.Abs(val*.00001))
+                {
+                    Set(!IsReversed ? Relay.Value.Reverse : Relay.Value.Forward, sender);
+                }
+            }
+            else
+            {
+                Report.Error(
+                    $"The valid arguments for Relay {Name} is Off, Forward, and Reverse (-1, 1, 0). {sender} tried to set a value not in this range.");
+                throw new ArgumentOutOfRangeException(nameof(val),
+                    $"The valid arguments for Relay {Name} is Off, Forward, and Reverse (-1, 1, 0). {sender} tried to set a value not in this range.");
+            }
+            Sender = null;
+            InUse = false;
+            onValueChanged(new VirtualControlEventArgs(-1, InUse));
+        }
+
         /// <summary>
         /// Disposes of this IComponent and its managed resources
         /// </summary>
@@ -142,7 +173,13 @@ namespace Base.Components
         /// <summary>
         /// Sets the Relay to its default position
         /// </summary>
-        public void DefaultSet() { lock (relay) { relay.Set(Default); } }
+        public void DefaultSet()
+        {
+            lock (relay)
+            {
+                relay.Set(Default);
+            }
+        }
 
         /// <summary>
         /// Gets the raw Relay object representing the Relay
@@ -154,7 +191,13 @@ namespace Base.Components
         /// Gets the current position that the relay is supposed to be in
         /// </summary>
         /// <returns></returns>
-        public Relay.Value GetCurrentPosition() { lock (relay) { return relay.Get(); } }
+        public Relay.Value GetCurrentPosition()
+        {
+            lock (relay)
+            {
+                return relay.Get();
+            }
+        }
 
         /// <summary>
         /// Sets the Relay to the Off Position

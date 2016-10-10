@@ -19,7 +19,7 @@ namespace Base
 
         #region Private Constructors
 
-        private DashboardComms()
+        internal DashboardComms()
         {
             RobotStatus.Instance.RobotStatusChanged += Instance_RobotStatusChanged;
         }
@@ -68,6 +68,16 @@ namespace Base
                 dashboard.PutValue($"AUTON_{key}", value);
             else
                 dashboard.PutValue($"{key}", value);
+        }
+
+        /// <summary>
+        /// Sends data to the dashboard
+        /// </summary>
+        /// <param name="key">network table key</param>
+        /// <param name="value">object value to send</param>
+        public void SendHealthData(string key, object value)
+        {
+                dashboard.PutValue($"HEALTH_{key}", value);
         }
 
         /// <summary>

@@ -60,7 +60,10 @@
   <ItemGroup>
     <Compile Include="ControlCollection.cs" />
     <Compile Include="ControlItems\AxisControl.cs" />
+    <Compile Include="ControlItems\ButtonControl.cs" />
     <Compile Include="ControlItems\ControlItem.cs" />
+    <Compile Include="ControlItems\DualButtonControl.cs" />
+    <Compile Include="ControlItems\ToggleButtonControl.cs" />
     <Compile Include="Initialize.cs" />
     <Compile Include="Sensing.cs" />
     <Compile Include="Operator.cs" />

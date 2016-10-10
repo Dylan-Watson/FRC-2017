@@ -171,7 +171,7 @@ namespace Base.Components
         {
             Sender = sender;
             lock (solenoid)
-            {
+            { 
                 if ((val >= 0) && (val <= 2))
                 {
                     InUse = true;

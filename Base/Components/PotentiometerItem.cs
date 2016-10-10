@@ -100,6 +100,7 @@ namespace Base.Components
             }
         }
 
+
         /// <summary>
         ///     Return the WPILib AnalogPotentiometer
         /// </summary>

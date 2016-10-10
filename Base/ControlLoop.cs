@@ -59,7 +59,7 @@ namespace Base
 
         #region Private Fields
 
-        private double cycleTime = .005;
+        private double cycleTime = .05;
         private bool kill;
         private Task thread;
 
@@ -70,7 +70,7 @@ namespace Base
         /// <summary>
         /// Sets the time in miliseconds that the loop will wait to its default value, .005 seconds
         /// </summary>
-        public void DefaultCycleTime() => cycleTime = .005;
+        public void SetToDefaultCycleTime() => cycleTime = .05;
 
         /// <summary>
         /// Kills or aborts the loop at next possible time
