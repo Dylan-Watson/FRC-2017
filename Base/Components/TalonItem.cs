@@ -46,6 +46,7 @@ namespace Base.Components
             IsReversed = isReversed;
             talon.MotorControlMode = ControlMode.PercentVbus;
             talon.ControlEnabled = true;
+            talon.SafetyEnabled = true;
         }
 
         /// <summary>
@@ -70,6 +71,7 @@ namespace Base.Components
             talon.FeedBackDevice = CANTalon.FeedbackDevice.QuadEncoder;
             talon.SetPID(p, i, d);
             talon.ControlEnabled = true;
+            talon.SafetyEnabled = true;
         }
 
         /// <summary>
@@ -89,6 +91,7 @@ namespace Base.Components
             talon.MotorControlMode = ControlMode.Follower;
             master.AddSlave(this);
             this.master = master.Name;
+            talon.SafetyEnabled = true;
         }
 
         #endregion Public Constructors

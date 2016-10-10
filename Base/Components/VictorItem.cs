@@ -72,6 +72,7 @@ namespace Base.Components
 
             Name = commonName;
             IsReversed = isReversed;
+            victor.SafetyEnabled = true;
         }
 
         /// <summary>
@@ -94,6 +95,7 @@ namespace Base.Components
             IsReversed = isReversed;
             IsDrivetrainMotor = true;
             DriveSide = side;
+            victor.SafetyEnabled = true;
         }
 
         #endregion Public Constructors
