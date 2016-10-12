@@ -115,7 +115,7 @@ namespace Base
         public void Dispose()
         {
             dispose(true);
-            GC.SuppressFinalize(this);
+            //GC.SuppressFinalize(this);
         }
 
         /// <summary>

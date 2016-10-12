@@ -9,16 +9,14 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoftware.co
 \********************************************************************/
 
-using Base.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Base.Components;
 using WPILib;
-using static Base.Motor;
-using static Base.Schemas;
 
-namespace Base
+namespace Base.Config
 {
     /// <summary>
     ///     Manages and loads the configuration file from XML.
@@ -61,12 +59,12 @@ namespace Base
         /// <summary>
         ///     Instance of the driver's control schema to be used thoughout the program.
         /// </summary>
-        public DriverConfig DriverConfig { get; private set; }
+        public Schemas.DriverConfig DriverConfig { get; private set; }
 
         /// <summary>
         ///     Instance of the operators's control schema to be used thoughout the program.
         /// </summary>
-        public OperatorConfig OperatorConfig { get; private set; }
+        public Schemas.OperatorConfig OperatorConfig { get; private set; }
 
         /// <summary>
         ///     Boolean flag to set QuickLoad mode, see reference manule for details.
@@ -88,7 +86,7 @@ namespace Base
         public void Dispose()
         {
             dispose(true);
-            GC.SuppressFinalize(this);
+            //GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -336,9 +334,9 @@ namespace Base
                                 element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value));
 
                             ActiveCollection.AddComponent(temp);
-                            temp.setUpperLimit(upperLimit);
-                            temp.setLowerLimit(lowerLimit);
-                            temp.setEncoder(motorEncoder);
+                            temp.SetUpperLimit(upperLimit);
+                            temp.SetLowerLimit(lowerLimit);
+                            temp.SetEncoder(motorEncoder);
                         }
                         else
                             switch (element.Attribute("side").Value)
@@ -346,26 +344,26 @@ namespace Base
                                 case "right":
                                     var temp =
                                         new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
-                                            element.Name.ToString(), Side.Right,
+                                            element.Name.ToString(), Motor.Side.Right,
                                             Convert.ToBoolean(element.Attribute("reversed").Value));
 
                                     ActiveCollection.AddComponent(temp);
-                                    temp.setUpperLimit(upperLimit);
-                                    temp.setLowerLimit(lowerLimit);
-                                    temp.setEncoder(motorEncoder);
+                                    temp.SetUpperLimit(upperLimit);
+                                    temp.SetLowerLimit(lowerLimit);
+                                    temp.SetEncoder(motorEncoder);
 
                                     break;
 
                                 case "left":
                                     temp =
                                         new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
-                                            element.Name.ToString(), Side.Left,
+                                            element.Name.ToString(), Motor.Side.Left,
                                             Convert.ToBoolean(element.Attribute("reversed").Value));
 
                                     ActiveCollection.AddComponent(temp);
-                                    temp.setUpperLimit(upperLimit);
-                                    temp.setLowerLimit(lowerLimit);
-                                    temp.setEncoder(motorEncoder);
+                                    temp.SetUpperLimit(upperLimit);
+                                    temp.SetLowerLimit(lowerLimit);
+                                    temp.SetEncoder(motorEncoder);
                                     break;
                             }
                     }
@@ -421,9 +419,9 @@ namespace Base
                             var temp = new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
                                 element.Name.ToString());
                             ActiveCollection.AddComponent(temp);
-                            temp.setUpperLimit(upperLimit);
-                            temp.setLowerLimit(lowerLimit);
-                            temp.setEncoder(motorEncoder);
+                            temp.SetUpperLimit(upperLimit);
+                            temp.SetLowerLimit(lowerLimit);
+                            temp.SetEncoder(motorEncoder);
                         }
                         else
                             switch (element.Attribute("type").Value)
@@ -460,9 +458,9 @@ namespace Base
                                         element.Name.ToString(), p, i, d,
                                         Convert.ToBoolean(element.Attribute("reversed").Value));
                                     ActiveCollection.AddComponent(temp);
-                                    temp.setUpperLimit(upperLimit);
-                                    temp.setLowerLimit(lowerLimit);
-                                    temp.setEncoder(motorEncoder);
+                                    temp.SetUpperLimit(upperLimit);
+                                    temp.SetLowerLimit(lowerLimit);
+                                    temp.SetEncoder(motorEncoder);
                                     Report.General($"{element.Name} is a master with PID set to {p}, {i}, {d}");
                                     break;
 
@@ -671,7 +669,7 @@ namespace Base
                         var drivers = toBindCommonName(element.Attribute("drivers"));
                         var actors = toBindCommonName(element.Attribute("actions"));
 
-                        var tmp = new VirtualControlEvent(this, type, setMethod, enInAuton, enInTeleop,
+                        var tmp = new VirtualControlEvent(type, setMethod, enInAuton, enInTeleop,
                             drivers.Select(driver => ActiveCollection.Get(driver)).ToArray());
                         tmp.AddActionComponents(actors.Select(actor => ActiveCollection.Get(actor)).ToArray());
                     }
@@ -855,15 +853,15 @@ namespace Base
                         Report.Error(ex.Message);
                 }
 
-                var left = new DriverControlSchema("leftDrive", (MotorControlFitFunction) driveFit, driveFitPower,
+                var left = new Schemas.DriverControlSchema("leftDrive", (MotorControlFitFunction) driveFit, driveFitPower,
                     toBindCommonName(getAttribute("bindTo", "Controls", "Driver", "leftDrive")), leftAxis, leftDz,
                     multiplier, leftReversed);
 
-                var right = new DriverControlSchema("rightDrive", (MotorControlFitFunction) driveFit, driveFitPower,
+                var right = new Schemas.DriverControlSchema("rightDrive", (MotorControlFitFunction) driveFit, driveFitPower,
                     toBindCommonName(getAttribute("bindTo", "Controls", "Driver", "rightDrive")), rightAxis, rightDz,
                     multiplier, rightReversed);
 
-                var temp = new List<ControlSchema>();
+                var temp = new List<Schemas.ControlSchema>();
                 foreach (var element in getElements("Controls", "DriverAux"))
                 {
                     bool reversed;
@@ -886,9 +884,9 @@ namespace Base
                         reversed = false;
                     }
 
-                    switch (ControlSchema.GetControlTypeFromAttribute(element.Attribute("type")))
+                    switch (Schemas.ControlSchema.GetControlTypeFromAttribute(element.Attribute("type")))
                     {
-                        case ControlType.Axis:
+                        case Schemas.ControlType.Axis:
                             double deadZone = 0;
                             try
                             {
@@ -900,35 +898,35 @@ namespace Base
                                 if (VerboseOutput)
                                     Report.Error(ex.Message);
                             }
-                            temp.Add(new ControlSchema(element.Name.ToString(), ControlType.Axis,
+                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Axis,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("axis").Value), deadZone,
                                 powerMultiplier, reversed));
                             break;
 
-                        case ControlType.Button:
-                            temp.Add(new ControlSchema(element.Name.ToString(), ControlType.Button,
+                        case Schemas.ControlType.Button:
+                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Button,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("button").Value), powerMultiplier, reversed));
                             break;
 
-                        case ControlType.DualButton:
-                            temp.Add(new ControlSchema(element.Name.ToString(), ControlType.DualButton,
+                        case Schemas.ControlType.DualButton:
+                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.DualButton,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("buttonA").Value),
                                 Convert.ToInt32(element.Attribute("buttonB").Value),
                                 powerMultiplier, reversed));
                             break;
 
-                        case ControlType.ToggleButton:
-                            temp.Add(new ControlSchema(element.Name.ToString(), ControlType.ToggleButton,
+                        case Schemas.ControlType.ToggleButton:
+                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.ToggleButton,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("button").Value), powerMultiplier, reversed));
                             break;
                     }
                 }
 
-                DriverConfig = new DriverConfig(new Joystick(controllerSlot), left, right, temp); //add driver stuff
+                DriverConfig = new Schemas.DriverConfig(new Joystick(controllerSlot), left, right, temp); //add driver stuff
             }
             catch (Exception ex)
             {
@@ -947,7 +945,7 @@ namespace Base
 
             try
             {
-                var temp = new List<ControlSchema>();
+                var temp = new List<Schemas.ControlSchema>();
                 foreach (var element in getElements("Controls", "Operator").Where(element => element.Name != "slot"))
                 {
                     bool reversed;
@@ -970,9 +968,9 @@ namespace Base
                         reversed = false;
                     }
 
-                    switch (ControlSchema.GetControlTypeFromAttribute(element.Attribute("type")))
+                    switch (Schemas.ControlSchema.GetControlTypeFromAttribute(element.Attribute("type")))
                     {
-                        case ControlType.Axis:
+                        case Schemas.ControlType.Axis:
                             double deadZone = 0;
                             try
                             {
@@ -984,28 +982,28 @@ namespace Base
                                 if (VerboseOutput)
                                     Report.Error(ex.Message);
                             }
-                            temp.Add(new ControlSchema(element.Name.ToString(), ControlType.Axis,
+                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Axis,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("axis").Value), deadZone,
                                 powerMultiplier, reversed));
                             break;
 
-                        case ControlType.Button:
-                            temp.Add(new ControlSchema(element.Name.ToString(), ControlType.Button,
+                        case Schemas.ControlType.Button:
+                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Button,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("button").Value), powerMultiplier, reversed));
                             break;
 
-                        case ControlType.DualButton:
-                            temp.Add(new ControlSchema(element.Name.ToString(), ControlType.DualButton,
+                        case Schemas.ControlType.DualButton:
+                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.DualButton,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("buttonA").Value),
                                 Convert.ToInt32(element.Attribute("buttonB").Value),
                                 powerMultiplier, reversed));
                             break;
 
-                        case ControlType.ToggleButton:
-                            temp.Add(new ControlSchema(element.Name.ToString(), ControlType.ToggleButton,
+                        case Schemas.ControlType.ToggleButton:
+                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.ToggleButton,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("button").Value), powerMultiplier, reversed));
                             break;
@@ -1111,7 +1109,7 @@ namespace Base
                 #endregion Warning checkes
 
                 OperatorConfig =
-                    new OperatorConfig(
+                    new Schemas.OperatorConfig(
                         new Joystick(Convert.ToInt32(getAttributeValue("controllerSlot", "Controls", "Operator", "slot"))),
                         temp);
             }
