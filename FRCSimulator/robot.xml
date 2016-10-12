@@ -23,7 +23,7 @@
     <Victors>
       <!-- Examples -->
       <!--<xxxxxxxx type="SP" channel="x ID from roboRio" reversed="x" drive="false" optional encoder="xxxxxx" upperLimit="Name of DI" optional lowerLimit="Name of DI" />-->
-      <rightDrive_1 type="888" channel="0" reversed="true" drive="true" side="right" encoder="test_encoder" />
+      <rightDrive_1 type="888" channel="0" reversed="true" drive="true" side="right" />
       <rightDrive_2 type="888" channel="1" reversed="true" drive="true" side="right" />
       <!--<rightDrive_3 type="888" channel="2" reversed="false" type="drive" side="right" />-->
       <leftDrive_1 type="888" channel="2" reversed="false" drive="true" side="left" />

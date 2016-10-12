@@ -72,7 +72,6 @@ namespace Base.Components
 
             Name = commonName;
             IsReversed = isReversed;
-            victor.SafetyEnabled = true;
         }
 
         /// <summary>
@@ -95,7 +94,6 @@ namespace Base.Components
             IsReversed = isReversed;
             IsDrivetrainMotor = true;
             DriveSide = side;
-            victor.SafetyEnabled = true;
         }
 
         #endregion Public Constructors
@@ -192,7 +190,7 @@ namespace Base.Components
                 }
                 else if (InUse)
                 {
-                    victor.StopMotor();
+                    victor.Set(0);
                     InUse = false;
                     onValueChanged(new VirtualControlEventArgs(val, InUse));
                 }
@@ -221,7 +219,7 @@ namespace Base.Components
         {
             lock (victor)
             {
-                victor.StopMotor();
+                victor.Set(0);
                 InUse = false;
                 Sender = null;
                 onValueChanged(new VirtualControlEventArgs(0, InUse));
