@@ -191,7 +191,6 @@ namespace Dashboard2017
                 return new Tuple<Mat, Image<Gray, byte>>(original, imageHsvDest);
             }
             //if there are no good targets, return the frame unaltered
-
             var xCentre = original.Size.Width/2;
             var largestAndClosest = circles[0];
 
