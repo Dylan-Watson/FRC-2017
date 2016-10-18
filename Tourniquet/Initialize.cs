@@ -11,8 +11,9 @@ Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
 using Base;
+using Base.Config;
 using Tourniquet.ControlItems;
-using static Base.Schemas;
+using static Base.Config.Schemas;
 
 namespace Tourniquet
 {

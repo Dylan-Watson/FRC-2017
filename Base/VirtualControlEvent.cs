@@ -24,13 +24,12 @@ namespace Base
         /// <summary>
         ///     Default constructor
         /// </summary>
-        /// <param name="config">instance of the config</param>
         /// <param name="eventType">type of VirtualControlEvent</param>
         /// <param name="setMethod">the SetMethod to use</param>
         /// <param name="drivers">the drivers; IComponents that fire this event</param>
         /// <param name="enabledDuringAuton">determins whether action will be taken during auton</param>
         /// <param name="enabledDuringTeleop">determins whether action will be taken during teleop</param>
-        public VirtualControlEvent(Config config, VirtualControlEventType eventType,
+        public VirtualControlEvent(VirtualControlEventType eventType,
             VirtualControlEventSetMethod setMethod, bool enabledDuringAuton, bool enabledDuringTeleop,
             params IComponent[] drivers)
         {

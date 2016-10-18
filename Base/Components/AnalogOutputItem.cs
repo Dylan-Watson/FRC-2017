@@ -99,7 +99,7 @@ namespace Base.Components
         public void Dispose()
         {
             dispose(true);
-            GC.SuppressFinalize(this);
+            //GC.SuppressFinalize(this);
         }
 
         /// <summary>

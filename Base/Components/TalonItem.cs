@@ -37,8 +37,6 @@ namespace Base.Components
         /// <param name="channel">channel/address of the talon</param>
         /// <param name="commonName">CommonName the component will have</param>
         /// <param name="isReversed">if the controller output should be reversed</param>
-        /// <param name="upperLimit">Limit switch to prevent the motor from moving forward</param>
-        /// <param name="lowerLimit">Limit switch to prevent the motor from moving reverse</param>
         public CanTalonItem(int channel, string commonName, bool isReversed = false)
         {
             talon = new CANTalon(channel);
@@ -57,8 +55,6 @@ namespace Base.Components
         /// <param name="i">integral</param>
         /// <param name="d">derivative</param>
         /// <param name="isReversed">if the controller output should be reversed</param>
-        /// <param name="upperLimit">Limit switch to prevent the motor from moving forward</param>
-        /// <param name="lowerLimit">Limit switch to prevent the motor from moving reverse</param>
         public CanTalonItem(int channel, string commonName, double p, double i, double d, bool isReversed = false)
         {
             talon = new CANTalon(channel);
@@ -136,7 +132,7 @@ namespace Base.Components
         public void Dispose()
         {
             dispose(true);
-            GC.SuppressFinalize(this);
+            //GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -300,17 +296,17 @@ namespace Base.Components
             }
         }
 
-        public void setEncoder(EncoderItem encoder)
+        public void SetEncoder(EncoderItem encoder)
         {
             Encoder = encoder;
         }
 
-        public void setLowerLimit(DigitalInputItem lowerLimit)
+        public void SetLowerLimit(DigitalInputItem lowerLimit)
         {
             LowerLimit = lowerLimit;
         }
 
-        public void setUpperLimit(DigitalInputItem upperLimit)
+        public void SetUpperLimit(DigitalInputItem upperLimit)
         {
             UpperLimit = upperLimit;
         }

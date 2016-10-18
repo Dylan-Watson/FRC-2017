@@ -11,6 +11,7 @@ Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
 using Base;
+using Base.Config;
 using Tourniquet;
 using WPILib;
 using RobotState = Base.RobotState;

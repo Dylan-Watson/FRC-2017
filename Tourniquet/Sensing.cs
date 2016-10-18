@@ -11,6 +11,7 @@ Email: cooper.ryan@centaurisoft.org
 
 using Base;
 using Base.Components;
+using Base.Config;
 
 namespace Tourniquet
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Xml.Linq;
 using WPILib;
 
-namespace Base
+namespace Base.Config
 {
     /// <summary>
     ///     Class to store all relevant ControlSchemas
