@@ -76,15 +76,7 @@ namespace RobotMain2017
         {
             quickLoad();
             RobotStatus.Instance.NotifyState(RobotState.Teleop);
-            var p = new PixyCam();
-
-            while (!p.getStart()) ;
-            while (true)
-            {
-                var t = p.getWord();
-                Report.General($"Get Word: {t}");
-            }
-
+            
             new Sensing(config).Start();
             new Driver().Start();
             new Operator().Start();
