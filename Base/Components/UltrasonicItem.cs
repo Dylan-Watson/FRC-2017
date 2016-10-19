@@ -1,8 +1,8 @@
 ﻿/****************************** Header ******************************\
-Class Name: PotentiometerItem, inherits IComponent and InputComponent
-Summary: Abstraction for the WPIlib AnalogPot. that extends to include
-some helper and reading methods.
-Project:     FRC2017
+Class Name: UltrasonicItem inherits InputComponent and IComponent
+Summary: Abstraction for the WPIlib Ultrasonic that extends to include
+some helper and control methods.
+Project:     FRC2017.
 Copyright (c) BroncBotz.
 All rights reserved.
 
@@ -15,25 +15,37 @@ using WPILib;
 
 namespace Base.Components
 {
+
     /// <summary>
-    ///     Class to handle the Potentiometer Components
+    ///     Class to handle UltrasonicItem Sensor Components
     /// </summary>
-    public sealed class PotentiometerItem : InputComponent, IComponent
+    public sealed class UltrasonicItem : InputComponent, IComponent
     {
-        #region Public Constructors
+
+        #region Public Constructor
 
         /// <summary>
         ///     Constructor
         /// </summary>
-        /// <param name="channel">The analog channel this potentiometer is plugged into.</param>
         /// <param name="commonName">CommonName the component will have</param>
-        public PotentiometerItem(int channel, string commonName)
+        /// <param name="pingChannel"></param>
+        /// <param name="echoChannel"></param>
+        /// <param name="unit"></param>
+        public UltrasonicItem(string commonName, int pingChannel, int echoChannel, Ultrasonic.Unit unit = 
+                  Ultrasonic.Unit.Millimeters)
         {
-            apt = new AnalogPotentiometer(channel);
+            u = new Ultrasonic(pingChannel, echoChannel, unit);
             Name = commonName;
+            Unit = unit;
         }
 
-        #endregion Public Constructors
+        #endregion Public Constructor
+
+        #region Private Fields
+
+        private Ultrasonic u;
+
+        #endregion Private Fields 
 
         #region Public Events
 
@@ -43,14 +55,6 @@ namespace Base.Components
         public event EventHandler ValueChanged;
 
         #endregion Public Events
-
-        #region Private Fields
-
-        private readonly AnalogPotentiometer apt;
-
-        private double previousInput;
-
-        #endregion Private Fields
 
         #region Public Properties
 
@@ -69,9 +73,23 @@ namespace Base.Components
         /// </summary>
         public object Sender { get; } = null;
 
+        /// <summary>
+        ///     Defines the Units the Ultrasonic will measure in -> Inches or MM
+        /// </summary>
+        public Ultrasonic.Unit Unit { get; }
+
         #endregion Public Properties
 
         #region Public Methods
+
+        /// <summary>
+        ///     returns ain
+        /// </summary>
+        /// <returns>ain</returns>
+        public object GetRawComponent()
+        {
+            return u;
+        }
 
         /// <summary>
         ///     Disposes of this IComponent and its managed resources
@@ -83,30 +101,22 @@ namespace Base.Components
         }
 
         /// <summary>
-        ///     Gets the current value of the AnalogPotentiometer
+        ///     Gets the current value of the Ultrasonic Sensor in Inches or MM
         /// </summary>
-        /// <returns></returns>
+        /// <returns>double rangeInches or double rangeMM</returns>
         public override double Get()
         {
-            lock (apt)
+            lock (u)
             {
-                var input = apt.Get();
-
-                if (previousInput != input)
-                    onValueChanged(new VirtualControlEventArgs(input, true));
-
-                previousInput = input;
-                return input;
+                if (Unit == Ultrasonic.Unit.Inches)
+                {
+                    return u.GetRangeInches();
+                }
+                else
+                {
+                    return u.GetRangeMM();
+                }
             }
-        }
-
-        /// <summary>
-        ///     Return the WPILib AnalogPotentiometer
-        /// </summary>
-        /// <returns>WPILib.AnalogPotentiometer apt</returns>
-        public object GetRawComponent()
-        {
-            return apt;
         }
 
         #endregion Public Methods
@@ -120,21 +130,13 @@ namespace Base.Components
         private void dispose(bool disposing)
         {
             if (!disposing) return;
-            lock (apt)
+            lock (u)
             {
-                apt?.Dispose();
+                u?.Dispose();
             }
         }
 
-        /// <summary>
-        ///     Method to fire value changes for set/get values and InUse values
-        /// </summary>
-        /// <param name="e">VirtualControlEventArgs</param>
-        private void onValueChanged(VirtualControlEventArgs e)
-        {
-            ValueChanged?.Invoke(this, e);
-        }
-
         #endregion Private Methods
+
     }
 }

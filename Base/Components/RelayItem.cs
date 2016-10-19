@@ -1,9 +1,9 @@
 ﻿/****************************** Header ******************************\
-Class Name: DoubleSolenoidItem inherits IComponent
-Summary: Abstractio017
-Copyright (c) n for the WPIlib Relay that extends to include
+Class Name: RelayItem inherits IComponent
+Summary: Abstraction for the WPIlib Relay that extends to include
 some helper and control methods.
-Project:     FRC2BroncBotz.
+Project:     FRC2017.
+Copyright (c) BroncBotz.
 All rights reserved.
 
 Author(s): Dylan Watson, Ryan S. Cooper
