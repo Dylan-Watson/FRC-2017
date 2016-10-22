@@ -23,9 +23,14 @@
         public const double MINUMUM_JOYSTICK_RETURN = .04;
 
         /// <summary>
-        ///     The name of our primary network table
+        ///     The name of the network table to communicate witht he dashboard
         /// </summary>
-        public const string PRIMARY_NETWORK_TABLE = @"DASHBOARD_2017";
+        public const string DASHBOARD_NETWORK_TABLE = @"DASHBOARD_2017";
+
+        /// <summary>
+        ///     The name of the network table to communicate with vision co-processor
+        /// </summary>
+        public const string VISION_NETWORK_TABLE = @"NTRELAY_2017";
 
         /// <summary>
         ///     Constant used during communications with the dashboard

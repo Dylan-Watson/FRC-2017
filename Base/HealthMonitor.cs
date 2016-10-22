@@ -32,8 +32,8 @@ namespace Base
         #endregion Protected Methods
 
         #region Private Fields
-
-        private DashboardComms comms = DashboardComms.Instance;
+        
+        private FrameworkCommunication comms = FrameworkCommunication.Instance;
         private PowerDistributionPanel pdb = new PowerDistributionPanel();
 
         #endregion Private Fields

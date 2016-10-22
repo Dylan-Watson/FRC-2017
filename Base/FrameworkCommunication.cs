@@ -6,11 +6,11 @@ namespace Base
     /// <summary>
     ///     Singleton for handling communication with the dashboard
     /// </summary>
-    public sealed class DashboardComms
+    public sealed class FrameworkCommunication
     {
         #region Internal Constructors
 
-        internal DashboardComms()
+        internal FrameworkCommunication()
         {
             RobotStatus.Instance.RobotStatusChanged += Instance_RobotStatusChanged;
         }
@@ -22,20 +22,24 @@ namespace Base
         /// <summary>
         ///     The instance of the singleton
         /// </summary>
-        public static DashboardComms Instance => _lazy.Value;
+        public static FrameworkCommunication Instance => _lazy.Value;
 
         #endregion Public Properties
 
         #region Private Fields
 
-        private static readonly Lazy<DashboardComms> _lazy =
-            new Lazy<DashboardComms>(() => new DashboardComms());
+        private static readonly Lazy<FrameworkCommunication> _lazy =
+            new Lazy<FrameworkCommunication>(() => new FrameworkCommunication());
 
-        private readonly NetworkTable dashboard = NetworkTable.GetTable(Constants.PRIMARY_NETWORK_TABLE);
+        private readonly NetworkTable dashboardComm = NetworkTable.GetTable(Constants.DASHBOARD_NETWORK_TABLE);
+        private readonly NetworkTable nTRelayComm = NetworkTable.GetTable(Constants.VISION_NETWORK_TABLE);
 
         #endregion Private Fields
 
         #region Public Methods
+
+        public NetworkTable GetDashboardComm() => dashboardComm;
+        public NetworkTable GetVisonRelayComm() => nTRelayComm;
 
         /// <summary>
         ///     Sends data to the dashboard
@@ -45,11 +49,11 @@ namespace Base
         public void SendData(string key, object value)
         {
             if (LoopCheck._IsTeleoporated())
-                dashboard.PutValue($"TELEOP_{key}", value);
+                dashboardComm.PutValue($"TELEOP_{key}", value);
             else if (LoopCheck._IsAutonomous())
-                dashboard.PutValue($"AUTON_{key}", value);
+                dashboardComm.PutValue($"AUTON_{key}", value);
             else
-                dashboard.PutValue($"{key}", value);
+                dashboardComm.PutValue($"{key}", value);
         }
 
         /// <summary>
@@ -59,7 +63,7 @@ namespace Base
         /// <param name="value">object value to send</param>
         public void SendHealthData(string key, object value)
         {
-            dashboard.PutValue($"HEALTH_{key}", value);
+            dashboardComm.PutValue($"HEALTH_{key}", value);
         }
 
         #endregion Public Methods
@@ -90,7 +94,7 @@ namespace Base
         /// <param name="value">the state of the robot (string)</param>
         private void notifyRobotState(object value)
         {
-            dashboard.PutValue(@"ROBOT_STATE", value);
+            dashboardComm.PutValue(@"ROBOT_STATE", value);
         }
 
         #endregion Private Methods
