@@ -32,6 +32,7 @@ namespace RobotMain2017
         {
             Log.ClearSessionLog();
             config.Load(CONFIG_FILE);
+            var v = VisionMonitor.Instance;
         }
 
         #endregion Public Constructors
@@ -80,6 +81,8 @@ namespace RobotMain2017
             new Sensing(config).Start();
             new Driver().Start();
             new Operator().Start();
+            var v = VisionMonitor.Instance;
+            v.CreateFrameSetting(0, 0, 200, 0, 255, 0, 180, 255, 255, 500);
         }
 
         /// <summary>

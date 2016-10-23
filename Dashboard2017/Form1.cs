@@ -519,6 +519,13 @@ namespace Dashboard2017
                 else if (key.StartsWith(@"HEALTH_"))
                 {
                 }
+                else if(key == @"TARGET")
+                {
+                    if (source.GetBoolean(@"TARGET"))
+                        parent.TargetAquired();
+                    else
+                        parent.NoTarget();
+                }
 
                 parent.debugControlLayoutPanel.Invoke(new Action(() =>
                 {
