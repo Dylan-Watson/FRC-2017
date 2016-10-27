@@ -49,6 +49,11 @@ namespace Base
 
         #region Private Methods
 
+        /// <summary>
+        ///     Method to check if two commonNames are equal
+        /// </summary>
+        /// <param name="other">The commonName to compare to</param>
+        /// <returns>Boolean equals</returns>
         private bool equals(CommonName other) => string.Equals(name, other.name);
 
         #endregion Private Methods

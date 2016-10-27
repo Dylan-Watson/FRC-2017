@@ -1,4 +1,16 @@
-﻿namespace Base
+﻿/****************************** Header ******************************\
+Class Name: Constants
+Summary: Class to house all of the constant variables used throughout 
+the program
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper
+Email: cooper.ryan@centaurisoft.org
+\********************************************************************/
+
+namespace Base
 {
     /// <summary>
     ///     Class to define common program wide constants

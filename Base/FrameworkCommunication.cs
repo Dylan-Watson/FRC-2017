@@ -1,4 +1,15 @@
-﻿using NetworkTables;
+﻿/****************************** Header ******************************\
+Class Name: FrameworkCommunication
+Summary: Class to handle communication with the smart dashboard.
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper
+Email: cooper.ryan@centaurisoft.org
+\********************************************************************/
+
+using NetworkTables;
 using System;
 
 namespace Base
@@ -10,6 +21,9 @@ namespace Base
     {
         #region Internal Constructors
 
+        /// <summary>
+        ///     TODO: Ryan, comment
+        /// </summary>
         internal FrameworkCommunication()
         {
             RobotStatus.Instance.RobotStatusChanged += Instance_RobotStatusChanged;
@@ -31,14 +45,30 @@ namespace Base
         private static readonly Lazy<FrameworkCommunication> _lazy =
             new Lazy<FrameworkCommunication>(() => new FrameworkCommunication());
 
+        /// <summary>
+        ///     The name of the network table to communicate with the dashboard used for this class.
+        /// </summary>
         private readonly NetworkTable dashboardComm = NetworkTable.GetTable(Constants.DASHBOARD_NETWORK_TABLE);
+
+        /// <summary>
+        ///     The name of the network table to communicate with vision co-processor. See <see cref="Constants"/>.<see cref="Constants.VISION_NETWORK_TABLE"/>
+        /// </summary>  
         private readonly NetworkTable nTRelayComm = NetworkTable.GetTable(Constants.VISION_NETWORK_TABLE);
 
         #endregion Private Fields
 
         #region Public Methods
 
+        /// <summary>
+        ///     Method to get the dashboardComm
+        /// </summary>
+        /// <returns>NetworkTable dashboardComm</returns>
         public NetworkTable GetDashboardComm() => dashboardComm;
+
+        /// <summary>
+        ///     Method to getg the VisionRelayComm
+        /// </summary>
+        /// <returns>NetworkTable nTRelayComm</returns>
         public NetworkTable GetVisonRelayComm() => nTRelayComm;
 
         /// <summary>

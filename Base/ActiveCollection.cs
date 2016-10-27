@@ -47,6 +47,9 @@ namespace Base
 
         #region Private Fields
 
+        /// <summary>
+        ///     Dictionary used to store the IComponents 
+        /// </summary>
         private readonly Dictionary<string, IComponent> componentCollection = new Dictionary<string, IComponent>();
 
         /// <summary>
