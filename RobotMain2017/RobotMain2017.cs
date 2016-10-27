@@ -82,7 +82,7 @@ namespace RobotMain2017
             new Driver().Start();
             new Operator().Start();
             var v = VisionMonitor.Instance;
-            v.CreateFrameSetting(0, 0, 200, 0, 255, 0, 180, 255, 255, 500);
+            v.CreateFrameSetting(0, true, 0, 50, 75, 170, 200, 180, 255, 255);
         }
 
         /// <summary>

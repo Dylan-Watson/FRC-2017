@@ -40,6 +40,7 @@ namespace Base.Components
         /// <summary>
         ///     Event used for VirtualControlEvents
         /// </summary>
+        [Obsolete("no usey")]
         public event EventHandler ValueChanged;
 
         #endregion Public Events

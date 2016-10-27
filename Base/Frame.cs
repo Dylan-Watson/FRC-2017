@@ -10,11 +10,6 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 //TODO: Ryan, check all of the comments I made in here
 namespace Base
 {
@@ -28,6 +23,8 @@ namespace Base
         /// </summary>
         public struct Target
         {
+            public int ID;
+
             /// <summary>
             ///     TODO: Ryan, comment
             /// </summary>
@@ -52,22 +49,22 @@ namespace Base
         /// <summary>
         ///     Struct used to establish settings for the Frame
         /// </summary>
-        public struct FrameSetting
+        public struct TargetSetting
         {
             /// <summary>
-            ///     Unique ID of the frame
+            ///     Unique ID of the target
             /// </summary>
             public int ID;
-            
+
             /// <summary>
-            ///     Target to find: <see cref="Frame.Target"/>
+            ///     Defines if the target should be searched for
             /// </summary>
-            public Target Target;
+            public bool Enabled;
 
             /// <summary>
             ///     TODO: Ryan, comment
             /// </summary>
-            public int MaximumRadius, MinimumRadius, MaxObjects;
+            public int MinimumRadius, MaximumRadius, MaxObjects;
 
             /// <summary>
             ///     TODO: Ryan, comment
