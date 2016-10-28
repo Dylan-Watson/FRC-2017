@@ -233,15 +233,15 @@ namespace Dashboard2017
         {
             if (!pingSuccess || (feedHandler != null) || justSet) return;
             justSet = true;
-            feedHandler = new FeedHandler(Settings.Default.videoSource, mainVideoBox, compositVideoBox, this);
-            ConsoleManager.Instance.AppendInfo("FeedHandler created for source at : " +
-                                               Settings.Default.videoSource);
-            feedHandler.Targeting = true;
+            //feedHandler = new FeedHandler(Settings.Default.videoSource, mainVideoBox, compositVideoBox, this);
+           // ConsoleManager.Instance.AppendInfo("FeedHandler created for source at : " +
+                                              // Settings.Default.videoSource);
+            //feedHandler.Targeting = true;
         }
 
         private void createFeedHandler()
         {
-            justSet = false;
+            /*justSet = false;
             feedHandler?.Dispose();
             feedHandler = null;
 
@@ -286,7 +286,7 @@ namespace Dashboard2017
                 ConsoleManager.Instance.AppendError(
                     $"Error creating a feed handler for {Settings.Default.videoSource}. Check to make sure the source is valid.");
                 Log.Write(ex);
-            }
+            }*/
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) => Application.Exit();

@@ -2,6 +2,8 @@
 using System.Runtime.InteropServices;
 using NetworkTables;
 using NetworkTables.Tables;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Base
 {
@@ -23,7 +25,6 @@ namespace Base
         private static Frame.Target _currentFrame;
 
         public Frame.Target GetCurrentFrame() => _currentFrame;
-
 
         public void CreateFrameSetting(int id, bool enabled, int minRadius, int maxRadius, byte lowerHue, byte lowerSat, byte lowerVal, byte upperHue, byte upperSat, byte upperVal, int maxObj = 125)
         {
@@ -48,7 +49,7 @@ namespace Base
             Marshal.StructureToPtr(frame, ptr, true);
             Marshal.Copy(ptr, arr, 0, size);
             Marshal.FreeHGlobal(ptr);
-            table.PutRaw("CREATE_TARGET_SETTING", arr);
+            table.PutRaw($"CREATE_TARGET_SETTING_{id}", arr);
         }
 
         public void DeleteFrameSetting(int id)
@@ -58,13 +59,20 @@ namespace Base
 
         private class TableActivityListener : ITableListener
         {
+            private bool lastDashboardUpdate;
+
             public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
             {
-                if (key == "TARGET")
+                if (key.StartsWith("TARGET"))
                 {
-                    _currentFrame = frameFromByteArray(source.GetRaw("TARGET"));
-                    if(_currentFrame.ID==0)
+                    _currentFrame = frameFromByteArray(source.GetRaw(key));
+
+                    if (_currentFrame.ID == 0 && _currentFrame.HasTarget != lastDashboardUpdate)
+                    {
                         FrameworkCommunication.Instance.GetDashboardComm().PutBoolean("TARGET", _currentFrame.HasTarget);
+                        //Report.General($"Target: {_currentFrame.HasTarget} - {_currentFrame.ID}");
+                        lastDashboardUpdate = _currentFrame.HasTarget;
+                    }
                 }
             }
 

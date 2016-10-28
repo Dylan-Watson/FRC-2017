@@ -69,12 +69,7 @@ namespace Base
             /// <summary>
             ///     TODO: Ryan, comment
             /// </summary>
-            public byte LowerHue, LowerSaturation, LowerValue;
-
-            /// <summary>
-            ///     TODO: Ryan, comment
-            /// </summary>
-            public byte UpperHue, UpperSaturation, UpperValue;
+            public byte LowerHue, UpperHue, LowerValue, UpperValue, LowerSaturation, UpperSaturation;
         }
     }
 }
