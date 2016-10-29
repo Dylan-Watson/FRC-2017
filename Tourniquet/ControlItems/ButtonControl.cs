@@ -2,6 +2,9 @@
 
 namespace Tourniquet.ControlItems
 {
+    /// <summary>
+    /// Defines a control that uses a button on the controller
+    /// </summary>
     public class ButtonControl : ControlItem
     {
         #region Public Constructors
@@ -25,6 +28,9 @@ namespace Tourniquet.ControlItems
 
         #region Public Methods
 
+        /// <summary>
+        /// Update the control
+        /// </summary>
         public override void Update()
         {
             if (joystick.GetRawButton(button))

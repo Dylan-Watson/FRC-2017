@@ -79,7 +79,8 @@ namespace Base
         }
 
         /// <summary>
-        ///     TODO: Ryan, comment
+        ///     Starts the loop then the robot is either in Auton or Teleop,
+        ///     and kills the loop otherwise.
         /// </summary>
         public void StartWhenReady()
         {

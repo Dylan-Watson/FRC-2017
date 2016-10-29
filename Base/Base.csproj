@@ -78,7 +78,7 @@
     <Compile Include="ControlLoop.cs" />
     <Compile Include="FrameworkCommunication.cs" />
     <Compile Include="Filters.cs" />
-    <Compile Include="Frame.cs" />
+    <Compile Include="CommunicationFrames.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IComponent.cs" />
     <Compile Include="InputComponent.cs" />

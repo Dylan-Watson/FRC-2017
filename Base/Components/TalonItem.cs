@@ -141,7 +141,7 @@ namespace Base.Components
         /// <returns></returns>
         public double GetEncoderValue()
         {
-            return Encoder.Get();
+            return encoder.Get();
         }
 
         /// <summary>
@@ -158,8 +158,8 @@ namespace Base.Components
         public override void Set(double val, object sender)
         {
             Sender = sender;
-            SetAllowC(UpperLimit?.GetBool() ?? true);
-            SetAllowCc(LowerLimit?.GetBool() ?? true);
+            SetAllowC(upperLimit?.GetBool() ?? true);
+            SetAllowCc(lowerLimit?.GetBool() ?? true);
             if (Slave)
             {
                 Report.Warning(
@@ -298,17 +298,17 @@ namespace Base.Components
 
         public void SetEncoder(EncoderItem encoder)
         {
-            Encoder = encoder;
+            base.encoder = encoder;
         }
 
         public void SetLowerLimit(DigitalInputItem lowerLimit)
         {
-            LowerLimit = lowerLimit;
+            base.lowerLimit = lowerLimit;
         }
 
         public void SetUpperLimit(DigitalInputItem upperLimit)
         {
-            UpperLimit = upperLimit;
+            base.upperLimit = upperLimit;
         }
 
         /// <summary>

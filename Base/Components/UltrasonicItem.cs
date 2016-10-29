@@ -15,14 +15,18 @@ using WPILib;
 
 namespace Base.Components
 {
-
     /// <summary>
     ///     Class to handle UltrasonicItem Sensor Components
     /// </summary>
     public sealed class UltrasonicItem : InputComponent, IComponent
     {
+        #region Private Fields
 
-        #region Public Constructor
+        private readonly Ultrasonic u;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         /// <summary>
         ///     Constructor
@@ -31,21 +35,15 @@ namespace Base.Components
         /// <param name="pingChannel"></param>
         /// <param name="echoChannel"></param>
         /// <param name="unit"></param>
-        public UltrasonicItem(string commonName, int pingChannel, int echoChannel, Ultrasonic.Unit unit = 
-                  Ultrasonic.Unit.Millimeters)
+        public UltrasonicItem(string commonName, int pingChannel, int echoChannel, Ultrasonic.Unit unit =
+            Ultrasonic.Unit.Millimeters)
         {
             u = new Ultrasonic(pingChannel, echoChannel, unit);
             Name = commonName;
             Unit = unit;
         }
 
-        #endregion Public Constructor
-
-        #region Private Fields
-
-        private Ultrasonic u;
-
-        #endregion Private Fields 
+        #endregion Public Constructors
 
         #region Public Events
 
@@ -55,6 +53,23 @@ namespace Base.Components
         public event EventHandler ValueChanged;
 
         #endregion Public Events
+
+        #region Private Methods
+
+        /// <summary>
+        ///     Releases managed and native resources
+        /// </summary>
+        /// <param name="disposing"></param>
+        private void dispose(bool disposing)
+        {
+            if (!disposing) return;
+            lock (u)
+            {
+                u?.Dispose();
+            }
+        }
+
+        #endregion Private Methods
 
         #region Public Properties
 
@@ -83,15 +98,6 @@ namespace Base.Components
         #region Public Methods
 
         /// <summary>
-        ///     returns ain
-        /// </summary>
-        /// <returns>ain</returns>
-        public object GetRawComponent()
-        {
-            return u;
-        }
-
-        /// <summary>
         ///     Disposes of this IComponent and its managed resources
         /// </summary>
         public void Dispose()
@@ -108,35 +114,30 @@ namespace Base.Components
         {
             lock (u)
             {
-                if (Unit == Ultrasonic.Unit.Inches)
-                {
-                    return u.GetRangeInches();
-                }
-                else
-                {
-                    return u.GetRangeMM();
-                }
+                var val = Unit == Ultrasonic.Unit.Inches ? u.GetRangeInches() : u.GetRangeMM();
+                onValueChanged(new VirtualControlEventArgs(val, false));
+                return val;
             }
+        }
+
+        /// <summary>
+        ///     Method to fire value changes for set/get values and InUse values
+        /// </summary>
+        /// <param name="e">VirtualControlEventArgs</param>
+        private void onValueChanged(VirtualControlEventArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
+        }
+
+        /// <summary>
+        ///     returns ain
+        /// </summary>
+        /// <returns>ain</returns>
+        public object GetRawComponent()
+        {
+            return u;
         }
 
         #endregion Public Methods
-
-        #region Private Methods
-
-        /// <summary>
-        ///     Releases managed and native resources
-        /// </summary>
-        /// <param name="disposing"></param>
-        private void dispose(bool disposing)
-        {
-            if (!disposing) return;
-            lock (u)
-            {
-                u?.Dispose();
-            }
-        }
-
-        #endregion Private Methods
-
     }
 }

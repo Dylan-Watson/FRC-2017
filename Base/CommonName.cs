@@ -133,7 +133,8 @@ namespace Base
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
 
-            return obj is CommonName && equals((CommonName) obj);
+            var other = obj as CommonName;
+            return (other != null) && equals(other);
         }
 
         /// <summary>

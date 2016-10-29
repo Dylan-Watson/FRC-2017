@@ -32,7 +32,6 @@ namespace RobotMain2017
         {
             Log.ClearSessionLog();
             config.Load(CONFIG_FILE);
-            var v = VisionMonitor.Instance;
         }
 
         #endregion Public Constructors
@@ -77,14 +76,10 @@ namespace RobotMain2017
         {
             quickLoad();
             RobotStatus.Instance.NotifyState(RobotState.Teleop);
-            
+
             new Sensing(config).Start();
             new Driver().Start();
             new Operator().Start();
-            var v = VisionMonitor.Instance;
-            v.CreateFrameSetting(0, true, 15, 45, 30, 255, 200, 180, 255, 255);
-            //v.CreateFrameSetting(0, true, 40, 70, 130, 130, 0, 180, 255, 255);
-            //v.CreateFrameSetting(1, true, 35, 65, 80, 235, 140, 180, 255, 255);
         }
 
         /// <summary>

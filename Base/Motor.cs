@@ -104,17 +104,17 @@ namespace Base
         /// <summary>
         ///     Encoder to read the value of the motor
         /// </summary>
-        protected EncoderItem Encoder { get; set; }
+        protected EncoderItem encoder { get; set; }
 
         /// <summary>
         ///     DigitalInput to stop the motor from going reverse when true
         /// </summary>
-        protected DigitalInputItem LowerLimit { get; set; }
+        protected DigitalInputItem lowerLimit { get; set; }
 
         /// <summary>
         ///     DigitalInput to stop the motor from going forward when true
         /// </summary>
-        protected DigitalInputItem UpperLimit { get; set; }
+        protected DigitalInputItem upperLimit { get; set; }
 
         #endregion Protected Properties
 

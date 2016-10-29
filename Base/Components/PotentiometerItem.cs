@@ -92,7 +92,7 @@ namespace Base.Components
             {
                 var input = apt.Get();
 
-                if (previousInput != input)
+                if (Math.Abs(previousInput - input) > Constants.EPSILON_MIN)
                     onValueChanged(new VirtualControlEventArgs(input, true));
 
                 previousInput = input;

@@ -22,7 +22,7 @@ namespace Base
         /// <summary>
         ///     Unised, is never invoked
         /// </summary>
-        [Obsolete("Unused Property")]
+        [Obsolete("Unused Event")]
         public event EventHandler ValueChanged;
 
         #endregion Public Events

@@ -86,6 +86,15 @@ namespace Base.Components
         #region Public Methods
 
         /// <summary>
+        /// Sets if the relay is reversed or not
+        /// </summary>
+        /// <param name="val">boolean value to represent reversion</param>
+        public void SetReverse(bool val)
+        {
+            IsReversed = val;
+        }
+
+        /// <summary>
         ///     Sets the Relay to its default position
         /// </summary>
         public void DefaultSet()
@@ -141,24 +150,29 @@ namespace Base.Components
             InUse = false;
         }
 
+        /// <summary>
+        /// Sets the relay to the given value
+        /// </summary>
+        /// <param name="val">double value 0-2</param>
+        /// <param name="sender"></param>
         public void Set(double val, object sender)
         {
             if ((val >= 0) && (val <= 2))
             {
                 InUse = true;
-                if (Math.Abs(val - 2) <= Math.Abs(val*.00001))
+                if (Math.Abs(val - 2) <= Math.Abs(val*Constants.EPSILON_MIN))
                     Set(Relay.Value.Off, sender);
-                else if (Math.Abs(val - 0) <= Math.Abs(val*.00001))
+                else if (Math.Abs(val - 0) <= Math.Abs(val* Constants.EPSILON_MIN))
                     Set(!IsReversed ? Relay.Value.Forward : Relay.Value.Reverse, sender);
-                else if (Math.Abs(val - 1) <= Math.Abs(val*.00001))
+                else if (Math.Abs(val - 1) <= Math.Abs(val* Constants.EPSILON_MIN))
                     Set(!IsReversed ? Relay.Value.Reverse : Relay.Value.Forward, sender);
             }
             else
             {
                 Report.Error(
-                    $"The valid arguments for Relay {Name} is Off, Forward, and Reverse (-1, 1, 0). {sender} tried to set a value not in this range.");
+                    $"The valid arguments for Relay {Name} is Off, Forward, and Reverse (2, 0, 1). {sender} tried to set a value not in this range.");
                 throw new ArgumentOutOfRangeException(nameof(val),
-                    $"The valid arguments for Relay {Name} is Off, Forward, and Reverse (-1, 1, 0). {sender} tried to set a value not in this range.");
+                    $"The valid arguments for Relay {Name} is Off, Forward, and Reverse (2, 0, 1). {sender} tried to set a value not in this range.");
             }
             Sender = null;
             InUse = false;
@@ -196,7 +210,10 @@ namespace Base.Components
         /// </summary>
         private void setForward()
         {
-            relay.Set(Relay.Value.Forward);
+            lock (relay)
+            {
+                relay.Set(Relay.Value.Forward);
+            }
             onValueChanged(new VirtualControlEventArgs(2, InUse));
         }
 
@@ -205,7 +222,10 @@ namespace Base.Components
         /// </summary>
         private void setOff()
         {
-            relay.Set(Relay.Value.Off);
+            lock (relay)
+            {
+                relay.Set(Relay.Value.Off);
+            }
             onValueChanged(new VirtualControlEventArgs(0, InUse));
         }
 
@@ -214,7 +234,10 @@ namespace Base.Components
         /// </summary>
         private void setOn()
         {
-            relay.Set(Relay.Value.On);
+            lock (relay)
+            {
+                relay.Set(Relay.Value.On);
+            }
             onValueChanged(new VirtualControlEventArgs(1, InUse));
         }
 
@@ -223,7 +246,10 @@ namespace Base.Components
         /// </summary>
         private void setReverse()
         {
-            relay.Set(Relay.Value.Reverse);
+            lock (relay)
+            {
+                relay.Set(Relay.Value.Reverse);
+            }
             onValueChanged(new VirtualControlEventArgs(3, InUse));
         }
 

@@ -82,7 +82,7 @@ namespace Base.Components
             {
                 var input = Convert.ToDouble(din.Get());
 
-                if (previousInput != input)
+                if (Math.Abs(previousInput - input) > Constants.EPSILON_MIN)
                     onValueChanged(new VirtualControlEventArgs(input, InUse));
 
                 previousInput = input;

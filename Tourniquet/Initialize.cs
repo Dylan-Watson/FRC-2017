@@ -64,44 +64,44 @@ namespace Tourniquet
                 switch (s.ControlType)
                 {
                     case ControlType.Axis:
-                        var axis_control = new AxisControl(s.Name, config.DriverConfig.Driver,
+                        var axisControl = new AxisControl(s.Name, config.DriverConfig.Driver,
                             s.Axis, MotorControlFitFunction.Linear, s.Reversed, s.DeadZone, s.IsEnabled,
                             s.PowerMultiplier);
 
                         foreach (var binding in s.Bindings)
-                            axis_control.AddComponent(config.ActiveCollection.Get(binding));
+                            axisControl.AddComponent(config.ActiveCollection.Get(binding));
 
-                        ControlCollection.Instance.AddDriverControl(axis_control);
+                        ControlCollection.Instance.AddDriverControl(axisControl);
                         break;
 
                     case ControlType.Button:
-                        var btn_control = new ButtonControl(s.Name, config.DriverConfig.Driver,
+                        var btnControl = new ButtonControl(s.Name, config.DriverConfig.Driver,
                             s.ButtonA, s.Reversed, s.IsEnabled, s.PowerMultiplier);
 
                         foreach (var binding in s.Bindings)
-                            btn_control.AddComponent(config.ActiveCollection.Get(binding));
+                            btnControl.AddComponent(config.ActiveCollection.Get(binding));
 
-                        ControlCollection.Instance.AddDriverControl(btn_control);
+                        ControlCollection.Instance.AddDriverControl(btnControl);
                         break;
 
                     case ControlType.DualButton:
-                        var dual_btn_control = new DualButtonControl(s.Name, config.DriverConfig.Driver,
+                        var dualBtnControl = new DualButtonControl(s.Name, config.DriverConfig.Driver,
                             s.ButtonA, s.ButtonB, s.Reversed, s.IsEnabled, s.PowerMultiplier);
 
                         foreach (var binding in s.Bindings)
-                            dual_btn_control.AddComponent(config.ActiveCollection.Get(binding));
+                            dualBtnControl.AddComponent(config.ActiveCollection.Get(binding));
 
-                        ControlCollection.Instance.AddDriverControl(dual_btn_control);
+                        ControlCollection.Instance.AddDriverControl(dualBtnControl);
                         break;
 
                     case ControlType.ToggleButton:
-                        var toggle_btn_control = new ToggleButtonControl(s.Name, config.DriverConfig.Driver,
+                        var toggleBtnControl = new ToggleButtonControl(s.Name, config.DriverConfig.Driver,
                             s.ButtonA, s.Reversed, s.IsEnabled, s.PowerMultiplier);
 
                         foreach (var binding in s.Bindings)
-                            toggle_btn_control.AddComponent(config.ActiveCollection.Get(binding));
+                            toggleBtnControl.AddComponent(config.ActiveCollection.Get(binding));
 
-                        ControlCollection.Instance.AddDriverControl(toggle_btn_control);
+                        ControlCollection.Instance.AddDriverControl(toggleBtnControl);
                         break;
                 }
 
@@ -113,45 +113,45 @@ namespace Tourniquet
                 switch (s.ControlType)
                 {
                     case ControlType.Axis:
-                        var axis_control = new AxisControl(s.Name,
+                        var axisControl = new AxisControl(s.Name,
                             config.OperatorConfig.Operator,
                             s.Axis, MotorControlFitFunction.Linear, s.Reversed, s.DeadZone, s.IsEnabled,
                             s.PowerMultiplier);
 
                         foreach (var binding in s.Bindings)
-                            axis_control.AddComponent(config.ActiveCollection.Get(binding));
+                            axisControl.AddComponent(config.ActiveCollection.Get(binding));
 
-                        ControlCollection.Instance.AddOperatorControl(axis_control);
+                        ControlCollection.Instance.AddOperatorControl(axisControl);
                         break;
 
                     case ControlType.Button:
-                        var btn_control = new ButtonControl(s.Name, config.OperatorConfig.Operator,
+                        var btnControl = new ButtonControl(s.Name, config.OperatorConfig.Operator,
                             s.ButtonA, s.Reversed, s.IsEnabled, s.PowerMultiplier);
 
                         foreach (var binding in s.Bindings)
-                            btn_control.AddComponent(config.ActiveCollection.Get(binding));
+                            btnControl.AddComponent(config.ActiveCollection.Get(binding));
 
-                        ControlCollection.Instance.AddOperatorControl(btn_control);
+                        ControlCollection.Instance.AddOperatorControl(btnControl);
                         break;
 
                     case ControlType.DualButton:
-                        var dual_btn_control = new DualButtonControl(s.Name, config.OperatorConfig.Operator,
+                        var dualBtnControl = new DualButtonControl(s.Name, config.OperatorConfig.Operator,
                             s.ButtonA, s.ButtonB, s.Reversed, s.IsEnabled, s.PowerMultiplier);
 
                         foreach (var binding in s.Bindings)
-                            dual_btn_control.AddComponent(config.ActiveCollection.Get(binding));
+                            dualBtnControl.AddComponent(config.ActiveCollection.Get(binding));
 
-                        ControlCollection.Instance.AddOperatorControl(dual_btn_control);
+                        ControlCollection.Instance.AddOperatorControl(dualBtnControl);
                         break;
 
                     case ControlType.ToggleButton:
-                        var toggle_btn_control = new ToggleButtonControl(s.Name, config.OperatorConfig.Operator,
+                        var toggleBtnControl = new ToggleButtonControl(s.Name, config.OperatorConfig.Operator,
                             s.ButtonA, s.Reversed, s.IsEnabled, s.PowerMultiplier);
 
                         foreach (var binding in s.Bindings)
-                            toggle_btn_control.AddComponent(config.ActiveCollection.Get(binding));
+                            toggleBtnControl.AddComponent(config.ActiveCollection.Get(binding));
 
-                        ControlCollection.Instance.AddOperatorControl(toggle_btn_control);
+                        ControlCollection.Instance.AddOperatorControl(toggleBtnControl);
                         break;
                 }
 

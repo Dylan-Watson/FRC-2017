@@ -19,17 +19,17 @@ namespace Base
     /// </summary>
     public sealed class FrameworkCommunication
     {
-        #region Internal Constructors
+        #region Private Constructors
 
         /// <summary>
-        ///     TODO: Ryan, comment
+        ///     Default constructor, this is only called by the class itself.
         /// </summary>
-        internal FrameworkCommunication()
+        private FrameworkCommunication()
         {
             RobotStatus.Instance.RobotStatusChanged += Instance_RobotStatusChanged;
         }
 
-        #endregion Internal Constructors
+        #endregion Private Constructors
 
         #region Public Properties
 
@@ -51,8 +51,9 @@ namespace Base
         private readonly NetworkTable dashboardComm = NetworkTable.GetTable(Constants.DASHBOARD_NETWORK_TABLE);
 
         /// <summary>
-        ///     The name of the network table to communicate with vision co-processor. See <see cref="Constants"/>.<see cref="Constants.VISION_NETWORK_TABLE"/>
-        /// </summary>  
+        ///     The name of the network table to communicate with vision co-processor. See <see cref="Constants" />.
+        ///     <see cref="Constants.VISION_NETWORK_TABLE" />
+        /// </summary>
         private readonly NetworkTable nTRelayComm = NetworkTable.GetTable(Constants.VISION_NETWORK_TABLE);
 
         #endregion Private Fields

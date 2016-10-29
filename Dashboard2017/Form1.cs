@@ -9,7 +9,6 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-using Base;
 using Dashboard2017.Properties;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
@@ -234,8 +233,8 @@ namespace Dashboard2017
             if (!pingSuccess || (feedHandler != null) || justSet) return;
             justSet = true;
             //feedHandler = new FeedHandler(Settings.Default.videoSource, mainVideoBox, compositVideoBox, this);
-           // ConsoleManager.Instance.AppendInfo("FeedHandler created for source at : " +
-                                              // Settings.Default.videoSource);
+            // ConsoleManager.Instance.AppendInfo("FeedHandler created for source at : " +
+            // Settings.Default.videoSource);
             //feedHandler.Targeting = true;
         }
 
@@ -519,7 +518,7 @@ namespace Dashboard2017
                 else if (key.StartsWith(@"HEALTH_"))
                 {
                 }
-                else if(key == @"TARGET")
+                else if (key == @"TARGET")
                 {
                     if (source.GetBoolean(@"TARGET"))
                         parent.TargetAquired();

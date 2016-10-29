@@ -16,15 +16,18 @@ using Base.Config;
 namespace Tourniquet
 {
     /// <summary>
-    ///     Class to handle sensors on the robot, this is a ControlLoop, see ControlLoop in Base
+    ///     Class to handle specific sensor functionality on the robot, this is a ControlLoop, see ControlLoop in Base
     /// </summary>
     public class Sensing : ControlLoop
     {
         #region Public Constructors
 
+        /// <summary>
+        /// Defult constructor
+        /// </summary>
+        /// <param name="config">instance of the config</param>
         public Sensing(Config config)
         {
-            this.config = config;
             preassurePad = (AnalogInputItem) config.ActiveCollection.Get(new CommonName("p_pad"));
             shooter = (CanTalonItem) config.ActiveCollection.Get(new CommonName("shooter_1"));
         }
@@ -38,7 +41,6 @@ namespace Tourniquet
         /// </summary>
         protected override void main()
         {
-            var control = ControlCollection.Instance.GetOperatorControl("intakeIn");
             if ((preassurePad.Get() > .3) && !shooter.InUse)
                 ControlCollection.Instance.GetOperatorControl("intakeIn").IsEnabled = false;
             else
@@ -50,8 +52,8 @@ namespace Tourniquet
         #region Private Fields
 
         private readonly AnalogInputItem preassurePad;
+
         private readonly CanTalonItem shooter;
-        private Config config;
 
         #endregion Private Fields
     }

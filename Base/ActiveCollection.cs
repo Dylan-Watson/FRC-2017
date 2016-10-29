@@ -38,17 +38,10 @@ namespace Base
 
         #endregion Private Methods
 
-        /*private static readonly Lazy<ActiveCollection> _lazy =
-            new Lazy<ActiveCollection>(() => new ActiveCollection());*/
-
-        /*private ActiveCollection()
-        {
-        }*/
-
         #region Private Fields
 
         /// <summary>
-        ///     Dictionary used to store the IComponents 
+        ///     Dictionary used to store the IComponents
         /// </summary>
         private readonly Dictionary<string, IComponent> componentCollection = new Dictionary<string, IComponent>();
 
@@ -185,6 +178,13 @@ namespace Base
         }
 
         #endregion Public Methods
+
+        /*private static readonly Lazy<ActiveCollection> _lazy =
+            new Lazy<ActiveCollection>(() => new ActiveCollection());*/
+
+        /*private ActiveCollection()
+        {
+        }*/
     }
 
     /// <summary>

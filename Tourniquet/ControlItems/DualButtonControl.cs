@@ -2,6 +2,9 @@
 
 namespace Tourniquet.ControlItems
 {
+    /// <summary>
+    /// Control that uses two butons to perform an action
+    /// </summary>
     public class DualButtonControl : ControlItem
     {
         #region Public Constructors
@@ -26,6 +29,9 @@ namespace Tourniquet.ControlItems
 
         #region Public Methods
 
+        /// <summary>
+        /// Updates the control
+        /// </summary>
         public override void Update()
         {
             if (joystick.GetRawButton(buttonA))
@@ -76,7 +82,14 @@ namespace Tourniquet.ControlItems
 
         #region Public Properties
 
+        /// <summary>
+        /// Button a of the control
+        /// </summary>
         public bool ButtonA { get; private set; }
+
+        /// <summary>
+        /// Button b of the control
+        /// </summary>
         public bool ButtonB { get; private set; }
 
         #endregion Public Properties

@@ -32,8 +32,9 @@ namespace Base
         #endregion Protected Methods
 
         #region Private Fields
-        
+
         private FrameworkCommunication comms = FrameworkCommunication.Instance;
+
         private PowerDistributionPanel pdb = new PowerDistributionPanel();
 
         #endregion Private Fields

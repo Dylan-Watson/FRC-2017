@@ -9,11 +9,11 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoftware.co
 \********************************************************************/
 
+using Base.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using Base.Components;
 using WPILib;
 
 namespace Base.Config
@@ -853,11 +853,13 @@ namespace Base.Config
                         Report.Error(ex.Message);
                 }
 
-                var left = new Schemas.DriverControlSchema("leftDrive", (MotorControlFitFunction) driveFit, driveFitPower,
+                var left = new Schemas.DriverControlSchema("leftDrive", (MotorControlFitFunction) driveFit,
+                    driveFitPower,
                     toBindCommonName(getAttribute("bindTo", "Controls", "Driver", "leftDrive")), leftAxis, leftDz,
                     multiplier, leftReversed);
 
-                var right = new Schemas.DriverControlSchema("rightDrive", (MotorControlFitFunction) driveFit, driveFitPower,
+                var right = new Schemas.DriverControlSchema("rightDrive", (MotorControlFitFunction) driveFit,
+                    driveFitPower,
                     toBindCommonName(getAttribute("bindTo", "Controls", "Driver", "rightDrive")), rightAxis, rightDz,
                     multiplier, rightReversed);
 
@@ -926,7 +928,8 @@ namespace Base.Config
                     }
                 }
 
-                DriverConfig = new Schemas.DriverConfig(new Joystick(controllerSlot), left, right, temp); //add driver stuff
+                DriverConfig = new Schemas.DriverConfig(new Joystick(controllerSlot), left, right, temp);
+                    //add driver stuff
             }
             catch (Exception ex)
             {
