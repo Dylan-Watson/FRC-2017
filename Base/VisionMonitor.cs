@@ -67,22 +67,24 @@ namespace Base
                 var size = Marshal.SizeOf(target);
                 var ptr = Marshal.AllocHGlobal(size);
                 Marshal.Copy(arr, 0, ptr, size);
-
-                target = (CommunicationFrames.Target) Marshal.PtrToStructure(ptr, target.GetType());
+                target = (CommunicationFrames.Target)Marshal.PtrToStructure(ptr, target.GetType());
                 Marshal.FreeHGlobal(ptr);
-
                 return target;
             }
+
 
             private static void _updateTarget(CommunicationFrames.Target target)
             {
                 for (var i = 0; i < _targets.Count; i++)
                 {
                     var o = _targets[i];
-                    if ((o != null) && (o.Value.ID == target.ID))
+                    if ((o != null) && (o.Target.ID == target.ID))
                         _targets.RemoveAt(i);
                 }
-                _targets.Add(new CommunicationFrames.Target(target));
+                var tmp = new CommunicationFrames.TargetContainer();
+                tmp.Target = new CommunicationFrames.Target(target);
+
+                _targets.Add(tmp);
             }
 
             #endregion Private Methods
@@ -95,7 +97,7 @@ namespace Base
         private static readonly Lazy<VisionMonitor> _lazy =
             new Lazy<VisionMonitor>(() => new VisionMonitor());
 
-        private static readonly List<CommunicationFrames.Target?> _targets = new List<CommunicationFrames.Target?>();
+        private static readonly List<CommunicationFrames.TargetContainer> _targets = new List<CommunicationFrames.TargetContainer>();
         private readonly NetworkTable ntRelayTable = FrameworkCommunication.Instance.GetVisonRelayComm();
 
         #endregion Private Fields
@@ -151,7 +153,7 @@ namespace Base
         /// <param name="id">the id of the target setting</param>
         public void DeleteFrameSetting(int id)
         {
-            ntRelayTable.PutNumber("DELETE_TARGET_SETTING", id);
+            ntRelayTable.PutNumber($"DELETE_TARGET_SETTING_{id}", id);
         }
 
         /// <summary>
@@ -160,10 +162,10 @@ namespace Base
         /// </summary>
         /// <param name="id">id of the target setting</param>
         /// <returns></returns>
-        public CommunicationFrames.Target? GetLatestTargetData(int id)
+        public CommunicationFrames.TargetContainer GetLatestTargetData(int id)
         {
             foreach (var target in _targets)
-                if ((target != null) && (target.Value.ID == id))
+                if ((target != null) && (target.Target.ID == id))
                     return target;
             return null;
         }

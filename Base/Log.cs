@@ -33,8 +33,12 @@ namespace Base
         /// </summary>
         public static void ClearFullLog()
         {
-            if (File.Exists(FULL_LOG_FILE))
-                File.Delete(FULL_LOG_FILE);
+            try
+            {
+                if (File.Exists(FULL_LOG_FILE))
+                    File.Delete(FULL_LOG_FILE);
+            }
+            catch (Exception) { }
         }
 
         /// <summary>
@@ -42,8 +46,12 @@ namespace Base
         /// </summary>
         public static void ClearSessionLog()
         {
-            if (File.Exists(SESSION_LOG_FILE))
+            try
+            {
+                if (File.Exists(SESSION_LOG_FILE))
                 File.Delete(SESSION_LOG_FILE);
+            }
+            catch (Exception) { }
         }
 
         /// <summary>
@@ -52,13 +60,17 @@ namespace Base
         /// <param name="msg">A string for dubugging info</param>
         public static void Str(string msg)
         {
-            var sessionLog = File.AppendText(SESSION_LOG_FILE);
-            var fullLog = File.AppendText(FULL_LOG_FILE);
+            try
+            {
+                var sessionLog = File.AppendText(SESSION_LOG_FILE);
+                var fullLog = File.AppendText(FULL_LOG_FILE);
 
-            sessionLog.WriteLine(msg + "   ::" + DateTime.Now.ToString("dd/MM/yy HH:mm:ss"));
-            fullLog.WriteLine(msg + "   ::" + DateTime.Now.ToString("dd/MM/yy HH:mm:ss"));
-            sessionLog.Close();
-            fullLog.Close();
+                sessionLog.WriteLine(msg + "   ::" + DateTime.Now.ToString("dd/MM/yy HH:mm:ss"));
+                fullLog.WriteLine(msg + "   ::" + DateTime.Now.ToString("dd/MM/yy HH:mm:ss"));
+                sessionLog.Close();
+                fullLog.Close();
+            }
+            catch (Exception) { }
         }
 
         /// <summary>
@@ -67,13 +79,17 @@ namespace Base
         /// <param name="ex">Exception</param>
         public static void Write(Exception ex)
         {
-            var sessionLog = File.AppendText(SESSION_LOG_FILE);
-            var fullLog = File.AppendText(FULL_LOG_FILE);
+            try
+            {
+                var sessionLog = File.AppendText(SESSION_LOG_FILE);
+                var fullLog = File.AppendText(FULL_LOG_FILE);
 
-            sessionLog.WriteLine(ex + "   ::" + DateTime.Now.ToString("dd/MM/yy HH:mm:ss"));
-            fullLog.WriteLine(ex + "   ::" + DateTime.Now.ToString("dd/MM/yy HH:mm:ss"));
-            sessionLog.Close();
-            fullLog.Close();
+                sessionLog.WriteLine(ex + "   ::" + DateTime.Now.ToString("dd/MM/yy HH:mm:ss"));
+                fullLog.WriteLine(ex + "   ::" + DateTime.Now.ToString("dd/MM/yy HH:mm:ss"));
+                sessionLog.Close();
+                fullLog.Close();
+            }
+            catch (Exception) { }
         }
 
         #endregion Public Methods

@@ -10,6 +10,7 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using System.Runtime.InteropServices;
 using WPILib;
 
 namespace Base
@@ -57,6 +58,7 @@ namespace Base
         /// <summary>
         ///     Struct used to define a vision target
         /// </summary>
+        //[StructLayout(LayoutKind.Explicit, CharSet = CharSet.Ansi)]
         public struct Target
         {
             #region Public Fields
@@ -64,17 +66,26 @@ namespace Base
             /// <summary>
             ///     The ID of the originating TargetSetting
             /// </summary>
+            //[FieldOffset(0)]
             public int ID;
+
+            /// <summary>
+            ///     The X and Y placment of the target's centre
+            /// </summary>
+            //[FieldOffset(1)]
+            public int X, Y;
 
             /// <summary>
             ///     Radius of target
             /// </summary>
+            //[FieldOffset(2)]
             public int Radius;
 
             /// <summary>
-            ///     Time stamp of the communication
+            ///     Width and Height of target
             /// </summary>
-            public FrameTimeStamp TimeStamp;
+            //[FieldOffset(3)]
+            public int Width, Height;
 
             /// <summary>
             ///     Booleans to define if the image is valid and if
@@ -82,17 +93,9 @@ namespace Base
             ///     if something went wrong with grabbing the image from
             ///     the camera in OpenCV)
             /// </summary>
+            //[FieldOffset(4)]
             public bool ValidImage, HasTarget;
 
-            /// <summary>
-            ///     Width and Height of target
-            /// </summary>
-            public int Width, Height;
-
-            /// <summary>
-            ///     The X and Y placment of the target's centre
-            /// </summary>
-            public int X, Y;
 
             #endregion Public Fields
 
@@ -112,10 +115,19 @@ namespace Base
                 Height = t.Height;
                 ValidImage = t.ValidImage;
                 HasTarget = t.HasTarget;
-                TimeStamp = new FrameTimeStamp();
             }
 
             #endregion Public Constructors
+        }
+
+        public class TargetContainer
+        {
+            public Target Target;
+
+            /// <summary>
+            ///     Time stamp of the communication
+            /// </summary>
+            public FrameTimeStamp TimeStamp;
         }
 
         /// <summary>

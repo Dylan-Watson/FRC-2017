@@ -92,6 +92,7 @@
     <Compile Include="Report.cs" />
     <Compile Include="RobotStatus.cs" />
     <Compile Include="HealthMonitor.cs" />
+    <Compile Include="Util.cs" />
     <Compile Include="VirtualControlEvent.cs" />
     <Compile Include="VisionMonitor.cs" />
   </ItemGroup>

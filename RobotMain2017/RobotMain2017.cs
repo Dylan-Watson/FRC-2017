@@ -76,7 +76,8 @@ namespace RobotMain2017
         {
             quickLoad();
             RobotStatus.Instance.NotifyState(RobotState.Teleop);
-
+            VisionMonitor.Instance.CreateTargetSetting(0, true, 10, 40, 90, 145, 245, 180, 255, 255, 150);
+            //VisionMonitor.Instance.CreateTargetSetting(1, true, 0, 0, 0, 0, 0, 0, 0, 0);
             new Sensing(config).Start();
             new Driver().Start();
             new Operator().Start();
