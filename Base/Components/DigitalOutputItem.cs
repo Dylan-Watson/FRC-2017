@@ -1,4 +1,16 @@
-﻿using System;
+﻿/****************************** Header ******************************\
+Class Name: DigitalOutpotItem inherits OoutputComponent and IComponent
+Summary: Abstraction for the WPIlib DigitalOutput that extends to include
+some helper and control methods.
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper
+Email: cooper.ryan@centaurisoft.org
+\********************************************************************/
+
+using System;
 using WPILib;
 
 namespace Base.Components

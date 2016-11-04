@@ -1,4 +1,15 @@
-﻿using System;
+﻿/****************************** Header ******************************\
+Class Name: Schemas [static]
+Summary: Static class to store all relevant ControlScemas
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper
+Email: cooper.ryan@centaurisoft.org
+\********************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using WPILib;

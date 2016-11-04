@@ -1,4 +1,15 @@
-﻿using Base.Components;
+﻿/****************************** Header ******************************\
+Class Name: VirtualControlEvent
+Summary: Class to handle VirtualControlEvents; events driven by IComponents inputs/outputs
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper
+Email: cooper.ryan@centaurisoft.org
+\********************************************************************/
+
+using Base.Components;
 using System;
 using System.Collections.Generic;
 using WPILib;

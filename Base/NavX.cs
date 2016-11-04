@@ -1,4 +1,15 @@
-﻿using System;
+﻿/****************************** Header ******************************\
+Class Name: NavX [singleton] inherits AHRS [WPILib] and IComponent
+Summary: Provides methods to use and get values from sensors on the NavX board.
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper
+Email: cooper.ryan@centaurisoft.org
+\********************************************************************/
+
+using System;
 using WPILib;
 using WPILib.Extras.NavX;
 

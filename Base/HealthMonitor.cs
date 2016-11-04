@@ -1,11 +1,28 @@
-﻿using WPILib;
+﻿/****************************** Header ******************************\
+Class Name: HealthMonitor inherits ControlLoop
+Summary: Class to handle monitoring the system health of the robot.
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper
+Email: cooper.ryan@centaurisoft.org
+\********************************************************************/
+
+using WPILib;
 
 namespace Base
 {
+    /// <summary>
+    ///     Class to handle robot system diagnostics
+    /// </summary>
     internal class HealthMonitor : ControlLoop
     {
         #region Protected Methods
 
+        /// <summary>
+        ///     Main Method
+        /// </summary>
         protected override void main()
         {
             /*comms.SendHealthData("Match Time", DriverStation.Instance.GetMatchTime());

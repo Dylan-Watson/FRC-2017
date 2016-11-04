@@ -1,6 +1,6 @@
 ﻿/****************************** Header ******************************\
 Class Name: PotentiometerItem, inherits IComponent and InputComponent
-Summary: Abstraction for the WPIlib AnalogPot. that extends to include
+Summary: Abstraction for the WPIlib AnalogPotentiometer that extends to include
 some helper and reading methods.
 Project:     FRC2017
 Copyright (c) BroncBotz.

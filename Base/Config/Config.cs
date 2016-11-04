@@ -5,8 +5,8 @@ Project:     FRC2017
 Copyright (c) BroncBotz.
 All rights reserved.
 
-Author(s): Ryan Cooper
-Email: cooper.ryan@centaurisoftware.co
+Author(s): Ryan Cooper, Dylan Watson
+Email: cooper.ryan@centaurisoftware.co, dylantrwatson@gmail.com
 \********************************************************************/
 
 using Base.Components;

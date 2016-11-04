@@ -1,4 +1,16 @@
-﻿using System;
+﻿/****************************** Header ******************************\
+Class Name: AnalogOutputItem inherits OutputItem and IComponent
+Summary: Abstraction for the WPIlib AnalogOutput that extends to include
+some helper and control methods.
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Dylan Watson, Ryan Cooper
+Email: dylantrwatson@gmal.com, cooper.ryan@centaurisoft.org
+\********************************************************************/
+
+using System;
 using WPILib;
 
 namespace Base.Components

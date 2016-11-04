@@ -1,4 +1,15 @@
-﻿using System;
+﻿/****************************** Header ******************************\
+Class Name: RobotStatus [singleton]
+Summary: Singleton class to manage and notify the current status of the robot and the robot code.
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper
+Email: cooper.ryan@centaurisoft.org
+\********************************************************************/
+
+using System;
 
 namespace Base
 {

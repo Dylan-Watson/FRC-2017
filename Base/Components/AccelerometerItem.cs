@@ -1,5 +1,5 @@
 ﻿/****************************** Header ******************************\
-Class Name: RioAccelerometerItem, inherits IComponent and WPI BuiltinAccelerometer, this is a singleton
+Class Name: RioAccelerometerItem [singleton], inherits IComponent and WPI BuiltinAccelerometer
 Summary: Abstraction for the WPIlib BuiltInAccelerometer that extends to include
 some helper and reading methods.
 Project:     FRC2017
@@ -71,11 +71,18 @@ namespace Base.Components
 
         #region Public Methods
 
+        /// <summary>
+        ///     Method to dispose of this object
+        /// </summary>
         [Obsolete("This object does not need to be disposed of, as it is a standard singleton.")]
         public void Dispose()
         {
         }
 
+        /// <summary>
+        ///     Method to get the current instance of thi class
+        /// </summary>
+        /// <returns>Class RioAccelerometerItem</returns>
         public object GetRawComponent()
         {
             return this;

@@ -1,5 +1,5 @@
 ﻿/****************************** Header ******************************\
-Interface Name: IComponent
+Interface Name: IComponent inherits IDisposable
 Summary: Interface used to create all component items that map to
 physical components on the robot.
 Project:     FRC2017

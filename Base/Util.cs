@@ -1,4 +1,6 @@
-﻿using System;
+﻿//TODO: Ryan, comment this file when you're done with it.
+
+using System;
 using System.Runtime.InteropServices;
 
 namespace Base

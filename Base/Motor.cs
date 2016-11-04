@@ -1,5 +1,5 @@
 ﻿/****************************** Header ******************************\
-Interface Name: Motor
+Class Name: Motor [Abstract]
 Summary: Abstract class for motor components
 Project:     FRC2017
 Copyright (c) BroncBotz.

@@ -1,4 +1,16 @@
-﻿using System;
+﻿/****************************** Header ******************************\
+Class Name: CanTalonItem inherits Motor and IComponent
+Summary: Abstraction for the WPIlib CANTalon that extends to include
+some helper and control methods.
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper
+Email: cooper.ryan@centaurisoft.org
+\********************************************************************/
+
+using System;
 using System.Collections.Generic;
 using WPILib;
 using WPILib.Interfaces;

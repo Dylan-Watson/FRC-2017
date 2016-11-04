@@ -1,9 +1,21 @@
-﻿using NetworkTables;
+﻿/****************************** Header ******************************\
+Class Name: VisionMonitor [singleton]
+Summary: Singleton to manage communication and interpretation of 
+data reviced from the vision Co-Processor.
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper
+Email: cooper.ryan@centaurisoft.org
+\********************************************************************/
+
+using NetworkTables;
 using NetworkTables.Tables;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-
+//TODO: Ryan, finish commenting this file -> thanks.
 namespace Base
 {
     /// <summary>

@@ -1,4 +1,15 @@
-﻿using System;
+﻿/****************************** Header ******************************\
+Class Name: Report [static]
+Summary: Simple reporting class to report general, warning, and error messages to the driverstation.
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper
+Email: cooper.ryan@centaurisoft.org
+\********************************************************************/
+
+using System;
 using WPILib;
 
 namespace Base

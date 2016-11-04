@@ -1,4 +1,15 @@
-﻿using System;
+﻿/****************************** Header ******************************\
+Class Name: OutputComponent [Abstract]
+Summary: Abstract Class used to create all items that return an input to the robot.
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper, Dylan Watson
+Email: cooper.ryan@centaurisoft.org, dylantrwatson@gmail.com
+\********************************************************************/
+
+using System;
 
 namespace Base
 {
