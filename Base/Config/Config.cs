@@ -131,13 +131,20 @@ namespace Base.Config
                 foreach (var element in getElements("RobotConfig", "Encoders"))
                     try
                     {
+                        
+                        bool isReversed = false;
+                        if (element.Attribute("reversed") != null)
+                        {
+                            isReversed = Convert.ToBoolean(element.Attribute("reversed").Value);
+                        }
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
-                            $"Added Encoder {element.Name}, aChannel = {Convert.ToInt32(element.Attribute("aChannel").Value)}, bChannel = {Convert.ToInt32(element.Attribute("bChannel").Value)}");
+                            $"Added Encoder {element.Name}, aChannel = {Convert.ToInt32(element.Attribute("aChannel").Value)}, bChannel = {Convert.ToInt32(element.Attribute("bChannel").Value)}, isReversed = {isReversed}");
                         ActiveCollection.AddComponent(
                             new EncoderItem(element.Name.ToString(),
                                 Convert.ToInt32(element.Attribute("aChannel").Value),
-                                Convert.ToInt32(element.Attribute("bChannel").Value)));
+                                Convert.ToInt32(element.Attribute("bChannel").Value),
+                                isReversed ));
                     }
                     catch (Exception ex)
                     {

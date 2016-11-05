@@ -47,7 +47,7 @@
 
     <!-- Encoder locations -->
     <Encoders>
-      <!--<xxxxxx aChannel="x" bChannel="x" />-->
+      <!--<xxxxxx aChannel="x" bChannel="x" optional reversed="x" />-->
     <test_encoder aChannel="8" bChannel="9" />
     </Encoders>
 
