@@ -6,8 +6,8 @@ Project:     FRC2017
 Copyright (c) BroncBotz.
 All rights reserved.
 
-Author(s): Dylan Watson, Ryan S. Cooper, Matthew Ring
-Email: dylantrwatson@gmail.com, cooper.ryan@centaurisoft.org, matthewzring@gmail.com
+Author(s): Dylan Watson, Ryan S. Cooper
+Email: dylantrwatson@gmail.com, cooper.ryan@centaurisoft.org
 \********************************************************************/
 
 using System;
@@ -25,13 +25,15 @@ namespace Base.Components
         /// <summary>
         ///     Constructor
         /// </summary>
-        /// <param name="commonName"></param>
-        /// <param name="aChannel"></param>
-        /// <param name="bChannel"></param>
-        public EncoderItem(string commonName, int aChannel, int bChannel)
+        /// <param name="commonName">CommonName the EncoderItem will have</param>
+        /// <param name="aChannel">aChannel that the encoder is plugged into on the roboRIO</param>
+        /// <param name="bChannel">bChannel that the encoder is plugged into on the roboRIO</param>
+        /// <param name="isReversed">Whether or not the encoder is reversed - defaults to false</param>
+        public EncoderItem(string commonName, int aChannel, int bChannel, bool isReversed = false)
         {
-            encoder = new Encoder(aChannel, bChannel);
+            encoder = new Encoder(aChannel, bChannel, isReversed);
             Name = commonName;
+            IsReversed = isReversed;
         }
 
         #endregion Public Constructors
@@ -70,6 +72,11 @@ namespace Base.Components
         /// </summary>
         public object Sender { get; } = null;
 
+        /// <summary>
+        ///     Defines whether or not the encoder is reversed
+        /// </summary>
+        public object IsReversed { get; }
+
         #endregion Public Properties
 
         #region Public Methods
@@ -86,7 +93,7 @@ namespace Base.Components
         /// <summary>
         ///     Gets the current value of the encoder
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Double Input</returns>
         public override double Get()
         {
             lock (encoder)
