@@ -1,4 +1,6 @@
-﻿using Base.Config;
+﻿using System.Threading;
+using Base;
+using Base.Config;
 
 namespace Trephine
 {
@@ -15,8 +17,25 @@ namespace Trephine
         /// <param name="config">instance of the config</param>
         public Initialize(Config config)
         {
-            this.config = config;
             baseCalls = new BaseCalls(config);
+            RobotStatus.Instance.RobotStatusChanged += Instance_RobotStatusChanged;
+        }
+
+
+        /// <summary>
+        /// Aborts the autonomous thread if the robot state changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Instance_RobotStatusChanged(object sender, RobotStatusChangedEventArgs e)
+        {
+            baseCalls.FullStop();
+            thread?.Abort();
+
+            if(thread != null)
+                Report.Warning("Autonomous thread was aborted before completion");
+
+            RobotStatus.Instance.RobotStatusChanged -= Instance_RobotStatusChanged;
         }
 
         #endregion Public Constructors
@@ -28,7 +47,9 @@ namespace Trephine
         /// </summary>
         public void Run()
         {
-            new DriveStrait(baseCalls, .5, 1).Start();
+            thread = new Thread(() => new DriveStrait(baseCalls, .5, 5).Start());
+
+            thread.Start();
         }
 
         #endregion Public Methods
@@ -37,7 +58,7 @@ namespace Trephine
 
         private readonly BaseCalls baseCalls;
 
-        private readonly Config config;
+        private Thread thread;
 
         #endregion Private Fields
     }
