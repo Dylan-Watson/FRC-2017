@@ -95,6 +95,7 @@
     <Compile Include="Util.cs" />
     <Compile Include="VirtualControlEvent.cs" />
     <Compile Include="VisionMonitor.cs" />
+    <Compile Include="WatchDog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
