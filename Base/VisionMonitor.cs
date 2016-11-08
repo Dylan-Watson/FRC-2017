@@ -157,7 +157,6 @@ namespace Base
             ntRelayTable.PutRaw($"CREATE_TARGET_SETTING_{id}", arr);
         }
 
-        //TODO: fix DELETE_TARGET_SETTING to use prefix and rename to DISABLE_TARGET...
         /// <summary>
         ///     Deletes an target setting from the Co-Processors list
         ///     of target to search for
