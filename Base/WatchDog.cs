@@ -18,7 +18,7 @@ namespace Base
     /// <summary>
     ///     An expiration timer used to check if a specified amount of time has passed
     /// </summary>
-    public class WatchDog
+    public class WatchDog : IDisposable
     {
         #region Public Enums
 
@@ -55,7 +55,18 @@ namespace Base
         {
             timer = new Timer(seconds*1000);
             timer.Elapsed += Timer_Expired;
-            ExTime = seconds;
+            RobotStatus.Instance.RobotStatusChanged += Instance_RobotStatusChanged;
+        }
+
+        /// <summary>
+        /// Disposes of the instance if the robot state changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Instance_RobotStatusChanged(object sender, RobotStatusChangedEventArgs e)
+        {
+            Report.Warning("WatchDog disposed due to robot state change.");
+            Dispose();
         }
 
         /// <summary>
@@ -66,7 +77,7 @@ namespace Base
         {
             timer = new Timer(milliseconds);
             timer.Elapsed += Timer_Expired;
-            ExTime = milliseconds/1000;
+            RobotStatus.Instance.RobotStatusChanged += Instance_RobotStatusChanged;
         }
 
         #endregion
@@ -78,8 +89,8 @@ namespace Base
         /// </summary>
         public void Reset()
         {
-            Start();
             Stop();
+            Start();
         }
 
         /// <summary>
@@ -107,7 +118,6 @@ namespace Base
         public void SetInSeconds(int seconds)
         {
             timer.Interval = seconds*1000;
-            ExTime = seconds;
         }
 
         /// <summary>
@@ -117,15 +127,15 @@ namespace Base
         public void SetInMilliseconds(double milliseconds)
         {
             timer.Interval = milliseconds;
-            ExTime = milliseconds/1000;
         }
 
         /// <summary>
-        ///     Method to be used after expiration to reset the state to stopped
+        ///     Disposes of this class and its managed resources
         /// </summary>
-        public void ResetState()
+        public void Dispose()
         {
-            State = WatchDogState.Stopped;
+            dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         #endregion
@@ -144,6 +154,19 @@ namespace Base
             Report.Warning("WatchDog Timer Expired Invoked!");
         }
 
+        /// <summary>
+        ///     Releases managed and native resources
+        /// </summary>
+        /// <param name="disposing"></param>
+        private void dispose(bool disposing)
+        {
+            if (!disposing) return;
+            lock (timer)
+            {
+                timer?.Dispose();
+            }
+        }
+
         #endregion
 
         #region Public Properties
@@ -151,7 +174,7 @@ namespace Base
         /// <summary>
         ///     Defines the amount of time before the timer expires
         /// </summary>
-        public double ExTime { get; private set; }
+        public double ExTime => timer.Interval;
 
         /// <summary>
         ///     Defines the current state of the timer
