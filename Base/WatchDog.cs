@@ -59,17 +59,6 @@ namespace Base
         }
 
         /// <summary>
-        /// Disposes of the instance if the robot state changes
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Instance_RobotStatusChanged(object sender, RobotStatusChangedEventArgs e)
-        {
-            Report.Warning("WatchDog disposed due to robot state change.");
-            Dispose();
-        }
-
-        /// <summary>
         ///     Constructor for the timer using milliseconds
         /// </summary>
         /// <param name="milliseconds">The amount of time (interval) for the timer to go for in milliseconds</param>
@@ -145,13 +134,24 @@ namespace Base
         /// <summary>
         ///     Event handler for the timer.Elapsed event
         /// </summary>
-        /// <param name="sender">The object that called this method</param>
-        /// <param name="e">Elapsed Event Arguments Passed</param>
+        /// <param name="sender">The object invoking the method</param>
+        /// <param name="e">ElapsedEvent Arguments Passed</param>
         private void Timer_Expired(object sender, ElapsedEventArgs e)
         {
             State = WatchDogState.Expired;
             IsExpired?.Invoke(this, e);
             Report.Warning("WatchDog Timer Expired Invoked!");
+        }
+
+        /// <summary>
+        /// Disposes of the instance if the robot state changes
+        /// </summary>
+        /// <param name="sender">The object invoking the method</param>
+        /// <param name="e">RobotStatusChanged Arguments passed</param>
+        private void Instance_RobotStatusChanged(object sender, RobotStatusChangedEventArgs e)
+        {
+            Report.Warning("WatchDog disposed due to robot state change.");
+            Dispose();
         }
 
         /// <summary>
