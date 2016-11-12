@@ -74,6 +74,8 @@ namespace Base
 
                 foreach (var component in actors)
                 {
+                    if (component.InUse) continue;//skip if the component is in use
+
                     var actor = component;
 
                     if ((EventType == VirtualControlEventType.Value) &&

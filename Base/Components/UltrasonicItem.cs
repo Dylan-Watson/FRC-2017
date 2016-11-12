@@ -63,7 +63,9 @@ namespace Base.Components
         private void dispose(bool disposing)
         {
             if (!disposing) return;
+#if USE_LOCKING
             lock (u)
+#endif
             {
                 u?.Dispose();
             }
@@ -112,7 +114,9 @@ namespace Base.Components
         /// <returns>double rangeInches or double rangeMM</returns>
         public override double Get()
         {
+#if USE_LOCKING
             lock (u)
+#endif
             {
                 var val = Unit == Ultrasonic.Unit.Inches ? u.GetRangeInches() : u.GetRangeMM();
                 onValueChanged(new VirtualControlEventArgs(val, false));

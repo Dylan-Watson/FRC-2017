@@ -12,10 +12,12 @@ Email: cooper.ryan@centaurisoft.org
 
 using System;
 using System.Threading.Tasks;
-using WPILib;
 
 namespace Base
 {
+    using System.Threading;
+    using Timer = WPILib.Timer;
+
     /// <summary>
     ///     Abstract class to create and manage a loop for robot functions
     /// </summary>
@@ -37,6 +39,8 @@ namespace Base
         private bool kill;
 
         private Task thread;
+
+        private CancellationTokenSource tokenSource = new CancellationTokenSource();
 
         #endregion Private Fields
 
@@ -72,9 +76,11 @@ namespace Base
         /// </summary>
         public void Start()
         {
+            var cToken = tokenSource.Token;
+            cToken.Register(notifyCancellation);
             kill = false;
             Report.General($"Spinning up the {GetType()} system.");
-            thread = new Task(loop);
+            thread = new Task(loop, cToken);
             thread.Start();
         }
 
@@ -97,6 +103,11 @@ namespace Base
 
         #region Private Methods
 
+        private void notifyCancellation()
+        {
+            Report.General($"{GetType()} cancellation requested.");
+        }
+
         private void backgroundLoop()
         {
             while (true)
@@ -118,7 +129,9 @@ namespace Base
         private void dispose(bool disposing)
         {
             if (!disposing) return;
+#if USE_LOCKING
             lock (thread)
+#endif
             {
                 thread?.Dispose();
             }
@@ -145,6 +158,7 @@ namespace Base
                 main();
                 Timer.Delay(cycleTime);
             }
+            tokenSource.Cancel();
         }
 
         #endregion Private Methods

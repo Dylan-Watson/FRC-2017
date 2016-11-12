@@ -155,8 +155,9 @@ namespace Base.Components
             Sender = sender;
             SetAllowC(upperLimit?.GetBool() ?? true);
             SetAllowCc(lowerLimit?.GetBool() ?? true);
-
+#if USE_LOCKING
             lock (victor)
+#endif
             {
                 if ((val < -Constants.MINUMUM_JOYSTICK_RETURN) && AllowCc)
                 {
@@ -215,7 +216,9 @@ namespace Base.Components
         /// </summary>
         public override void Stop()
         {
+#if USE_LOCKING
             lock (victor)
+#endif
             {
                 victor.Set(0);
                 InUse = false;
@@ -235,7 +238,9 @@ namespace Base.Components
         private void dispose(bool disposing)
         {
             if (!disposing) return;
+#if USE_LOCKING
             lock (victor)
+#endif
             {
                 victor?.Dispose();
             }

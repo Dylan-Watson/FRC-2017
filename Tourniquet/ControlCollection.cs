@@ -57,7 +57,9 @@ namespace Tourniquet
 
         public ControlItem GetDriverControl(string name)
         {
+#if USE_LOCKING
             lock (driverControlItems)
+#endif
             {
                 return driverControlItems.FirstOrDefault(x => x.ControlName == name);
             }
@@ -65,7 +67,9 @@ namespace Tourniquet
 
         public List<ControlItem> GetDriverControls()
         {
+#if USE_LOCKING
             lock (driverControlItems)
+#endif
             {
                 return driverControlItems;
             }
@@ -73,7 +77,9 @@ namespace Tourniquet
 
         public ControlItem GetOperatorControl(string name)
         {
+#if USE_LOCKING
             lock (operatorControlItems)
+#endif
             {
                 return operatorControlItems.FirstOrDefault(x => x.ControlName == name);
             }
@@ -81,12 +87,14 @@ namespace Tourniquet
 
         public List<ControlItem> GetOperatorControls()
         {
+#if USE_LOCKING
             lock (operatorControlItems)
+#endif
             {
                 return operatorControlItems;
             }
         }
 
-        #endregion Public Methods
+#endregion Public Methods
     }
 }

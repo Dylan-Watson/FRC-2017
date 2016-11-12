@@ -90,7 +90,9 @@ namespace Base.Components
         /// <returns>Boolean</returns>
         public override double Get()
         {
+#if USE_LOCKING
             lock (din)
+#endif
             {
                 var input = Convert.ToDouble(din.Get());
 
@@ -108,7 +110,9 @@ namespace Base.Components
         /// <returns>Boolean</returns>
         public bool GetBool()
         {
+#if USE_LOCKING
             lock (din)
+#endif
             {
                 var value = din.Get();
 
@@ -140,7 +144,9 @@ namespace Base.Components
         private void dispose(bool disposing)
         {
             if (!disposing) return;
+#if USE_LOCKING
             lock (din)
+#endif
             {
                 din?.Dispose();
             }

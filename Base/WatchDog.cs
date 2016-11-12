@@ -161,7 +161,9 @@ namespace Base
         private void dispose(bool disposing)
         {
             if (!disposing) return;
+#if USE_LOCKING
             lock (timer)
+#endif
             {
                 timer?.Dispose();
             }

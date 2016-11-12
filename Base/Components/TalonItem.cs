@@ -180,7 +180,9 @@ namespace Base.Components
             }
 
             if (!Master)
+#if USE_LOCKING
                 lock (talon)
+#endif
                 {
                     talon.ControlEnabled = true;
                     if ((val < -Constants.MINUMUM_JOYSTICK_RETURN) && AllowCc)
@@ -225,7 +227,9 @@ namespace Base.Components
             {
                 if (IsReversed)
                 {
+#if USE_LOCKING
                     lock (talon)
+#endif
                     {
                         talon.ControlEnabled = true;
                         InUse = true;
@@ -233,7 +237,9 @@ namespace Base.Components
                         onValueChanged(new VirtualControlEventArgs(-val, InUse));
                     }
                     foreach (var slave in slaves)
+#if USE_LOCKING
                         lock (slave)
+#endif
                         {
                             ((CANTalon) slave.GetRawComponent()).ControlEnabled = true;
                             ((CANTalon) slave.GetRawComponent()).Set(talon.DeviceId);
@@ -241,7 +247,9 @@ namespace Base.Components
                 }
                 else
                 {
+#if USE_LOCKING
                     lock (talon)
+#endif
                     {
                         talon.ControlEnabled = true;
                         InUse = true;
@@ -249,7 +257,9 @@ namespace Base.Components
                         onValueChanged(new VirtualControlEventArgs(val, InUse));
                     }
                     foreach (var slave in slaves)
+#if USE_LOCKING
                         lock (slave)
+#endif
                         {
                             ((CANTalon) slave.GetRawComponent()).ControlEnabled = true;
                             ((CANTalon) slave.GetRawComponent()).Set(talon.DeviceId);
@@ -260,7 +270,9 @@ namespace Base.Components
             {
                 if (IsReversed)
                 {
+#if USE_LOCKING
                     lock (talon)
+#endif
                     {
                         talon.ControlEnabled = true;
                         InUse = true;
@@ -268,7 +280,9 @@ namespace Base.Components
                         onValueChanged(new VirtualControlEventArgs(-val, InUse));
                     }
                     foreach (var slave in slaves)
+#if USE_LOCKING
                         lock (slave)
+#endif
                         {
                             ((CANTalon) slave.GetRawComponent()).ControlEnabled = true;
                             ((CANTalon) slave.GetRawComponent()).Set(talon.DeviceId);
@@ -276,7 +290,9 @@ namespace Base.Components
                 }
                 else
                 {
+#if USE_LOCKING
                     lock (talon)
+#endif
                     {
                         talon.ControlEnabled = true;
                         InUse = true;
@@ -284,7 +300,9 @@ namespace Base.Components
                         onValueChanged(new VirtualControlEventArgs(val, InUse));
                     }
                     foreach (var slave in slaves)
+#if USE_LOCKING
                         lock (slave)
+#endif
                         {
                             ((CANTalon) slave.GetRawComponent()).ControlEnabled = true;
                             ((CANTalon) slave.GetRawComponent()).Set(talon.DeviceId);
@@ -293,7 +311,9 @@ namespace Base.Components
             }
             else
             {
+#if USE_LOCKING
                 lock (talon)
+#endif
                 {
                     talon.Set(0);
                     talon.ControlEnabled = false;
@@ -301,7 +321,9 @@ namespace Base.Components
                     onValueChanged(new VirtualControlEventArgs(-val, InUse));
                 }
                 foreach (var slave in slaves)
+#if USE_LOCKING
                     lock (slave)
+#endif
                     {
                         ((CANTalon) slave.GetRawComponent()).ControlEnabled = false;
                     }
@@ -328,7 +350,9 @@ namespace Base.Components
         /// </summary>
         public override void Stop()
         {
+#if USE_LOCKING
             lock (talon)
+#endif
             {
                 talon.Set(0);
                 talon.ControlEnabled = false;
@@ -349,7 +373,9 @@ namespace Base.Components
         private void dispose(bool disposing)
         {
             if (!disposing) return;
+#if USE_LOCKING
             lock (talon)
+#endif
             {
                 talon?.Dispose();
             }

@@ -61,7 +61,9 @@ namespace Base.Components
         {
             var value = false;
             Sender = sender;
+#if USE_LOCKING
             lock (dout)
+#endif
             {
                 if (Math.Abs(val - 0) <= Math.Abs(val*.00001))
                 {
@@ -142,7 +144,9 @@ namespace Base.Components
         private void dispose(bool disposing)
         {
             if (!disposing) return;
+#if USE_LOCKING
             lock (dout)
+#endif
             {
                 dout?.Dispose();
             }

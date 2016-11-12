@@ -99,7 +99,9 @@ namespace Base.Components
         /// </summary>
         public void DefaultSet()
         {
+#if USE_LOCKING
             lock (relay)
+#endif
             {
                 relay.Set(Default);
             }
@@ -120,7 +122,9 @@ namespace Base.Components
         /// <returns></returns>
         public Relay.Value GetCurrentPosition()
         {
+#if USE_LOCKING
             lock (relay)
+#endif
             {
                 return relay.Get();
             }
@@ -140,7 +144,9 @@ namespace Base.Components
         {
             Sender = sender;
             InUse = true;
+#if USE_LOCKING
             lock (relay)
+#endif
             {
                 relay.Set(val);
                 onValueChanged(new VirtualControlEventArgs(Convert.ToDouble(val), InUse));
@@ -190,7 +196,9 @@ namespace Base.Components
         private void dispose(bool disposing)
         {
             if (!disposing) return;
+#if USE_LOCKING
             lock (relay)
+#endif
             {
                 relay?.Dispose();
             }
@@ -210,7 +218,9 @@ namespace Base.Components
         /// </summary>
         private void setForward()
         {
+#if USE_LOCKING
             lock (relay)
+#endif
             {
                 relay.Set(Relay.Value.Forward);
             }
@@ -222,7 +232,9 @@ namespace Base.Components
         /// </summary>
         private void setOff()
         {
+#if USE_LOCKING
             lock (relay)
+#endif
             {
                 relay.Set(Relay.Value.Off);
             }
@@ -234,7 +246,9 @@ namespace Base.Components
         /// </summary>
         private void setOn()
         {
+#if USE_LOCKING
             lock (relay)
+#endif
             {
                 relay.Set(Relay.Value.On);
             }
@@ -246,7 +260,9 @@ namespace Base.Components
         /// </summary>
         private void setReverse()
         {
+#if USE_LOCKING
             lock (relay)
+#endif
             {
                 relay.Set(Relay.Value.Reverse);
             }

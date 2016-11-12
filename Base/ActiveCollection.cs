@@ -30,7 +30,9 @@ namespace Base
         private void dispose(bool disposing)
         {
             if (!disposing) return;
+#if USE_LOCKING
             lock (inputComponentUpdateLoop)
+#endif
             {
                 inputComponentUpdateLoop?.Dispose();
             }
@@ -219,7 +221,9 @@ namespace Base
         protected override void main()
         {
             if (inputComponents.Count == 0) return;
+#if USE_LOCKING
             lock (inputComponents)
+#endif
             {
                 foreach (var input in inputComponents)
                     input.Get();
@@ -236,7 +240,9 @@ namespace Base
         /// <param name="input"></param>
         public void AddInputComponent(InputComponent input)
         {
+#if USE_LOCKING
             lock (inputComponents)
+#endif
             {
                 inputComponents.Add(input);
             }
@@ -247,7 +253,9 @@ namespace Base
         /// </summary>
         public void ClearInputComponents()
         {
+#if USE_LOCKING
             lock (inputComponents)
+#endif
             {
                 inputComponents.Clear();
             }

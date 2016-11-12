@@ -88,7 +88,9 @@ namespace Base.Components
         /// <returns>Double</returns>
         public override double Get()
         {
+#if USE_LOCKING
             lock (ain)
+#endif
             {
                 var voltage = ain.GetVoltage();
 
@@ -120,7 +122,9 @@ namespace Base.Components
         private void dispose(bool disposing)
         {
             if (!disposing) return;
+#if USE_LOCKING
             lock (ain)
+#endif
             {
                 ain?.Dispose();
             }

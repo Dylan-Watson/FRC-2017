@@ -705,7 +705,9 @@ namespace Base.Config
         private void dispose(bool disposing)
         {
             if (!disposing) return;
+#if USE_LOCKING
             lock (ActiveCollection)
+#endif
             {
                 ActiveCollection?.Dispose();
             }

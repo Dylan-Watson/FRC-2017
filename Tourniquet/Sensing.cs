@@ -15,6 +15,8 @@ using Base.Config;
 
 namespace Tourniquet
 {
+    using System;
+
     /// <summary>
     ///     Class to handle specific sensor functionality on the robot, this is a ControlLoop, see ControlLoop in Base
     /// </summary>
@@ -41,10 +43,14 @@ namespace Tourniquet
         /// </summary>
         protected override void main()
         {
-            if ((preassurePad.Get() > .3) && !shooter.InUse)
-                ControlCollection.Instance.GetOperatorControl("intakeIn").IsEnabled = false;
-            else
-                ControlCollection.Instance.GetOperatorControl("intakeIn").IsEnabled = true;
+            try
+            {
+                if ((preassurePad.Get() > .3) && !shooter.InUse)
+                    ControlCollection.Instance.GetOperatorControl("intakeIn").IsEnabled = false;
+                else
+                    ControlCollection.Instance.GetOperatorControl("intakeIn").IsEnabled = true;
+            }
+            catch (Exception) { }
         }
 
         #endregion Protected Methods

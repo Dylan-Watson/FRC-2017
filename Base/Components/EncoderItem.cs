@@ -96,7 +96,9 @@ namespace Base.Components
         /// <returns>Double Input</returns>
         public override double Get()
         {
+#if USE_LOCKING
             lock (encoder)
+#endif
             {
                 var input = Convert.ToDouble(encoder.Get());
 
@@ -125,7 +127,9 @@ namespace Base.Components
         private void dispose(bool disposing)
         {
             if (!disposing) return;
+#if USE_LOCKING
             lock (encoder)
+#endif
             {
                 encoder?.Dispose();
             }

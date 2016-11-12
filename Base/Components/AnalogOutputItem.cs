@@ -60,7 +60,9 @@ namespace Base.Components
         protected override void set(double val, object sender)
         {
             Sender = sender;
+#if USE_LOCKING
             lock (aout)
+#endif
             {
                 if ((val >= 0) && (val <= 5))
                 {
@@ -134,7 +136,9 @@ namespace Base.Components
         private void dispose(bool disposing)
         {
             if (!disposing) return;
+#if USE_LOCKING
             lock (aout)
+#endif
             {
                 aout?.Dispose();
             }

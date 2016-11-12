@@ -88,7 +88,9 @@ namespace Base.Components
         /// <returns></returns>
         public override double Get()
         {
+#if USE_LOCKING
             lock (apt)
+#endif
             {
                 var input = apt.Get();
 
@@ -120,7 +122,9 @@ namespace Base.Components
         private void dispose(bool disposing)
         {
             if (!disposing) return;
+#if USE_LOCKING
             lock (apt)
+#endif
             {
                 apt?.Dispose();
             }

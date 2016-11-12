@@ -50,6 +50,7 @@ namespace FRCSimulator
         {
             SimHooks.WaitForProgramStart();
             DriverStation.StartDriverStationGui();
+            new THreadStates().ShowDialog();
             // using (var game = new FRCSimulator()) game.Run();
         }
 

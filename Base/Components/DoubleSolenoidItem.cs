@@ -97,7 +97,9 @@ namespace Base.Components
         /// </summary>
         public void DefaultSet()
         {
+#if USE_LOCKING
             lock (solenoid)
+#endif
             {
                 solenoid.Set(Default);
             }
@@ -118,7 +120,9 @@ namespace Base.Components
         /// <returns></returns>
         public DoubleSolenoid.Value GetCurrentPosition()
         {
+#if USE_LOCKING
             lock (solenoid)
+#endif
             {
                 return solenoid.Get();
             }
@@ -150,8 +154,11 @@ namespace Base.Components
         public void Set(double val, object sender)
         {
             Sender = sender;
+#if USE_LOCKING
             lock (solenoid)
+#endif
             {
+                Report.General($"Solenoid set to {val}");
                 if ((val >= 0) && (val <= 2))
                 {
                     InUse = true;
@@ -189,7 +196,9 @@ namespace Base.Components
         public void Set(DoubleSolenoid.Value value, object sender)
         {
             Sender = sender;
+#if USE_LOCKING
             lock (solenoid)
+#endif
             {
                 solenoid.Set(value);
             }
@@ -217,7 +226,9 @@ namespace Base.Components
         private void dispose(bool disposing)
         {
             if (!disposing) return;
+#if USE_LOCKING
             lock (solenoid)
+#endif
             {
                 solenoid?.Dispose();
             }

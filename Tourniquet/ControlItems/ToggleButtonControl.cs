@@ -32,6 +32,7 @@ namespace Tourniquet.ControlItems
             if (currentState != previousState)
             {
                 toggle ^= currentState;
+                if(!currentState)
                 if (toggle)
                 {
                     if (!IsReversed)
