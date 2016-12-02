@@ -1,6 +1,6 @@
 ﻿/****************************** Header ******************************\
 Class Name: Log
-Summary: Simple loggin class to log exceptions and other data.
+Summary: Simple logging class to log exceptions and other data.
 Project:     FRC2017
 Copyright (c) BroncBotz.
 All rights reserved.

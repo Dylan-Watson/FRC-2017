@@ -1,4 +1,18 @@
-﻿using Base;
+﻿/****************************** Header ******************************\
+Class Name: Base Calls
+Summary: Class to handle all of the calls to the base broject to 
+gather groups of components 
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper
+Email: cooper.ryan@centaurisoft.org
+\********************************************************************/
+
+//TODO: Ryan, check this header to make sure it is correct
+
+using Base;
 using Base.Config;
 
 namespace Trephine

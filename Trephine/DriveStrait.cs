@@ -1,4 +1,15 @@
-﻿using WPILib;
+﻿/****************************** Header ******************************\
+Class Name: DriveStrait
+Summary: Practice autonomous made to drive straight
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper
+Email: cooper.ryan@centaurisoft.org
+\********************************************************************/
+
+using WPILib;
 
 namespace Trephine
 {

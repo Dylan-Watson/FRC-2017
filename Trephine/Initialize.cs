@@ -1,4 +1,15 @@
-﻿using System.Threading;
+﻿/****************************** Header ******************************\
+Class Name: Initialize
+Summary: Class used to initialize the autonomous period
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper
+Email: cooper.ryan@centaurisoft.org
+\********************************************************************/
+
+using System.Threading;
 using Base;
 using Base.Config;
 

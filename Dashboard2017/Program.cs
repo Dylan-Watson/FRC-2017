@@ -1,6 +1,6 @@
 ﻿/****************************** Header ******************************\
-Class Name:
-Summary:
+Class Name: Program
+Summary: Call used to start an implementation of the Smart Dashboard
 Project:     FRC2017
 Copyright (c) BroncBotz.
 All rights reserved.
