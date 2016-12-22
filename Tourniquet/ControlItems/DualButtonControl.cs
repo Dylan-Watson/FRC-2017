@@ -1,4 +1,16 @@
-﻿using WPILib;
+﻿/****************************** Header ******************************\
+Class Name: DualButtonControl inherits ControlItem
+Summary: Used to control physical component with two buttons (on 
+and off positions...two button toggle).
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper
+Email: cooper.ryan@centaurisoft.org
+\********************************************************************/
+
+using WPILib;
 
 namespace Tourniquet.ControlItems
 {

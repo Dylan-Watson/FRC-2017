@@ -1,4 +1,15 @@
-﻿using WPILib;
+﻿/****************************** Header ******************************\
+Class Name: ToggleButtonControl inherits ControlItem
+Summary: Used to control physical component with a single button toggle.
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper
+Email: cooper.ryan@centaurisoft.org
+\********************************************************************/
+
+using WPILib;
 
 namespace Tourniquet.ControlItems
 {

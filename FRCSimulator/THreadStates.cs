@@ -7,10 +7,13 @@ namespace FRCSimulator
     using ThreadState = System.Diagnostics.ThreadState;
     using Timer = WPILib.Timer;
 
+    /// <summary>
+    ///     ThreadStates
+    /// </summary>
     public partial class THreadStates : Form
     {
         /// <summary>
-        ///  Initialize the ThreadStates
+        ///     Constructor
         /// </summary>
         public THreadStates()
         {

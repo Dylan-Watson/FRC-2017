@@ -1,5 +1,5 @@
 ﻿/****************************** Header ******************************\
-Class Name: Log
+Class Name: Log [static]
 Summary: Simple logging class to log exceptions and other data.
 Project:     FRC2017
 Copyright (c) BroncBotz.

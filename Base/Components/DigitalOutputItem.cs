@@ -1,5 +1,5 @@
 ﻿/****************************** Header ******************************\
-Class Name: DigitalOutpotItem inherits OoutputComponent and IComponent
+Class Name: DigitalOutputItem inherits OutputComponent and IComponent
 Summary: Abstraction for the WPIlib DigitalOutput that extends to include
 some helper and control methods.
 Project:     FRC2017

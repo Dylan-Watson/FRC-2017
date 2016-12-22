@@ -25,7 +25,13 @@ namespace Trephine
         #endregion Private Fields
 
         #region Public Constructors
-
+        
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="baseCalls">Instantiation of the BaseCalls class to interact with the Base project</param>
+        /// <param name="power">Power to set the drive motors to</param>
+        /// <param name="seconds">Time to drive strait for</param>
         public DriveStrait(BaseCalls baseCalls, double power = .5, double seconds = .5) : base(baseCalls)
         {
             this.power = power;
