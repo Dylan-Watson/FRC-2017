@@ -1,5 +1,5 @@
 ﻿/****************************** Header ******************************\
-Class Name: Config [singleton]
+Class Name: Config
 Summary: Manages and loads the configuration file from XML.
 Project:     FRC2017
 Copyright (c) BroncBotz.

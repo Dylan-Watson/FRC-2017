@@ -6,6 +6,9 @@ using System.Windows.Forms;
 
 namespace Dashboard2017
 {
+    /// <summary>
+    ///     Class to manage the Options
+    /// </summary>
     public partial class Options : Form
     {
         #region Private Fields
@@ -16,6 +19,9 @@ namespace Dashboard2017
 
         #region Public Constructors
 
+        /// <summary>
+        ///     Constructor
+        /// </summary>
         public Options()
         {
             InitializeComponent();
