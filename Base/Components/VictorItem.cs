@@ -196,16 +196,28 @@ namespace Base.Components
             }
         }
 
+        /// <summary>
+        ///     Attach an encoder to this motor
+        /// </summary>
+        /// <param name="encoder">The EncoderItem to bind to the motor</param>
         public void SetEncoder(EncoderItem encoder)
         {
             base.encoder = encoder;
         }
 
+        /// <summary>
+        ///     Attach a DigitalInputItem to be the lowerlimit of this motor
+        /// </summary>
+        /// <param name="lowerLimit">The DigitalInputItem to attach</param>
         public void SetLowerLimit(DigitalInputItem lowerLimit)
         {
             base.lowerLimit = lowerLimit;
         }
 
+        /// <summary>
+        ///     Attach a DigitalInputItem to be the upperlimit of this motor
+        /// </summary>
+        /// <param name="upperLimit">The DigitalInputItem to attach</param>
         public void SetUpperLimit(DigitalInputItem upperLimit)
         {
             base.upperLimit = upperLimit;

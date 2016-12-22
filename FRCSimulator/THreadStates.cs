@@ -9,6 +9,9 @@ namespace FRCSimulator
 
     public partial class THreadStates : Form
     {
+        /// <summary>
+        ///  Initialize the ThreadStates
+        /// </summary>
         public THreadStates()
         {
             InitializeComponent();

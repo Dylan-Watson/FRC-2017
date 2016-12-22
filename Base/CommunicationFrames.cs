@@ -120,8 +120,14 @@ namespace Base
             #endregion Public Constructors
         }
 
+        /// <summary>
+        ///     Class to contain the Target and the TimeStamp
+        /// </summary>
         public class TargetContainer
         {
+            /// <summary>
+            ///     The target to be contained
+            /// </summary>
             public Target Target;
 
             /// <summary>
