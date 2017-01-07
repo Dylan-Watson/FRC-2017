@@ -1,4 +1,16 @@
-﻿using System;
+﻿/****************************** Header ******************************\
+Class Name: CanTalonItem inherits Motor and IComponent
+Summary: Abstraction for the WPIlib CANTalon that extends to include
+some helper and control methods.
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper
+Email: cooper.ryan@centaurisoft.org
+\********************************************************************/
+
+using System;
 using System.Collections.Generic;
 using WPILib;
 using WPILib.Interfaces;
@@ -6,59 +18,25 @@ using WPILib.Interfaces;
 namespace Base.Components
 {
     /// <summary>
-    /// Class to handle CanTalon motor controllers
+    ///     Class to handle CanTalon motor controllers
     /// </summary>
-    public class CanTalonItem : Motor, IComponent
+    public sealed class CanTalonItem : Motor, IComponent
     {
         #region Public Events
 
         /// <summary>
-        /// Event used for VirtualControlEvents
+        ///     Event used for VirtualControlEvents
         /// </summary>
         public event EventHandler ValueChanged;
 
         #endregion Public Events
-
-        /// <summary>
-        /// Disposes of this IComponent and its managed resources
-        /// </summary>
-        public void Dispose()
-        {
-            dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        #region Protected Methods
-
-        /// <summary>
-        /// Method to fire value changes for set/get values and InUse values
-        /// </summary>
-        /// <param name="e">VirtualControlEventArgs</param>
-        protected virtual void onValueChanged(VirtualControlEventArgs e)
-        {
-            ValueChanged?.Invoke(this, e);
-        }
-
-        #endregion Protected Methods
-
-        /// <summary>
-        /// Releases managed and native resources
-        /// </summary>
-        /// <param name="disposing"></param>
-        protected virtual void dispose(bool disposing)
-        {
-            if (!disposing) return;
-            lock (talon)
-            {
-                talon?.Dispose();
-            }
-        }
 
         #region Private Fields
 
         private readonly string master;
 
         private readonly List<CanTalonItem> slaves;
+
         private readonly CANTalon talon;
 
         #endregion Private Fields
@@ -66,27 +44,22 @@ namespace Base.Components
         #region Public Constructors
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="channel">channel/address of the talon</param>
         /// <param name="commonName">CommonName the component will have</param>
         /// <param name="isReversed">if the controller output should be reversed</param>
-        /// <param name="upperLimit">Limit switch to prevent the motor from moving forward</param>
-        /// <param name="lowerLimit">Limit switch to prevent the motor from moving reverse</param>
-        public CanTalonItem(int channel, string commonName, bool isReversed = false, DigitalInputItem upperLimit = null,
-            DigitalInputItem lowerLimit = null)
+        public CanTalonItem(int channel, string commonName, bool isReversed = false)
         {
             talon = new CANTalon(channel);
             Name = commonName;
             IsReversed = isReversed;
             talon.MotorControlMode = ControlMode.PercentVbus;
             talon.ControlEnabled = true;
-            UpperLimit = upperLimit;
-            LowerLimit = lowerLimit;
         }
 
         /// <summary>
-        /// PID Constructor
+        ///     PID Constructor
         /// </summary>
         /// <param name="channel">channel/address of the talon</param>
         /// <param name="commonName">CommonName the component will have</param>
@@ -94,10 +67,7 @@ namespace Base.Components
         /// <param name="i">integral</param>
         /// <param name="d">derivative</param>
         /// <param name="isReversed">if the controller output should be reversed</param>
-        /// <param name="upperLimit">Limit switch to prevent the motor from moving forward</param>
-        /// <param name="lowerLimit">Limit switch to prevent the motor from moving reverse</param>
-        public CanTalonItem(int channel, string commonName, double p, double i, double d, bool isReversed = false,
-            DigitalInputItem upperLimit = null, DigitalInputItem lowerLimit = null)
+        public CanTalonItem(int channel, string commonName, double p, double i, double d, bool isReversed = false)
         {
             talon = new CANTalon(channel);
             Name = commonName;
@@ -108,12 +78,10 @@ namespace Base.Components
             talon.FeedBackDevice = CANTalon.FeedbackDevice.QuadEncoder;
             talon.SetPID(p, i, d);
             talon.ControlEnabled = true;
-            UpperLimit = upperLimit;
-            LowerLimit = lowerLimit;
         }
 
         /// <summary>
-        /// Slave Constructor
+        ///     Slave Constructor
         /// </summary>
         /// <param name="channel">channel/address of the talon</param>
         /// <param name="commonName">CommonName the component will have</param>
@@ -136,27 +104,27 @@ namespace Base.Components
         #region Public Properties
 
         /// <summary>
-        /// Defines if the talon is in use
+        ///     Defines if the talon is in use
         /// </summary>
         public bool InUse { get; private set; }
 
         /// <summary>
-        /// Defines if the talon is a master
+        ///     Defines if the talon is a master
         /// </summary>
         public bool Master { get; }
 
         /// <summary>
-        /// Name of the component
+        ///     Name of the component
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// Defines the object issuing the commands
+        ///     Defines the object issuing the commands
         /// </summary>
         public object Sender { get; private set; }
 
         /// <summary>
-        /// Defines if the talon is a slave
+        ///     Defines if the talon is a slave
         /// </summary>
         public bool Slave { get; }
 
@@ -165,27 +133,45 @@ namespace Base.Components
         #region Public Methods
 
         /// <summary>
-        /// Adds a slave to this controller
+        ///     Adds a slave to this controller
         /// </summary>
         /// <param name="slave"></param>
         public void AddSlave(CanTalonItem slave) => slaves.Add(slave);
 
         /// <summary>
-        /// Gets the raw WPI CANTalon object
+        ///     Disposes of this IComponent and its managed resources
+        /// </summary>
+        public void Dispose()
+        {
+            dispose(true);
+            //GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        ///     Returns the current value of the encoder
+        /// </summary>
+        /// <returns></returns>
+        public double GetEncoderValue()
+        {
+            return encoder.Get();
+        }
+
+        /// <summary>
+        ///     Gets the raw WPI CANTalon object
         /// </summary>
         /// <returns></returns>
         public object GetRawComponent() => talon;
 
         /// <summary>
-        /// Sets a value to the talon
+        ///     Sets a value to the talon
         /// </summary>
         /// <param name="val">value to set the controller to</param>
         /// <param name="sender">the caller of this method</param>
         public override void Set(double val, object sender)
         {
             Sender = sender;
-            SetAllowC(UpperLimit?.GetBool() ?? true);
-            SetAllowCc(LowerLimit?.GetBool() ?? true);
+            SetAllowC(upperLimit?.GetBool() ?? true);
+            SetAllowCc(lowerLimit?.GetBool() ?? true);
             if (Slave)
             {
                 Report.Warning(
@@ -194,7 +180,9 @@ namespace Base.Components
             }
 
             if (!Master)
+#if USE_LOCKING
                 lock (talon)
+#endif
                 {
                     talon.ControlEnabled = true;
                     if ((val < -Constants.MINUMUM_JOYSTICK_RETURN) && AllowCc)
@@ -227,6 +215,7 @@ namespace Base.Components
                     }
                     else
                     {
+                        talon.Set(0);
                         talon.ControlEnabled = false;
                         InUse = false;
                         onValueChanged(new VirtualControlEventArgs(val, InUse));
@@ -238,7 +227,9 @@ namespace Base.Components
             {
                 if (IsReversed)
                 {
+#if USE_LOCKING
                     lock (talon)
+#endif
                     {
                         talon.ControlEnabled = true;
                         InUse = true;
@@ -246,7 +237,9 @@ namespace Base.Components
                         onValueChanged(new VirtualControlEventArgs(-val, InUse));
                     }
                     foreach (var slave in slaves)
+#if USE_LOCKING
                         lock (slave)
+#endif
                         {
                             ((CANTalon) slave.GetRawComponent()).ControlEnabled = true;
                             ((CANTalon) slave.GetRawComponent()).Set(talon.DeviceId);
@@ -254,7 +247,9 @@ namespace Base.Components
                 }
                 else
                 {
+#if USE_LOCKING
                     lock (talon)
+#endif
                     {
                         talon.ControlEnabled = true;
                         InUse = true;
@@ -262,7 +257,9 @@ namespace Base.Components
                         onValueChanged(new VirtualControlEventArgs(val, InUse));
                     }
                     foreach (var slave in slaves)
+#if USE_LOCKING
                         lock (slave)
+#endif
                         {
                             ((CANTalon) slave.GetRawComponent()).ControlEnabled = true;
                             ((CANTalon) slave.GetRawComponent()).Set(talon.DeviceId);
@@ -273,7 +270,9 @@ namespace Base.Components
             {
                 if (IsReversed)
                 {
+#if USE_LOCKING
                     lock (talon)
+#endif
                     {
                         talon.ControlEnabled = true;
                         InUse = true;
@@ -281,7 +280,9 @@ namespace Base.Components
                         onValueChanged(new VirtualControlEventArgs(-val, InUse));
                     }
                     foreach (var slave in slaves)
+#if USE_LOCKING
                         lock (slave)
+#endif
                         {
                             ((CANTalon) slave.GetRawComponent()).ControlEnabled = true;
                             ((CANTalon) slave.GetRawComponent()).Set(talon.DeviceId);
@@ -289,7 +290,9 @@ namespace Base.Components
                 }
                 else
                 {
+#if USE_LOCKING
                     lock (talon)
+#endif
                     {
                         talon.ControlEnabled = true;
                         InUse = true;
@@ -297,7 +300,9 @@ namespace Base.Components
                         onValueChanged(new VirtualControlEventArgs(val, InUse));
                     }
                     foreach (var slave in slaves)
+#if USE_LOCKING
                         lock (slave)
+#endif
                         {
                             ((CANTalon) slave.GetRawComponent()).ControlEnabled = true;
                             ((CANTalon) slave.GetRawComponent()).Set(talon.DeviceId);
@@ -306,14 +311,19 @@ namespace Base.Components
             }
             else
             {
+#if USE_LOCKING
                 lock (talon)
+#endif
                 {
+                    talon.Set(0);
                     talon.ControlEnabled = false;
                     InUse = false;
                     onValueChanged(new VirtualControlEventArgs(-val, InUse));
                 }
                 foreach (var slave in slaves)
+#if USE_LOCKING
                     lock (slave)
+#endif
                     {
                         ((CANTalon) slave.GetRawComponent()).ControlEnabled = false;
                     }
@@ -321,12 +331,42 @@ namespace Base.Components
         }
 
         /// <summary>
-        /// Stops the controller
+        ///     Attach an encoder to this motor
+        /// </summary>
+        /// <param name="encoder">The EncoderItem to bind to the motor</param>
+        public void SetEncoder(EncoderItem encoder)
+        {
+            base.encoder = encoder;
+        }
+
+        /// <summary>
+        ///     Attach a DigitalInputItem to be the lowerlimit of this motor
+        /// </summary>
+        /// <param name="lowerLimit">The DigitalInputItem to attach</param> 
+        public void SetLowerLimit(DigitalInputItem lowerLimit)
+        {
+            base.lowerLimit = lowerLimit;
+        }
+
+        /// <summary>
+        ///     Attach a DigitalInputItem to be the upperlimit of this motor
+        /// </summary>
+        /// <param name="upperLimit">The DigitalInputItem to attach</param>
+        public void SetUpperLimit(DigitalInputItem upperLimit)
+        {
+            base.upperLimit = upperLimit;
+        }
+
+        /// <summary>
+        ///     Stops the controller
         /// </summary>
         public override void Stop()
         {
+#if USE_LOCKING
             lock (talon)
+#endif
             {
+                talon.Set(0);
                 talon.ControlEnabled = false;
                 InUse = false;
                 Sender = null;
@@ -335,5 +375,33 @@ namespace Base.Components
         }
 
         #endregion Public Methods
+
+        #region Private Methods
+
+        /// <summary>
+        ///     Releases managed and native resources
+        /// </summary>
+        /// <param name="disposing"></param>
+        private void dispose(bool disposing)
+        {
+            if (!disposing) return;
+#if USE_LOCKING
+            lock (talon)
+#endif
+            {
+                talon?.Dispose();
+            }
+        }
+
+        /// <summary>
+        ///     Method to fire value changes for set/get values and InUse values
+        /// </summary>
+        /// <param name="e">VirtualControlEventArgs</param>
+        private void onValueChanged(VirtualControlEventArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
+        }
+
+        #endregion Private Methods
     }
 }

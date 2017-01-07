@@ -7,65 +7,75 @@
 
   <!-- If true, will dump full exception methods to the console and driverstation. -->
   <VerboseOutput value="false" />
-  
+
   <!-- Absolutely do not change QuickLoad to true, only Ryan should do this. -->
   <QuickLoad value="false" />
 
   <EnableAuton value="true" />
+
+  <!-- Sets whether or not to initialize the NavX-->
+  <UseNavX value="true" port="default" />
 
   <!-- Contains assignments to ports and robot dimensions -->
   <RobotConfig>
 
     <!-- All victor assignments type="SP" or type="888"-->
     <Victors>
+      <!-- Examples -->
+      <!--<xxxxxxxx type="SP" channel="x ID from roboRio" reversed="x" drive="false" optional encoder="xxxxxx" upperLimit="Name of DI" optional lowerLimit="Name of DI" />-->
       <rightDrive_1 type="888" channel="0" reversed="true" drive="true" side="right" />
       <rightDrive_2 type="888" channel="1" reversed="true" drive="true" side="right" />
       <!--<rightDrive_3 type="888" channel="2" reversed="false" type="drive" side="right" />-->
-      <leftDrive_1 type="888" channel="2" reversed="true" drive="true" side="left" />
-      <leftDrive_2 type="888" channel="3" reversed="true" drive="true" side="left" />
+      <leftDrive_1 type="888" channel="2" reversed="false" drive="true" side="left" />
+      <leftDrive_2 type="888" channel="3" reversed="false" drive="true" side="left" />
+      <indexer type="888" channel="10" reversed="false" drive="false" />
       <!--<leftDrive_3 type="888" channel="5" reversed="false" type="drive" side="left" />-->
     </Victors>
 
     <!-- All CANTalon assignments -->
     <Talons>
       <!-- Examples -->
-      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="pwm" />-->
-      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="master" optional PID p="double" i="double" d="double" />-->
-      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="slave" master="binding name (name of master talon)" />-->
+      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="pwm" encoder="xxxxxx" />-->
+      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="master" encoder="xxxxxx" optional PID p="double" i="double" d="double" />-->
+      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="slave" encoder="xxxxxx" master="binding name (name of master talon)" />-->
 
-      <!-- <shooter_1 channel="22" reversed="false" type="pwm" /> -->
-      <!--<shooter_1 channel="24" reversed="false" type="master" p=".5" i=".001" d="0" />-->
-      <!-- <shooter_2 channel="22" reversed="false" type="slave" master="shooter_1" />-->
+       <!--<shooter_1 channel="22" reversed="false" type="pwm" />-->
+
+      <shooter_1 channel="24" reversed="false" type="master" p=".5" i=".001" d="0" />
+      <shooter_2 channel="22" reversed="false" type="slave" master="shooter_1" />
     </Talons>
 
     <!-- Encoder locations -->
     <Encoders>
-      <!--<xxxxxx aChannel="x" bChannel="x" />-->
+      <!--<xxxxxx aChannel="x" bChannel="x" optional reversed="x" />-->
+    <test_encoder aChannel="8" bChannel="9" />
     </Encoders>
 
     <!-- Double solenoid locations-->
     <Solenoids>
       <!--<xxxxxx forward="x" reverse="x" default="forward/reverse" reversed="false" />-->
-       <test_solenoid forward="0" reverse="1" default="forward" reversed="true" />
-      <test_solenoid1 forward="2" reverse="3" default="forward" reversed="true" />
-      <test_solenoid2 forward="4" reverse="5" default="forward" reversed="true" />
+      <!-- default is optional, reversed is not. -->
+      <intake forward="2" reverse="3" default="reverse" reversed="true" />
+      <shifters forward="0" reverse="1" default="reverse" reversed="true" />
+      <hood forward="4" reverse="5" default="reverse" reversed="true" />
     </Solenoids>
 
     <!--  Digital input/outputs !!!!NOTE!!!! DI and DO are on the same line as the Encoders -->
     <!--  so DO NOT have matching channel numbers, that allocated drifferent resources in the same spot.-->
     <DI>
       <!--<xxxxxx channel="x" />-->
-       <test_di channel="0" />
+      <test_di channel="0" />
     </DI>
 
     <DO>
       <!--<xxxxxx channel="x" />-->
-      <!--  <test_do channel="1" />-->
+      <test_do channel="1" />
     </DO>
 
     <!-- Analog inputs/outputs -->
     <AI>
       <!--<xxxxxx channel="x" />-->
+      <p_pad channel="1" />
     </AI>
 
     <AO>
@@ -73,8 +83,14 @@
     </AO>
 
     <Relays>
-      <!--<xxxxxx channel="x" />-->
+      <!--<xxxxxx channel="x" optional default="off/on/reverse/forward" />-->
+    <test_relay channel="0" default="off" />
     </Relays>
+
+    <Potentiometers>
+      <!--<xxxxxx channel="x">-->
+      <!--<test_potentiometer channel="0" />-->
+    </Potentiometers>
   </RobotConfig>
 
   <!-- Control assignments -->
@@ -101,18 +117,22 @@
     </Driver>
 
     <DriverAux>
+      <shiftGears type="dualButton" buttonA="5" buttonB="6" reversed ="false" bindTo="shifters" />
     </DriverAux>
 
     <!-- Operator assignments -->
     <Operator>
       <slot controllerSlot="1" />
-      <shooter type="axis" axis="5" reversed="false" deadZone="0" bindTo="shooter_1" />
+      <shooter type="axis" axis="3" reversed="false" deadZone=".02" bindTo="shooter_1" />
+      <hoodToggle type="toggle" button="7" reversed="true" bindTo="hood" />
+      <intakeToggle type="toggle" button="8" reversed="true" bindTo="intake" />
+      <intakeIn type ="button" button="2" reversed="false" powerMultiplier=".75" bindTo="indexer" />
+      <intakeOut type ="button" button="4" reversed="false" powerMultiplier="-.75" bindTo="indexer" />
     </Operator>
   </Controls>
 
   <!-- Event assignments -->
   <!-- types= 'value' or 'usage'; setMethods= 'passthrough' or 'adjusted'-->
   <VirtualControlEvents>
-     <test_event type="value" drivers="test_di" actions="test_solenoid, test_solenoid1, test_solenoid2" setMethod="passthrough" />
   </VirtualControlEvents>
 </Robot>

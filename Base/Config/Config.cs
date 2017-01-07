@@ -1,12 +1,12 @@
 ﻿/****************************** Header ******************************\
-Class Name: Config [singleton]
+Class Name: Config
 Summary: Manages and loads the configuration file from XML.
 Project:     FRC2017
 Copyright (c) BroncBotz.
 All rights reserved.
 
-Author(s): Ryan Cooper
-Email: cooper.ryan@centaurisoftware.co
+Author(s): Ryan Cooper, Dylan Watson
+Email: cooper.ryan@centaurisoftware.co, dylantrwatson@gmail.com
 \********************************************************************/
 
 using Base.Components;
@@ -15,32 +15,82 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using WPILib;
-using static Base.Config.Schemas;
-using static Base.Motor;
 
 namespace Base.Config
 {
     /// <summary>
-    /// Manages and loads the configuration file from XML.
+    ///     Manages and loads the configuration file from XML.
     /// </summary>
-    public class Config
+    public sealed class Config : IDisposable
     {
         #region Public Constructors
 
         /// <summary>
-        /// Default constructor
+        ///     Default constructor
         /// </summary>
         public Config()
         {
             ActiveCollection = new ActiveCollection();
+            //ActiveCollection = ActiveCollection.Instance;
         }
 
         #endregion Public Constructors
 
+        #region Private Fields
+
+        private readonly List<CommonName> componentNames = new List<CommonName>();
+
+        private XDocument doc;
+
+        #endregion Private Fields
+
+        #region Public Properties
+
+        /// <summary>
+        ///     Instance of the ActiveCollection to be used thoughout the program.
+        /// </summary>
+        public ActiveCollection ActiveCollection { get; }
+
+        /// <summary>
+        ///     Boolean flag to determin if autonomous should be enabled in any sence.
+        /// </summary>
+        public bool AutonEnabled { get; private set; }
+
+        /// <summary>
+        ///     Instance of the driver's control schema to be used thoughout the program.
+        /// </summary>
+        public Schemas.DriverConfig DriverConfig { get; private set; }
+
+        /// <summary>
+        ///     Instance of the operators's control schema to be used thoughout the program.
+        /// </summary>
+        public Schemas.OperatorConfig OperatorConfig { get; private set; }
+
+        /// <summary>
+        ///     Boolean flag to set QuickLoad mode, see reference manule for details.
+        /// </summary>
+        public bool QuickLoad { get; private set; }
+
+        /// <summary>
+        ///     Defines if all exception messages should be output to the console in addition to the log.
+        /// </summary>
+        public bool VerboseOutput { get; private set; }
+
+        #endregion Public Properties
+
         #region Public Methods
 
         /// <summary>
-        /// Loads the config.
+        ///     Disposes of this IComponent and its managed resources
+        /// </summary>
+        public void Dispose()
+        {
+            dispose(true);
+            //GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        ///     Loads the config.
         /// </summary>
         /// <param name="fileName">name of config on disk</param>
         public void Load(string fileName)
@@ -58,48 +108,7 @@ namespace Base.Config
 
         #endregion Public Methods
 
-        #region Private Fields
-
-        private readonly List<CommonName> componentNames = new List<CommonName>();
-        private XDocument doc;
-
-        #endregion Private Fields
-
-        #region Public Properties
-
-        /// <summary>
-        /// Instance of the ActiveCollection to be used thoughout the program.
-        /// </summary>
-        public ActiveCollection ActiveCollection { get; }
-
-        /// <summary>
-        /// Boolean flag to determin if autonomous should be enabled in any sence.
-        /// </summary>
-        public bool AutonEnabled { get; private set; }
-
-        /// <summary>
-        /// Instance of the driver's control schema to be used thoughout the program.
-        /// </summary>
-        public DriverConfig DriverConfig { get; private set; }
-
-        /// <summary>
-        /// Instance of the operators's control schema to be used thoughout the program.
-        /// </summary>
-        public OperatorConfig OperatorConfig { get; private set; }
-
-        /// <summary>
-        /// Boolean flag to set QuickLoad mode, see reference manule for details.
-        /// </summary>
-        public bool QuickLoad { get; private set; }
-
-        #endregion Public Properties
-
         #region Private Methods
-
-        /// <summary>
-        /// Defines if all exception messages should be output to the console in addition to the log.
-        /// </summary>
-        public bool VerboseOutput { get; private set; }
 
         private void allocateComponents()
         {
@@ -110,6 +119,52 @@ namespace Base.Config
 
             QuickLoad = Convert.ToBoolean(getAttributeValue("value", "QuickLoad"));
             if (QuickLoad) Report.Warning("I see QuickLoad is turned... This should only be used during practice!");
+
+            //TODO: allow different ports to be used when initializing NavX
+            if (Convert.ToBoolean(getAttributeValue("value", "UseNavX")))
+                ActiveCollection.AddComponent(NavX.InitializeNavX(SPI.Port.MXP));
+
+            #region Encoders
+
+            try
+            {
+                foreach (var element in getElements("RobotConfig", "Encoders"))
+                    try
+                    {
+                        
+                        bool isReversed = false;
+                        if (element.Attribute("reversed") != null)
+                        {
+                            isReversed = Convert.ToBoolean(element.Attribute("reversed").Value);
+                        }
+                        componentNames.Add(new CommonName(element.Name.ToString()));
+                        Report.General(
+                            $"Added Encoder {element.Name}, aChannel = {Convert.ToInt32(element.Attribute("aChannel").Value)}, bChannel = {Convert.ToInt32(element.Attribute("bChannel").Value)}, isReversed = {isReversed}");
+                        ActiveCollection.AddComponent(
+                            new EncoderItem(element.Name.ToString(),
+                                Convert.ToInt32(element.Attribute("aChannel").Value),
+                                Convert.ToInt32(element.Attribute("bChannel").Value),
+                                isReversed ));
+                    }
+                    catch (Exception ex)
+                    {
+                        Report.Error(
+                            $"Failed to load Encoder {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                        Log.Write(ex);
+                        if (VerboseOutput)
+                            Report.Error(ex.Message);
+                    }
+            }
+            catch (Exception ex)
+            {
+                Report.Error(
+                    "There was an error loading one or more encoders. This may cause a fatal runtime error! See log for details.");
+                Log.Write(ex);
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
+            }
+
+            #endregion Encoders
 
             #region DI
 
@@ -189,9 +244,10 @@ namespace Base.Config
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
                             $"Added Analog Input {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
-                        ActiveCollection.AddComponent(
-                            new AnalogInputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString()));
+                        var tmp = new AnalogInputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString());
+
+                        ActiveCollection.AddComponent(tmp);
                     }
                     catch (Exception ex)
                     {
@@ -265,35 +321,56 @@ namespace Base.Config
                         if (element.Attribute("upperLimit") != null)
                             upperLimit =
                                 (DigitalInputItem)
-                                    ActiveCollection.Get(toBindCommonName(element.Attribute("upperLimit"))[0]);
+                                ActiveCollection.Get(toBindCommonName(element.Attribute("upperLimit"))[0]);
                         if (element.Attribute("lowerLimit") != null)
                             lowerLimit =
                                 (DigitalInputItem)
-                                    ActiveCollection.Get(toBindCommonName(element.Attribute("lowerLimit"))[0]);
+                                ActiveCollection.Get(toBindCommonName(element.Attribute("lowerLimit"))[0]);
+                        EncoderItem motorEncoder = null;
+                        if (element.Attribute("encoder") != null)
+                            motorEncoder =
+                                (EncoderItem)
+                                ActiveCollection.Get(toBindCommonName(element.Attribute("encoder"))[0]);
 
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
                             $"Added Victor{type} {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
                         if (!Convert.ToBoolean(element.Attribute("drive").Value))
-                            ActiveCollection.AddComponent(
-                                new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
-                                    element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value),
-                                    upperLimit, lowerLimit));
+                        {
+                            var temp = new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
+                                element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value));
+
+                            ActiveCollection.AddComponent(temp);
+                            temp.SetUpperLimit(upperLimit);
+                            temp.SetLowerLimit(lowerLimit);
+                            temp.SetEncoder(motorEncoder);
+                        }
                         else
                             switch (element.Attribute("side").Value)
                             {
                                 case "right":
-                                    ActiveCollection.AddComponent(
+                                    var temp =
                                         new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
-                                            element.Name.ToString(), Side.Right,
-                                            Convert.ToBoolean(element.Attribute("reversed").Value)));
+                                            element.Name.ToString(), Motor.Side.Right,
+                                            Convert.ToBoolean(element.Attribute("reversed").Value));
+
+                                    ActiveCollection.AddComponent(temp);
+                                    temp.SetUpperLimit(upperLimit);
+                                    temp.SetLowerLimit(lowerLimit);
+                                    temp.SetEncoder(motorEncoder);
+
                                     break;
 
                                 case "left":
-                                    ActiveCollection.AddComponent(
+                                    temp =
                                         new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
-                                            element.Name.ToString(), Side.Left,
-                                            Convert.ToBoolean(element.Attribute("reversed").Value)));
+                                            element.Name.ToString(), Motor.Side.Left,
+                                            Convert.ToBoolean(element.Attribute("reversed").Value));
+
+                                    ActiveCollection.AddComponent(temp);
+                                    temp.SetUpperLimit(upperLimit);
+                                    temp.SetLowerLimit(lowerLimit);
+                                    temp.SetEncoder(motorEncoder);
                                     break;
                             }
                     }
@@ -329,21 +406,30 @@ namespace Base.Config
                         if (element.Attribute("upperLimit") != null)
                             upperLimit =
                                 (DigitalInputItem)
-                                    ActiveCollection.Get(toBindCommonName(element.Attribute("upperLimit"))[0]);
+                                ActiveCollection.Get(toBindCommonName(element.Attribute("upperLimit"))[0]);
                         if (element.Attribute("lowerLimit") != null)
                             lowerLimit =
                                 (DigitalInputItem)
-                                    ActiveCollection.Get(toBindCommonName(element.Attribute("lowerLimit"))[0]);
+                                ActiveCollection.Get(toBindCommonName(element.Attribute("lowerLimit"))[0]);
+                        EncoderItem motorEncoder = null;
+                        if (element.Attribute("encoder") != null)
+                            motorEncoder =
+                                (EncoderItem)
+                                ActiveCollection.Get(toBindCommonName(element.Attribute("encoder"))[0]);
 
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
                             $"Added Talon {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
 
                         if (element.Attribute("type").Value == "pwm")
-                            ActiveCollection.AddComponent(
-                                new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                    element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value),
-                                    upperLimit, lowerLimit));
+                        {
+                            var temp = new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
+                                element.Name.ToString());
+                            ActiveCollection.AddComponent(temp);
+                            temp.SetUpperLimit(upperLimit);
+                            temp.SetLowerLimit(lowerLimit);
+                            temp.SetEncoder(motorEncoder);
+                        }
                         else
                             switch (element.Attribute("type").Value)
                             {
@@ -375,11 +461,13 @@ namespace Base.Config
                                         Report.Warning($"Failed to set D for {element.Name}");
                                     }
 
-                                    ActiveCollection.AddComponent(
-                                        new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                            element.Name.ToString(), p, i, d,
-                                            Convert.ToBoolean(element.Attribute("reversed").Value), upperLimit,
-                                            lowerLimit));
+                                    var temp = new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
+                                        element.Name.ToString(), p, i, d,
+                                        Convert.ToBoolean(element.Attribute("reversed").Value));
+                                    ActiveCollection.AddComponent(temp);
+                                    temp.SetUpperLimit(upperLimit);
+                                    temp.SetLowerLimit(lowerLimit);
+                                    temp.SetEncoder(motorEncoder);
                                     Report.General($"{element.Name} is a master with PID set to {p}, {i}, {d}");
                                     break;
 
@@ -432,7 +520,7 @@ namespace Base.Config
                 foreach (var element in getElements("RobotConfig", "Solenoids"))
                     try
                     {
-                        var _default = element.Attribute("default").Value;
+                        var _default = element.Attribute("default")?.Value;
 
                         var d = DoubleSolenoid.Value.Off;
                         if (_default == "forward")
@@ -442,7 +530,7 @@ namespace Base.Config
 
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
-                            $"Added Double Solenoid {element.Name}, forward channel {Convert.ToInt32(element.Attribute("forward").Value)}, reverse channel {Convert.ToInt32(element.Attribute("reverse").Value)}, default position = {element.Attribute("default").Value}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
+                            $"Added Double Solenoid {element.Name}, forward channel {Convert.ToInt32(element.Attribute("forward").Value)}, reverse channel {Convert.ToInt32(element.Attribute("reverse").Value)}, default position = {d}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
                         ActiveCollection.AddComponent(
                             new DoubleSolenoidItem(element.Name.ToString(),
                                 Convert.ToInt32(element.Attribute("forward").Value),
@@ -469,6 +557,85 @@ namespace Base.Config
 
             #endregion DoubleSolenoids
 
+            #region Relays
+
+            try
+            {
+                foreach (var element in getElements("RobotConfig", "Relays"))
+                    try
+                    {
+                        componentNames.Add(new CommonName(element.Name.ToString()));
+
+                        var _default = element.Attribute("default")?.Value;
+                        var d = Relay.Value.Off;
+                        if (_default == "on")
+                            d = Relay.Value.On;
+                        else if (_default == "forward")
+                            d = Relay.Value.Forward;
+                        else if (_default == "reverse")
+                            d = Relay.Value.Reverse;
+
+                        Report.General(
+                            $"Added Relay {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}, default position {d}");
+                        ActiveCollection.AddComponent(
+                            new RelayItem(Convert.ToInt32(element.Attribute("channel").Value),
+                                element.Name.ToString(), d));
+                    }
+                    catch (Exception ex)
+                    {
+                        Report.Error(
+                            $"Failed to load Relay {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                        Log.Write(ex);
+                        if (VerboseOutput)
+                            Report.Error(ex.Message);
+                    }
+            }
+            catch (Exception ex)
+            {
+                Report.Error(
+                    "There was an error loading one or more relays. This may cause a fatal runtime error! See log for details.");
+                Log.Write(ex);
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
+            }
+
+            #endregion Relays
+
+            #region Potentiometers
+
+            try
+            {
+                foreach (var element in getElements("RobotConfig", "Potentiometers"))
+                    try
+                    {
+                        componentNames.Add(new CommonName(element.Name.ToString()));
+
+                        Report.General(
+                            $"Added Potentiometer {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
+                        var tmp = new PotentiometerItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString());
+                        ActiveCollection.AddComponent(tmp);
+                    }
+                    catch (Exception ex)
+                    {
+                        Report.Error(
+                            $"Failed to load Potentiometer {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                        Log.Write(ex);
+                        if (VerboseOutput)
+                            Report.Error(ex.Message);
+                    }
+            }
+            catch (Exception ex)
+            {
+                Report.Error(
+                    "There was an error loading one or more potentiometers. This may cause a fatal runtime error! See log for details.");
+                Log.Write(ex);
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
+            }
+
+            #endregion Potentiometers
+
             #endregion channel asignments
         }
 
@@ -482,7 +649,7 @@ namespace Base.Config
                         var type = VirtualControlEvent.VirtualControlEventType.Value;
                         var setMethod = VirtualControlEvent.VirtualControlEventSetMethod.Passthrough;
 
-                        switch (element.Attribute("type").Value)
+                        switch (element.Attribute("type")?.Value)
                         {
                             case "value":
                                 type = VirtualControlEvent.VirtualControlEventType.Value;
@@ -493,7 +660,7 @@ namespace Base.Config
                                 break;
                         }
 
-                        switch (element.Attribute("setMethod").Value)
+                        switch (element.Attribute("setMethod")?.Value)
                         {
                             case "passthrough":
                                 setMethod = VirtualControlEvent.VirtualControlEventSetMethod.Passthrough;
@@ -504,10 +671,12 @@ namespace Base.Config
                                 break;
                         }
 
+                        var enInAuton = Convert.ToBoolean(element.Attribute("auton")?.Value);
+                        var enInTeleop = Convert.ToBoolean(element.Attribute("teleop")?.Value);
                         var drivers = toBindCommonName(element.Attribute("drivers"));
                         var actors = toBindCommonName(element.Attribute("actions"));
 
-                        var tmp = new VirtualControlEvent(type, setMethod,
+                        var tmp = new VirtualControlEvent(type, setMethod, enInAuton, enInTeleop,
                             drivers.Select(driver => ActiveCollection.Get(driver)).ToArray());
                         tmp.AddActionComponents(actors.Select(actor => ActiveCollection.Get(actor)).ToArray());
                     }
@@ -530,7 +699,22 @@ namespace Base.Config
         }
 
         /// <summary>
-        /// Returns the attribute of an XElement.
+        ///     Releases managed and native resources
+        /// </summary>
+        /// <param name="disposing"></param>
+        private void dispose(bool disposing)
+        {
+            if (!disposing) return;
+#if USE_LOCKING
+            lock (ActiveCollection)
+#endif
+            {
+                ActiveCollection?.Dispose();
+            }
+        }
+
+        /// <summary>
+        ///     Returns the attribute of an XElement.
         /// </summary>
         /// <param name="attribute">The attribute from which to obtain the value.</param>
         /// <param name="elements">Name of elements to navigate.</param>
@@ -553,7 +737,7 @@ namespace Base.Config
         }
 
         /// <summary>
-        /// Returns the attribute value of an XElement.
+        ///     Returns the attribute value of an XElement.
         /// </summary>
         /// <param name="attribute">The attribute from which to obtain the value.</param>
         /// <param name="elements">Name of elements to navigate.</param>
@@ -577,14 +761,14 @@ namespace Base.Config
         }
 
         /// <summary>
-        /// Returns the last nodes Elements from a path of XElements.
+        ///     Returns the last nodes Elements from a path of XElements.
         /// </summary>
         /// <param name="elements">Name of elements to navigate.</param>
         /// <returns></returns>
         private IEnumerable<XElement> getElements(params string[] elements) => getNode(elements).Elements();
 
         /// <summary>
-        /// Returns the last nodes from a path of XElements.
+        ///     Returns the last nodes from a path of XElements.
         /// </summary>
         /// <param name="elements">Name of elements to navigate.</param>
         /// <returns></returns>
@@ -608,7 +792,7 @@ namespace Base.Config
         }
 
         /// <summary>
-        /// Loads all relevant attributes and values from the config file.
+        ///     Loads all relevant attributes and values from the config file.
         /// </summary>
         // ReSharper disable once InconsistentNaming
         private void load()
@@ -678,15 +862,17 @@ namespace Base.Config
                         Report.Error(ex.Message);
                 }
 
-                var left = new DriverControlSchema("leftDrive", (MotorControlFitFunction) driveFit, driveFitPower,
+                var left = new Schemas.DriverControlSchema("leftDrive", (MotorControlFitFunction) driveFit,
+                    driveFitPower,
                     toBindCommonName(getAttribute("bindTo", "Controls", "Driver", "leftDrive")), leftAxis, leftDz,
                     multiplier, leftReversed);
 
-                var right = new DriverControlSchema("rightDrive", (MotorControlFitFunction) driveFit, driveFitPower,
+                var right = new Schemas.DriverControlSchema("rightDrive", (MotorControlFitFunction) driveFit,
+                    driveFitPower,
                     toBindCommonName(getAttribute("bindTo", "Controls", "Driver", "rightDrive")), rightAxis, rightDz,
                     multiplier, rightReversed);
 
-                var temp = new List<ControlSchema>();
+                var temp = new List<Schemas.ControlSchema>();
                 foreach (var element in getElements("Controls", "DriverAux"))
                 {
                     bool reversed;
@@ -709,9 +895,9 @@ namespace Base.Config
                         reversed = false;
                     }
 
-                    switch (ControlSchema.GetControlTypeFromAttribute(element.Attribute("type")))
+                    switch (Schemas.ControlSchema.GetControlTypeFromAttribute(element.Attribute("type")))
                     {
-                        case ControlType.Axis:
+                        case Schemas.ControlType.Axis:
                             double deadZone = 0;
                             try
                             {
@@ -723,35 +909,36 @@ namespace Base.Config
                                 if (VerboseOutput)
                                     Report.Error(ex.Message);
                             }
-                            temp.Add(new ControlSchema(element.Name.ToString(), ControlType.Axis,
+                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Axis,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("axis").Value), deadZone,
                                 powerMultiplier, reversed));
                             break;
 
-                        case ControlType.Button:
-                            temp.Add(new ControlSchema(element.Name.ToString(), ControlType.Button,
+                        case Schemas.ControlType.Button:
+                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Button,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("button").Value), powerMultiplier, reversed));
                             break;
 
-                        case ControlType.DualButton:
-                            temp.Add(new ControlSchema(element.Name.ToString(), ControlType.DualButton,
+                        case Schemas.ControlType.DualButton:
+                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.DualButton,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("buttonA").Value),
                                 Convert.ToInt32(element.Attribute("buttonB").Value),
                                 powerMultiplier, reversed));
                             break;
 
-                        case ControlType.ToggleButton:
-                            temp.Add(new ControlSchema(element.Name.ToString(), ControlType.ToggleButton,
+                        case Schemas.ControlType.ToggleButton:
+                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.ToggleButton,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("button").Value), powerMultiplier, reversed));
                             break;
                     }
                 }
 
-                DriverConfig = new DriverConfig(new Joystick(controllerSlot), left, right, temp); //add driver stuff
+                DriverConfig = new Schemas.DriverConfig(new Joystick(controllerSlot), left, right, temp);
+                    //add driver stuff
             }
             catch (Exception ex)
             {
@@ -770,7 +957,7 @@ namespace Base.Config
 
             try
             {
-                var temp = new List<ControlSchema>();
+                var temp = new List<Schemas.ControlSchema>();
                 foreach (var element in getElements("Controls", "Operator").Where(element => element.Name != "slot"))
                 {
                     bool reversed;
@@ -793,9 +980,9 @@ namespace Base.Config
                         reversed = false;
                     }
 
-                    switch (ControlSchema.GetControlTypeFromAttribute(element.Attribute("type")))
+                    switch (Schemas.ControlSchema.GetControlTypeFromAttribute(element.Attribute("type")))
                     {
-                        case ControlType.Axis:
+                        case Schemas.ControlType.Axis:
                             double deadZone = 0;
                             try
                             {
@@ -807,28 +994,28 @@ namespace Base.Config
                                 if (VerboseOutput)
                                     Report.Error(ex.Message);
                             }
-                            temp.Add(new ControlSchema(element.Name.ToString(), ControlType.Axis,
+                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Axis,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("axis").Value), deadZone,
                                 powerMultiplier, reversed));
                             break;
 
-                        case ControlType.Button:
-                            temp.Add(new ControlSchema(element.Name.ToString(), ControlType.Button,
+                        case Schemas.ControlType.Button:
+                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Button,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("button").Value), powerMultiplier, reversed));
                             break;
 
-                        case ControlType.DualButton:
-                            temp.Add(new ControlSchema(element.Name.ToString(), ControlType.DualButton,
+                        case Schemas.ControlType.DualButton:
+                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.DualButton,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("buttonA").Value),
                                 Convert.ToInt32(element.Attribute("buttonB").Value),
                                 powerMultiplier, reversed));
                             break;
 
-                        case ControlType.ToggleButton:
-                            temp.Add(new ControlSchema(element.Name.ToString(), ControlType.ToggleButton,
+                        case Schemas.ControlType.ToggleButton:
+                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.ToggleButton,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("button").Value), powerMultiplier, reversed));
                             break;
@@ -934,7 +1121,7 @@ namespace Base.Config
                 #endregion Warning checkes
 
                 OperatorConfig =
-                    new OperatorConfig(
+                    new Schemas.OperatorConfig(
                         new Joystick(Convert.ToInt32(getAttributeValue("controllerSlot", "Controls", "Operator", "slot"))),
                         temp);
             }

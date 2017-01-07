@@ -18,14 +18,14 @@ using static Base.Config.Schemas;
 namespace Tourniquet
 {
     /// <summary>
-    /// Sets up everything required for teleop to run
+    ///     Sets up everything required for teleop to run
     /// </summary>
     public static class Initialize
     {
         #region Public Methods
 
         /// <summary>
-        /// Builds the driver and operators controls based of off their ControlSchemas
+        ///     Builds the driver and operators controls based of off their ControlSchemas
         /// </summary>
         /// <param name="config">The main program's instance of the config</param>
         public static void BuildControlSchema(Config config)
@@ -64,13 +64,44 @@ namespace Tourniquet
                 switch (s.ControlType)
                 {
                     case ControlType.Axis:
-                        var control = new AxisControl(s.Name, config.DriverConfig.Driver,
-                            s.Axis, MotorControlFitFunction.Linear, s.Reversed, s.DeadZone, s.IsEnabled, s.PowerMultiplier);
+                        var axisControl = new AxisControl(s.Name, config.DriverConfig.Driver,
+                            s.Axis, MotorControlFitFunction.Linear, s.Reversed, s.DeadZone, s.IsEnabled,
+                            s.PowerMultiplier);
 
                         foreach (var binding in s.Bindings)
-                            control.AddComponent(config.ActiveCollection.Get(binding));
+                            axisControl.AddComponent(config.ActiveCollection.Get(binding));
 
-                        ControlCollection.Instance.AddDriverControl(control);
+                        ControlCollection.Instance.AddDriverControl(axisControl);
+                        break;
+
+                    case ControlType.Button:
+                        var btnControl = new ButtonControl(s.Name, config.DriverConfig.Driver,
+                            s.ButtonA, s.Reversed, s.IsEnabled, s.PowerMultiplier);
+
+                        foreach (var binding in s.Bindings)
+                            btnControl.AddComponent(config.ActiveCollection.Get(binding));
+
+                        ControlCollection.Instance.AddDriverControl(btnControl);
+                        break;
+
+                    case ControlType.DualButton:
+                        var dualBtnControl = new DualButtonControl(s.Name, config.DriverConfig.Driver,
+                            s.ButtonA, s.ButtonB, s.Reversed, s.IsEnabled, s.PowerMultiplier);
+
+                        foreach (var binding in s.Bindings)
+                            dualBtnControl.AddComponent(config.ActiveCollection.Get(binding));
+
+                        ControlCollection.Instance.AddDriverControl(dualBtnControl);
+                        break;
+
+                    case ControlType.ToggleButton:
+                        var toggleBtnControl = new ToggleButtonControl(s.Name, config.DriverConfig.Driver,
+                            s.ButtonA, s.Reversed, s.IsEnabled, s.PowerMultiplier);
+
+                        foreach (var binding in s.Bindings)
+                            toggleBtnControl.AddComponent(config.ActiveCollection.Get(binding));
+
+                        ControlCollection.Instance.AddDriverControl(toggleBtnControl);
                         break;
                 }
 
@@ -82,14 +113,45 @@ namespace Tourniquet
                 switch (s.ControlType)
                 {
                     case ControlType.Axis:
-                        var control = new AxisControl(s.Name,
+                        var axisControl = new AxisControl(s.Name,
                             config.OperatorConfig.Operator,
-                            s.Axis, MotorControlFitFunction.Linear, s.Reversed, s.DeadZone, s.IsEnabled, s.PowerMultiplier);
-                        
-                        foreach (var binding in s.Bindings)
-                            control.AddComponent(config.ActiveCollection.Get(binding));
+                            s.Axis, MotorControlFitFunction.Linear, s.Reversed, s.DeadZone, s.IsEnabled,
+                            s.PowerMultiplier);
 
-                        ControlCollection.Instance.AddOperatorControl(control);
+                        foreach (var binding in s.Bindings)
+                            axisControl.AddComponent(config.ActiveCollection.Get(binding));
+
+                        ControlCollection.Instance.AddOperatorControl(axisControl);
+                        break;
+
+                    case ControlType.Button:
+                        var btnControl = new ButtonControl(s.Name, config.OperatorConfig.Operator,
+                            s.ButtonA, s.Reversed, s.IsEnabled, s.PowerMultiplier);
+
+                        foreach (var binding in s.Bindings)
+                            btnControl.AddComponent(config.ActiveCollection.Get(binding));
+
+                        ControlCollection.Instance.AddOperatorControl(btnControl);
+                        break;
+
+                    case ControlType.DualButton:
+                        var dualBtnControl = new DualButtonControl(s.Name, config.OperatorConfig.Operator,
+                            s.ButtonA, s.ButtonB, s.Reversed, s.IsEnabled, s.PowerMultiplier);
+
+                        foreach (var binding in s.Bindings)
+                            dualBtnControl.AddComponent(config.ActiveCollection.Get(binding));
+
+                        ControlCollection.Instance.AddOperatorControl(dualBtnControl);
+                        break;
+
+                    case ControlType.ToggleButton:
+                        var toggleBtnControl = new ToggleButtonControl(s.Name, config.OperatorConfig.Operator,
+                            s.ButtonA, s.Reversed, s.IsEnabled, s.PowerMultiplier);
+
+                        foreach (var binding in s.Bindings)
+                            toggleBtnControl.AddComponent(config.ActiveCollection.Get(binding));
+
+                        ControlCollection.Instance.AddOperatorControl(toggleBtnControl);
                         break;
                 }
 

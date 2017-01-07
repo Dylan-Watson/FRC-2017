@@ -2,41 +2,8 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Dashboard2017.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="lowerHue" Type="System.UInt32" Scope="User">
-      <Value Profile="(Default)">149</Value>
-    </Setting>
-    <Setting Name="upperHue" Type="System.UInt32" Scope="User">
-      <Value Profile="(Default)">255</Value>
-    </Setting>
-    <Setting Name="lowerSaturation" Type="System.UInt32" Scope="User">
-      <Value Profile="(Default)">230</Value>
-    </Setting>
-    <Setting Name="upperSaturation" Type="System.UInt32" Scope="User">
-      <Value Profile="(Default)">255</Value>
-    </Setting>
-    <Setting Name="lowerValue" Type="System.UInt32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="upperValue" Type="System.UInt32" Scope="User">
-      <Value Profile="(Default)">218</Value>
-    </Setting>
     <Setting Name="rioAddress" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="videoSource" Type="System.String" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="targetRightXBound" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="targetLeftXBound" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="targetRadiusUpperBound" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="targetRadiusLowerBound" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

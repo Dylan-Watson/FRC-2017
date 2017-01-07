@@ -32,9 +32,13 @@ namespace FRCSimulator
     /// </summary>
     public class Simulator : ISimulator
     {
+        #region Public Properties
+
         /// <summary>
         /// </summary>
         public string Name => "Mono Game Simulator";
+
+        #endregion Public Properties
 
         #region Public Methods
 
@@ -46,6 +50,7 @@ namespace FRCSimulator
         {
             SimHooks.WaitForProgramStart();
             DriverStation.StartDriverStationGui();
+            new THreadStates().ShowDialog();
             // using (var game = new FRCSimulator()) game.Run();
         }
 

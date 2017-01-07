@@ -19,14 +19,14 @@ namespace Tourniquet.ControlItems
     internal delegate double FitFunction(double x, double y, double z);
 
     /// <summary>
-    /// Class to handle an axis control
+    ///     Class to handle an axis control
     /// </summary>
     public class AxisControl : ControlItem
     {
         #region Public Constructors
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="name">name of the control</param>
         /// <param name="joystick">WPI joysick the control will use</param>
@@ -36,10 +36,11 @@ namespace Tourniquet.ControlItems
         /// <param name="deadZone">the deadzone of the axis</param>
         /// <param name="multiplier">the output multiplier</param>
         /// <param name="power">the power for the fit function, see Filters class in Base</param>
+        /// <param name="isEnabled">determins whether the control is enabled or not</param>
         public AxisControl(string name, Joystick joystick, int axis, MotorControlFitFunction fitFunction, bool reversed,
             double deadZone, bool isEnabled, double multiplier = 1, double power = 2)
         {
-            this.IsEnabled = IsEnabled;
+            IsEnabled = isEnabled;
             ControlName = name;
             ControlType = ControlItemType.AxisControl;
             this.deadZone = deadZone;
@@ -47,7 +48,7 @@ namespace Tourniquet.ControlItems
             this.power = power;
             this.axis = axis;
             this.joystick = joystick;
-            setReversed(reversed);
+            IsReversed = reversed;
 
             switch (fitFunction)
             {
@@ -77,7 +78,7 @@ namespace Tourniquet.ControlItems
         #region Public Methods
 
         /// <summary>
-        /// Update the control and its bindings
+        ///     Update the control and its bindings
         /// </summary>
         public override void Update()
         {
@@ -99,9 +100,13 @@ namespace Tourniquet.ControlItems
         #region Private Fields
 
         private readonly int axis;
+
         private readonly double deadZone;
+
         private readonly FitFunction fitFunction;
+
         private readonly double multiplier;
+
         private readonly double power;
 
         #endregion Private Fields

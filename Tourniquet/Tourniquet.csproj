@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tourniquet</RootNamespace>
     <AssemblyName>Tourniquet</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -60,7 +61,10 @@
   <ItemGroup>
     <Compile Include="ControlCollection.cs" />
     <Compile Include="ControlItems\AxisControl.cs" />
+    <Compile Include="ControlItems\ButtonControl.cs" />
     <Compile Include="ControlItems\ControlItem.cs" />
+    <Compile Include="ControlItems\DualButtonControl.cs" />
+    <Compile Include="ControlItems\ToggleButtonControl.cs" />
     <Compile Include="Initialize.cs" />
     <Compile Include="Sensing.cs" />
     <Compile Include="Operator.cs" />

@@ -1,16 +1,27 @@
-﻿using System;
+﻿/****************************** Header ******************************\
+Class Name: OutputComponent [Abstract]
+Summary: Abstract Class used to create all items that return an input to the robot.
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper, Dylan Watson
+Email: cooper.ryan@centaurisoft.org, dylantrwatson@gmail.com
+\********************************************************************/
+
+using System;
 
 namespace Base
 {
     /// <summary>
-    /// Abstract class for creating components that have physical output
+    ///     Abstract class for creating components that have physical output
     /// </summary>
     public abstract class OutputComponent
     {
         #region Protected Methods
 
         /// <summary>
-        /// Set function that the inheriting component class must implement
+        ///     Set function that the inheriting component class must implement
         /// </summary>
         /// <param name="val">value to pass to the IO component -1 to +5 valid range</param>
         /// <param name="sender">object calling the method</param>
@@ -21,12 +32,12 @@ namespace Base
         #region Public Methods
 
         /// <summary>
-        /// Public set method that calls the inherited classes implementation of protected void set()
+        ///     Public set method that calls the inherited classes implementation of protected void set()
         /// </summary>
         /// <param name="val">value to pass to the IO component 0 to +5 valid range</param>
         /// <param name="sender">object calling the method</param>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// exception is thrown if the input value is out of the acceptable range 0 to +5
+        ///     exception is thrown if the input value is out of the acceptable range 0 to +5
         /// </exception>
         public void Set(double val, object sender)
         {
@@ -38,8 +49,8 @@ namespace Base
         }
 
         /// <summary>
-        /// Public set method to handel boolean IO output, simply resolves to 1 or -1 then passes to
-        /// the abstract implementation of set
+        ///     Public set method to handel boolean IO output, simply resolves to 1 or -1 then passes to
+        ///     the abstract implementation of set
         /// </summary>
         /// <param name="val">boolean ouput desired</param>
         /// <param name="sender">object calling the method</param>

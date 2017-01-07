@@ -1,5 +1,5 @@
 ﻿/****************************** Header ******************************\
-Interface Name: IComponent
+Interface Name: IComponent inherits IDisposable
 Summary: Interface used to create all component items that map to
 physical components on the robot.
 Project:     FRC2017
@@ -15,19 +15,23 @@ using System;
 namespace Base
 {
     /// <summary>
-    /// Interface that all components [physical devices on the robot] implement.
+    ///     Interface that all components [physical devices on the robot] implement.
     /// </summary>
     public interface IComponent : IDisposable
     {
-        #region Public Methods
+        #region Public Events
 
         /// <summary>
-        /// Event used for VirtualControlEvents
+        ///     Event used for VirtualControlEvents
         /// </summary>
         event EventHandler ValueChanged;
 
+        #endregion Public Events
+
+        #region Public Methods
+
         /// <summary>
-        /// Returns the WPI object that this component wraps
+        ///     Returns the WPI object that this component wraps
         /// </summary>
         /// <returns></returns>
         [Obsolete("Not thread safe! Be sure to lock if you are using this method.")]
@@ -38,17 +42,17 @@ namespace Base
         #region Public Properties
 
         /// <summary>
-        /// Boolean flag to determin if the component is in use
+        ///     Boolean flag to determin if the component is in use
         /// </summary>
         bool InUse { get; }
 
         /// <summary>
-        /// The name of the component
+        ///     The name of the component
         /// </summary>
         string Name { get; }
 
         /// <summary>
-        /// Returns the object that is currently using the component
+        ///     Returns the object that is currently using the component
         /// </summary>
         object Sender { get; }
 

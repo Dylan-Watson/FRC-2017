@@ -14,7 +14,7 @@ using WPILib;
 namespace RobotMain2017
 {
     /// <summary>
-    /// Entry point
+    ///     Entry point
     /// </summary>
     public static class Program
     {

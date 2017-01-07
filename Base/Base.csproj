@@ -9,15 +9,16 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Base</RootNamespace>
     <AssemblyName>Base</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
@@ -27,7 +28,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;USE_LOCKING</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -60,28 +61,40 @@
   <ItemGroup>
     <Compile Include="ActiveCollection.cs" />
     <Compile Include="CommonName.cs" />
+    <Compile Include="Components\AccelerometerItem.cs" />
     <Compile Include="Components\AnalogInputItem.cs" />
     <Compile Include="Components\AnalogOutputItem.cs" />
+    <Compile Include="Components\EncoderItem.cs" />
     <Compile Include="Components\DoubleSolenoidItem.cs" />
     <Compile Include="Components\DigitalInputItem.cs" />
     <Compile Include="Components\DigitalOutputItem.cs" />
+    <Compile Include="Components\PotentiometerItem.cs" />
+    <Compile Include="Components\RelayItem.cs" />
     <Compile Include="Components\TalonItem.cs" />
+    <Compile Include="Components\UltrasonicItem.cs" />
     <Compile Include="Components\VictorItem.cs" />
     <Compile Include="Config\Config.cs" />
     <Compile Include="Config\Schemas.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ControlLoop.cs" />
-    <Compile Include="DashboardComms.cs" />
+    <Compile Include="FrameworkCommunication.cs" />
     <Compile Include="Filters.cs" />
+    <Compile Include="CommunicationFrames.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IComponent.cs" />
     <Compile Include="InputComponent.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LoopCheck.cs" />
     <Compile Include="Motor.cs" />
+    <Compile Include="NavX.cs" />
     <Compile Include="OutputComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Report.cs" />
+    <Compile Include="RobotStatus.cs" />
+    <Compile Include="HealthMonitor.cs" />
     <Compile Include="VirtualControlEvent.cs" />
+    <Compile Include="VisionMonitor.cs" />
+    <Compile Include="WatchDog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

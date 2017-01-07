@@ -11,6 +11,7 @@ Email: cooper.ryan@centaurisoft.org
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Tourniquet.ControlItems;
 
 namespace Tourniquet
@@ -25,6 +26,12 @@ namespace Tourniquet
 
         #endregion Private Constructors
 
+        #region Public Properties
+
+        public static ControlCollection Instance => _lazy.Value;
+
+        #endregion Public Properties
+
         #region Private Fields
 
         private static readonly Lazy<ControlCollection> _lazy =
@@ -38,8 +45,6 @@ namespace Tourniquet
 
         #region Public Methods
 
-        public static ControlCollection Instance => _lazy.Value;
-
         public void AddDriverControl(ControlItem item) => driverControlItems.Add(item);
 
         public void AddOperatorControl(ControlItem item) => operatorControlItems.Add(item);
@@ -50,18 +55,46 @@ namespace Tourniquet
             operatorControlItems.Clear();
         }
 
+        public ControlItem GetDriverControl(string name)
+        {
+#if USE_LOCKING
+            lock (driverControlItems)
+#endif
+            {
+                return driverControlItems.FirstOrDefault(x => x.ControlName == name);
+            }
+        }
+
         public List<ControlItem> GetDriverControls()
         {
+#if USE_LOCKING
             lock (driverControlItems)
+#endif
+            {
                 return driverControlItems;
+            }
+        }
+
+        public ControlItem GetOperatorControl(string name)
+        {
+#if USE_LOCKING
+            lock (operatorControlItems)
+#endif
+            {
+                return operatorControlItems.FirstOrDefault(x => x.ControlName == name);
+            }
         }
 
         public List<ControlItem> GetOperatorControls()
         {
+#if USE_LOCKING
             lock (operatorControlItems)
+#endif
+            {
                 return operatorControlItems;
+            }
         }
 
-        #endregion Public Methods
+#endregion Public Methods
     }
 }

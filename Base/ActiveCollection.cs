@@ -17,34 +17,66 @@ using WPILib.Exceptions;
 namespace Base
 {
     /// <summary>
-    /// Class that stores the currently active collection of components on the robot.
+    ///     Class that stores the currently active collection of components on the robot
     /// </summary>
-    public class ActiveCollection
+    public sealed class ActiveCollection : IDisposable
     {
+        #region Private Methods
+
+        /// <summary>
+        ///     Releases managed and native resources
+        /// </summary>
+        /// <param name="disposing"></param>
+        private void dispose(bool disposing)
+        {
+            if (!disposing) return;
+#if USE_LOCKING
+            lock (inputComponentUpdateLoop)
+#endif
+            {
+                inputComponentUpdateLoop?.Dispose();
+            }
+        }
+
+        #endregion Private Methods
+
         #region Private Fields
 
+        /// <summary>
+        ///     Dictionary used to store the IComponents
+        /// </summary>
         private readonly Dictionary<string, IComponent> componentCollection = new Dictionary<string, IComponent>();
+
+        /// <summary>
+        ///     Instance of the singleton
+        /// </summary>
+        //public static ActiveCollection Instance => _lazy.Value;
+        private readonly InputComponentUpdateLoop inputComponentUpdateLoop = new InputComponentUpdateLoop();
 
         #endregion Private Fields
 
-        #region Public Methods
+        #region Public Properties
 
         /// <summary>
-        /// Gets the motors that were flagged to be on the left side fo the drive train.
+        ///     Gets the motors that were flagged to be on the left side fo the drive train.
         /// </summary>
         public List<IComponent> GetLeftDriveMotors
             => (from t in componentCollection.Values where t is Motor select t as Motor).ToList().Where
                 (t => t.DriveSide == Motor.Side.Left).ToList().Cast<IComponent>().ToList();
 
         /// <summary>
-        /// Gets the motors that were flagged to be on the right side fo the drive train.
+        ///     Gets the motors that were flagged to be on the right side fo the drive train.
         /// </summary>
         public List<IComponent> GetRightDriveMotors
             => (from t in componentCollection.Values where t is Motor select t as Motor).ToList().Where
                 (t => t.DriveSide == Motor.Side.Right).ToList().Cast<IComponent>().ToList();
 
+        #endregion Public Properties
+
+        #region Public Methods
+
         /// <summary>
-        /// Adds a component to the active collection, and reports and errors in doing so.
+        ///     Adds a component to the active collection, and reports and errors in doing so.
         /// </summary>
         /// <param name="component">The IComponent to add</param>
         public void AddComponent(IComponent component)
@@ -55,6 +87,10 @@ namespace Base
                     throw new AllocationException(
                         $"Attempting to allocate two components with the same name - {component.Name}");
                 componentCollection.Add(component.Name, component);
+
+                var input = component as InputComponent;
+                if (input != null)
+                    inputComponentUpdateLoop.AddInputComponent(input);
             }
             catch (AllocationException ex)
             {
@@ -72,8 +108,17 @@ namespace Base
         }
 
         /// <summary>
-        /// Gets a IComponent from the active colletion by it's name. Reports any errors and returns
-        /// null should there be any.
+        ///     Disposes of this IComponent and its managed resources
+        /// </summary>
+        public void Dispose()
+        {
+            dispose(true);
+            //GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        ///     Gets a IComponent from the active colletion by it's name. Reports any errors and returns
+        ///     null should there be any.
         /// </summary>
         /// <param name="commonName">CommonName of the component</param>
         /// <returns></returns>
@@ -93,8 +138,17 @@ namespace Base
         }
 
         /// <summary>
-        /// Gets and casts an IComponents item to a Motor by it's CommonName. Reports any errors and
-        /// returns null should there be any.
+        ///     Returns the dictionary containing all the active IComponent objects
+        /// </summary>
+        /// <returns>"</returns>
+        public Dictionary<string, IComponent> GetActiveCollection()
+        {
+            return componentCollection;
+        }
+
+        /// <summary>
+        ///     Gets and casts an IComponents item to a Motor by it's CommonName. Reports any errors and
+        ///     returns null should there be any.
         /// </summary>
         /// <param name="commonName">CommonName of the component/motor</param>
         /// <returns></returns>
@@ -115,13 +169,96 @@ namespace Base
         }
 
         /// <summary>
-        /// Disposes of all IComponents within the Active Collection, and then clears the collection
+        ///     Disposes of all IComponents within the Active Collection, and then clears the collection
         /// </summary>
         public void ReleaseActiveCollection()
         {
+            inputComponentUpdateLoop.ClearInputComponents();
             foreach (var component in componentCollection)
                 component.Value.Dispose();
             componentCollection.Clear();
+        }
+
+        #endregion Public Methods
+
+        /*private static readonly Lazy<ActiveCollection> _lazy =
+            new Lazy<ActiveCollection>(() => new ActiveCollection());*/
+
+        /*private ActiveCollection()
+        {
+        }*/
+    }
+
+    /// <summary>
+    ///     Class to handle periodic updating of InputComponents
+    /// </summary>
+    public class InputComponentUpdateLoop : ControlLoop
+    {
+        #region Private Fields
+
+        private readonly List<InputComponent> inputComponents = new List<InputComponent>();
+
+        #endregion Private Fields
+
+        #region Public Constructors
+
+        /// <summary>
+        ///     Default constructor
+        /// </summary>
+        public InputComponentUpdateLoop()
+        {
+            OverrideCycleTime(.05);
+            StartWhenReady();
+        }
+
+        #endregion Public Constructors
+
+        #region Protected Methods
+
+        /// <summary>
+        ///     Method called by the ControlLoop
+        /// </summary>
+        protected override void main()
+        {
+            if (inputComponents.Count == 0) return;
+#if USE_LOCKING
+            lock (inputComponents)
+#endif
+            {
+                foreach (var input in inputComponents)
+                    input.Get();
+            }
+        }
+
+        #endregion Protected Methods
+
+        #region Public Methods
+
+        /// <summary>
+        ///     Adds an InputComponent to the list of InputComponent to be updated within the loop
+        /// </summary>
+        /// <param name="input"></param>
+        public void AddInputComponent(InputComponent input)
+        {
+#if USE_LOCKING
+            lock (inputComponents)
+#endif
+            {
+                inputComponents.Add(input);
+            }
+        }
+
+        /// <summary>
+        ///     Clears the list of InputComponents
+        /// </summary>
+        public void ClearInputComponents()
+        {
+#if USE_LOCKING
+            lock (inputComponents)
+#endif
+            {
+                inputComponents.Clear();
+            }
         }
 
         #endregion Public Methods

@@ -14,36 +14,27 @@ using Base;
 using Base.Config;
 using Tourniquet;
 using WPILib;
+using RobotState = Base.RobotState;
 
 namespace RobotMain2017
 {
     /// <summary>
-    /// Class called by WPI for robot states (teleop, auto, test...)
+    ///     Class called by WPI for robot states (teleop, auto, test...)
     /// </summary>
     public class RobotMain2017 : SampleRobot
     {
         #region Public Constructors
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         public RobotMain2017()
         {
             Log.ClearSessionLog();
             config.Load(CONFIG_FILE);
-            DashboardComms.Instance.NotifyRobotState(Constants.STANDBY);
         }
 
         #endregion Public Constructors
-
-        #region Protected Methods
-
-        /// <summary>
-        /// Called by WPI on robot initialization
-        /// </summary>
-        protected override void RobotInit() => Initialize.BuildControlSchema(config);
-
-        #endregion Protected Methods
 
         #region Private Methods
 
@@ -59,7 +50,8 @@ namespace RobotMain2017
 
         #region Private Fields
 
-        private const string CONFIG_FILE = @"/robot.xml";
+        private const string CONFIG_FILE = @"robot.xml";
+
         private readonly Config config = new Config();
 
         #endregion Private Fields
@@ -67,36 +59,56 @@ namespace RobotMain2017
         #region Public Methods
 
         /// <summary>
-        /// Called when auton starts
+        ///     Called when auton starts
         /// </summary>
         public override void Autonomous()
         {
             quickLoad();
-            DashboardComms.Instance.NotifyRobotState(Constants.AUTON);
-            if (config.AutonEnabled)
-                new Trephine.Initialize(config).Run();
+            RobotStatus.Instance.NotifyState(RobotState.Auton);
+            if (!config.AutonEnabled) return;
+            new Trephine.Initialize(config).Run();
         }
 
         /// <summary>
-        /// Called with teleop starts
+        ///     Called with teleop starts
         /// </summary>
         public override void OperatorControl()
         {
             quickLoad();
-            DashboardComms.Instance.NotifyRobotState(Constants.TELEOP);
+            RobotStatus.Instance.NotifyState(RobotState.Teleop);
+            new Sensing(config).Start();
             new Driver().Start();
             new Operator().Start();
-
-            //while (IsOperatorControl && IsEnabled) { }
         }
 
         /// <summary>
-        /// Called when Test is run
+        ///     Called when Test is run
         /// </summary>
         public override void Test()
         {
+            RobotStatus.Instance.NotifyState(RobotState.Test);
+
+            Disabled();
         }
 
         #endregion Public Methods
+
+        #region Protected Methods
+
+        /// <summary>
+        ///     Called when the robot is disabled
+        /// </summary>
+        protected override void Disabled()
+        {
+            base.Disabled();
+            RobotStatus.Instance.NotifyState(RobotState.Disabled);
+        }
+
+        /// <summary>
+        ///     Called by WPI on robot initialization
+        /// </summary>
+        protected override void RobotInit() => Initialize.BuildControlSchema(config);
+
+        #endregion Protected Methods
     }
 }
