@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<Robot>
+
+  <Version version="1.0" />
+  <Comment comment="Configured for the test kit" />
+
+  <!-- If true, will dump full exception methods to the console and driverstation. -->
+  <VerboseOutput value="true" />
+
+  <!-- Absolutely do not change QuickLoad to true, only Ryan should do this. -->
+  <QuickLoad value="false" />
+
+  <EnableAuton value="true" />
+
+  <!-- Sets whether or not to initialize the NavX-->
+  <UseNavX value="true" port="default" />
+
+  <!-- Contains assignments to ports and robot dimensions -->
+  <RobotConfig>
+
+    <!-- All victor assignments type="SP" or type="888"-->
+    <Victors>
+      <!-- Examples -->
+      <!--<xxxxxxxx type="SP" channel="x ID from roboRio" reversed="x" drive="false" optional encoder="xxxxxx" upperLimit="Name of DI" optional lowerLimit="Name of DI" />-->
+      <testVictorOne type="SP" channel="0" reversed="false" drive="false"/>
+    </Victors>
+
+    <!-- All CANTalon assignments -->
+    <Talons>
+      <!-- Examples -->
+      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="pwm" encoder="xxxxxx" />-->
+      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="master" encoder="xxxxxx" optional PID p="double" i="double" d="double" />-->
+      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="slave" encoder="xxxxxx" master="binding name (name of master talon)" />-->
+    </Talons>
+
+    <!-- Encoder locations -->
+    <Encoders>
+      <!--<xxxxxx aChannel="x" bChannel="x" optional reversed="x" />-->
+    </Encoders>
+
+    <!-- Double solenoid locations-->
+    <Solenoids>
+      <!--<xxxxxx forward="x" reverse="x" default="forward/reverse" reversed="false" />-->
+      <!-- default is optional, reversed is not. -->
+    </Solenoids>
+
+    <!--  Digital input/outputs !!!!NOTE!!!! DI and DO are on the same line as the Encoders -->
+    <!--  so DO NOT have matching channel numbers, that allocated drifferent resources in the same spot.-->
+    <DI>
+      <!--<xxxxxx channel="x" />-->
+    </DI>
+
+    <DO>
+      <!--<xxxxxx channel="x" />-->
+    </DO>
+
+    <!-- Analog inputs/outputs -->
+    <AI>
+      <!--<xxxxxx channel="x" />-->
+    </AI>
+
+    <AO>
+      <!--<xxxxxx channel="x" />-->
+    </AO>
+
+    <Relays>
+      <!--<xxxxxx channel="x" optional default="off/on/reverse/forward" />-->
+    </Relays>
+
+    <Potentiometers>
+      <!--<xxxxxx channel="x">-->
+      <!--<test_potentiometer channel="0" />-->
+    </Potentiometers>
+  </RobotConfig>
+
+  <!-- Control assignments -->
+  <Controls>
+    <!--control item exampls, reversed="true/false"
+	     and powerMultiplier="double" are optional additions to these tags-->
+
+    <!--<example type="button" button=""int bindTo="IComponent" />
+	<example type="dualButton" buttonA="int" buttonB="" bindTo="IComponent" />
+	<example type="togggle" button="int" bindTo="IComponent" />
+	<example type="axis" axis="int" deadZone="double" bindTo="IComponent" />-->
+
+    <!-- Driver assignments: ONLY VALUES SHOULD CHANGE! NEVER EDIT TAGS OR ATTRIBUTE IDENTIFIERS-->
+    <Driver>
+      <slot controllerSlot="0" />
+
+      <!-- fit values are linear=0, quadratic=1, exponential=2, and poly=3 -->
+      <drive driveFit="0" power="3" />
+      <powerMultiplier powerMultiplier="1" />
+
+      <leftDrive axis="1" reversed="true" deadZone=".02" bindTo="testVictorOne" />
+      <rightDrive axis="5" reversed="false" deadZone=".02" bindTo="testVictorOne" />
+    </Driver>
+
+    <DriverAux>
+    </DriverAux>
+
+    <!-- Operator assignments -->
+    <Operator>
+      <slot controllerSlot="1" />
+    </Operator>
+  </Controls>
+
+  <!-- Event assignments -->
+  <!-- types= 'value' or 'usage'; setMethods= 'passthrough' or 'adjusted'-->
+  <VirtualControlEvents>
+  </VirtualControlEvents>
+</Robot>

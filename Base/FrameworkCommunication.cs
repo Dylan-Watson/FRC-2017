@@ -80,11 +80,11 @@ namespace Base
         public void SendData(string key, object value)
         {
             if (LoopCheck._IsTeleoporated())
-                dashboardComm.PutValue($"TELEOP_{key}", value);
+                dashboardComm.PutValue($"TELEOP_{key}", Value.MakeValue(value));
             else if (LoopCheck._IsAutonomous())
-                dashboardComm.PutValue($"AUTON_{key}", value);
+                dashboardComm.PutValue($"AUTON_{key}", Value.MakeValue(value));
             else
-                dashboardComm.PutValue($"{key}", value);
+                dashboardComm.PutValue($"{key}", Value.MakeValue(value));
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Base
         /// <param name="value">object value to send</param>
         public void SendHealthData(string key, object value)
         {
-            dashboardComm.PutValue($"HEALTH_{key}", value);
+            dashboardComm.PutValue($"HEALTH_{key}", Value.MakeValue(value));
         }
 
         #endregion Public Methods
@@ -125,7 +125,7 @@ namespace Base
         /// <param name="value">the state of the robot (string)</param>
         private void notifyRobotState(object value)
         {
-            dashboardComm.PutValue(@"ROBOT_STATE", value);
+            dashboardComm.PutValue(@"ROBOT_STATE", Value.MakeValue(value));
         }
 
         #endregion Private Methods

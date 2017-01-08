@@ -51,17 +51,6 @@ namespace Base
         {
             #region Public Methods
 
-            public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
-            {
-                if (!key.StartsWith("TARGET")) return;
-                _currentTarget = _frameFromByteArray(source.GetRaw(key));
-                _updateTarget(_currentTarget);
-
-                if ((_currentTarget.ID != 0) || (_currentTarget.HasTarget == lastDashboardUpdate)) return;
-                FrameworkCommunication.Instance.GetDashboardComm().PutBoolean("TARGET", _currentTarget.HasTarget);
-                lastDashboardUpdate = _currentTarget.HasTarget;
-            }
-
             #endregion Public Methods
 
             #region Private Fields
@@ -97,6 +86,17 @@ namespace Base
                 tmp.Target = new CommunicationFrames.Target(target);
 
                 _targets.Add(tmp);
+            }
+
+            public void ValueChanged(ITable source, string key, Value value, NotifyFlags flags)
+            {
+                if (!key.StartsWith("TARGET")) return;
+                _currentTarget = _frameFromByteArray(source.GetRaw(key));
+                _updateTarget(_currentTarget);
+
+                if ((_currentTarget.ID != 0) || (_currentTarget.HasTarget == lastDashboardUpdate)) return;
+                FrameworkCommunication.Instance.GetDashboardComm().PutBoolean("TARGET", _currentTarget.HasTarget);
+                lastDashboardUpdate = _currentTarget.HasTarget;
             }
 
             #endregion Private Methods
