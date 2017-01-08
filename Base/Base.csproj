@@ -45,6 +45,10 @@
       <HintPath>..\packages\FRC.OpenCvSharp.1.0.0\lib\net45\FRC.OpenCvSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FRC.WPILib.CTRE, Version=2017.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.WPILib.CTRE.2017.0.0\lib\net451\FRC.WPILib.CTRE.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="HAL, Version=2017.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FRC.WPILib.Extras.2017.0.1\lib\net451\HAL.dll</HintPath>
       <Private>True</Private>

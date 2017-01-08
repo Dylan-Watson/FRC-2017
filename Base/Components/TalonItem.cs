@@ -10,13 +10,14 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-/*using System;
+using CTRE;
+using System;
 using System.Collections.Generic;
-using WPILib;
 using WPILib.Interfaces;
 
 namespace Base.Components
 {
+
     /// <summary>
     ///     Class to handle CanTalon motor controllers
     /// </summary>
@@ -403,80 +404,5 @@ namespace Base.Components
         }
 
         #endregion Private Methods
-    }
-}*/
-
-using System;
-
-namespace Base.Components
-{
-    public sealed class CanTalonItem : Motor, IComponent
-    {
-        public CanTalonItem(int i, string n)
-        {
-            throw new NotImplementedException();
-        }
-
-        public CanTalonItem(int channel, string commonName, double p, double i, double d, bool isReversed = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        public CanTalonItem(int channel, string commonName, CanTalonItem master, bool isReversed = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetEncoder(EncoderItem encoder)
-        {
-            base.encoder = encoder;
-        }
-
-        public void SetLowerLimit(DigitalInputItem lowerLimit)
-        {
-            base.lowerLimit = lowerLimit;
-        }
-
-        public void SetUpperLimit(DigitalInputItem upperLimit)
-        {
-            base.upperLimit = upperLimit;
-        }
-
-        public bool InUse
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public string Name
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public object Sender
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public event EventHandler ValueChanged;
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-        public object GetRawComponent()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Set(double val, object sender)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Stop()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
