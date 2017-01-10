@@ -86,7 +86,6 @@
     <Compile Include="Components\DigitalOutputItem.cs" />
     <Compile Include="Components\PotentiometerItem.cs" />
     <Compile Include="Components\RelayItem.cs" />
-    <Compile Include="Components\TalonItem.cs" />
     <Compile Include="Components\UltrasonicItem.cs" />
     <Compile Include="Components\VictorItem.cs" />
     <Compile Include="Config\Config.cs" />

@@ -31,7 +31,6 @@ namespace Tourniquet
         public Sensing(Config config)
         {
             preassurePad = (AnalogInputItem) config.ActiveCollection.Get(new CommonName("p_pad"));
-            shooter = (CanTalonItem) config.ActiveCollection.Get(new CommonName("shooter_1"));
         }
 
         #endregion Public Constructors
@@ -43,14 +42,7 @@ namespace Tourniquet
         /// </summary>
         protected override void main()
         {
-            try
-            {
-                if ((preassurePad.Get() > .3) && !shooter.InUse)
-                    ControlCollection.Instance.GetOperatorControl("intakeIn").IsEnabled = false;
-                else
-                    ControlCollection.Instance.GetOperatorControl("intakeIn").IsEnabled = true;
-            }
-            catch (Exception) { }
+
         }
 
         #endregion Protected Methods
@@ -58,8 +50,6 @@ namespace Tourniquet
         #region Private Fields
 
         private readonly AnalogInputItem preassurePad;
-
-        private readonly CanTalonItem shooter;
 
         #endregion Private Fields
     }
