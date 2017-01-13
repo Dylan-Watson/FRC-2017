@@ -97,6 +97,14 @@ namespace Base
             dashboardComm.PutValue($"HEALTH_{key}", Value.MakeValue(value));
         }
 
+        /// <summary>
+        /// Initialize the singleton
+        /// </summary>
+        public static void Initialize()
+        {
+            var tmp = Instance;
+        }
+
         #endregion Public Methods
 
         #region Private Methods

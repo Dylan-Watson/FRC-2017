@@ -102,6 +102,11 @@
     <!-- Operator assignments -->
     <Operator>
       <slot controllerSlot="1" />
+      <a type ="button" button="1" reversed="false" powerMultiplier=".75" bindTo="testVictorOne" />
+      <x type ="button" button="3" reversed="false" powerMultiplier=".85" bindTo="testVictorOne" />
+      <y type ="button" button="4" reversed="false" powerMultiplier=".95" bindTo="testVictorOne" />
+      <b type ="button" button="2" reversed="false" powerMultiplier="1" bindTo="testVictorOne" />
+      
     </Operator>
   </Controls>
 

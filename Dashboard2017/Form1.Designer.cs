@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
-using Emgu.CV.UI;
 
 namespace Dashboard2017
 {

@@ -154,14 +154,14 @@ namespace Dashboard2017
             public void Connected(IRemote remote, ConnectionInfo info)
             {
                 ConsoleManager.Instance.AppendInfo(
-                    $"Network tables connected at {info.RemoteName}. Protocol version: {info.ProtocolVersion}.",
+                    $"Network tables connected at {info.RemoteIp}. Protocol version: {info.ProtocolVersion}.",
                     Color.Green);
             }
 
             public void Disconnected(IRemote remote, ConnectionInfo info)
             {
                 ConsoleManager.Instance.AppendError(
-                    $"Network tables disconnected from {info.RemoteName}. Protocol version: {info.ProtocolVersion}.");
+                    $"Network tables disconnected from {info.RemoteIp}. Protocol version: {info.ProtocolVersion}.");
             }
 
             #endregion Public Methods
@@ -180,10 +180,11 @@ namespace Dashboard2017
 
             #region Public Methods
 
-            public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
+
+            public void ValueChanged(ITable source, string key, Value value, NotifyFlags flags)
             {
                 /*if (key == "AUTONS")
-                    parent.UpdateAutonList(source.GetStringArray(key));*/
+                   parent.UpdateAutonList(source.GetStringArray(key));*/
 
                 if (key == "ROBOT_STATE")
                 {

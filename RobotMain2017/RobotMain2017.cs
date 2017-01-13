@@ -32,6 +32,7 @@ namespace RobotMain2017
         {
             Log.ClearSessionLog();
             config.Load(CONFIG_FILE);
+            FrameworkCommunication.Initialize();
         }
 
         #endregion Public Constructors
