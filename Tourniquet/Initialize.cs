@@ -76,7 +76,7 @@ namespace Tourniquet
 
                     case ControlType.Button:
                         var btnControl = new ButtonControl(s.Name, config.DriverConfig.Driver,
-                            s.ButtonA, s.Reversed, s.IsEnabled, s.PowerMultiplier);
+                            s.ButtonA, s.Reversed, s.IsEnabled, s.ActOnRelease, s.PowerMultiplier);
 
                         foreach (var binding in s.Bindings)
                             btnControl.AddComponent(config.ActiveCollection.Get(binding));
@@ -126,7 +126,7 @@ namespace Tourniquet
 
                     case ControlType.Button:
                         var btnControl = new ButtonControl(s.Name, config.OperatorConfig.Operator,
-                            s.ButtonA, s.Reversed, s.IsEnabled, s.PowerMultiplier);
+                            s.ButtonA, s.Reversed, s.IsEnabled, s.ActOnRelease, s.PowerMultiplier);
 
                         foreach (var binding in s.Bindings)
                             btnControl.AddComponent(config.ActiveCollection.Get(binding));

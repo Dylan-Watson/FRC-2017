@@ -24,7 +24,7 @@ namespace Tourniquet.ControlItems
         ///     Constructor
         /// </summary>
         public ButtonControl(string name, Joystick joystick, int buttonA, bool reversed,
-            bool isEnabled, double multiplier = 1)
+            bool isEnabled, bool actOnRelease, double multiplier = 1)
         {
             IsEnabled = isEnabled;
             ControlName = name;
@@ -33,6 +33,7 @@ namespace Tourniquet.ControlItems
             IsReversed = reversed;
             this.multiplier = multiplier;
             button = buttonA;
+            this.actOnRelease = actOnRelease;
         }
 
         #endregion Public Constructors
@@ -56,7 +57,7 @@ namespace Tourniquet.ControlItems
                     stop();
                     IsRunning = false;
                 }
-            else if (IsRunning)
+            else if (IsRunning && actOnRelease)
                 if (!IsReversed)
                 {
                     set(0);
@@ -77,6 +78,8 @@ namespace Tourniquet.ControlItems
         private readonly int button;
 
         private readonly double multiplier;
+
+        private readonly bool actOnRelease;
 
         #endregion Private Fields
     }
