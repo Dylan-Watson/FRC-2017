@@ -52,7 +52,7 @@ namespace RobotMain2017
         #region Private Fields
 
         //private const string CONFIG_FILE = @"robot.xml";
-        private const string CONFIG_FILE = @"robot_test_kit.xml";
+        private const string CONFIG_FILE = @"eltoro.xml";
 
         private readonly Config config = new Config();
 

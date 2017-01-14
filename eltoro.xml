@@ -24,12 +24,11 @@
       <!-- Examples -->
       <!--<xxxxxxxx type="SP" channel="x ID from roboRio" reversed="x" drive="false" optional encoder="xxxxxx" upperLimit="Name of DI" optional lowerLimit="Name of DI" />-->
       <left_0 type="SP" channel="0" reversed="true" drive="true" side="left"/>
-      <left_1 type="SP" channel="1" reversed="true" drive="true" side="left"/>
+      <right_0 type="SP" channel="1" reversed="true" drive="true" side="left"/>
 
-      <right_0 type="SP" channel="2" reversed="false" drive="true" side="right"/>
-      <right_1 type="SP" channel="3" reversed="false" drive="true" side="right"/>
+      <kicker type="SP" channel="2" reversed="false" drive="false"/>
+      <lift type="SP" channel="3" reversed="false" drive="false" upperLimit="liftUpperLimit" lowerLimit="liftLowerLimit"/>
 
-      <kicker type="SP" channel="4" reversed="false" drive="false"/>
     </Victors>
 
     <!-- Encoder locations -->
@@ -41,12 +40,17 @@
     <Solenoids>
       <!--<xxxxxx forward="x" reverse="x" default="forward/reverse" reversed="false" />-->
       <!-- default is optional, reversed is not. -->
+      <shifters forward="1" reverse="3" default="forward" reversed="false"/>
+      <manipulator forward="0" reverse="2" default="reverse" reversed="false"/>
+    
     </Solenoids>
 
     <!--  Digital input/outputs !!!!NOTE!!!! DI and DO are on the same line as the Encoders -->
     <!--  so DO NOT have matching channel numbers, that allocated drifferent resources in the same spot.-->
     <DI>
       <!--<xxxxxx channel="x" />-->
+      <liftUpperLimit channel="1"/>
+      <liftLowerLimit channel="0"/>
     </DI>
 
     <DO>
@@ -69,7 +73,9 @@
     <Potentiometers>
       <!--<xxxxxx channel="x">-->
       <!--<test_potentiometer channel="0" />-->
+      <liftPot channel="0"/>
     </Potentiometers>
+  
   </RobotConfig>
 
   <!-- Control assignments -->
@@ -90,18 +96,24 @@
       <drive driveFit="0" power="3" />
       <powerMultiplier powerMultiplier="1" />
 
-      <leftDrive axis="1" reversed="true" deadZone=".02" bindTo="left_0, left_1" />
-      <rightDrive axis="5" reversed="false" deadZone=".02" bindTo="right_0, right_1" />
+      <leftDrive axis="1" reversed="true" deadZone=".02" bindTo="left_0" />
+      <rightDrive axis="5" reversed="false" deadZone=".02" bindTo="right_0" />
     </Driver>
 
     <DriverAux>
       <kickerLeft type="button" button="5" reversed="false" bindTo="kicker" powerMultiplier=".75"/>
-      <kickerRight type="button" button="6" reversed="true" bindTo="kicker" powerMultiplier=".75"/>
+      <kickerRight type="button" button="6" reversed="false" bindTo="kicker" powerMultiplier="-.75"/>
+      
+      <gearShift type="dualButton" buttonA="7" buttonB="8" reversed="true" bindTo="shifters"/>
     </DriverAux>
 
     <!-- Operator assignments -->
     <Operator>
       <slot controllerSlot="1" />
+    
+      <liftControl type="axis" axis="1" reversed="true" deadZone=".02" bindTo="lift" />   
+      <man type="dualButton" buttonA="7" buttonB="8" reversed="false" bindTo="manipulator"/>
+    
     </Operator>
   </Controls>
 
