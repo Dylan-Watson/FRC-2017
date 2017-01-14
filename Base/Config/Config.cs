@@ -797,7 +797,7 @@ namespace Base.Config
                             break;
 
                         case Schemas.ControlType.Button:
-                            bool actOnRelease = false;
+                            var actOnRelease = true;
                             try
                             {
                                 actOnRelease = Convert.ToBoolean(element.Attribute("actOnRelease").Value);
@@ -893,7 +893,7 @@ namespace Base.Config
                             break;
 
                         case Schemas.ControlType.Button:
-                            bool actOnRelease = false;
+                            var actOnRelease = true;
                             try
                             {
                                 actOnRelease = Convert.ToBoolean(element.Attribute("actOnRelease").Value);
