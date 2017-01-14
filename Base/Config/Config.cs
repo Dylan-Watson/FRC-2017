@@ -797,9 +797,20 @@ namespace Base.Config
                             break;
 
                         case Schemas.ControlType.Button:
+                            bool actOnRelease = false;
+                            try
+                            {
+                                actOnRelease = Convert.ToBoolean(element.Attribute("actOnRelease").Value);
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Write(ex);
+                                if (VerboseOutput)
+                                    Report.Error(ex.Message);
+                            }
                             temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Button,
                                 toBindCommonName(element.Attribute("bindTo")),
-                                Convert.ToInt32(element.Attribute("button").Value), powerMultiplier, reversed));
+                                Convert.ToInt32(element.Attribute("button").Value), actOnRelease, powerMultiplier, reversed));
                             break;
 
                         case Schemas.ControlType.DualButton:
@@ -882,9 +893,20 @@ namespace Base.Config
                             break;
 
                         case Schemas.ControlType.Button:
+                            bool actOnRelease = false;
+                            try
+                            {
+                                actOnRelease = Convert.ToBoolean(element.Attribute("actOnRelease").Value);
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Write(ex);
+                                if (VerboseOutput)
+                                    Report.Error(ex.Message);
+                            }
                             temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Button,
                                 toBindCommonName(element.Attribute("bindTo")),
-                                Convert.ToInt32(element.Attribute("button").Value), powerMultiplier, reversed));
+                                Convert.ToInt32(element.Attribute("button").Value), actOnRelease, powerMultiplier, reversed));
                             break;
 
                         case Schemas.ControlType.DualButton:

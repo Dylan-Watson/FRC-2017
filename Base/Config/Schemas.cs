@@ -198,6 +198,38 @@ namespace Base.Config
             /// <param name="button">
             ///     The address of the button on the controller that will be used by this control
             /// </param>
+            /// <param name="actOnRelease">
+            ///     Whether or not to act on release
+            /// </param>
+            /// <param name="powerMultiplier">
+            ///     The multiplier to be applied before output to the IComponents
+            /// </param>
+            /// <param name="reversed">Defines if the control will be reversed</param>
+            /// <param name="isEnabled">Defines if the control is enabled by default or not</param>
+            public ControlSchema(string name, ControlType controlType, List<CommonName> bindTo, int button,
+                bool actOnRelease, double powerMultiplier = 1, bool reversed = false, bool isEnabled = true)
+            {
+                Name = name;
+                ControlType = controlType;
+                Bindings = bindTo;
+                ButtonA = button;
+                PowerMultiplier = powerMultiplier;
+                Reversed = reversed;
+                IsEnabled = isEnabled;
+                ActOnRelease = actOnRelease;
+            }
+
+            /// <summary>
+            ///     Constructor.
+            /// </summary>
+            /// <param name="name">Name of the control schema</param>
+            /// <param name="controlType">Type of control that the schema represents</param>
+            /// <param name="bindTo">
+            ///     List of CommonNames to represent what components the schema is bound to
+            /// </param>
+            /// <param name="button">
+            ///     The address of the button on the controller that will be used by this control
+            /// </param>
             /// <param name="powerMultiplier">
             ///     The multiplier to be applied before output to the IComponents
             /// </param>
@@ -282,6 +314,11 @@ namespace Base.Config
             #endregion Public Constructors
 
             #region Public Properties
+
+            /// <summary>
+            ///     Whether or not to act on the release of a button (only for use with single button controls)
+            /// </summary>
+            public bool ActOnRelease { get; private set; }
 
             /// <summary>
             ///     Axis for this control
