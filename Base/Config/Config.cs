@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using WPILib;
+using WPILib.Exceptions;
 
 namespace Base.Config
 {
@@ -148,11 +149,18 @@ namespace Base.Config
                     }
                     catch (Exception ex)
                     {
-                        Report.Error(
+                        if (ex is AllocationException)
+                        {
+                            AllocationExceptionReport(ex, element);
+                        }
+                        else
+                        {
+                            Report.Error(
                             $"Failed to load Encoder {element?.Name}. This may cause a fatal runtime error! See log for details.");
-                        Log.Write(ex);
-                        if (VerboseOutput)
-                            Report.Error(ex.Message);
+                            Log.Write(ex);
+                            if (VerboseOutput)
+                                Report.Error(ex.Message);
+                        }
                     }
             }
             catch (Exception ex)
@@ -182,11 +190,18 @@ namespace Base.Config
                     }
                     catch (Exception ex)
                     {
-                        Report.Error(
-                            $"Failed to load DigitalInput {element?.Name}. This may cause a fatal runtime error! See log for details.");
-                        Log.Write(ex);
-                        if (VerboseOutput)
-                            Report.Error(ex.Message);
+                        if (ex is AllocationException)
+                        {
+                            AllocationExceptionReport(ex, element);
+                        }
+                        else
+                        {
+                            Report.Error(
+                                $"Failed to load DigitalInput {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                            Log.Write(ex);
+                            if (VerboseOutput)
+                                Report.Error(ex.Message);
+                        }
                     }
             }
             catch (Exception ex)
@@ -216,11 +231,18 @@ namespace Base.Config
                     }
                     catch (Exception ex)
                     {
-                        Report.Error(
-                            $"Failed to load DigitalOutput {element?.Name}. This may cause a fatal runtime error! See log for details.");
-                        Log.Write(ex);
-                        if (VerboseOutput)
-                            Report.Error(ex.Message);
+                        if (ex is AllocationException)
+                        {
+                            AllocationExceptionReport(ex, element);
+                        }
+                        else
+                        {
+                            Report.Error(
+                                $"Failed to load DigitalOutput {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                            Log.Write(ex);
+                            if (VerboseOutput)
+                                Report.Error(ex.Message);
+                        }
                     }
             }
             catch (Exception ex)
@@ -251,11 +273,18 @@ namespace Base.Config
                     }
                     catch (Exception ex)
                     {
-                        Report.Error(
-                            $"Failed to load AnalogInput {element?.Name}. This may cause a fatal runtime error! See log for details.");
-                        Log.Write(ex);
-                        if (VerboseOutput)
-                            Report.Error(ex.Message);
+                        if (ex is AllocationException)
+                        {
+                            AllocationExceptionReport(ex, element);
+                        }
+                        else
+                        {
+                            Report.Error(
+                                $"Failed to load AnalogInput {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                            Log.Write(ex);
+                            if (VerboseOutput)
+                                Report.Error(ex.Message);
+                        }
                     }
             }
             catch (Exception ex)
@@ -285,11 +314,18 @@ namespace Base.Config
                     }
                     catch (Exception ex)
                     {
-                        Report.Error(
-                            $"Failed to load AnalogOutput {element?.Name}. This may cause a fatal runtime error! See log for details.");
-                        Log.Write(ex);
-                        if (VerboseOutput)
-                            Report.Error(ex.Message);
+                        if (ex is AllocationException)
+                        {
+                            AllocationExceptionReport(ex, element);
+                        }
+                        else
+                        {
+                            Report.Error(
+                                $"Failed to load AnalogOutput {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                            Log.Write(ex);
+                            if (VerboseOutput)
+                                Report.Error(ex.Message);
+                        }
                     }
             }
             catch (Exception ex)
@@ -376,11 +412,18 @@ namespace Base.Config
                     }
                     catch (Exception ex)
                     {
-                        Report.Error(
-                            $"Failed to load Victor {element?.Name}. This may cause a fatal runtime error! See log for details.");
-                        Log.Write(ex);
-                        if (VerboseOutput)
-                            Report.Error(ex.Message);
+                        if (ex is AllocationException)
+                        {
+                            AllocationExceptionReport(ex, element);
+                        }
+                        else
+                        {
+                            Report.Error(
+                                $"Failed to load Victor {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                            Log.Write(ex);
+                            if (VerboseOutput)
+                                Report.Error(ex.Message);
+                        }
                     }
             }
             catch (Exception ex)
@@ -420,11 +463,18 @@ namespace Base.Config
                     }
                     catch (Exception ex)
                     {
-                        Report.Error(
-                            $"Failed to load DoubleSolenoid {element?.Name}. This may cause a fatal runtime error! See log for details.");
-                        Log.Write(ex);
-                        if (VerboseOutput)
-                            Report.Error(ex.Message);
+                        if (ex is AllocationException)
+                        {
+                            AllocationExceptionReport(ex, element);
+                        }
+                        else
+                        {
+                            Report.Error(
+                                $"Failed to load DoubleSolenoid {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                            Log.Write(ex);
+                            if (VerboseOutput)
+                                Report.Error(ex.Message);
+                        }
                     }
             }
             catch (Exception ex)
@@ -464,11 +514,18 @@ namespace Base.Config
                     }
                     catch (Exception ex)
                     {
-                        Report.Error(
-                            $"Failed to load Relay {element?.Name}. This may cause a fatal runtime error! See log for details.");
-                        Log.Write(ex);
-                        if (VerboseOutput)
-                            Report.Error(ex.Message);
+                        if (ex is AllocationException)
+                        {
+                            AllocationExceptionReport(ex, element);
+                        }
+                        else
+                        {
+                            Report.Error(
+                                $"Failed to load Relay {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                            Log.Write(ex);
+                            if (VerboseOutput)
+                                Report.Error(ex.Message);
+                        }
                     }
             }
             catch (Exception ex)
@@ -499,11 +556,18 @@ namespace Base.Config
                     }
                     catch (Exception ex)
                     {
-                        Report.Error(
-                            $"Failed to load Potentiometer {element?.Name}. This may cause a fatal runtime error! See log for details.");
-                        Log.Write(ex);
-                        if (VerboseOutput)
-                            Report.Error(ex.Message);
+                        if (ex is AllocationException)
+                        {
+                            AllocationExceptionReport(ex, element);
+                        }
+                        else
+                        {
+                            Report.Error(
+                                $"Failed to load Potentiometer {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                            Log.Write(ex);
+                            if (VerboseOutput)
+                                Report.Error(ex.Message);
+                        }
                     }
             }
             catch (Exception ex)
@@ -1073,6 +1137,13 @@ namespace Base.Config
                     $"Control attempting to bind to the resource \"{str}\" that has no CommonName, or doesn't exist!");
 
             return bindings;
+        }
+
+        private void AllocationExceptionReport(Exception ex, XElement element){
+            Report.Error($"AllocationException thrown by WPILib for { element?.Name }");
+            Log.Write(ex);
+            if (VerboseOutput)
+                Report.Error(ex.Message);
         }
 
         #endregion Private Methods
