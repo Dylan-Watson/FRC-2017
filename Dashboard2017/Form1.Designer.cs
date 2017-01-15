@@ -48,6 +48,10 @@ namespace Dashboard2017
             this.consoleTextBox = new System.Windows.Forms.RichTextBox();
             this.debugTab = new System.Windows.Forms.TabPage();
             this.debugControlLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.ntRelayStatusLight = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.rioStatusLight = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -97,7 +101,7 @@ namespace Dashboard2017
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.optionsToolStripMenuItem.Text = "RIO Address";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
@@ -227,12 +231,48 @@ namespace Dashboard2017
             this.debugControlLayoutPanel.Size = new System.Drawing.Size(506, 425);
             this.debugControlLayoutPanel.TabIndex = 0;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(909, 8);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(63, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "NT-RELAY:";
+            // 
+            // ntRelayStatusLight
+            // 
+            this.ntRelayStatusLight.Location = new System.Drawing.Point(978, 8);
+            this.ntRelayStatusLight.Name = "ntRelayStatusLight";
+            this.ntRelayStatusLight.Size = new System.Drawing.Size(26, 13);
+            this.ntRelayStatusLight.TabIndex = 5;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(805, 8);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(55, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "RoboRIO:";
+            // 
+            // rioStatusLight
+            // 
+            this.rioStatusLight.Location = new System.Drawing.Point(866, 8);
+            this.rioStatusLight.Name = "rioStatusLight";
+            this.rioStatusLight.Size = new System.Drawing.Size(26, 13);
+            this.rioStatusLight.TabIndex = 6;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1008, 475);
+            this.Controls.Add(this.rioStatusLight);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.ntRelayStatusLight);
             this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
@@ -273,6 +313,10 @@ namespace Dashboard2017
         private RichTextBox consoleTextBox;
         private TabPage debugTab;
         private FlowLayoutPanel debugControlLayoutPanel;
+        private Label label1;
+        private Panel ntRelayStatusLight;
+        private Label label2;
+        private Panel rioStatusLight;
     }
 }
 

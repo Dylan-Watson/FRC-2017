@@ -32,7 +32,7 @@ namespace Dashboard2017
 
         #region Private Fields
 
-        private static ConsoleManager instance;
+        private static ConsoleManager _instance;
 
         private RichTextBox console;
 
@@ -48,7 +48,7 @@ namespace Dashboard2017
         /// <summary>
         ///     Method to return the instance of this class, or a new instance if this instance is null
         ///    </summary>
-        public static ConsoleManager Instance => instance ?? (instance = new ConsoleManager());
+        public static ConsoleManager Instance => _instance ?? (_instance = new ConsoleManager());
 
         #endregion Public Properties
 

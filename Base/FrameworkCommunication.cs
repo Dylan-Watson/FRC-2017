@@ -11,6 +11,7 @@ Email: cooper.ryan@centaurisoft.org
 
 using NetworkTables;
 using System;
+using NetworkTables.Tables;
 
 namespace Base
 {
@@ -27,16 +28,17 @@ namespace Base
         private FrameworkCommunication()
         {
             RobotStatus.Instance.RobotStatusChanged += Instance_RobotStatusChanged;
+            nTRelayComm.AddConnectionListener(new NtRelayListener(), true);
         }
 
         #endregion Private Constructors
 
-        #region Public Properties
+            #region Public Properties
 
-        /// <summary>
-        ///     The instance of the singleton
-        /// </summary>
-        public static FrameworkCommunication Instance => _lazy.Value;
+            /// <summary>
+            ///     The instance of the singleton
+            /// </summary>
+            public static FrameworkCommunication Instance => _lazy.Value;
 
         #endregion Public Properties
 
@@ -137,5 +139,19 @@ namespace Base
         }
 
         #endregion Private Methods
+
+
+        private class NtRelayListener : IRemoteConnectionListener
+        {
+            public void Connected(IRemote remote, ConnectionInfo info)
+            {
+                Instance.GetDashboardComm().PutValue(@"NTRELAY_CONNECTION", Value.MakeValue(true));
+            }
+
+            public void Disconnected(IRemote remote, ConnectionInfo info)
+            {
+                Instance.GetDashboardComm().PutValue(@"NTRELAY_CONNECTION", Value.MakeValue(false));
+            }
+        }
     }
 }

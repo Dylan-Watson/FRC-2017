@@ -20,7 +20,7 @@ namespace Dashboard2017
     {
         #region Private Fields
 
-        private static TableManager instance;
+        private static TableManager _instance;
 
         #endregion Private Fields
 
@@ -37,7 +37,7 @@ namespace Dashboard2017
         /// <summary>
         ///     Method to return the instance of this class, or a new instance if this instance is null
         /// </summary>
-        public static TableManager Instance => instance ?? (instance = new TableManager());
+        public static TableManager Instance => _instance ?? (_instance = new TableManager());
 
         /// <summary>
         ///     The NetworkTable to manage

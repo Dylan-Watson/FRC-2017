@@ -13,7 +13,7 @@ namespace Dashboard2017
     {
         #region Private Fields
 
-        private string rioIP;
+        private string rioIp;
 
         #endregion Private Fields
 
@@ -67,20 +67,20 @@ namespace Dashboard2017
                 switch (teamNumber.Text.Length)
                 {
                     case 2:
-                        rioIP = $"10.{teamNumber.Text[0]}.{teamNumber.Text[1]}.2";
+                        rioIp = $"10.{teamNumber.Text[0]}.{teamNumber.Text[1]}.2";
                         break;
 
                     case 3:
-                        rioIP = $"10.{teamNumber.Text[0]}{teamNumber.Text[1]}.{teamNumber.Text[2]}.2";
+                        rioIp = $"10.{teamNumber.Text[0]}{teamNumber.Text[1]}.{teamNumber.Text[2]}.2";
                         break;
 
                     case 4:
-                        rioIP =
+                        rioIp =
                             $"10.{teamNumber.Text[0]}{teamNumber.Text[1]}.{teamNumber.Text[2]}{teamNumber.Text[3]}.2";
                         break;
                 }
 
-                addressBox.Text = rioIP;
+                addressBox.Text = rioIp;
             }
             else
             {

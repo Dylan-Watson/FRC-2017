@@ -123,7 +123,7 @@ namespace Dashboard2017
             NetworkTable.SetClientMode();
             NetworkTable.SetIPAddress(address);
             TableManager.Instance.Table = NetworkTable.GetTable("DASHBOARD_2017");
-            TableManager.Instance.Table.AddConnectionListener(new NetworkTableLister(), true);
+            TableManager.Instance.Table.AddConnectionListener(new NetworkTableLister(this), true);
             TableManager.Instance.Table.AddTableListener(new TableActivityListener(this), true);
         }
 
@@ -143,12 +143,35 @@ namespace Dashboard2017
                     "No NetworkTables address set, go to 'Options' to set roboRIO address.");
         }
 
+        public void SetRioStatusLight(bool connected)
+        {
+            rioStatusLight.Invoke(new Action(() =>
+            {
+                rioStatusLight.BackColor = connected ? Color.Green : Color.Red;
+            }));
+        }
+
+        public void SetNtRelayStatusLight(bool connected)
+        {
+            ntRelayStatusLight.Invoke(new Action(() =>
+            {
+                ntRelayStatusLight.BackColor = connected ? Color.Green : Color.Red;
+            }));
+        }
+
         #endregion Private Methods
 
         #region Private Classes
 
         private class NetworkTableLister : IRemoteConnectionListener
         {
+            public NetworkTableLister(Form1 parent)
+            {
+                this.parent = parent;
+            }
+
+            private readonly Form1 parent;
+
             #region Public Methods
 
             public void Connected(IRemote remote, ConnectionInfo info)
@@ -156,12 +179,15 @@ namespace Dashboard2017
                 ConsoleManager.Instance.AppendInfo(
                     $"Network tables connected at {info.RemoteIp}. Protocol version: {info.ProtocolVersion}.",
                     Color.Green);
+                parent.SetRioStatusLight(true);
             }
 
             public void Disconnected(IRemote remote, ConnectionInfo info)
             {
                 ConsoleManager.Instance.AppendError(
                     $"Network tables disconnected from {info.RemoteIp}. Protocol version: {info.ProtocolVersion}.");
+                parent.SetRioStatusLight(false);
+                parent.SetNtRelayStatusLight(false);
             }
 
             #endregion Public Methods
@@ -212,6 +238,10 @@ namespace Dashboard2017
                         parent.TargetAquired();
                     else
                         parent.NoTarget();
+                }
+                else if (key == @"NTRELAY_CONNECTION")
+                {
+                    parent.SetNtRelayStatusLight(source.GetBoolean(@"NTRELAY_CONNECTION"));
                 }
 
                 parent.debugControlLayoutPanel.Invoke(new Action(() =>
