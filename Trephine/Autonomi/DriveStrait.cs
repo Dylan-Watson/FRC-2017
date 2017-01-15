@@ -11,7 +11,7 @@ Email: cooper.ryan@centaurisoft.org
 
 using WPILib;
 
-namespace Trephine
+namespace Trephine.Autonomi
 {
     /// <summary>
     ///     Drives strait for x amount of time
@@ -20,25 +20,9 @@ namespace Trephine
     {
         #region Private Fields
 
-        private readonly double driveTime, power;
+        private readonly double driveTime = 1, power = 1;
 
         #endregion Private Fields
-
-        #region Public Constructors
-        
-        /// <summary>
-        ///     Constructor
-        /// </summary>
-        /// <param name="baseCalls">Instantiation of the BaseCalls class to interact with the Base project</param>
-        /// <param name="power">Power to set the drive motors to</param>
-        /// <param name="seconds">Time to drive strait for</param>
-        public DriveStrait(BaseCalls baseCalls, double power = .5, double seconds = .5) : base(baseCalls)
-        {
-            this.power = power;
-            driveTime = seconds;
-        }
-
-        #endregion Public Constructors
 
         #region Public Methods
 

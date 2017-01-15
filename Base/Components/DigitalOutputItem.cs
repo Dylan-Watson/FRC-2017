@@ -65,7 +65,7 @@ namespace Base.Components
             lock (dout)
 #endif
             {
-                if (Math.Abs(val - 0) <= Math.Abs(val*.00001))
+                if (Math.Abs(val - 0) <= Math.Abs(val * .00001))
                 {
                     InUse = true;
                     dout.Set(false);

@@ -49,7 +49,7 @@ namespace FRCSimulator
         void ISimulator.Start()
         {
             DriverStation.StartDriverStationGui();
-            new THreadStates().ShowDialog();
+            new ThreadStates().ShowDialog();
             // using (var game = new FRCSimulator()) game.Run();
         }
 

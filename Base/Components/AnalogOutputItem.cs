@@ -64,7 +64,7 @@ namespace Base.Components
             lock (aout)
 #endif
             {
-                if ((val >= 0) && (val <= 5))
+                if (val >= 0 && val <= 5)
                 {
                     InUse = true;
                     aout.SetVoltage(val);

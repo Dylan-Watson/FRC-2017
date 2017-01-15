@@ -38,7 +38,9 @@ namespace Base
                 if (File.Exists(FULL_LOG_FILE))
                     File.Delete(FULL_LOG_FILE);
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+            }
         }
 
         /// <summary>
@@ -49,9 +51,11 @@ namespace Base
             try
             {
                 if (File.Exists(SESSION_LOG_FILE))
-                File.Delete(SESSION_LOG_FILE);
+                    File.Delete(SESSION_LOG_FILE);
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+            }
         }
 
         /// <summary>
@@ -70,7 +74,9 @@ namespace Base
                 sessionLog.Close();
                 fullLog.Close();
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+            }
         }
 
         /// <summary>
@@ -89,7 +95,9 @@ namespace Base
                 sessionLog.Close();
                 fullLog.Close();
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+            }
         }
 
         #endregion Public Methods

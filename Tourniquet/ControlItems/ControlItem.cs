@@ -137,28 +137,28 @@ namespace Tourniquet.ControlItems
             foreach (
                 var motor in
                 components.OfType<Motor>()
-                    .Where(motor => !((IComponent) motor).InUse || (((IComponent) motor).Sender == this)))
+                    .Where(motor => !((IComponent) motor).InUse || ((IComponent) motor).Sender == this))
                 if (!IsReversed)
-                    motor?.Set(val, this);
+                    motor.Set(val, this);
                 else
-                    motor?.Set(-val, this);
+                    motor.Set(-val, this);
 
             foreach (
                 var output in
                 components.OfType<OutputComponent>()
-                    .Where(output => !((IComponent) output).InUse || (((IComponent) output).Sender == this)))
-                output?.Set(Math.Abs(val*5), this);
+                    .Where(output => !((IComponent) output).InUse || ((IComponent) output).Sender == this))
+                output.Set(Math.Abs(val * 5), this);
 
             foreach (
                 var output in
                 components.OfType<DoubleSolenoidItem>()
-                    .Where(output => !output.InUse || (output.Sender == this)))
+                    .Where(output => !output.InUse || output.Sender == this))
                 output.Set(val, this);
 
             foreach (
                 var output in
                 components.OfType<RelayItem>()
-                    .Where(output => !output.InUse || (output.Sender == this)))
+                    .Where(output => !output.InUse || output.Sender == this))
                 output.Set(val, this);
 
             //times five to compensate for analog output, which has upto 5v output.
@@ -169,7 +169,7 @@ namespace Tourniquet.ControlItems
         /// </summary>
         protected void setOnlyForward()
         {
-            foreach (var motor in components.OfType<Motor>()) motor?.SetAllowCc(false);
+            foreach (var motor in components.OfType<Motor>()) motor.SetAllowCc(false);
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Tourniquet.ControlItems
         /// </summary>
         protected void setOnlyReverse()
         {
-            foreach (var motor in components.OfType<Motor>()) motor?.SetAllowCc(false);
+            foreach (var motor in components.OfType<Motor>()) motor.SetAllowCc(false);
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace Tourniquet.ControlItems
                 var motor in
                 components.OfType<Motor>()
                     .Where(motor => ((IComponent) motor).Sender == this))
-                motor?.Stop();
+                motor.Stop();
         }
 
         /// <summary>
@@ -222,8 +222,8 @@ namespace Tourniquet.ControlItems
             foreach (
                 var output in
                 components.OfType<OutputComponent>()
-                    .Where(output => !((IComponent) output).InUse || (((IComponent) output).Sender == this)))
-                output?.Set(0, this);
+                    .Where(output => !((IComponent) output).InUse || ((IComponent) output).Sender == this))
+                output.Set(0, this);
         }
 
         #endregion Protected Methods

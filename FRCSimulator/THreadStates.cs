@@ -1,28 +1,28 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Windows.Forms;
+using ThreadState = System.Diagnostics.ThreadState;
+using Timer = WPILib.Timer;
 
 namespace FRCSimulator
 {
-    using System.Diagnostics;
-    using System.Threading;
-    using ThreadState = System.Diagnostics.ThreadState;
-    using Timer = WPILib.Timer;
-
     /// <summary>
     ///     ThreadStates
     /// </summary>
-    public partial class THreadStates : Form
+    public partial class ThreadStates : Form
     {
         /// <summary>
         ///     Constructor
         /// </summary>
-        public THreadStates()
+        public ThreadStates()
         {
             InitializeComponent();
             Shown += THreadStates_Shown;
             richTextBox1.Enabled = false;
         }
 
-        private void THreadStates_Shown(object sender, System.EventArgs e)
+        private void THreadStates_Shown(object sender, EventArgs e)
         {
             new Thread(() =>
             {

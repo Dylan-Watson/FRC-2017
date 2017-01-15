@@ -1,6 +1,6 @@
 ﻿/****************************** Header ******************************\
 Class Name: DualButtonControl inherits ControlItem
-Summary: Used to control physical component with two buttons (on 
+Summary: Used to control physical component with two buttons (on
 and off positions...two button toggle).
 Project:     FRC2017
 Copyright (c) BroncBotz.
@@ -15,7 +15,7 @@ using WPILib;
 namespace Tourniquet.ControlItems
 {
     /// <summary>
-    /// Control that uses two butons to perform an action
+    ///     Control that uses two butons to perform an action
     /// </summary>
     public class DualButtonControl : ControlItem
     {
@@ -42,7 +42,7 @@ namespace Tourniquet.ControlItems
         #region Public Methods
 
         /// <summary>
-        /// Updates the control
+        ///     Updates the control
         /// </summary>
         public override void Update()
         {
@@ -52,7 +52,7 @@ namespace Tourniquet.ControlItems
                 ButtonB = false;
                 if (!IsReversed)
                 {
-                    set(1*multiplier);
+                    set(1 * multiplier);
                     IsRunning = true;
                 }
                 else
@@ -74,7 +74,7 @@ namespace Tourniquet.ControlItems
                 }
                 else
                 {
-                    set(1*multiplier);
+                    set(1 * multiplier);
                     IsRunning = true;
                 }
             }
@@ -95,12 +95,12 @@ namespace Tourniquet.ControlItems
         #region Public Properties
 
         /// <summary>
-        /// Button a of the control
+        ///     Button a of the control
         /// </summary>
         public bool ButtonA { get; private set; }
 
         /// <summary>
-        /// Button b of the control
+        ///     Button b of the control
         /// </summary>
         public bool ButtonB { get; private set; }
 

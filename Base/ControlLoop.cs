@@ -11,13 +11,12 @@ Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
+using Timer = WPILib.Timer;
 
 namespace Base
 {
-    using System.Threading;
-    using Timer = WPILib.Timer;
-
     /// <summary>
     ///     Abstract class to create and manage a loop for robot functions
     /// </summary>
@@ -40,7 +39,7 @@ namespace Base
 
         private Task thread;
 
-        private CancellationTokenSource tokenSource = new CancellationTokenSource();
+        private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
 
         #endregion Private Fields
 
@@ -139,7 +138,7 @@ namespace Base
 
         private void Instance_RobotStatusChanged(object sender, RobotStatusChangedEventArgs e)
         {
-            if ((e.CurrentRobotState == RobotState.Auton) || (e.CurrentRobotState == RobotState.Teleop))
+            if (e.CurrentRobotState == RobotState.Auton || e.CurrentRobotState == RobotState.Teleop)
             {
                 kill = false;
                 thread = new Task(backgroundLoop);

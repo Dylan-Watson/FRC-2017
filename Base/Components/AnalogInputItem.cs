@@ -94,7 +94,7 @@ namespace Base.Components
             {
                 var voltage = ain.GetVoltage();
 
-                if (Math.Abs(previousVoltage - voltage) <= Math.Abs(previousVoltage*.00001))
+                if (Math.Abs(previousVoltage - voltage) <= Math.Abs(previousVoltage * .00001))
                     onValueChanged(new VirtualControlEventArgs(voltage, InUse));
 
                 previousVoltage = voltage;

@@ -86,7 +86,7 @@ namespace Base.Components
         #region Public Methods
 
         /// <summary>
-        /// Sets if the relay is reversed or not
+        ///     Sets if the relay is reversed or not
         /// </summary>
         /// <param name="val">boolean value to represent reversion</param>
         public void SetReverse(bool val)
@@ -157,20 +157,20 @@ namespace Base.Components
         }
 
         /// <summary>
-        /// Sets the relay to the given value
+        ///     Sets the relay to the given value
         /// </summary>
         /// <param name="val">double value 0-2</param>
         /// <param name="sender"></param>
         public void Set(double val, object sender)
         {
-            if ((val >= 0) && (val <= 2))
+            if (val >= 0 && val <= 2)
             {
                 InUse = true;
-                if (Math.Abs(val - 2) <= Math.Abs(val*Constants.EPSILON_MIN))
+                if (Math.Abs(val - 2) <= Math.Abs(val * Constants.EPSILON_MIN))
                     Set(Relay.Value.Off, sender);
-                else if (Math.Abs(val - 0) <= Math.Abs(val* Constants.EPSILON_MIN))
+                else if (Math.Abs(val - 0) <= Math.Abs(val * Constants.EPSILON_MIN))
                     Set(!IsReversed ? Relay.Value.Forward : Relay.Value.Reverse, sender);
-                else if (Math.Abs(val - 1) <= Math.Abs(val* Constants.EPSILON_MIN))
+                else if (Math.Abs(val - 1) <= Math.Abs(val * Constants.EPSILON_MIN))
                     Set(!IsReversed ? Relay.Value.Reverse : Relay.Value.Forward, sender);
             }
             else

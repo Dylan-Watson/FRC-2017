@@ -15,8 +15,6 @@ using Base.Config;
 
 namespace Tourniquet
 {
-    using System;
-
     /// <summary>
     ///     Class to handle specific sensor functionality on the robot, this is a ControlLoop, see ControlLoop in Base
     /// </summary>
@@ -25,12 +23,11 @@ namespace Tourniquet
         #region Public Constructors
 
         /// <summary>
-        /// Defult constructor
+        ///     Defult constructor
         /// </summary>
         /// <param name="config">instance of the config</param>
         public Sensing(Config config)
         {
-            preassurePad = (AnalogInputItem) config.ActiveCollection.Get(new CommonName("p_pad"));
         }
 
         #endregion Public Constructors
@@ -42,15 +39,8 @@ namespace Tourniquet
         /// </summary>
         protected override void main()
         {
-
         }
 
         #endregion Protected Methods
-
-        #region Private Fields
-
-        private readonly AnalogInputItem preassurePad;
-
-        #endregion Private Fields
     }
 }

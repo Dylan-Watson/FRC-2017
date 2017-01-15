@@ -10,8 +10,8 @@ Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
 using NetworkTables;
-using System;
 using NetworkTables.Tables;
+using System;
 
 namespace Base
 {
@@ -33,14 +33,27 @@ namespace Base
 
         #endregion Private Constructors
 
-            #region Public Properties
+        #region Public Properties
 
-            /// <summary>
-            ///     The instance of the singleton
-            /// </summary>
-            public static FrameworkCommunication Instance => _lazy.Value;
+        /// <summary>
+        ///     The instance of the singleton
+        /// </summary>
+        public static FrameworkCommunication Instance => _lazy.Value;
 
         #endregion Public Properties
+
+        private class NtRelayListener : IRemoteConnectionListener
+        {
+            public void Connected(IRemote remote, ConnectionInfo info)
+            {
+                Instance.GetDashboardComm().PutValue(@"NTRELAY_CONNECTION", Value.MakeValue(true));
+            }
+
+            public void Disconnected(IRemote remote, ConnectionInfo info)
+            {
+                Instance.GetDashboardComm().PutValue(@"NTRELAY_CONNECTION", Value.MakeValue(false));
+            }
+        }
 
         #region Private Fields
 
@@ -79,11 +92,12 @@ namespace Base
         /// </summary>
         /// <param name="key">network table key</param>
         /// <param name="value">object value to send</param>
-        public void SendData(string key, object value)
+        /// <param name="announcePeriod">should the key be prefixed with the current robot state? (auton/teleop)</param>
+        public void SendData(string key, object value, bool announcePeriod = true)
         {
-            if (LoopCheck._IsTeleoporated())
+            if (LoopCheck._IsTeleoporated() && announcePeriod)
                 dashboardComm.PutValue($"TELEOP_{key}", Value.MakeValue(value));
-            else if (LoopCheck._IsAutonomous())
+            else if (LoopCheck._IsAutonomous() && announcePeriod)
                 dashboardComm.PutValue($"AUTON_{key}", Value.MakeValue(value));
             else
                 dashboardComm.PutValue($"{key}", Value.MakeValue(value));
@@ -100,7 +114,7 @@ namespace Base
         }
 
         /// <summary>
-        /// Initialize the singleton
+        ///     Initialize the singleton
         /// </summary>
         public static void Initialize()
         {
@@ -139,19 +153,5 @@ namespace Base
         }
 
         #endregion Private Methods
-
-
-        private class NtRelayListener : IRemoteConnectionListener
-        {
-            public void Connected(IRemote remote, ConnectionInfo info)
-            {
-                Instance.GetDashboardComm().PutValue(@"NTRELAY_CONNECTION", Value.MakeValue(true));
-            }
-
-            public void Disconnected(IRemote remote, ConnectionInfo info)
-            {
-                Instance.GetDashboardComm().PutValue(@"NTRELAY_CONNECTION", Value.MakeValue(false));
-            }
-        }
     }
 }

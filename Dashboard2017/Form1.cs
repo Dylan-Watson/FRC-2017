@@ -46,17 +46,26 @@ namespace Dashboard2017
             Shown += Form1_Shown;
             KeyDown += Form1_KeyPress;
             debugControlLayoutPanel.FlowDirection = FlowDirection.TopDown;
+            autonCombo.GotFocus += AutonCombo_GotFocus;
+            autonCombo.LostFocus += AutonCombo_LostFocus;
+        }
+
+        private void AutonCombo_LostFocus(object sender, EventArgs e)
+        {
+            autonCombo.SelectedIndexChanged -= AutonCombo_SelectedIndexChanged;
+        }
+
+        private void AutonCombo_GotFocus(object sender, EventArgs e)
+        {
+            autonCombo.SelectedIndexChanged += AutonCombo_SelectedIndexChanged;
+        }
+
+        private void AutonCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TableManager.Instance.Table.PutValue(@"AUTON_SELECT", Value.MakeString(autonCombo.SelectedItem.ToString()));
         }
 
         #endregion Public Constructors
-
-        #region Private Fields
-
-        private bool justSet;
-
-        private bool pingSuccess;
-
-        #endregion Private Fields
 
         #region Public Methods
 
@@ -143,34 +152,37 @@ namespace Dashboard2017
                     "No NetworkTables address set, go to 'Options' to set roboRIO address.");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="connected"></param>
         public void SetRioStatusLight(bool connected)
         {
-            rioStatusLight.Invoke(new Action(() =>
-            {
-                rioStatusLight.BackColor = connected ? Color.Green : Color.Red;
-            }));
+            rioStatusLight.Invoke(new Action(() => { rioStatusLight.BackColor = connected ? Color.Green : Color.Red; }));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="connected"></param>
         public void SetNtRelayStatusLight(bool connected)
         {
-            ntRelayStatusLight.Invoke(new Action(() =>
-            {
-                ntRelayStatusLight.BackColor = connected ? Color.Green : Color.Red;
-            }));
+            ntRelayStatusLight.Invoke(
+                new Action(() => { ntRelayStatusLight.BackColor = connected ? Color.Green : Color.Red; }));
         }
 
-        #endregion Private Methods
+        #endregion Public Methods
 
         #region Private Classes
 
         private class NetworkTableLister : IRemoteConnectionListener
         {
+            private readonly Form1 parent;
+
             public NetworkTableLister(Form1 parent)
             {
                 this.parent = parent;
             }
-
-            private readonly Form1 parent;
 
             #region Public Methods
 
@@ -205,7 +217,6 @@ namespace Dashboard2017
             #endregion Public Constructors
 
             #region Public Methods
-
 
             public void ValueChanged(ITable source, string key, Value value, NotifyFlags flags)
             {
@@ -243,6 +254,12 @@ namespace Dashboard2017
                 {
                     parent.SetNtRelayStatusLight(source.GetBoolean(@"NTRELAY_CONNECTION"));
                 }
+                else if (key == @"AUTON_LIST")
+                {
+                    parent.autonCombo.Invoke(
+                        new Action(
+                            () => { parent.autonCombo.DataSource = source.GetValue(@"AUTON_LIST").GetObjectValue(); }));
+                }
 
                 parent.debugControlLayoutPanel.Invoke(new Action(() =>
                 {
@@ -251,7 +268,7 @@ namespace Dashboard2017
                             .Select(control => control)
                             .ToList();
 
-                    if ((key.Split('_')[0] == "AUTON") || (key.Split('_')[0] == "TELEOP"))
+                    if (key.Split('_')[0] == "AUTON" || key.Split('_')[0] == "TELEOP")
                         if (controls.All(c => c.Name != key))
                         {
                             var tmp = new DebugControl(key);

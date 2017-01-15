@@ -14,6 +14,7 @@ using Base;
 using Base.Config;
 using Tourniquet;
 using WPILib;
+using Initialize = Trephine.Initialize;
 using RobotState = Base.RobotState;
 
 namespace RobotMain2017
@@ -23,6 +24,8 @@ namespace RobotMain2017
     /// </summary>
     public class RobotMain2017 : SampleRobot
     {
+        private readonly Initialize auton;
+
         #region Public Constructors
 
         /// <summary>
@@ -33,6 +36,7 @@ namespace RobotMain2017
             Log.ClearSessionLog();
             config.Load(CONFIG_FILE);
             FrameworkCommunication.Initialize();
+            auton = new Initialize(config);
         }
 
         #endregion Public Constructors
@@ -44,7 +48,7 @@ namespace RobotMain2017
             if (!config.QuickLoad) return;
 
             config.Load(CONFIG_FILE);
-            Initialize.BuildControlSchema(config);
+            Tourniquet.Initialize.BuildControlSchema(config);
         }
 
         #endregion Private Methods
@@ -68,7 +72,7 @@ namespace RobotMain2017
             quickLoad();
             RobotStatus.Instance.NotifyState(RobotState.Auton);
             if (!config.AutonEnabled) return;
-            new Trephine.Initialize(config).Run();
+            auton.Run();
         }
 
         /// <summary>
@@ -109,7 +113,7 @@ namespace RobotMain2017
         /// <summary>
         ///     Called by WPI on robot initialization
         /// </summary>
-        protected override void RobotInit() => Initialize.BuildControlSchema(config);
+        protected override void RobotInit() => Tourniquet.Initialize.BuildControlSchema(config);
 
         #endregion Protected Methods
     }

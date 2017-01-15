@@ -1,6 +1,6 @@
 ﻿/****************************** Header ******************************\
 Class Name: VisionMonitor [singleton]
-Summary: Singleton to manage communication and interpretation of 
+Summary: Singleton to manage communication and interpretation of
 data reviced from the vision Co-Processor.
 Project:     FRC2017
 Copyright (c) BroncBotz.
@@ -15,7 +15,9 @@ using NetworkTables.Tables;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+
 //TODO: Ryan, finish commenting this file -> thanks.
+
 namespace Base
 {
     /// <summary>
@@ -49,10 +51,6 @@ namespace Base
 
         private class TableActivityListener : ITableListener
         {
-            #region Public Methods
-
-            #endregion Public Methods
-
             #region Private Fields
 
             private static CommunicationFrames.Target _currentTarget;
@@ -68,22 +66,20 @@ namespace Base
                 var size = Marshal.SizeOf(target);
                 var ptr = Marshal.AllocHGlobal(size);
                 Marshal.Copy(arr, 0, ptr, size);
-                target = (CommunicationFrames.Target)Marshal.PtrToStructure(ptr, target.GetType());
+                target = (CommunicationFrames.Target) Marshal.PtrToStructure(ptr, target.GetType());
                 Marshal.FreeHGlobal(ptr);
                 return target;
             }
-
 
             private static void _updateTarget(CommunicationFrames.Target target)
             {
                 for (var i = 0; i < _targets.Count; i++)
                 {
                     var o = _targets[i];
-                    if ((o != null) && (o.Target.ID == target.ID))
+                    if (o != null && o.Target.ID == target.ID)
                         _targets.RemoveAt(i);
                 }
-                var tmp = new CommunicationFrames.TargetContainer();
-                tmp.Target = new CommunicationFrames.Target(target);
+                var tmp = new CommunicationFrames.TargetContainer {Target = new CommunicationFrames.Target(target)};
 
                 _targets.Add(tmp);
             }
@@ -94,7 +90,7 @@ namespace Base
                 _currentTarget = _frameFromByteArray(source.GetRaw(key));
                 _updateTarget(_currentTarget);
 
-                if ((_currentTarget.ID != 0) || (_currentTarget.HasTarget == lastDashboardUpdate)) return;
+                if (_currentTarget.ID != 0 || _currentTarget.HasTarget == lastDashboardUpdate) return;
                 FrameworkCommunication.Instance.GetDashboardComm().PutBoolean("TARGET", _currentTarget.HasTarget);
                 lastDashboardUpdate = _currentTarget.HasTarget;
             }
@@ -109,7 +105,9 @@ namespace Base
         private static readonly Lazy<VisionMonitor> _lazy =
             new Lazy<VisionMonitor>(() => new VisionMonitor());
 
-        private static readonly List<CommunicationFrames.TargetContainer> _targets = new List<CommunicationFrames.TargetContainer>();
+        private static readonly List<CommunicationFrames.TargetContainer> _targets =
+            new List<CommunicationFrames.TargetContainer>();
+
         private readonly NetworkTable ntRelayTable = FrameworkCommunication.Instance.GetVisonRelayComm();
 
         #endregion Private Fields
@@ -176,7 +174,7 @@ namespace Base
         public CommunicationFrames.TargetContainer GetLatestTargetData(int id)
         {
             foreach (var target in _targets)
-                if ((target != null) && (target.Target.ID == id))
+                if (target != null && target.Target.ID == id)
                     return target;
             return null;
         }

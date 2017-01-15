@@ -14,7 +14,7 @@ using WPILib;
 namespace Tourniquet.ControlItems
 {
     /// <summary>
-    /// Defines a control that uses a button on the controller
+    ///     Defines a control that uses a button on the controller
     /// </summary>
     public class ButtonControl : ControlItem
     {
@@ -41,14 +41,14 @@ namespace Tourniquet.ControlItems
         #region Public Methods
 
         /// <summary>
-        /// Update the control
+        ///     Update the control
         /// </summary>
         public override void Update()
         {
             if (joystick.GetRawButton(button))
                 if (!IsReversed)
                 {
-                    set(1*multiplier);
+                    set(1 * multiplier);
                     IsRunning = true;
                 }
                 else
@@ -66,7 +66,7 @@ namespace Tourniquet.ControlItems
                 }
                 else
                 {
-                    set(1*multiplier);
+                    set(1 * multiplier);
                     IsRunning = true;
                 }
         }

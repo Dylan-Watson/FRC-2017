@@ -1,6 +1,6 @@
 ﻿/****************************** Header ******************************\
 Class Name: WatchDog
-Summary: An expiration timer used to check if a specified amount 
+Summary: An expiration timer used to check if a specified amount
 of time has passed.
 Project:     FRC2017
 Copyright (c) BroncBotz.
@@ -28,7 +28,7 @@ namespace Base
         public enum WatchDogState
         {
             /// <summary>
-            ///     The timer is running currently 
+            ///     The timer is running currently
             /// </summary>
             Running,
 
@@ -43,9 +43,27 @@ namespace Base
             Expired
         }
 
-        #endregion
+        #endregion Public Enums
 
-        #region Public Constructors 
+        #region Private Properties
+
+        /// <summary>
+        ///     Instantiation of the native C# DateTime class used for timing
+        /// </summary>
+        private Timer timer { get; }
+
+        #endregion Private Properties
+
+        #region Public Events
+
+        /// <summary>
+        ///     Event to handle when the timer expires
+        /// </summary>
+        public event ElapsedEventHandler IsExpired;
+
+        #endregion Public Events
+
+        #region Public Constructors
 
         /// <summary>
         ///     Contructor for the timer using seconds
@@ -53,7 +71,7 @@ namespace Base
         /// <param name="seconds">The amount of time (interval) for the timer to go for in seconds</param>
         public WatchDog(int seconds)
         {
-            timer = new Timer(seconds*1000);
+            timer = new Timer(seconds * 1000);
             timer.Elapsed += Timer_Expired;
             RobotStatus.Instance.RobotStatusChanged += Instance_RobotStatusChanged;
         }
@@ -69,7 +87,7 @@ namespace Base
             RobotStatus.Instance.RobotStatusChanged += Instance_RobotStatusChanged;
         }
 
-        #endregion
+        #endregion Public Constructors
 
         #region Public Methods
 
@@ -106,7 +124,7 @@ namespace Base
         /// <param name="seconds">The new interval in seconds</param>
         public void SetInSeconds(int seconds)
         {
-            timer.Interval = seconds*1000;
+            timer.Interval = seconds * 1000;
         }
 
         /// <summary>
@@ -127,7 +145,7 @@ namespace Base
             GC.SuppressFinalize(this);
         }
 
-        #endregion
+        #endregion Public Methods
 
         #region Private Methods
 
@@ -144,7 +162,7 @@ namespace Base
         }
 
         /// <summary>
-        /// Disposes of the instance if the robot state changes
+        ///     Disposes of the instance if the robot state changes
         /// </summary>
         /// <param name="sender">The object invoking the method</param>
         /// <param name="e">RobotStatusChanged Arguments passed</param>
@@ -169,7 +187,7 @@ namespace Base
             }
         }
 
-        #endregion
+        #endregion Private Methods
 
         #region Public Properties
 
@@ -183,24 +201,6 @@ namespace Base
         /// </summary>
         public WatchDogState State { get; private set; } = WatchDogState.Stopped;
 
-        #endregion
-
-        #region Private Properties
-
-        /// <summary>
-        ///     Instantiation of the native C# DateTime class used for timing
-        /// </summary>
-        private Timer timer { get; }
-
-        #endregion
-
-        #region Public Events
-
-        /// <summary>
-        ///     Event to handle when the timer expires 
-        /// </summary>
-        public event ElapsedEventHandler IsExpired;
-        
-        #endregion
+        #endregion Public Properties
     }
 }

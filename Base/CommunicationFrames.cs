@@ -10,7 +10,6 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-using System.Runtime.InteropServices;
 using WPILib;
 
 namespace Base
@@ -95,7 +94,6 @@ namespace Base
             /// </summary>
             //[FieldOffset(4)]
             public bool ValidImage, HasTarget;
-
 
             #endregion Public Fields
 

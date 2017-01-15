@@ -1,7 +1,7 @@
 ﻿/****************************** Header ******************************\
 Class Name: Base Calls
-Summary: Class to handle all of the calls to the base broject to 
-gather groups of components 
+Summary: Class to handle all of the calls to the base broject to
+gather groups of components
 Project:     FRC2017
 Copyright (c) BroncBotz.
 All rights reserved.
@@ -14,19 +14,31 @@ Email: cooper.ryan@centaurisoft.org
 
 using Base;
 using Base.Config;
+using System;
 
 namespace Trephine
 {
     /// <summary>
     ///     Instance based utility class for calles to Base
     /// </summary>
-    public class BaseCalls
+    public sealed class BaseCalls
     {
+        private static readonly Lazy<BaseCalls> _lazy =
+            new Lazy<BaseCalls>(() => new BaseCalls());
+
         #region Private Fields
 
-        private readonly Config config;
+        private Config config;
 
         #endregion Private Fields
+
+        private BaseCalls()
+        {
+        }
+
+        /// <summary>
+        /// </summary>
+        public static BaseCalls Instance => _lazy.Value;
 
         #region Public Constructors
 
@@ -34,7 +46,7 @@ namespace Trephine
         ///     Constructor
         /// </summary>
         /// <param name="config">instance of the config</param>
-        public BaseCalls(Config config)
+        public void SetConfig(Config config)
         {
             this.config = config;
         }

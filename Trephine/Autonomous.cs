@@ -16,25 +16,12 @@ namespace Trephine
     /// </summary>
     public abstract class Autonomous
     {
-        #region Protected Constructors
-
-        /// <summary>
-        ///     Constructor
-        /// </summary>
-        /// <param name="baseCalls">auton base calls instance</param>
-        protected Autonomous(BaseCalls baseCalls)
-        {
-            this.baseCalls = baseCalls;
-        }
-
-        #endregion Protected Constructors
-
         #region Protected Properties
 
         /// <summary>
         ///     Instance of BaseCalls
         /// </summary>
-        protected BaseCalls baseCalls { get; }
+        protected BaseCalls baseCalls { get; } = BaseCalls.Instance;
 
         #endregion Protected Properties
 

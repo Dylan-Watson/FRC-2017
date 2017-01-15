@@ -132,12 +132,9 @@ namespace Base.Config
                 foreach (var element in getElements("RobotConfig", "Encoders"))
                     try
                     {
-                        
-                        bool isReversed = false;
+                        var isReversed = false;
                         if (element.Attribute("reversed") != null)
-                        {
                             isReversed = Convert.ToBoolean(element.Attribute("reversed").Value);
-                        }
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
                             $"Added Encoder {element.Name}, aChannel = {Convert.ToInt32(element.Attribute("aChannel").Value)}, bChannel = {Convert.ToInt32(element.Attribute("bChannel").Value)}, isReversed = {isReversed}");
@@ -145,7 +142,7 @@ namespace Base.Config
                             new EncoderItem(element.Name.ToString(),
                                 Convert.ToInt32(element.Attribute("aChannel").Value),
                                 Convert.ToInt32(element.Attribute("bChannel").Value),
-                                isReversed ));
+                                isReversed));
                     }
                     catch (Exception ex)
                     {
@@ -156,7 +153,7 @@ namespace Base.Config
                         else
                         {
                             Report.Error(
-                            $"Failed to load Encoder {element?.Name}. This may cause a fatal runtime error! See log for details.");
+                                $"Failed to load Encoder {element?.Name}. This may cause a fatal runtime error! See log for details.");
                             Log.Write(ex);
                             if (VerboseOutput)
                                 Report.Error(ex.Message);
@@ -382,6 +379,7 @@ namespace Base.Config
                             temp.SetEncoder(motorEncoder);
                         }
                         else
+                        {
                             switch (element.Attribute("side").Value)
                             {
                                 case "right":
@@ -409,6 +407,7 @@ namespace Base.Config
                                     temp.SetEncoder(motorEncoder);
                                     break;
                             }
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -874,7 +873,8 @@ namespace Base.Config
                             }
                             temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Button,
                                 toBindCommonName(element.Attribute("bindTo")),
-                                Convert.ToInt32(element.Attribute("button").Value), actOnRelease, powerMultiplier, reversed));
+                                Convert.ToInt32(element.Attribute("button").Value), actOnRelease, powerMultiplier,
+                                reversed));
                             break;
 
                         case Schemas.ControlType.DualButton:
@@ -894,7 +894,7 @@ namespace Base.Config
                 }
 
                 DriverConfig = new Schemas.DriverConfig(new Joystick(controllerSlot), left, right, temp);
-                    //add driver stuff
+                //add driver stuff
             }
             catch (Exception ex)
             {
@@ -970,7 +970,8 @@ namespace Base.Config
                             }
                             temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Button,
                                 toBindCommonName(element.Attribute("bindTo")),
-                                Convert.ToInt32(element.Attribute("button").Value), actOnRelease, powerMultiplier, reversed));
+                                Convert.ToInt32(element.Attribute("button").Value), actOnRelease, powerMultiplier,
+                                reversed));
                             break;
 
                         case Schemas.ControlType.DualButton:
@@ -1139,8 +1140,9 @@ namespace Base.Config
             return bindings;
         }
 
-        private void AllocationExceptionReport(Exception ex, XElement element){
-            Report.Error($"AllocationException thrown by WPILib for { element?.Name }");
+        private void AllocationExceptionReport(Exception ex, XElement element)
+        {
+            Report.Error($"AllocationException thrown by WPILib for {element?.Name}");
             Log.Write(ex);
             if (VerboseOutput)
                 Report.Error(ex.Message);

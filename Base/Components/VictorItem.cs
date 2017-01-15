@@ -159,7 +159,7 @@ namespace Base.Components
             lock (victor)
 #endif
             {
-                if ((val < -Constants.MINUMUM_JOYSTICK_RETURN) && AllowCc)
+                if (val < -Constants.MINUMUM_JOYSTICK_RETURN && AllowCc)
                 {
                     InUse = true;
                     if (IsReversed)
@@ -173,7 +173,7 @@ namespace Base.Components
                         onValueChanged(new VirtualControlEventArgs(val, InUse));
                     }
                 }
-                else if ((val > Constants.MINUMUM_JOYSTICK_RETURN) && AllowC)
+                else if (val > Constants.MINUMUM_JOYSTICK_RETURN && AllowC)
                 {
                     InUse = true;
                     if (IsReversed)
@@ -202,7 +202,7 @@ namespace Base.Components
         /// <param name="encoder">The EncoderItem to bind to the motor</param>
         public void SetEncoder(EncoderItem encoder)
         {
-            base.encoder = encoder;
+            this.encoder = encoder;
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace Base.Components
         /// <param name="lowerLimit">The DigitalInputItem to attach</param>
         public void SetLowerLimit(DigitalInputItem lowerLimit)
         {
-            base.lowerLimit = lowerLimit;
+            this.lowerLimit = lowerLimit;
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace Base.Components
         /// <param name="upperLimit">The DigitalInputItem to attach</param>
         public void SetUpperLimit(DigitalInputItem upperLimit)
         {
-            base.upperLimit = upperLimit;
+            this.upperLimit = upperLimit;
         }
 
         /// <summary>

@@ -1,25 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Trephine
+﻿namespace Trephine
 {
-    static class UtilityFunctions
+    internal static class UtilityFunctions
     {
-        const int ANGLE_CHECK_RANGE = 3;
-
-        
-         /// <summary>
-         /// find direction to turn given where bot is and where it will turn
-         /// </summary>
-         /// <param name="original"></param>
-         /// <param name="turn"></param>
-         /// <returns></returns>
+        /// <summary>
+        ///     find direction to turn given where bot is and where it will turn
+        /// </summary>
+        /// <param name="original"></param>
+        /// <param name="turn"></param>
+        /// <returns></returns>
         public static int GetDirection(int original, int turn)
         {
-            int diff = turn - original;
+            var diff = turn - original;
 
             if (diff < -180)
                 diff += 360;
@@ -34,10 +25,9 @@ namespace Trephine
 
         //
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="original"></param>
-        /// <param name="newA"></param>
+        /// <param name="turn"></param>
         /// <returns></returns>
         public static int GetDestination(int original, int turn)
         {
@@ -54,7 +44,7 @@ namespace Trephine
         public static int GetDistance(int orgin, int currentPos)
         {
             var val = orgin - currentPos;
-            int dir = GetDirection(orgin, currentPos);
+            var dir = GetDirection(orgin, currentPos);
             if (dir == -1)
                 val *= -1;
 

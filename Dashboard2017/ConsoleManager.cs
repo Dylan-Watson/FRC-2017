@@ -47,7 +47,7 @@ namespace Dashboard2017
 
         /// <summary>
         ///     Method to return the instance of this class, or a new instance if this instance is null
-        ///    </summary>
+        /// </summary>
         public static ConsoleManager Instance => _instance ?? (_instance = new ConsoleManager());
 
         #endregion Public Properties
@@ -108,7 +108,7 @@ namespace Dashboard2017
             console = consoleRichTextBox;
             console.TextChanged += Console_TextChanged;
         }
-        
+
         /// <summary>
         ///     Method to write a character to the console
         /// </summary>

@@ -50,7 +50,7 @@ namespace Base
         public const string VISION_NETWORK_TABLE = @"NTRELAY_2017";
 
         /// <summary>
-        /// Value to use with epsilon comparison of floating points
+        ///     Value to use with epsilon comparison of floating points
         /// </summary>
         public const double EPSILON_MIN = .00001;
 

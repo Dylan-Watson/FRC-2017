@@ -74,24 +74,24 @@ namespace Base
 
                 foreach (var component in actors)
                 {
-                    if (component.InUse) continue;//skip if the component is in use
+                    if (component.InUse) continue; //skip if the component is in use
 
                     var actor = component;
 
-                    if ((EventType == VirtualControlEventType.Value) &&
-                        (SetMethod == VirtualControlEventSetMethod.Passthrough))
+                    if (EventType == VirtualControlEventType.Value &&
+                        SetMethod == VirtualControlEventSetMethod.Passthrough)
                     {
                         (actor as Motor)?.Set(param.Value, this);
                         (actor as OutputComponent)?.Set(Math.Abs(param.Value), this);
                         (actor as DoubleSolenoidItem)?.Set(Math.Abs(param.Value), this);
                         (actor as RelayItem)?.Set((Relay.Value) Math.Abs(param.Value), this);
                     }
-                    else if ((EventType == VirtualControlEventType.Value) &&
-                             (SetMethod == VirtualControlEventSetMethod.Adjusted))
+                    else if (EventType == VirtualControlEventType.Value &&
+                             SetMethod == VirtualControlEventSetMethod.Adjusted)
                     {
                         if (sender is AnalogInputItem || sender is PotentiometerItem)
                         {
-                            (actor as Motor)?.Set(param.Value/5, this);
+                            (actor as Motor)?.Set(param.Value / 5, this);
                             (actor as OutputComponent)?.Set(Math.Abs(param.Value), this);
                             (actor as DoubleSolenoidItem)?.Set(Math.Abs(param.Value), this);
                             (actor as RelayItem)?.Set((Relay.Value) Math.Abs(param.Value), this);
@@ -99,26 +99,26 @@ namespace Base
                         else if (sender is EncoderItem)
                         {
                             var tmp = (EncoderItem) sender;
-                            (actor as Motor)?.Set(param.Value/((Encoder) tmp.GetRawComponent()).EncodingScale, this);
+                            (actor as Motor)?.Set(param.Value / ((Encoder) tmp.GetRawComponent()).EncodingScale, this);
                             (actor as OutputComponent)?.Set(
-                                Math.Abs(param.Value/((Encoder) tmp.GetRawComponent()).EncodingScale), this);
+                                Math.Abs(param.Value / ((Encoder) tmp.GetRawComponent()).EncodingScale), this);
                             (actor as DoubleSolenoidItem)?.Set(
-                                Math.Abs(param.Value/((Encoder) tmp.GetRawComponent()).EncodingScale), this);
+                                Math.Abs(param.Value / ((Encoder) tmp.GetRawComponent()).EncodingScale), this);
                             (actor as RelayItem)?.Set(
-                                (Relay.Value) (Math.Abs(param.Value)/((Encoder) tmp.GetRawComponent()).EncodingScale),
+                                (Relay.Value) (Math.Abs(param.Value) / ((Encoder) tmp.GetRawComponent()).EncodingScale),
                                 this);
                         }
                         else
                         {
                             (actor as Motor)?.Set(param.Value, this);
                             (actor as DigitalOutputItem)?.Set(param.Value, this);
-                            (actor as AnalogOutputItem)?.Set(Math.Abs(param.Value)*5, this);
+                            (actor as AnalogOutputItem)?.Set(Math.Abs(param.Value) * 5, this);
                             (actor as DoubleSolenoidItem)?.Set(Math.Abs(param.Value), this);
                             (actor as RelayItem)?.Set((Relay.Value) Math.Abs(param.Value), this);
                         }
                     }
-                    else if ((EventType == VirtualControlEventType.Usage) &&
-                             (SetMethod == VirtualControlEventSetMethod.Passthrough))
+                    else if (EventType == VirtualControlEventType.Usage &&
+                             SetMethod == VirtualControlEventSetMethod.Passthrough)
                     {
                         (actor as Motor)?.Set(Convert.ToDouble(param.InUse), this);
                         (actor as OutputComponent)?.Set(param.InUse, this);

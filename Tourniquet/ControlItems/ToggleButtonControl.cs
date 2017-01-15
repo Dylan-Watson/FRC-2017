@@ -43,35 +43,35 @@ namespace Tourniquet.ControlItems
             if (currentState != previousState)
             {
                 toggle ^= currentState;
-                if(!currentState)
-                if (toggle)
-                {
-                    if (!IsReversed)
+                if (!currentState)
+                    if (toggle)
                     {
-                        set(1*multiplier);
-                        IsRunning = true;
+                        if (!IsReversed)
+                        {
+                            set(1 * multiplier);
+                            IsRunning = true;
+                        }
+                        else
+                        {
+                            set(0);
+                            stop();
+                            IsRunning = false;
+                        }
                     }
                     else
                     {
-                        set(0);
-                        stop();
-                        IsRunning = false;
+                        if (!IsReversed)
+                        {
+                            set(0);
+                            stop();
+                            IsRunning = false;
+                        }
+                        else
+                        {
+                            set(1 * multiplier);
+                            IsRunning = true;
+                        }
                     }
-                }
-                else
-                {
-                    if (!IsReversed)
-                    {
-                        set(0);
-                        stop();
-                        IsRunning = false;
-                    }
-                    else
-                    {
-                        set(1*multiplier);
-                        IsRunning = true;
-                    }
-                }
             }
 
             previousState = currentState;

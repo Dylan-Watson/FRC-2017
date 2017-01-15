@@ -40,6 +40,9 @@ namespace Base
 
         #endregion Private Methods
 
+        /*private static readonly Lazy<ActiveCollection> _lazy =
+            new Lazy<ActiveCollection>(() => new ActiveCollection());*/
+
         #region Private Fields
 
         /// <summary>
@@ -180,9 +183,6 @@ namespace Base
         }
 
         #endregion Public Methods
-
-        /*private static readonly Lazy<ActiveCollection> _lazy =
-            new Lazy<ActiveCollection>(() => new ActiveCollection());*/
 
         /*private ActiveCollection()
         {
