@@ -154,7 +154,7 @@ namespace Base
             /// <summary>
             ///     Defines the HSV lower and upper bound search parameters
             /// </summary>
-            public byte LowerHue, UpperHue, LowerValue, UpperValue, LowerSaturation, UpperSaturation;
+            public byte LowerHue, UpperHue, LowerValue, UpperValue, LowerSaturation, UpperSaturation, Red, Green, Blue;
 
             /// <summary>
             ///     Defines the search parameters for an object
