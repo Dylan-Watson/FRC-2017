@@ -14,6 +14,7 @@ using NetworkTables;
 using NetworkTables.Tables;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Runtime.InteropServices;
 
 //TODO: Ryan, finish commenting this file -> thanks.
@@ -129,7 +130,7 @@ namespace Base
         /// <param name="upperVal">Upper value of the target</param>
         /// <param name="maxObj">Maximum possible targets to sort through</param>
         public void CreateTargetSetting(int id, bool enabled, int minRadius, int maxRadius, byte lowerHue, byte lowerSat,
-            byte lowerVal, byte upperHue, byte upperSat, byte upperVal, int maxObj = 125)
+            byte lowerVal, byte upperHue, byte upperSat, byte upperVal, Color color, int maxObj = 125)
         {
             var frame = new CommunicationFrames.TargetSetting
             {
@@ -143,7 +144,10 @@ namespace Base
                 MinimumRadius = minRadius,
                 MaximumRadius = maxRadius,
                 LowerSaturation = lowerSat,
-                UpperSaturation = upperSat
+                UpperSaturation = upperSat,
+                Red = color.R,
+                Green = color.G,
+                Blue = color.B
             };
 
             var size = Marshal.SizeOf(frame);
