@@ -370,13 +370,47 @@ namespace Base.Config
                             $"Added Victor{type} {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
                         if (!Convert.ToBoolean(element.Attribute("drive").Value))
                         {
-                            var temp = new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
+                            switch (element.Attribute("mstype")?.Value)
+                            {
+                                case "master":
+                                    var _temp = new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
+                                element.Name.ToString(), true, Convert.ToBoolean(element.Attribute("reversed").Value));
+
+                                    ActiveCollection.AddComponent(_temp);
+                                    _temp.SetUpperLimit(upperLimit);
+                                    _temp.SetLowerLimit(lowerLimit);
+                                    _temp.SetEncoder(motorEncoder);
+                                    Report.General($"{element.Name} is a master victor.");
+                                    break;
+                                case "slave":
+                                    try
+                                    {
+                                        var master = element.Attribute("master").Value;
+
+                                        ActiveCollection.AddComponent(
+                                            new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value), 
+                                                element.Name.ToString(), (VictorItem) ActiveCollection.Get(new CommonName(master)), 
+                                                Convert.ToBoolean(element.Attribute("reversed").Value)
+                                            ));
+                                        Report.General($"{element.Name} is a slave whose master is {master}");
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Report.Error(
+                                            $"Error binding slave victor {element.Name} to its master, check spelling in the config.");
+                                        Log.Write(ex);
+                                    }
+                                    break;
+                                default:
+                                    var temp = new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
                                 element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value));
 
-                            ActiveCollection.AddComponent(temp);
-                            temp.SetUpperLimit(upperLimit);
-                            temp.SetLowerLimit(lowerLimit);
-                            temp.SetEncoder(motorEncoder);
+                                    ActiveCollection.AddComponent(temp);
+                                    temp.SetUpperLimit(upperLimit);
+                                    temp.SetLowerLimit(lowerLimit);
+                                    temp.SetEncoder(motorEncoder);
+                                    break;
+                            }
                         }
                         else
                         {
