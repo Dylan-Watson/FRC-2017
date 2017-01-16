@@ -3,7 +3,7 @@
 <Robot>
 
   <Version version="4.0" />
-  <Comment comment="Configured for roboRio deployment." />
+  <Comment comment="Configured for roboRio deployment.." />
 
   <!-- If true, will dump full exception methods to the console and driverstation. -->
   <VerboseOutput value="true" />
@@ -23,12 +23,9 @@
     <Victors>
       <!-- Examples -->
       <!--<xxxxxxxx type="SP" channel="x ID from roboRio" reversed="x" drive="false" optional encoder="xxxxxx" upperLimit="Name of DI" optional lowerLimit="Name of DI" />-->
-      <rightDrive_1 type="888" channel="0" reversed="true" drive="true" side="right" />
-      <rightDrive_2 type="888" channel="1" reversed="true" drive="true" side="right" />
-      <!--<rightDrive_3 type="888" channel="2" reversed="false" type="drive" side="right" />-->
-      <leftDrive_1 type="888" channel="2" reversed="false" drive="true" side="left" />
-      <leftDrive_2 type="888" channel="3" reversed="false" drive="true" side="left" />
-      <indexer type="888" channel="10" reversed="false" drive="false" />
+
+      <shootLeft type="SP" channel="0" reversed="false" drive="false" />
+      <shootRight type="SP" channel="3" reversed="true" drive="false"/>
       <!--<leftDrive_3 type="888" channel="5" reversed="false" type="drive" side="left" />-->
     </Victors>
 
@@ -40,42 +37,33 @@
       <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="slave" encoder="xxxxxx" master="binding name (name of master talon)" />-->
 
        <!--<shooter_1 channel="22" reversed="false" type="pwm" />-->
-
-      <shooter_1 channel="24" reversed="false" type="master" p=".5" i=".001" d="0" />
-      <shooter_2 channel="22" reversed="false" type="slave" master="shooter_1" />
     </Talons>
 
     <!-- Encoder locations -->
     <Encoders>
       <!--<xxxxxx aChannel="x" bChannel="x" optional reversed="x" />-->
-    <test_encoder aChannel="8" bChannel="9" />
     </Encoders>
 
     <!-- Double solenoid locations-->
     <Solenoids>
       <!--<xxxxxx forward="x" reverse="x" default="forward/reverse" reversed="false" />-->
       <!-- default is optional, reversed is not. -->
-      <intake forward="2" reverse="3" default="reverse" reversed="true" />
-      <shifters forward="0" reverse="1" default="reverse" reversed="true" />
-      <hood forward="4" reverse="5" default="reverse" reversed="true" />
+
     </Solenoids>
 
     <!--  Digital input/outputs !!!!NOTE!!!! DI and DO are on the same line as the Encoders -->
     <!--  so DO NOT have matching channel numbers, that allocated drifferent resources in the same spot.-->
     <DI>
       <!--<xxxxxx channel="x" />-->
-      <test_di channel="0" />
     </DI>
 
     <DO>
       <!--<xxxxxx channel="x" />-->
-      <test_do channel="1" />
     </DO>
 
     <!-- Analog inputs/outputs -->
     <AI>
       <!--<xxxxxx channel="x" />-->
-      <p_pad channel="1" />
     </AI>
 
     <AO>
@@ -84,7 +72,6 @@
 
     <Relays>
       <!--<xxxxxx channel="x" optional default="off/on/reverse/forward" />-->
-    <test_relay channel="0" default="off" />
     </Relays>
 
     <Potentiometers>
@@ -112,22 +99,18 @@
 
       <powerMultiplier powerMultiplier="1" />
 
-      <leftDrive axis="1" reversed="true" deadZone=".02" bindTo="leftDrive_1, leftDrive_2" />
-      <rightDrive axis="5" reversed="false" deadZone=".02" bindTo="rightDrive_1, rightDrive_2" />
+      <leftDrive axis="1" reversed="true" deadZone=".02" bindTo="" />
+      <rightDrive axis="5" reversed="false" deadZone=".02" bindTo="" />
     </Driver>
 
     <DriverAux>
-      <shiftGears type="dualButton" buttonA="5" buttonB="6" reversed ="false" bindTo="shifters" />
+
     </DriverAux>
 
     <!-- Operator assignments -->
     <Operator>
       <slot controllerSlot="1" />
-      <shooter type="axis" axis="3" reversed="false" deadZone=".02" bindTo="shooter_1" />
-      <hoodToggle type="toggle" button="7" reversed="true" bindTo="hood" />
-      <intakeToggle type="toggle" button="8" reversed="true" bindTo="intake" />
-      <intakeIn type ="button" button="2" reversed="false" powerMultiplier=".75" bindTo="indexer" />
-      <intakeOut type ="button" button="4" reversed="false" powerMultiplier="-.75" bindTo="indexer" />
+      <test type="axis" axis="3" deadZone=".02" bindTo="shootLeft, shootRight"/>
     </Operator>
   </Controls>
 
