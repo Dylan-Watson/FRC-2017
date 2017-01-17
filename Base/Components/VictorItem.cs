@@ -193,7 +193,7 @@ namespace Base.Components
                 {
                     victor.Set(0);
                     InUse = false;
-                    onValueChanged(new VirtualControlEventArgs(val, InUse));
+                    onValueChanged(new VirtualControlEventArgs(0, InUse));
                 }
             }
         }
