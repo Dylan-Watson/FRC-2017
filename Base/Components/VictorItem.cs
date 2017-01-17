@@ -41,10 +41,6 @@ namespace Base.Components
 
         private readonly PWMSpeedController victor;
 
-        private List<VictorItem> slaves;
-
-        private readonly string master;
-
         #endregion Private Fields
 
         #region Public Events
@@ -99,35 +95,6 @@ namespace Base.Components
             DriveSide = side;
         }
 
-        //Slave Constructor
-        public VictorItem(VictorType type, int channel, string commonName, VictorItem master, bool isReversed = false)
-        {
-            VictorType = type;
-            if (type == VictorType.Sp)
-                victor = new VictorSP(channel);
-            else
-                victor = new Victor(channel);
-
-            Name = commonName;
-            IsReversed = isReversed;
-            Slave = true;
-            this.master = master.Name;
-        }
-
-        public VictorItem(VictorType type, int channel, string commonName, bool master, bool isReversed = false)
-        {
-            VictorType = type;
-            if (type == VictorType.Sp)
-                victor = new VictorSP(channel);
-            else
-                victor = new Victor(channel);
-
-            Name = commonName;
-            IsReversed = isReversed;
-            Master = true;
-            slaves = new List<VictorItem>();
-        }
-
         #endregion Public Constructors
 
         #region Public Properties
@@ -151,10 +118,6 @@ namespace Base.Components
         ///     Type of victor
         /// </summary>
         public VictorType VictorType { get; }
-
-        public bool Slave { get; } = false;
-
-        public bool Master { get; } = false;
 
         #endregion Public Properties
 
@@ -193,12 +156,7 @@ namespace Base.Components
             Sender = sender;
             SetAllowC(upperLimit?.GetBool() ?? true);
             SetAllowCc(lowerLimit?.GetBool() ?? true);
-            if (Slave)
-            {
-                Report.Error($"{Name} - I ain't yo' bitch! Only {master} can set to me!");
-                return;
-            }
-            if (!Master)
+
 #if USE_LOCKING
             lock (victor)
 #endif
@@ -235,120 +193,8 @@ namespace Base.Components
                 {
                     victor.Set(0);
                     InUse = false;
-                    onValueChanged(new VirtualControlEventArgs(val, InUse));
+                    onValueChanged(new VirtualControlEventArgs(0, InUse));
                 }
-            }
-            if (!Master) return;
-
-            if (val < Constants.MINUMUM_JOYSTICK_RETURN && AllowCc)
-            {
-                InUse = true;
-                if (IsReversed)
-                {
-#if USE_LOCKING
-                    lock(victor)
-#endif
-                    {
-                        victor.Set(-val);
-                        onValueChanged(new VirtualControlEventArgs(-val, InUse));
-                    }
-                    foreach (var slave in slaves)
-#if USE_LOCKING
-                    lock(slave)
-#endif
-                    {
-                        if (slave.VictorType == VictorType.Sp)
-                            ((VictorSP)slave.GetRawComponent()).Set(-val);
-                        else
-                            ((Victor)slave.GetRawComponent()).Set(-val);
-                    }
-
-                }
-                else
-                {
-#if USE_LOCKING
-                    lock(victor)
-#endif
-                    {
-                        victor.Set(val);
-                        onValueChanged(new VirtualControlEventArgs(val, InUse));
-                    }
-                    foreach (var slave in slaves)
-#if USE_LOCKING
-                    lock(slave)
-#endif
-                    {
-                        if (slave.VictorType == VictorType.Sp)
-                            ((VictorSP)slave.GetRawComponent()).Set(val);
-                        else
-                            ((Victor)slave.GetRawComponent()).Set(val);
-                    }
-                }
-            }
-            else if (val > Constants.MINUMUM_JOYSTICK_RETURN && AllowC)
-            {
-                InUse = true;
-                if (IsReversed)
-                {
-#if USE_LOCKING
-                    lock(victor)
-#endif
-                    {
-                        victor.Set(-val);
-                        onValueChanged(new VirtualControlEventArgs(-val, InUse));
-                    }
-                    foreach (var slave in slaves)
-#if USE_LOCKING
-                    lock(slave)
-#endif
-                    {
-                        if (slave.VictorType == VictorType.Sp)
-                            ((VictorSP)slave.GetRawComponent()).Set(-val);
-                        else
-                            ((Victor)slave.GetRawComponent()).Set(-val);
-                    }
-                }
-                else if (!IsReversed)
-                {
-#if USE_LOCKING
-                    lock(victor)
-#endif
-                    {
-                        victor.Set(val);
-                        onValueChanged(new VirtualControlEventArgs(val, InUse));
-                    }
-                    foreach(var slave in slaves)
-#if USE_LOCKING
-                    lock(slave)
-#endif
-                    {
-                        if (slave.VictorType == VictorType.Sp)
-                            ((VictorSP)slave.GetRawComponent()).Set(val);
-                        else
-                            ((Victor)slave.GetRawComponent()).Set(val);
-                    }
-                }
-            }
-            else if (InUse)
-            {
-#if USE_LOCKING
-                lock(victor)
-#endif
-                {
-                    victor.Set(0);
-                }
-                foreach (var slave in slaves)
-#if USE_LOCKING
-                    lock(slave)
-#endif
-                {
-                    if (slave.VictorType == VictorType.Sp)
-                        ((VictorSP)slave.GetRawComponent()).Set(0);
-                    else
-                        ((Victor)slave.GetRawComponent()).Set(0);
-                }
-                InUse = false;
-                onValueChanged(new VirtualControlEventArgs(val, InUse));
             }
         }
 
@@ -394,8 +240,6 @@ namespace Base.Components
                 onValueChanged(new VirtualControlEventArgs(0, InUse));
             }
         }
-
-        public void AddSlave(VictorItem slave) => slaves.Add(slave);
 
 #endregion Public Methods
 
