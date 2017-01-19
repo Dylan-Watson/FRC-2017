@@ -17,6 +17,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using Trephine.Autonomi;
 
 namespace Trephine
@@ -35,9 +36,7 @@ namespace Trephine
         /// </summary>
         public void Run()
         {
-            thread = new Thread(() => auton.Start());
-
-            thread.Start();
+            auton?.Start();
         }
 
         #endregion Public Methods
@@ -53,7 +52,7 @@ namespace Trephine
 
             public void ValueChanged(ITable source, string key, Value value, NotifyFlags flags)
             {
-                /*if (key != @"AUTON_SELECT") return;
+                if (key != @"AUTON_SELECT") return;
                 foreach (
                     var auton in Assembly.GetExecutingAssembly().GetTypes().Where(t => string.Equals(t.Namespace,
                         @"Trephine.Autonomi", StringComparison.Ordinal)))
@@ -61,7 +60,7 @@ namespace Trephine
                     if (auton.Name != value.GetString()) continue;
                     parent.auton = (Autonomous) Activator.CreateInstance(auton);
                     return;
-                }*/
+                }
             }
         }
 
@@ -93,9 +92,9 @@ namespace Trephine
         private void Instance_RobotStatusChanged(object sender, RobotStatusChangedEventArgs e)
         {
             baseCalls.FullStop();
-            thread?.Abort();
+            auton?.Kill();
 
-            if (thread != null)
+            if (auton?.Status() != TaskStatus.RanToCompletion)
                 Report.Warning("Autonomous thread was aborted before completion");
 
             RobotStatus.Instance.RobotStatusChanged -= Instance_RobotStatusChanged;
@@ -106,8 +105,6 @@ namespace Trephine
         #region Private Fields
 
         private readonly BaseCalls baseCalls;
-
-        private Thread thread;
 
         #endregion Private Fields
     }

@@ -1,41 +1,34 @@
 ﻿using Base;
-using WPILib;
 using static Base.CommunicationFrames;
 
 namespace Trephine.Autonomi
 {
     internal class Align : Autonomous
     {
-
-        public override void Start()
+        protected override void main()
         {
-            while (true)
+            var target = VisionMonitor.Instance.GetLatestTargetData(0).Target;
+
+            if (!target.HasTarget)
             {
-                var target = VisionMonitor.Instance.GetLatestTargetData(0).Target;
-
-                if (!target.HasTarget)
-                {
-                    baseCalls.FullStop();
-                    continue;
-                }
-
-
-                if (getOffset(target) > 20)
-                {
-                    baseCalls.SetLeftDrive(-.25);
-                    baseCalls.SetRightDrive(.25);
-                }
-
-                else if (getOffset(target) < -20)
-                {
-                    baseCalls.SetLeftDrive(.25);
-                    baseCalls.SetRightDrive(-.25);
-                }
-                else if (getOffset(target) < 20 && getOffset(target) > -20)
-                    baseCalls.FullStop();
-
-                Timer.Delay(.05);
+                baseCalls.FullStop();
+                return;
             }
+
+
+            if (getOffset(target) > 20)
+            {
+                baseCalls.SetLeftDrive(-.25);
+                baseCalls.SetRightDrive(.25);
+            }
+
+            else if (getOffset(target) < -20)
+            {
+                baseCalls.SetLeftDrive(.25);
+                baseCalls.SetRightDrive(-.25);
+            }
+            else if (getOffset(target) < 20 && getOffset(target) > -20)
+                baseCalls.FullStop();
         }
 
         private int getOffset(Target target)
@@ -44,7 +37,7 @@ namespace Trephine.Autonomi
 
             if (target.X > centre)
                 return target.X - centre;
-            else if (target.X < centre)
+            if (target.X < centre)
                 return -(centre - target.X);
 
             return 0;

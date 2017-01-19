@@ -93,6 +93,14 @@ namespace Base
         }
 
         /// <summary>
+        /// Properly cancels the execution of the thread
+        /// </summary>
+        public void Cancel()
+        {
+            tokenSource?.Cancel();
+        }
+
+        /// <summary>
         ///     Returns the status of the thread that the loop is in
         /// </summary>
         /// <returns></returns>
@@ -141,7 +149,9 @@ namespace Base
             if (e.CurrentRobotState == RobotState.Auton || e.CurrentRobotState == RobotState.Teleop)
             {
                 kill = false;
-                thread = new Task(backgroundLoop);
+                var cToken = tokenSource.Token;
+                cToken.Register(notifyCancellation);
+                thread = new Task(backgroundLoop, cToken);
                 thread.Start();
             }
             else

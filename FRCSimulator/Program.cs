@@ -23,7 +23,11 @@ namespace FRCSimulator
 
         /// <summary>
         /// </summary>
-        public static void Main() => RobotBase.Main(null, typeof(RobotMain2017.RobotMain2017));
+        public static void Main()
+        {
+            DriverStation.StartDriverStationGui();
+            RobotBase.Main(null, typeof(RobotMain2017.RobotMain2017));
+        }
 
         #endregion Public Methods
     }

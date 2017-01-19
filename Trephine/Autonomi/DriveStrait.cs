@@ -24,16 +24,13 @@ namespace Trephine.Autonomi
 
         #endregion Private Fields
 
-        #region Public Methods
-
-        public override void Start()
+        protected override void main()
         {
             baseCalls.SetRightDrive(power);
             baseCalls.SetLeftDrive(power);
             Timer.Delay(driveTime);
             baseCalls.FullStop();
+            done();
         }
-
-        #endregion Public Methods
     }
 }
