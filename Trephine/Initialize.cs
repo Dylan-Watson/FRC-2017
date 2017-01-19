@@ -17,6 +17,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using Trephine.Autonomi;
 
 namespace Trephine
 {
@@ -25,7 +26,7 @@ namespace Trephine
     /// </summary>
     public class Initialize
     {
-        private Autonomous auton;
+        private Autonomous auton = new Align();
 
         #region Public Methods
 
@@ -52,7 +53,7 @@ namespace Trephine
 
             public void ValueChanged(ITable source, string key, Value value, NotifyFlags flags)
             {
-                if (key != @"AUTON_SELECT") return;
+                /*if (key != @"AUTON_SELECT") return;
                 foreach (
                     var auton in Assembly.GetExecutingAssembly().GetTypes().Where(t => string.Equals(t.Namespace,
                         @"Trephine.Autonomi", StringComparison.Ordinal)))
@@ -60,7 +61,7 @@ namespace Trephine
                     if (auton.Name != value.GetString()) continue;
                     parent.auton = (Autonomous) Activator.CreateInstance(auton);
                     return;
-                }
+                }*/
             }
         }
 

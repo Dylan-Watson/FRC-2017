@@ -6,19 +6,33 @@ namespace Trephine.Autonomi
 {
     internal class Align : Autonomous
     {
-        private Target target;
 
         public override void Start()
         {
-            while(true)
+            while (true)
             {
                 var target = VisionMonitor.Instance.GetLatestTargetData(0).Target;
 
                 if (!target.HasTarget)
+                {
+                    baseCalls.FullStop();
                     continue;
+                }
 
-                //TODO: try to make the robot align (aka get 0 returned from getOffset(target))
-                //remember you use these two methods to move the train baseCalls.SetRightDrive(0-1); and baseCalls.SetLeftDrive(0-1);
+
+                if (getOffset(target) > 20)
+                {
+                    baseCalls.SetLeftDrive(-.25);
+                    baseCalls.SetRightDrive(.25);
+                }
+
+                else if (getOffset(target) < -20)
+                {
+                    baseCalls.SetLeftDrive(.25);
+                    baseCalls.SetRightDrive(-.25);
+                }
+                else if (getOffset(target) < 20 && getOffset(target) > -20)
+                    baseCalls.FullStop();
 
                 Timer.Delay(.05);
             }
@@ -34,24 +48,6 @@ namespace Trephine.Autonomi
                 return -(centre - target.X);
 
             return 0;
-        }
-        
-        public void Allign()
-        {
-            if (getOffset(target) > 5 )
-            {
-                baseCalls.SetLeftDrive(1);
-                baseCalls.SetRightDrive(-1);
-            }
-
-            else if (getOffset(target) < -5)
-            {
-                baseCalls.SetLeftDrive(-1);
-                baseCalls.SetRightDrive(1);
-            }
-
-            if (getOffset(target) < 5 && getOffset(target) > -5)
-                    baseCalls.FullStop();
         }
     }
 }
