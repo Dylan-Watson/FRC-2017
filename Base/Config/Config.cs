@@ -125,6 +125,52 @@ namespace Base.Config
             if (Convert.ToBoolean(getAttributeValue("value", "UseNavX")))
                 ActiveCollection.AddComponent(NavX.InitializeNavX(SPI.Port.MXP));
 
+            try
+            {
+                foreach(var element in getElements("TargetSettings"))
+                {
+                    try
+                    {
+                        int id = Convert.ToInt32(element.Attribute("id").Value);
+                        bool enabled = Convert.ToBoolean(element.Attribute("enabled").Value);
+                        int minRadius = Convert.ToInt32(element.Attribute("minRadius").Value);
+                        int maxRadius = Convert.ToInt16(element.Attribute("maxRadius").Value);
+                        byte lowerHue = Convert.ToByte(element.Attribute("lowerHue").Value);
+                        byte upperHue = Convert.ToByte(element.Attribute("upperHue").Value);
+                        byte lowerSaturation = Convert.ToByte(element.Attribute("lowerSaturation").Value);
+                        byte upperSaturation = Convert.ToByte(element.Attribute("upperSaturation").Value);
+                        byte lowerValue = Convert.ToByte(element.Attribute("lowerValue").Value);
+                        byte upperValue = Convert.ToByte(element.Attribute("upperValue").Value);
+                        byte red = Convert.ToByte(element.Attribute("red").Value);
+                        byte green = Convert.ToByte(element.Attribute("green").Value);
+                        byte blue = Convert.ToByte(element.Attribute("blue").Value);
+                        int maxObjects = Convert.ToInt32(element.Attribute("maxObjects").Value);
+
+                        System.Drawing.Color color = System.Drawing.Color.FromArgb(red, green, blue);
+
+                        VisionMonitor.Instance.CreateTargetSetting(id, enabled, minRadius, maxRadius, lowerHue, lowerSaturation, lowerValue, upperHue, upperSaturation, upperValue, color, maxObjects);
+
+                        Report.General($"Added Vision Target {element?.Name}. See config or log for settings details!");
+
+                        Log.Str($"{element?.Name} -> ID: {id}, Enabled: {enabled}, Min Radius {minRadius}, Max Radius {maxRadius}, Lower Hue: {lowerHue}, Upper Hue: {upperHue}, Lower Saturation: {lowerSaturation}, Upper Saturation: {upperSaturation}, Lower Value: {lowerValue}, Upper Value: {upperValue}, Red: {red}, Green {green}, Blue: {blue}, Max Objects {maxObjects}.");
+                    }
+                    catch (Exception ex)
+                    {
+                        Report.Error($"Failed to load Vision Target Setting {element?.Name}. See Log for details!");
+                        Log.Write(ex);
+                        if (VerboseOutput)
+                            Report.Error(ex.Message);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Report.Error($"Caught an exception loading one or more Vision Target Setting. See Log for details!");
+                Log.Write(ex);
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
+            }
+
             #region Encoders
 
             try

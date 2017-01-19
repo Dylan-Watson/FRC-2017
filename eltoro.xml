@@ -13,8 +13,17 @@
 
   <EnableAuton value="true" />
 
-  <!-- Sets whether or not to initialize the NavX-->
+  <!-- Sets whether or not to initialize the NavX -->
   <UseNavX value="true" port="default" />
+
+  <!-- Sets the Vision Targets and Vision Settings -->
+  <TargetSettings>
+    <!-- Examples -->
+    <!-- NOTE: Even if you aren't including any vision targets you must include the encapsulating tag -->
+    <!--<primaryTarget id="int" enabled="bool" minRadius="int" maxRadius="int" lowerHue="byte" upperHue="byte" lowerSaturation="byte" upperSaturation="byte" lowerValue="byte" upperValue="byte" red="byte" green="byte" blue="byte" maxObjects="int"/>-->
+    <primaryTarget id="0" enabled="true" minRadius="0" maxRadius="10" lowerHue="20" upperHue="35" lowerSaturation="20" upperSaturation="35" lowerValue="20" upperValue="35" red="20" green="35" blue="40" maxObjects="2"/>
+
+  </TargetSettings> 
 
   <!-- Contains assignments to ports and robot dimensions -->
   <RobotConfig>
