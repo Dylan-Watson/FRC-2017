@@ -55,5 +55,16 @@
             val *= dir;
             return val;
         }
+
+        public static double GetCorrectedSpeed(double current, double origin, double alpha = 0, double gamma = 1, double variance = 3)
+        {
+            var pre = (((1 / origin) * (current)) * gamma) + alpha;
+
+            if (pre > 1)
+                return 1;
+            else if (current < variance && current > -variance)
+                return 0;
+            return pre;
+        }
     }
 }
