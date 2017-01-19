@@ -6,6 +6,8 @@ namespace Trephine.Autonomi
 {
     internal class Align : Autonomous
     {
+        private Target target;
+
         public override void Start()
         {
             while(true)
@@ -32,6 +34,24 @@ namespace Trephine.Autonomi
                 return -(centre - target.X);
 
             return 0;
+        }
+        
+        public void Allign()
+        {
+            if (getOffset(target) > 5 )
+            {
+                baseCalls.SetLeftDrive(1);
+                baseCalls.SetRightDrive(-1);
+            }
+
+            else if (getOffset(target) < -5)
+            {
+                baseCalls.SetLeftDrive(-1);
+                baseCalls.SetRightDrive(1);
+            }
+
+            if (getOffset(target) < 5 && getOffset(target) > -5)
+                    baseCalls.FullStop();
         }
     }
 }
