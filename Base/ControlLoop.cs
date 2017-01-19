@@ -97,6 +97,7 @@ namespace Base
         /// </summary>
         public void Cancel()
         {
+            Kill();
             tokenSource?.Cancel();
         }
 

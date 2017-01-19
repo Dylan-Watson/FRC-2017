@@ -33,7 +33,7 @@ namespace Trephine
         {
             Cancel();
             // ReSharper disable once EmptyEmbeddedStatement
-            while (Status() == TaskStatus.Running) ;
+            while (Status() != TaskStatus.RanToCompletion) ;
             Dispose();
         }
         #endregion Protected Properties
