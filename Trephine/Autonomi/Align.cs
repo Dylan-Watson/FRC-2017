@@ -5,7 +5,8 @@ namespace Trephine.Autonomi
 {
     internal class Align : Autonomous
     {
-        const double GAMMA = .15;
+        const double GAMMA = .011;
+        const double ALPHA = .20;
 
         protected override void main()
         {
@@ -21,22 +22,22 @@ namespace Trephine.Autonomi
 
             if (offset > 20)
             {
-                baseCalls.SetLeftDrive(-getSpeed(offset, GAMMA));
-                baseCalls.SetRightDrive(getSpeed(offset, GAMMA));
+                baseCalls.SetLeftDrive(-getSpeed(offset, GAMMA, ALPHA));
+                baseCalls.SetRightDrive(getSpeed(offset, GAMMA, ALPHA));
             }
 
             else if (offset < -20)
             {
-                baseCalls.SetLeftDrive(-getSpeed(offset, GAMMA));
-                baseCalls.SetRightDrive(getSpeed(offset, GAMMA));
+                baseCalls.SetLeftDrive(-getSpeed(offset, GAMMA, ALPHA));
+                baseCalls.SetRightDrive(getSpeed(offset, GAMMA, ALPHA));
             }
             else if (offset < 20 && getOffset(target) > -20)
                 baseCalls.FullStop();
         }
 
-        private double getSpeed(int offset, double gamma)
+        private double getSpeed(int offset, double gamma, double alpha)
         {
-            return (offset * gamma);
+            return (offset * gamma * alpha);
         }
 
         private int getOffset(Target target)
