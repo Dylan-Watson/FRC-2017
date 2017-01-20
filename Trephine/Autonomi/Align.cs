@@ -1,34 +1,41 @@
 ﻿using Base;
+using WPILib;
 using static Base.CommunicationFrames;
 
 namespace Trephine.Autonomi
 {
     internal class Align : Autonomous
     {
-        protected override void main()
+
+        public override void Start()
         {
-            var target = VisionMonitor.Instance.GetLatestTargetData(0).Target;
-
-            if (!target.HasTarget)
+            while (true)
             {
-                baseCalls.FullStop();
-                return;
-            }
+                var target = VisionMonitor.Instance.GetLatestTargetData(0).Target;
+
+                if (!target.HasTarget)
+                {
+                    baseCalls.FullStop();
+                    continue;
+                }
 
 
-            if (getOffset(target) > 20)
-            {
-                baseCalls.SetLeftDrive(-.25);
-                baseCalls.SetRightDrive(.25);
-            }
+                if (getOffset(target) > 20)
+                {
+                    baseCalls.SetLeftDrive(-.25);
+                    baseCalls.SetRightDrive(.25);
+                }
 
-            else if (getOffset(target) < -20)
-            {
-                baseCalls.SetLeftDrive(.25);
-                baseCalls.SetRightDrive(-.25);
+                else if (getOffset(target) < -20)
+                {
+                    baseCalls.SetLeftDrive(.25);
+                    baseCalls.SetRightDrive(-.25);
+                }
+                else if (getOffset(target) < 20 && getOffset(target) > -20)
+                    baseCalls.FullStop();
+
+                Timer.Delay(.05);
             }
-            else if (getOffset(target) < 20 && getOffset(target) > -20)
-                baseCalls.FullStop();
         }
 
         private int getOffset(Target target)
@@ -37,7 +44,7 @@ namespace Trephine.Autonomi
 
             if (target.X > centre)
                 return target.X - centre;
-            if (target.X < centre)
+            else if (target.X < centre)
                 return -(centre - target.X);
 
             return 0;
