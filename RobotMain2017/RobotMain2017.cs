@@ -40,7 +40,6 @@ namespace RobotMain2017
             config.Load(CONFIG_FILE);
             FrameworkCommunication.Initialize();
             auton = new Initialize(config);
-            //VisionMonitor.Instance.CreateTargetSetting(0, true, 10, 20, 0, 151, 0, 115, 255, 0, Color.Red, 256);
         }
 
         #endregion Public Constructors
@@ -59,9 +58,9 @@ namespace RobotMain2017
 
         #region Private Fields
 
-        private const string CONFIG_FILE = @"robot.xml";
+        //private const string CONFIG_FILE = @"robot.xml";
         //private const string CONFIG_FILE = @"robot_test_kit.xml";
-        //private const string CONFIG_FILE = @"eltoro.xml";
+        private const string CONFIG_FILE = @"eltoro.xml";
 
         private readonly Config config = new Config();
 

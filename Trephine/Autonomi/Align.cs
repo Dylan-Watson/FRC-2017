@@ -1,41 +1,42 @@
 ﻿using Base;
-using WPILib;
 using static Base.CommunicationFrames;
 
 namespace Trephine.Autonomi
 {
     internal class Align : Autonomous
     {
+        const double GAMMA = .15;
 
-        public override void Start()
+        protected override void main()
         {
-            while (true)
+            var target = VisionMonitor.Instance.GetLatestTargetData(0).Target;
+
+            if (!target.HasTarget)
             {
-                var target = VisionMonitor.Instance.GetLatestTargetData(0).Target;
-
-                if (!target.HasTarget)
-                {
-                    baseCalls.FullStop();
-                    continue;
-                }
-
-
-                if (getOffset(target) > 20)
-                {
-                    baseCalls.SetLeftDrive(-.25);
-                    baseCalls.SetRightDrive(.25);
-                }
-
-                else if (getOffset(target) < -20)
-                {
-                    baseCalls.SetLeftDrive(.25);
-                    baseCalls.SetRightDrive(-.25);
-                }
-                else if (getOffset(target) < 20 && getOffset(target) > -20)
-                    baseCalls.FullStop();
-
-                Timer.Delay(.05);
+                baseCalls.FullStop();
+                return;
             }
+
+            var offset = getOffset(target);
+
+            if (offset > 20)
+            {
+                baseCalls.SetLeftDrive(-getSpeed(offset, GAMMA));
+                baseCalls.SetRightDrive(getSpeed(offset, GAMMA));
+            }
+
+            else if (offset < -20)
+            {
+                baseCalls.SetLeftDrive(-getSpeed(offset, GAMMA));
+                baseCalls.SetRightDrive(getSpeed(offset, GAMMA));
+            }
+            else if (offset < 20 && getOffset(target) > -20)
+                baseCalls.FullStop();
+        }
+
+        private double getSpeed(int offset, double gamma)
+        {
+            return (offset * gamma);
         }
 
         private int getOffset(Target target)

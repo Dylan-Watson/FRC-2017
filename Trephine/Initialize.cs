@@ -92,10 +92,6 @@ namespace Trephine
         {
             baseCalls.FullStop();
             auton?.Kill();
-
-            if (auton?.Status() != TaskStatus.RanToCompletion)
-                Report.Warning("Autonomous thread was aborted before completion");
-
             RobotStatus.Instance.RobotStatusChanged -= Instance_RobotStatusChanged;
         }
 
