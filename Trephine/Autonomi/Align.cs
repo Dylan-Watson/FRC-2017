@@ -42,18 +42,18 @@ namespace Trephine.Autonomi
             /*check if the diameter is in the "o.k." range (assumed +/- 5 units), if not, adjust
              * stop once botty bot gets in the "o.k." range
              */
-            if (diameter > 5)
+            if (diameter > 20)
             {
                 baseCalls.SetLeftDrive(-getSpeed(offset, GAMMA, ALPHA));
                 baseCalls.SetRightDrive(-getSpeed(offset, GAMMA, ALPHA));
-                if (diameter <= 5)
+                if (diameter <= 20)
                     baseCalls.FullStop();
             }
-            if (diameter < -5)
+            if (diameter < 10)
             {
                 baseCalls.SetLeftDrive(getSpeed(offset, GAMMA, ALPHA));
                 baseCalls.SetRightDrive(getSpeed(offset, GAMMA, ALPHA));
-                if (diameter >= 5)
+                if (diameter >= 10)
                     baseCalls.FullStop();
             }
         }
