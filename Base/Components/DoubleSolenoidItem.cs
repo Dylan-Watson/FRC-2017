@@ -158,7 +158,6 @@ namespace Base.Components
             lock (solenoid)
 #endif
             {
-                Report.General($"Solenoid set to {val}");
                 if (val >= 0 && val <= 2)
                 {
                     InUse = true;
