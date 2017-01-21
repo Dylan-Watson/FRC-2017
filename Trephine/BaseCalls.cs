@@ -64,7 +64,9 @@ namespace Trephine
             config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor) s).Stop());
             config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor) s).Stop());
         }
-
+        /// <summary>
+        ///     slowly stops drive train yeet
+        /// </summary>
         public void SlowStop()
         {
             var rightPow = config.ActiveCollection.GetRightDriveMotors.Select(s => ((Motor)s).Get()).ToList()[0];
