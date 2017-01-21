@@ -260,6 +260,8 @@ namespace Dashboard2017
                         new Action(
                             () => { parent.autonCombo.DataSource = source.GetValue(@"AUTON_LIST").GetObjectValue(); }));
                 }
+                else if (key == @"MESSAGE")
+                    ConsoleManager.Instance.AppendInfo(value.GetString(), Color.Magenta);
 
                 parent.debugControlLayoutPanel.Invoke(new Action(() =>
                 {

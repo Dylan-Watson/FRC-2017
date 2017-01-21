@@ -57,6 +57,8 @@ namespace Trephine
                 {
                     if (auton.Name != value.GetString()) continue;
                     parent.auton = (Autonomous) Activator.CreateInstance(auton);
+                    FrameworkCommunication.Instance.SendData(@"MESSAGE", $"{auton.Name} auton selected.");
+                    Report.General($"{auton.Name} auton selected.");
                     return;
                 }
             }
