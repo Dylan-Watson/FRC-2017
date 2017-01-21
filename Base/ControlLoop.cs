@@ -12,7 +12,6 @@ Email: cooper.ryan@centaurisoft.org
 
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 using Timer = WPILib.Timer;
 
 namespace Base
@@ -20,7 +19,7 @@ namespace Base
     /// <summary>
     ///     Abstract class to create and manage a loop for robot functions
     /// </summary>
-    public abstract class ControlLoop : IDisposable
+    public abstract class ControlLoop
     {
         #region Protected Methods
 
@@ -35,29 +34,60 @@ namespace Base
 
         private double cycleTime = .05;
 
-        private bool kill;
+        private volatile bool cancel;
 
-        private Task thread;
+        private bool finished;
 
-        private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
+        private Thread thread;
 
         #endregion Private Fields
+
+
+        #region Public Events
+
+        /// <summary>
+        ///     Event raised when a cancelation is requested
+        /// </summary>
+        public event EventHandler<EventArgs> CancelationRequest;
+
+        /// <summary>
+        ///     Event raised when a cancelation is requested
+        /// </summary>
+        public event EventHandler<EventArgs> SignaledCompletion;
+
+        /// <summary>
+        ///     Event raised when a cancelation request is complete
+        /// </summary>
+        public event EventHandler<EventArgs> CancelationComplete;
+
+        /// <summary>
+        ///     Event raised when a cancelation request is complete
+        /// </summary>
+        public event EventHandler<EventArgs> Finished;
+
+        /// <summary>
+        ///     Event raised when a cancelation request is complete
+        /// </summary>
+        public event EventHandler<EventArgs> Started;
+
+        /// <summary>
+        ///     Event raised when the control loop is aborted
+        /// </summary>
+        public event EventHandler<EventArgs> Aborted;
+
+        #endregion Public Events
 
         #region Public Methods
 
         /// <summary>
-        ///     Disposes of this IComponent and its managed resources
+        ///     Cancels the loop asynchronously at the next available time
         /// </summary>
-        public void Dispose()
+        public void CancelAsync(object sender)
         {
-            dispose(true);
-            GC.SuppressFinalize(this);
+            cancel = true;
+            Report.General($"{GetType()} cancellation requested.");
+            CancelationRequest?.Invoke(sender, new EventArgs());
         }
-
-        /// <summary>
-        ///     Kills or aborts the loop at next possible time
-        /// </summary>
-        public void Kill() => kill = true;
 
         /// <summary>
         ///     Sets the time in miliseconds that the loop will wait each iteration, the default is .005 seconds
@@ -75,12 +105,12 @@ namespace Base
         /// </summary>
         public void Start()
         {
-            var cToken = tokenSource.Token;
-            cToken.Register(notifyCancellation);
-            kill = false;
+            finished = false;
+            cancel = false;
             Report.General($"Spinning up the {GetType()} system.");
-            thread = new Task(loop, cToken);
+            thread = new Thread(loop);
             thread.Start();
+            Started?.Invoke(this, new EventArgs());
         }
 
         /// <summary>
@@ -93,82 +123,123 @@ namespace Base
         }
 
         /// <summary>
-        /// Properly cancels the execution of the thread
+        /// Cancels the loop synchronously at the next available time
         /// </summary>
-        public void Cancel()
+        public void CancelSync(object sender)
         {
-            Kill();
-            tokenSource?.Cancel();
+            cancel = true;
+            Report.General($"{GetType()} cancellation requested.");
+            CancelationRequest?.Invoke(sender, new EventArgs());
+            while (thread.IsAlive)
+                // ReSharper disable once EmptyEmbeddedStatement
+                ;
+        }
+
+        /// <summary>
+        /// Aborts the thread, instantly stopping execution. If possible always try to cancel over abort
+        /// </summary>
+        public void Abort(object sender)
+        {
+            thread?.Abort();
+            Aborted?.Invoke(sender, new EventArgs());
         }
 
         /// <summary>
         ///     Returns the status of the thread that the loop is in
         /// </summary>
         /// <returns></returns>
-        public TaskStatus Status() => thread.Status;
+        public ThreadState ThreadState() => thread.ThreadState;
+
+        /// <summary>
+        ///     Returns the status of the thread that the loop is in
+        /// </summary>
+        /// <returns></returns>
+        public bool IsAlive() => thread.IsAlive;
 
         #endregion Public Methods
 
         #region Private Methods
 
-        private void notifyCancellation()
+        private void Instance_RobotStatusChanged(object sender, RobotStatusChangedEventArgs e)
         {
-            Report.General($"{GetType()} cancellation requested.");
-        }
-
-        private void backgroundLoop()
-        {
-            while (true)
+            if ((e.CurrentRobotState == RobotState.Auton) || (e.CurrentRobotState == RobotState.Teleop))
             {
-                if (kill)
-                    break;
-
-                if (LoopCheck._IsAutonomous() || LoopCheck._IsTeleoporated())
-                    main();
-
-                Timer.Delay(cycleTime);
+                finished = false;
+                cancel = false;
+                thread = new Thread(backgroundLoop);
+                thread.Start();
+                Started?.Invoke(this, new EventArgs());
+            }
+            else
+            {
+                Abort(RobotStatus.Instance);
             }
         }
 
         /// <summary>
-        ///     Releases managed and native resources
+        /// Gracefully stops the execution of the loop.
+        /// This should be called when you are finished.
         /// </summary>
-        /// <param name="disposing"></param>
-        private void dispose(bool disposing)
+        protected void done()
         {
-            if (!disposing) return;
-#if USE_LOCKING
-            lock (thread)
-#endif
-            {
-                thread?.Dispose();
-            }
+            finished = true;
+            SignaledCompletion?.Invoke(this, new EventArgs());
         }
 
-        private void Instance_RobotStatusChanged(object sender, RobotStatusChangedEventArgs e)
+        private void backgroundLoop()
         {
-            if (e.CurrentRobotState == RobotState.Auton || e.CurrentRobotState == RobotState.Teleop)
+            try
             {
-                kill = false;
-                var cToken = tokenSource.Token;
-                cToken.Register(notifyCancellation);
-                thread = new Task(backgroundLoop, cToken);
-                thread.Start();
+                while (!cancel && !finished)
+                {
+                    if (LoopCheck._IsAutonomous() || LoopCheck._IsTeleoporated())
+                        main();
+
+                    Timer.Delay(cycleTime);
+                }
+            }
+            catch (ThreadAbortException)
+            {
+                Report.General($"{GetType()} was forcefully aborted.");
+            }
+
+            if (cancel)
+            {
+                CancelationComplete?.Invoke(this, new EventArgs());
+                Report.General($"{GetType()} was canceled.");
             }
             else
             {
-                Kill();
+                Finished?.Invoke(this, new EventArgs());
+                Report.General($"{GetType()} ran to completion.");
             }
         }
 
         private void loop()
         {
-            while (!kill && (LoopCheck._IsAutonomous() || LoopCheck._IsTeleoporated()))
+            try
             {
-                main();
-                Timer.Delay(cycleTime);
+                while (!cancel && !finished && (LoopCheck._IsAutonomous() || LoopCheck._IsTeleoporated()))
+                {
+                    main();
+                    Timer.Delay(cycleTime);
+                }
             }
-            tokenSource.Cancel();
+            catch (ThreadAbortException)
+            {
+                Report.General($"{GetType()} was forcefully aborted.");
+            }
+
+            if (cancel)
+            {
+                CancelationComplete?.Invoke(this, new EventArgs());
+                Report.General($"{GetType()} was canceled.");
+            }
+            else
+            {
+                Finished?.Invoke(this, new EventArgs());
+                Report.General($"{GetType()} ran to completion.");
+            }
         }
 
         #endregion Private Methods

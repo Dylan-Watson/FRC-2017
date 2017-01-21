@@ -9,7 +9,6 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-using System.Threading.Tasks;
 using Base;
 
 namespace Trephine
@@ -26,16 +25,6 @@ namespace Trephine
         /// </summary>
         protected BaseCalls baseCalls { get; } = BaseCalls.Instance;
 
-        /// <summary>
-        /// Call at th end of an autonomous routine
-        /// </summary>
-        protected void done()
-        {
-            Cancel();
-            // ReSharper disable once EmptyEmbeddedStatement
-            while (Status() != TaskStatus.RanToCompletion) ;
-            Dispose();
-        }
         #endregion Protected Properties
     }
 }

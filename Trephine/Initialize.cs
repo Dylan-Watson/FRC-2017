@@ -16,7 +16,6 @@ using NetworkTables.Tables;
 using System;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Trephine.Autonomi;
 
 namespace Trephine
@@ -91,7 +90,7 @@ namespace Trephine
         private void Instance_RobotStatusChanged(object sender, RobotStatusChangedEventArgs e)
         {
             baseCalls.FullStop();
-            auton?.Kill();
+            auton?.Abort(this);
             RobotStatus.Instance.RobotStatusChanged -= Instance_RobotStatusChanged;
         }
 

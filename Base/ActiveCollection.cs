@@ -19,11 +19,11 @@ namespace Base
     /// <summary>
     ///     Class that stores the currently active collection of components on the robot
     /// </summary>
-    public sealed class ActiveCollection : IDisposable
+    public sealed class ActiveCollection // : IDisposable
     {
         #region Private Methods
 
-        /// <summary>
+        /*/// <summary>
         ///     Releases managed and native resources
         /// </summary>
         /// <param name="disposing"></param>
@@ -36,7 +36,7 @@ namespace Base
             {
                 inputComponentUpdateLoop?.Dispose();
             }
-        }
+        }*/
 
         #endregion Private Methods
 
@@ -110,14 +110,14 @@ namespace Base
             }
         }
 
-        /// <summary>
+        /*/// <summary>
         ///     Disposes of this IComponent and its managed resources
         /// </summary>
         public void Dispose()
         {
             dispose(true);
             //GC.SuppressFinalize(this);
-        }
+        }*/
 
         /// <summary>
         ///     Gets a IComponent from the active colletion by it's name. Reports any errors and returns

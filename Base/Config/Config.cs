@@ -22,7 +22,7 @@ namespace Base.Config
     /// <summary>
     ///     Manages and loads the configuration file from XML.
     /// </summary>
-    public sealed class Config : IDisposable
+    public sealed class Config // : IDisposable
     {
         #region Public Constructors
 
@@ -81,14 +81,14 @@ namespace Base.Config
 
         #region Public Methods
 
-        /// <summary>
+        /*/// <summary>
         ///     Disposes of this IComponent and its managed resources
         /// </summary>
         public void Dispose()
         {
             dispose(true);
             //GC.SuppressFinalize(this);
-        }
+        }*/
 
         /// <summary>
         ///     Loads the config.
@@ -688,7 +688,7 @@ namespace Base.Config
             }
         }
 
-        /// <summary>
+        /*/// <summary>
         ///     Releases managed and native resources
         /// </summary>
         /// <param name="disposing"></param>
@@ -701,7 +701,7 @@ namespace Base.Config
             {
                 ActiveCollection?.Dispose();
             }
-        }
+        }*/
 
         /// <summary>
         ///     Returns the attribute of an XElement.
