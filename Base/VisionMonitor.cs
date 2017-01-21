@@ -160,6 +160,15 @@ namespace Base
         }
 
         /// <summary>
+        /// Sets the exposure for the camera
+        /// </summary>
+        /// <param name="value">value to set the exposure to</param>
+        public void SetExposure(double value)
+        {
+            ntRelayTable.PutNumber(@"SET_EXPOSURE", value);
+        }
+
+        /// <summary>
         ///     Deletes an target setting from the Co-Processors list
         ///     of target to search for
         /// </summary>
