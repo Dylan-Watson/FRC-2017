@@ -15,6 +15,7 @@ Email: cooper.ryan@centaurisoft.org
 using Base;
 using Base.Config;
 using System;
+using System.Linq;
 
 namespace Trephine
 {
@@ -62,6 +63,21 @@ namespace Trephine
         {
             config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor) s).Stop());
             config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor) s).Stop());
+        }
+
+        public void SlowStop()
+        {
+            var rightPow = config.ActiveCollection.GetRightDriveMotors.Select(s => ((Motor)s).Get()).ToList()[0];
+            var leftPow = config.ActiveCollection.GetLeftDriveMotors.Select(s => ((Motor)s).Get()).ToList()[0];
+
+            for (double i = rightPow; i > 0; i-= .005)
+            {
+                BaseCalls.Instance.SetRightDrive(i);
+            }
+            for (double i = leftPow; i > 0; i -= .005)
+            {
+                BaseCalls.Instance.SetLeftDrive(i);
+            }
         }
 
         /// <summary>
