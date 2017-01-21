@@ -32,28 +32,25 @@ namespace Trephine.Autonomi
                 baseCalls.SetRightDrive(getSpeed(offset, GAMMA, ALPHA));
             }
             else if (offset < 20 && getOffset(target) > -20)
-                baseCalls.FullStop();
-
-
-            /*get the diameter of the target at current position 
-             * assume diameter should be 15 units
-             */
-            var diameter = target.Width;
-            /*check if the diameter is in the "o.k." range (assumed +/- 5 units), if not, adjust
-             * stop once botty bot gets in the "o.k." range
-             */
-            if (diameter > 20)
             {
-                baseCalls.SetLeftDrive(-getSpeed(offset, GAMMA, ALPHA));
-                baseCalls.SetRightDrive(-getSpeed(offset, GAMMA, ALPHA));
-                if (diameter <= 20)
-                    baseCalls.FullStop();
-            }
-            if (diameter < 10)
-            {
-                baseCalls.SetLeftDrive(getSpeed(offset, GAMMA, ALPHA));
-                baseCalls.SetRightDrive(getSpeed(offset, GAMMA, ALPHA));
-                if (diameter >= 10)
+                /*get the diameter of the target at current position 
+                 * assume diameter should be 15 units
+                 */
+                var diameter = target.Radius * 2;
+                /*check if the diameter is in the "o.k." range (assumed +/- 5 units), if not, adjust
+                 * stop once botty bot gets in the "o.k." range
+                 */
+                if (diameter > 20)
+                {
+                    baseCalls.SetLeftDrive(-getSpeed(offset, GAMMA, ALPHA));
+                    baseCalls.SetRightDrive(-getSpeed(offset, GAMMA, ALPHA));
+                }
+                else if (diameter < 10)
+                {
+                    baseCalls.SetLeftDrive(getSpeed(offset, GAMMA, ALPHA));
+                    baseCalls.SetRightDrive(getSpeed(offset, GAMMA, ALPHA));
+                }
+                else
                     baseCalls.FullStop();
             }
         }
