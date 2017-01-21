@@ -272,7 +272,7 @@ namespace Base.Components
         /// <summary>
         ///     Method to return the last value set to the motor 
         /// </summary>
-        /// <returns>Double value</returns>
+        /// <returns>double value</returns>
         public override double Get()
         {
             return victor.Get();

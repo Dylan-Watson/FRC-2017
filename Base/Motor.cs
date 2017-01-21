@@ -154,6 +154,10 @@ namespace Base
         /// </summary>
         public abstract void Stop();
 
+        /// <summary>
+        ///     Method to return the last value set to the motor 
+        /// </summary>
+        /// <returns>double value</returns>
         public abstract double Get();
 
         #endregion Public Methods
