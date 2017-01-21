@@ -33,6 +33,29 @@ namespace Trephine.Autonomi
             }
             else if (offset < 20 && getOffset(target) > -20)
                 baseCalls.FullStop();
+
+
+            /*get the diameter of the target at current position 
+             * assume diameter should be 15 units
+             */
+            var diameter = target.Width;
+            /*check if the diameter is in the "o.k." range (assumed +/- 5 units), if not, adjust
+             * stop once botty bot gets in the "o.k." range
+             */
+            if (diameter > 5)
+            {
+                baseCalls.SetLeftDrive(-getSpeed(offset, GAMMA, ALPHA));
+                baseCalls.SetRightDrive(-getSpeed(offset, GAMMA, ALPHA));
+                if (diameter <= 5)
+                    baseCalls.FullStop();
+            }
+            if (diameter < -5)
+            {
+                baseCalls.SetLeftDrive(getSpeed(offset, GAMMA, ALPHA));
+                baseCalls.SetRightDrive(getSpeed(offset, GAMMA, ALPHA));
+                if (diameter >= 5)
+                    baseCalls.FullStop();
+            }
         }
 
         private double getSpeed(int offset, double gamma, double alpha)
