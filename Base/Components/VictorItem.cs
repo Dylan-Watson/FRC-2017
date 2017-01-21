@@ -243,7 +243,7 @@ namespace Base.Components
 
 #endregion Public Methods
 
-#region Private Methods
+        #region Private Methods
 
         /// <summary>
         ///     Releases managed and native resources
@@ -269,6 +269,15 @@ namespace Base.Components
             ValueChanged?.Invoke(this, e);
         }
 
-#endregion Private Methods
+        /// <summary>
+        ///     Method to return the last value set to the motor 
+        /// </summary>
+        /// <returns>Double value</returns>
+        public override double Get()
+        {
+            return victor.Get();
+        }
+
+        #endregion Private Methods
     }
 }

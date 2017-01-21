@@ -154,6 +154,8 @@ namespace Base
         /// </summary>
         public abstract void Stop();
 
+        public abstract double Get();
+
         #endregion Public Methods
     }
 }
