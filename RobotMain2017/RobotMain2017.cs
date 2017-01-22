@@ -12,11 +12,8 @@ Email: cooper.ryan@centaurisoft.org
 
 using Base;
 using Base.Config;
-using NetworkTables;
-using System.Drawing;
 using Tourniquet;
 using WPILib;
-using static Base.CommunicationFrames;
 using Initialize = Trephine.Initialize;
 using RobotState = Base.RobotState;
 
