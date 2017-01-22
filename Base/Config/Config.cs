@@ -125,6 +125,7 @@ namespace Base.Config
             if (Convert.ToBoolean(getAttributeValue("value", "UseNavX")))
                 ActiveCollection.AddComponent(NavX.InitializeNavX(SPI.Port.MXP));
 
+            bool hasVision = false;
             try
             {
                 foreach(var element in getElements("TargetSettings"))
@@ -161,11 +162,35 @@ namespace Base.Config
                         if (VerboseOutput)
                             Report.Error(ex.Message);
                     }
+                    hasVision = true;
                 }
             }
             catch (Exception ex)
             {
                 Report.Error($"Caught an exception loading one or more Vision Target Setting. See Log for details!");
+                Log.Write(ex);
+                if (VerboseOutput)
+                    Report.Error(ex.Message);
+            }
+
+            try
+            {
+                XAttribute att = getAttribute("exposure", "Camera Settings");
+                if (att.Value.Equals("null") && !hasVision)
+                    Report.General($"Exposure loaded as null, no vision targets loaded.");
+                else if (att.Value.Equals("null") && hasVision)
+                    Report.Error($"Vision was loaded but camera exposure was set to null!");
+                else
+                {
+                    double val = Convert.ToDouble(att.Value);
+                    VisionMonitor.Instance.SetExposure(val);
+                }
+            }
+            catch(Exception ex){
+                if (hasVision)
+                    Report.Error($"Vision was loaded, CameraSettings could not be found. This can cause fatal problems!");
+                else
+                    Report.General($"Camera Settings not loaded.");
                 Log.Write(ex);
                 if (VerboseOutput)
                     Report.Error(ex.Message);
