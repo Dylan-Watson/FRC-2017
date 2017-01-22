@@ -11,7 +11,6 @@ Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
 using System;
-using System.Collections.Generic;
 using WPILib;
 
 namespace Base.Components
@@ -273,7 +272,12 @@ namespace Base.Components
         ///     Method to return the last value set to the motor 
         /// </summary>
         /// <returns>double value</returns>
-        public override double Get() => victor.Get();
+        public override double Get()
+        {
+            if(IsReversed)
+                return victor.Get() * -1;
+            return victor.Get();
+        }
         
 
         #endregion Private Methods

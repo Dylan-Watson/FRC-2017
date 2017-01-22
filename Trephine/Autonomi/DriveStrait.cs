@@ -29,7 +29,7 @@ namespace Trephine.Autonomi
             baseCalls.SetRightDrive(power);
             baseCalls.SetLeftDrive(power);
             Timer.Delay(driveTime);
-            baseCalls.FullStop();
+            baseCalls.SlowStop();
             done();
         }
     }

@@ -17,7 +17,7 @@ namespace Trephine.Autonomi
 
             if (!target.HasTarget)
             {
-                baseCalls.FullStop();
+                baseCalls.SlowStop();
                 return;
             }
 
@@ -54,7 +54,7 @@ namespace Trephine.Autonomi
                     baseCalls.SetRightDrive(getSpeed(diameter, GAMMA2, ALPHA2));
                 }
                 else
-                    baseCalls.FullStop();
+                    baseCalls.SlowStop();
             }
         }
 

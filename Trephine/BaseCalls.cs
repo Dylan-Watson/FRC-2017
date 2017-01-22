@@ -16,6 +16,7 @@ using Base;
 using Base.Config;
 using System;
 using System.Linq;
+using WPILib;
 
 namespace Trephine
 {
@@ -72,14 +73,18 @@ namespace Trephine
             var rightPow = config.ActiveCollection.GetRightDriveMotors.Select(s => ((Motor)s).Get()).ToList()[0];
             var leftPow = config.ActiveCollection.GetLeftDriveMotors.Select(s => ((Motor)s).Get()).ToList()[0];
 
-            for (double i = rightPow; i > 0; i-= .005)
+            while(Math.Abs(rightPow) > .05 && Math.Abs(leftPow) > .05)
             {
-                BaseCalls.Instance.SetRightDrive(i);
+                rightPow /= 1.02;
+                leftPow /= 1.02;
+
+                SetLeftDrive(leftPow);
+                SetRightDrive(rightPow);
+
+                Timer.Delay(.005);
             }
-            for (double i = leftPow; i > 0; i -= .005)
-            {
-                BaseCalls.Instance.SetLeftDrive(i);
-            }
+
+            FullDriveStop();
         }
 
         /// <summary>

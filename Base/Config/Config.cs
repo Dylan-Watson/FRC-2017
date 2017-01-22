@@ -151,7 +151,7 @@ namespace Base.Config
 
                         VisionMonitor.Instance.CreateTargetSetting(id, enabled, minRadius, maxRadius, lowerHue, lowerSaturation, lowerValue, upperHue, upperSaturation, upperValue, color, maxObjects);
 
-                        Report.General($"Added Vision Target {element?.Name}. See config or log for settings details!");
+                        Report.General($"Added Vision Target {element?.Name}.");
 
                         Log.Str($"{element?.Name} -> ID: {id}, Enabled: {enabled}, Min Radius {minRadius}, Max Radius {maxRadius}, Lower Hue: {lowerHue}, Upper Hue: {upperHue}, Lower Saturation: {lowerSaturation}, Upper Saturation: {upperSaturation}, Lower Value: {lowerValue}, Upper Value: {upperValue}, Red: {red}, Green {green}, Blue: {blue}, Max Objects {maxObjects}.");
                     }
@@ -175,18 +175,11 @@ namespace Base.Config
 
             try
             {
-                XAttribute att = getAttribute("exposure", "Camera Settings");
-                if (att.Value.Equals("null") && !hasVision)
-                    Report.General($"Exposure loaded as null, no vision targets loaded.");
-                else if (att.Value.Equals("null") && hasVision)
-                    Report.Error($"Vision was loaded but camera exposure was set to null!");
-                else
-                {
-                    double val = Convert.ToDouble(att.Value);
-                    VisionMonitor.Instance.SetExposure(val);
-                }
+                double val = Convert.ToDouble(getAttributeValue("exposure", "CameraSettings"));
+                VisionMonitor.Instance.SetExposure(val);
             }
-            catch(Exception ex){
+            catch (Exception ex)
+            {
                 if (hasVision)
                     Report.Error($"Vision was loaded, CameraSettings could not be found. This can cause fatal problems!");
                 else
