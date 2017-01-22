@@ -18,7 +18,7 @@ namespace Base
     /// <summary>
     ///     An expiration timer used to check if a specified amount of time has passed
     /// </summary>
-    public class WatchDog : IDisposable
+    public sealed class WatchDog : IDisposable
     {
         #region Public Enums
 
