@@ -10,10 +10,12 @@ Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
 using Dashboard2017.Properties;
+using MjpegProcessor;
 using NetworkTables;
 using NetworkTables.Tables;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
@@ -25,6 +27,8 @@ namespace Dashboard2017
     /// </summary>
     public partial class Form1 : Form
     {
+        MjpegDecoder m;
+
         #region Public Constructors
 
         /// <summary>
@@ -48,6 +52,34 @@ namespace Dashboard2017
             debugControlLayoutPanel.FlowDirection = FlowDirection.TopDown;
             autonCombo.GotFocus += AutonCombo_GotFocus;
             autonCombo.LostFocus += AutonCombo_LostFocus;
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            toggleFeed.BackColor = Color.Red;
+            pictureBox1.ImageLocation = @"default.jpg";
+        }
+
+        private void toggleFeedToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            toggleFeed.BackColor = Color.Green;
+            m = new MjpegDecoder();
+            m.FrameReady += M_FrameReady;
+            m.ParseStream(new Uri(@"http://10.34.81.2:1181/stream.mjpg"));
+            toggleFeed.Click -= toggleFeedToolStripMenuItem1_Click;
+            toggleFeed.Click += ToggleFeed_Click;
+        }
+
+        private void ToggleFeed_Click(object sender, EventArgs e)
+        {
+            m.StopStream();
+            m.FrameReady -= M_FrameReady;
+            toggleFeed.BackColor = Color.Red;
+            pictureBox1.ImageLocation = @"default.jpg";
+            toggleFeed.Click += toggleFeedToolStripMenuItem1_Click;
+            toggleFeed.Click -= ToggleFeed_Click;
+        }
+
+        private void M_FrameReady(object sender, FrameReadyEventArgs e)
+        {
+            pictureBox1.Image = e.Bitmap;
         }
 
         private void AutonCombo_LostFocus(object sender, EventArgs e)

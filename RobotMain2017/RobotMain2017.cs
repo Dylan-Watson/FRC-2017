@@ -37,6 +37,9 @@ namespace RobotMain2017
             config.Load(CONFIG_FILE);
             FrameworkCommunication.Initialize();
             auton = new Initialize(config);
+            var settings = CameraServer.Instance.StartAutomaticCapture();
+            settings.SetResolution(640, 480);
+            settings.SetFPS(120);
         }
 
         #endregion Public Constructors

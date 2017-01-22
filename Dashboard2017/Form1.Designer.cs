@@ -36,6 +36,7 @@ namespace Dashboard2017
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.videoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toggleFeedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.infoPanel = new System.Windows.Forms.TabControl();
             this.infoTab = new System.Windows.Forms.TabPage();
@@ -48,10 +49,13 @@ namespace Dashboard2017
             this.consoleTextBox = new System.Windows.Forms.RichTextBox();
             this.debugTab = new System.Windows.Forms.TabPage();
             this.debugControlLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.ntRelayStatusLight = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.rioStatusLight = new System.Windows.Forms.Panel();
+            this.toggleFeed = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -62,13 +66,17 @@ namespace Dashboard2017
             this.tableControl.SuspendLayout();
             this.consoleTab.SuspendLayout();
             this.debugTab.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.videoToolStripMenuItem});
+            this.videoToolStripMenuItem,
+            this.toggleFeedToolStripMenuItem,
+            this.toggleFeed});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1008, 24);
@@ -104,6 +112,11 @@ namespace Dashboard2017
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.optionsToolStripMenuItem.Text = "RIO Address";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
+            // 
+            // toggleFeedToolStripMenuItem
+            // 
+            this.toggleFeedToolStripMenuItem.Name = "toggleFeedToolStripMenuItem";
+            this.toggleFeedToolStripMenuItem.Size = new System.Drawing.Size(12, 20);
             // 
             // splitContainer1
             // 
@@ -187,6 +200,7 @@ namespace Dashboard2017
             // 
             this.tableControl.Controls.Add(this.consoleTab);
             this.tableControl.Controls.Add(this.debugTab);
+            this.tableControl.Controls.Add(this.tabPage1);
             this.tableControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableControl.Location = new System.Drawing.Point(0, 0);
             this.tableControl.Name = "tableControl";
@@ -231,6 +245,26 @@ namespace Dashboard2017
             this.debugControlLayoutPanel.Size = new System.Drawing.Size(506, 425);
             this.debugControlLayoutPanel.TabIndex = 0;
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.pictureBox1);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(506, 425);
+            this.tabPage1.TabIndex = 4;
+            this.tabPage1.Text = "Feed";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Location = new System.Drawing.Point(3, 3);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(500, 419);
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -263,6 +297,13 @@ namespace Dashboard2017
             this.rioStatusLight.Size = new System.Drawing.Size(26, 13);
             this.rioStatusLight.TabIndex = 6;
             // 
+            // toggleFeed
+            // 
+            this.toggleFeed.Name = "toggleFeed";
+            this.toggleFeed.Size = new System.Drawing.Size(83, 20);
+            this.toggleFeed.Text = "Toggle Feed";
+            this.toggleFeed.Click += new System.EventHandler(this.toggleFeedToolStripMenuItem1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -289,6 +330,8 @@ namespace Dashboard2017
             this.tableControl.ResumeLayout(false);
             this.consoleTab.ResumeLayout(false);
             this.debugTab.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -317,6 +360,10 @@ namespace Dashboard2017
         private Panel ntRelayStatusLight;
         private Label label2;
         private Panel rioStatusLight;
+        private TabPage tabPage1;
+        private PictureBox pictureBox1;
+        private ToolStripMenuItem toggleFeedToolStripMenuItem;
+        private ToolStripMenuItem toggleFeed;
     }
 }
 
