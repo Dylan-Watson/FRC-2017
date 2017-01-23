@@ -13,6 +13,8 @@ using Base.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Xml.Linq;
 using WPILib;
 using WPILib.Exceptions;
@@ -134,7 +136,13 @@ namespace Base.Config
                     server.SetResolution(Convert.ToInt32(getAttributeValue("width", "EnableSecondaryCameraServer")),
                         Convert.ToInt32(getAttributeValue("height", "EnableSecondaryCameraServer")));
                     server.SetFPS(Convert.ToInt32(getAttributeValue("fps", "EnableSecondaryCameraServer")));
-                    Report.General("Secondary camera server started.");
+
+                    var host = Dns.GetHostEntry(Dns.GetHostName());
+                    foreach (var ip in host.AddressList)
+                    {
+                        if (ip.AddressFamily == AddressFamily.InterNetwork)
+                            Report.General($"Secondary camera server started, you can access the stream at http://{ip}:1181");
+                    }
                 }
             }
             catch (Exception ex)
