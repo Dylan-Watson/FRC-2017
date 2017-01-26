@@ -13,6 +13,8 @@ using Base.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Xml.Linq;
 using WPILib;
 using WPILib.Exceptions;
@@ -125,29 +127,56 @@ namespace Base.Config
             if (Convert.ToBoolean(getAttributeValue("value", "UseNavX")))
                 ActiveCollection.AddComponent(NavX.InitializeNavX(SPI.Port.MXP));
 
-            bool hasVision = false;
+            try
+            {
+                if (Convert.ToBoolean(getAttributeValue("value", "EnableSecondaryCameraServer")))
+                {
+                    var server = CameraServer.Instance.StartAutomaticCapture();
+                    server.SetExposureAuto();
+                    server.SetResolution(Convert.ToInt32(getAttributeValue("width", "EnableSecondaryCameraServer")),
+                        Convert.ToInt32(getAttributeValue("height", "EnableSecondaryCameraServer")));
+                    server.SetFPS(Convert.ToInt32(getAttributeValue("fps", "EnableSecondaryCameraServer")));
+
+                    var host = Dns.GetHostEntry(Dns.GetHostName());
+                    foreach (var ip in host.AddressList)
+                    {
+                        if (ip.AddressFamily == AddressFamily.InterNetwork)
+                            Report.General($"Secondary camera server started, you can access the stream at http://{ip}:1181");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+                Report.Error("There was an error initializing the secondary camera server");
+
+                if(VerboseOutput)
+                    Report.Error(ex.Message);
+            }
+
+            var hasVision = false;
             try
             {
                 foreach(var element in getElements("TargetSettings"))
                 {
                     try
                     {
-                        int id = Convert.ToInt32(element.Attribute("id").Value);
-                        bool enabled = Convert.ToBoolean(element.Attribute("enabled").Value);
-                        int minRadius = Convert.ToInt32(element.Attribute("minRadius").Value);
+                        var id = Convert.ToInt32(element.Attribute("id").Value);
+                        var enabled = Convert.ToBoolean(element.Attribute("enabled").Value);
+                        var minRadius = Convert.ToInt32(element.Attribute("minRadius").Value);
                         int maxRadius = Convert.ToInt16(element.Attribute("maxRadius").Value);
-                        byte lowerHue = Convert.ToByte(element.Attribute("lowerHue").Value);
-                        byte upperHue = Convert.ToByte(element.Attribute("upperHue").Value);
-                        byte lowerSaturation = Convert.ToByte(element.Attribute("lowerSaturation").Value);
-                        byte upperSaturation = Convert.ToByte(element.Attribute("upperSaturation").Value);
-                        byte lowerValue = Convert.ToByte(element.Attribute("lowerValue").Value);
-                        byte upperValue = Convert.ToByte(element.Attribute("upperValue").Value);
-                        byte red = Convert.ToByte(element.Attribute("red").Value);
-                        byte green = Convert.ToByte(element.Attribute("green").Value);
-                        byte blue = Convert.ToByte(element.Attribute("blue").Value);
-                        int maxObjects = Convert.ToInt32(element.Attribute("maxObjects").Value);
+                        var lowerHue = Convert.ToByte(element.Attribute("lowerHue").Value);
+                        var upperHue = Convert.ToByte(element.Attribute("upperHue").Value);
+                        var lowerSaturation = Convert.ToByte(element.Attribute("lowerSaturation").Value);
+                        var upperSaturation = Convert.ToByte(element.Attribute("upperSaturation").Value);
+                        var lowerValue = Convert.ToByte(element.Attribute("lowerValue").Value);
+                        var upperValue = Convert.ToByte(element.Attribute("upperValue").Value);
+                        var red = Convert.ToByte(element.Attribute("red").Value);
+                        var green = Convert.ToByte(element.Attribute("green").Value);
+                        var blue = Convert.ToByte(element.Attribute("blue").Value);
+                        var maxObjects = Convert.ToInt32(element.Attribute("maxObjects").Value);
 
-                        System.Drawing.Color color = System.Drawing.Color.FromArgb(red, green, blue);
+                        var color = System.Drawing.Color.FromArgb(red, green, blue);
 
                         VisionMonitor.Instance.CreateTargetSetting(id, enabled, minRadius, maxRadius, lowerHue, lowerSaturation, lowerValue, upperHue, upperSaturation, upperValue, color, maxObjects);
 
@@ -175,7 +204,7 @@ namespace Base.Config
 
             try
             {
-                double val = Convert.ToDouble(getAttributeValue("exposure", "CameraSettings"));
+                var val = Convert.ToDouble(getAttributeValue("exposure", "CameraSettings"));
                 VisionMonitor.Instance.SetExposure(val);
             }
             catch (Exception ex)

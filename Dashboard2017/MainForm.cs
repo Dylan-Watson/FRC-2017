@@ -25,7 +25,7 @@ namespace Dashboard2017
     /// <summary>
     ///     Main window of the dashboard
     /// </summary>
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         MjpegDecoder m;
 
@@ -34,7 +34,7 @@ namespace Dashboard2017
         /// <summary>
         ///     Constructor
         /// </summary>
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
 
@@ -209,9 +209,9 @@ namespace Dashboard2017
 
         private class NetworkTableLister : IRemoteConnectionListener
         {
-            private readonly Form1 parent;
+            private readonly MainForm parent;
 
-            public NetworkTableLister(Form1 parent)
+            public NetworkTableLister(MainForm parent)
             {
                 this.parent = parent;
             }
@@ -241,7 +241,7 @@ namespace Dashboard2017
         {
             #region Public Constructors
 
-            public TableActivityListener(Form1 parent)
+            public TableActivityListener(MainForm parent)
             {
                 this.parent = parent;
             }
@@ -321,7 +321,7 @@ namespace Dashboard2017
 
             #region Private Fields
 
-            private readonly Form1 parent;
+            private readonly MainForm parent;
 
             private string currentState;
 
