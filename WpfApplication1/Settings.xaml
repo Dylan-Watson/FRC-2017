@@ -6,33 +6,38 @@
         xmlns:local="clr-namespace:WpfApplication1"
         mc:Ignorable="d"
         Title="Settings" Height="300" Width="475">
-    <Grid>
+    <Grid Name="OuterGrid">
         <Grid.RowDefinitions>
+            <!-- Margin Row -->
+            <RowDefinition Name="MarginRow" Height="20"/>
             <!-- Test for the top input -->
-            <RowDefinition Height="75"/>
+            <RowDefinition Name="TopInput" Height="75"/>
             <!-- Placeholder -->
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="*" Name="MiddleInput"/>
             <!-- Button Row -->
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="60" Name="ButtonRow"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <!-- Padding/Margin Column -->
-            <ColumnDefinition Width="50"/>
-            <!-- Title Column -->
-            <ColumnDefinition Width="50"/> 
-            <!-- Input Column -->
-            <!-- NOTE: Align left and use left margin to align -->
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+        <!-- Input Grid -->
+        <Grid Grid.Row="1" Grid.RowSpan="2" Name="InputGrid">
+            <Grid.ColumnDefinitions>
+                <!-- Padding/Margin Column -->
+                <ColumnDefinition Width="50" Name="PaddingColumn"/>
+                <!-- Labels Column -->
+                <ColumnDefinition Width="50" Name="LabelColumn"/>
+                <!-- Input Column -->
+                <!-- NOTE: Align left and use left margin to align -->
+                <ColumnDefinition Width="*" Name="InputColumn"/>
+            </Grid.ColumnDefinitions>
+        </Grid>
         <!-- Button Grid -->
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="3" Name="InnerGrid">
             <Grid.ColumnDefinitions>
                 <!-- Placeholder -->
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" Name="LeftHandHolder"/>
                 <!-- Save Button Column -->
-                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70" Name="SaveButtonColumn"/>
                 <!-- Cancel Button Column -->
-                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="80" Name="CancelButtonColumn"/>
             </Grid.ColumnDefinitions>
             <!-- Save Button -->
             <Button Name="SaveButton" Content="Save" Height="40" Width="50" Margin="0,10,20,10" VerticalAlignment="Bottom" 
