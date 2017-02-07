@@ -14,7 +14,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Menu x:Name="menu" Height="25" Width="auto" Background="#fbfbf8" Grid.Row="0" VerticalAlignment="Top">
-                    <MenuItem Header="_File" Height="25" Margin="0,0,10,0">
+                    <MenuItem Header="_File" Height="25" Margin="0">
                         <MenuItem Header="_Open"/>
                         <MenuItem Header="_Save"/>
                         <Separator/>
