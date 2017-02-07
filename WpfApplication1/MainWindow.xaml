@@ -7,18 +7,26 @@
         mc:Ignorable="d"
         Title="Config Editor" Height="550" Width="725">
     <Grid>
-        <!-- Wrapper -->
+        
+        <!--#region Wrapper -->
         <DockPanel Height="auto">
+            
+            <!--#region DockPanel Grid-->
             <Grid>
+                
+                <!--#region Grid Row Solutions-->
                 <Grid.RowDefinitions>
                     <!-- Menu Row -->
                     <RowDefinition Height="25"/>
                     <!-- Text Editor Row -->
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <!-- Main Menu -->
+                <!--#endregion-->
+                
+                <!--#region Main Menu -->
                 <Menu x:Name="menu" Height="25" Width="auto" Background="#fbfbf8" Grid.Row="0" VerticalAlignment="Top">
-                    <!-- File Dropdown Menu -->
+                    
+                    <!--#region File Dropdown Menu -->
                     <MenuItem Header="_File" Height="25" Margin="0">
                         <!-- Open a File -->
                         <MenuItem Name="OpenButton" Header="_Open"/>
@@ -28,7 +36,9 @@
                         <!-- Exit the Application -->
                         <MenuItem Name="ExitButton" Header="_Quexit"/>
                     </MenuItem>
-                    <!-- Dropdown Menu to Manage the Robot Connections -->
+                    <!--#endregion-->
+                    
+                    <!--#region Robot Connections Dropdown Menu-->
                     <MenuItem Header="_Robot">
                         <!-- Open Connection Settings Window-->
                         <MenuItem Name="SettingsButton" Header="Set_tings" Click="SettingsButton_Click"/>
@@ -36,10 +46,17 @@
                         <!-- NOTE: Be sure to run the build button function before upload --> 
                         <MenuItem Name="UploadButton" Header="_Upload"/>
                     </MenuItem>
+                    <!--#endregion-->
+                    
+                    <!--#region Build Button-->
                     <!-- Button to build and check the syntax of the XML -->
                     <MenuItem Name="BuildButton" Header="_Build"/>
+                    <!--#endregion-->
+                    
                 </Menu>
-                <!-- Text Editro Box -->
+                <!--#endregion-->
+                
+                <!--#region Text Editor Box -->
                 <RichTextBox x:Name="MainEditor" DockPanel.Dock="Bottom" Grid.Row="1" FontSize="14" CaretBrush="White" Block.LineHeight="2">
                     <FlowDocument Background="#FF1E1E1E" Foreground="#33A5FF">
                         <Paragraph>
@@ -47,8 +64,14 @@
                         </Paragraph>
                     </FlowDocument>
                 </RichTextBox>
+                <!--#endregion-->
+                
             </Grid>
+            <!--#endregion-->
+        
         </DockPanel>
+        <!--#endregion-->
+    
     </Grid>
 </Window>
  
