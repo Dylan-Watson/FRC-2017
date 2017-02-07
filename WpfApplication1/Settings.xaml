@@ -61,6 +61,34 @@
                    VerticalAlignment="Center" FontSize="15"/>
             <!--#endregion-->
             
+            <!--#region Input Fields-->
+            <!--NOTE: At this point, just have 4 text boxes (maybe 5px?)-->
+            <TextBox x:Name="IPTextBox1" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="0" 
+                     TextWrapping="Wrap" VerticalAlignment="Center" Width="40" Grid.Row="0" 
+                     FontSize="15" MaxLines="1" MaxLength="3" TextAlignment="Center" 
+                     PreviewTextInput="IPBox_PreviewTextInput"/>
+            <TextBox x:Name="IPTextBox2" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="50,0,0,0" 
+                     TextWrapping="Wrap" VerticalAlignment="Center" Width="40" Grid.Row="0" 
+                     FontSize="15" MaxLines="1" MaxLength="3" TextAlignment="Center" 
+                     PreviewTextInput="IPBox_PreviewTextInput"/>
+            <TextBox x:Name="IPTextBox3" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="100,0,0,0" 
+                     TextWrapping="Wrap" VerticalAlignment="Center" Width="40" Grid.Row="0" 
+                     FontSize="15" MaxLines="1" MaxLength="3" TextAlignment="Center" 
+                     PreviewTextInput="IPBox_PreviewTextInput"/>
+            <TextBox x:Name="IPTextBox4" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="150,0,0,0" 
+                     TextWrapping="Wrap" VerticalAlignment="Center" Width="40" Grid.Row="0" 
+                     FontSize="15" MaxLines="1" MaxLength="3" TextAlignment="Center" 
+                     PreviewTextInput="IPBox_PreviewTextInput"/>
+
+            <TextBox x:Name="UsernameTextBox" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="0" 
+                     TextWrapping="Wrap" VerticalAlignment="Center" Width="300" Grid.Row="1" 
+                     FontSize="15" MaxLines="1" TextAlignment="Left"/>
+
+            <TextBox x:Name="PasswordTextBox" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="0" 
+                     TextWrapping="Wrap" VerticalAlignment="Center" Width="300" Grid.Row="2" 
+                     FontSize="15" MaxLines="1" TextAlignment="Left"/>
+            <!--#endregion-->
+            
         </Grid>
         <!--#endregion-->
         
