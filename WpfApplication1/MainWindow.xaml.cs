@@ -11,12 +11,14 @@ namespace WpfApplication1
         public MainWindow()
         {
             InitializeComponent();
-            Closed += MainWindow_Closed;
+            Closing += MainWindow_Closing; ;
         }
 
-        private void MainWindow_Closed(object sender, EventArgs e)
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (checkClose())
+            if (!checkClose())
+                e.Cancel = true;
+            else
                 Environment.Exit(0);
         }
 
@@ -44,6 +46,18 @@ namespace WpfApplication1
         //will put save checking here
         private bool checkClose()
         {
+            //Check if there is unsaved changes
+            MessageBoxResult result = MessageBox.Show("You have unsaved changes. Do you want to save?", "Confirmation", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Cancel)
+                return false;
+            /*
+            If no, return true
+            If yes, ask if want to save
+                If yes, save
+                    Then, return true
+                If no, return true
+                If cancel, return false
+             */
             return true;
         }
 
