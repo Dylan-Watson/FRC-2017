@@ -7,25 +7,39 @@
         mc:Ignorable="d"
         Title="Config Editor" Height="550" Width="725">
     <Grid>
+        <!-- Wrapper -->
         <DockPanel Height="auto">
             <Grid>
                 <Grid.RowDefinitions>
+                    <!-- Menu Row -->
                     <RowDefinition Height="25"/>
+                    <!-- Text Editor Row -->
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
+                <!-- Main Menu -->
                 <Menu x:Name="menu" Height="25" Width="auto" Background="#fbfbf8" Grid.Row="0" VerticalAlignment="Top">
+                    <!-- File Dropdown Menu -->
                     <MenuItem Header="_File" Height="25" Margin="0">
+                        <!-- Open a File -->
                         <MenuItem Name="OpenButton" Header="_Open"/>
+                        <!-- Save a File -->
                         <MenuItem Name="SaveButton" Header="_Save"/>
                         <Separator/>
+                        <!-- Exit the Application -->
                         <MenuItem Name="ExitButton" Header="_Quexit"/>
                     </MenuItem>
+                    <!-- Dropdown Menu to Manage the Robot Connections -->
                     <MenuItem Header="_Robot">
+                        <!-- Open Connection Settings Window-->
                         <MenuItem Name="SettingsButton" Header="Set_tings" Click="SettingsButton_Click"/>
+                        <!-- Upload the Config to the robot -->
+                        <!-- NOTE: Be sure to run the build button function before upload --> 
                         <MenuItem Name="UploadButton" Header="_Upload"/>
                     </MenuItem>
+                    <!-- Button to build and check the syntax of the XML -->
                     <MenuItem Name="BuildButton" Header="_Build"/>
                 </Menu>
+                <!-- Text Editro Box -->
                 <RichTextBox x:Name="MainEditor" DockPanel.Dock="Bottom" Grid.Row="1" FontSize="14" CaretBrush="White" Block.LineHeight="2">
                     <FlowDocument Background="#FF1E1E1E" Foreground="#33A5FF">
                         <Paragraph>
