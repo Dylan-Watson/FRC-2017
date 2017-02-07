@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApplication1"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Config Editor" Height="550" Width="725">
     <Grid>
         <DockPanel Height="auto">
             <Grid>
@@ -15,18 +15,18 @@
                 </Grid.RowDefinitions>
                 <Menu x:Name="menu" Height="25" Width="auto" Background="#fbfbf8" Grid.Row="0" VerticalAlignment="Top">
                     <MenuItem Header="_File" Height="25" Margin="0">
-                        <MenuItem Header="_Open"/>
-                        <MenuItem Header="_Save"/>
+                        <MenuItem Name="OpenButton" Header="_Open"/>
+                        <MenuItem Name="SaveButton" Header="_Save"/>
                         <Separator/>
-                        <MenuItem Header="_Quexit"/>
+                        <MenuItem Name="ExitButton" Header="_Quexit"/>
                     </MenuItem>
                     <MenuItem Header="_Robot">
-                        <MenuItem Header="Set_tings"/>
-                        <MenuItem Header="Upload"/>
+                        <MenuItem Name="SettingsButton" Header="Set_tings" Click="SettingsButton_Click"/>
+                        <MenuItem Name="UploadButton" Header="_Upload"/>
                     </MenuItem>
-                    <MenuItem Header="Build"/>
+                    <MenuItem Name="BuildButton" Header="_Build"/>
                 </Menu>
-                <RichTextBox x:Name="richTextBox" DockPanel.Dock="Bottom" Grid.Row="1" FontSize="14" CaretBrush="White" Block.LineHeight="2">
+                <RichTextBox x:Name="MainEditor" DockPanel.Dock="Bottom" Grid.Row="1" FontSize="14" CaretBrush="White" Block.LineHeight="2">
                     <FlowDocument Background="#FF1E1E1E" Foreground="#33A5FF">
                         <Paragraph>
                             <Run Text="RichTextBox"/>

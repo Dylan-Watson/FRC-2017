@@ -24,5 +24,11 @@ namespace WpfApplication1
         {
             InitializeComponent();
         }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Settings set = new Settings();
+            set.Show();
+        }
     }
 }
