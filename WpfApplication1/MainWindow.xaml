@@ -34,7 +34,7 @@
                         <MenuItem Name="SaveButton" Header="_Save"/>
                         <Separator/>
                         <!-- Exit the Application -->
-                        <MenuItem Name="ExitButton" Header="_Quexit"/>
+                        <MenuItem Name="ExitButton" Header="_Quexit" Click="ExitButton_Click"/>
                     </MenuItem>
                     <!--#endregion-->
                     
@@ -50,7 +50,7 @@
                     
                     <!--#region Build Button-->
                     <!-- Button to build and check the syntax of the XML -->
-                    <MenuItem Name="BuildButton" Header="_Build"/>
+                    <MenuItem Name="BuildButton" Header="_Build" Click="BuildButton_Click"/>
                     <!--#endregion-->
                     
                 </Menu>

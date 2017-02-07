@@ -1,17 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WpfApplication1
 {
@@ -23,12 +11,42 @@ namespace WpfApplication1
         public MainWindow()
         {
             InitializeComponent();
+            Closed += MainWindow_Closed;
         }
 
+        private void MainWindow_Closed(object sender, EventArgs e)
+        {
+            if (checkClose())
+                Environment.Exit(0);
+        }
+
+        #region Event Handlers
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            Settings set = new Settings();
+            Settings set = new Settings(this);
             set.Show();
+            IsEnabled = false;
         }
+
+        private void BuildButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        #endregion
+
+        #region Methods
+        //will put save checking here
+        private bool checkClose()
+        {
+            return true;
+        }
+
+        #endregion
     }
 }

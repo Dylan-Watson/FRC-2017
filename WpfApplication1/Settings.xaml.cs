@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace WpfApplication1
 {
@@ -20,11 +10,25 @@ namespace WpfApplication1
     /// </summary>
     public partial class Settings : Window
     {
+        #region Private Variables
+
+        #endregion
+
+        private Window main = null;
+
         #region Constructors
 
-        public Settings()
+        public Settings(Window sender)
         {
             InitializeComponent();
+            main = sender;
+            Closed += Settings_Closed;
+        }
+
+        private void Settings_Closed(object sender, EventArgs e)
+        {
+            if (main != null)
+                main.IsEnabled = true;
         }
 
         #endregion
