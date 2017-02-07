@@ -1,0 +1,40 @@
+﻿<Window x:Class="WpfApplication1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApplication1"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <DockPanel Height="auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Menu x:Name="menu" Height="25" Width="auto" Background="#fbfbf8" Grid.Row="0" VerticalAlignment="Top">
+                    <MenuItem Header="_File" Height="25" Margin="0,0,10,0">
+                        <MenuItem Header="_Open"/>
+                        <MenuItem Header="_Save"/>
+                        <Separator/>
+                        <MenuItem Header="_Quexit"/>
+                    </MenuItem>
+                    <MenuItem Header="_Robot">
+                        <MenuItem Header="Set_tings"/>
+                        <MenuItem Header="Upload"/>
+                    </MenuItem>
+                    <MenuItem Header="Build"/>
+                </Menu>
+                <RichTextBox x:Name="richTextBox" DockPanel.Dock="Bottom" Grid.Row="1" FontSize="14" CaretBrush="White" Block.LineHeight="2">
+                    <FlowDocument Background="#FF1E1E1E" Foreground="#33A5FF">
+                        <Paragraph>
+                            <Run Text="RichTextBox"/>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+            </Grid>
+        </DockPanel>
+    </Grid>
+</Window>
+ 

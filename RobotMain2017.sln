@@ -24,6 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configs", "Configs", "{8973
 		robot_test_kit.xml = robot_test_kit.xml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigEditor", "WpfApplication1\ConfigEditor.csproj", "{F00B7441-07BE-469A-BC42-D212E646DE5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{CA78E7C0-A645-4D4D-8AC7-10A266AEBD72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA78E7C0-A645-4D4D-8AC7-10A266AEBD72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA78E7C0-A645-4D4D-8AC7-10A266AEBD72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F00B7441-07BE-469A-BC42-D212E646DE5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F00B7441-07BE-469A-BC42-D212E646DE5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F00B7441-07BE-469A-BC42-D212E646DE5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F00B7441-07BE-469A-BC42-D212E646DE5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
