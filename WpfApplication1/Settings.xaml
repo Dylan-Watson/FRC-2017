@@ -84,9 +84,8 @@
                      TextWrapping="Wrap" VerticalAlignment="Center" Width="300" Grid.Row="1" 
                      FontSize="15" MaxLines="1" TextAlignment="Left"/>
 
-            <TextBox x:Name="PasswordTextBox" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="0" 
-                     TextWrapping="Wrap" VerticalAlignment="Center" Width="300" Grid.Row="2" 
-                     FontSize="15" MaxLines="1" TextAlignment="Left"/>
+            <PasswordBox x:Name="PasswordTextBox" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="0" 
+                     FontSize="15" Grid.Row="2" Width="300"/>
             <!--#endregion-->
             
         </Grid>

@@ -38,6 +38,8 @@ namespace WpfApplication1
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
+         //   Properties.Settings.Default.IP = "durp";
+         //   Properties.Settings.Default.Save();
         }
 
         #endregion
