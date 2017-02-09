@@ -29,9 +29,9 @@
                     <!--#region File Dropdown Menu -->
                     <MenuItem Header="_File" Height="25" Margin="0">
                         <!-- Open a File -->
-                        <MenuItem Name="OpenButton" Header="_Open"/>
+                        <MenuItem Name="OpenButton" Header="_Open" Click="OpenButton_Click"/>
                         <!-- Save a File -->
-                        <MenuItem Name="SaveButton" Header="_Save"/>
+                        <MenuItem Name="SaveButton" Header="_Save" Click="SaveButton_Click"/>
                         <Separator/>
                         <!-- Exit the Application -->
                         <MenuItem Name="ExitButton" Header="_Quexit" Click="ExitButton_Click"/>
@@ -57,7 +57,8 @@
                 <!--#endregion-->
                 
                 <!--#region Text Editor Box -->
-                <RichTextBox x:Name="MainEditor" DockPanel.Dock="Bottom" Grid.Row="1" FontSize="14" CaretBrush="White" Block.LineHeight="2">
+                <RichTextBox x:Name="MainEditor" DockPanel.Dock="Bottom" Grid.Row="1" FontSize="14" 
+                             CaretBrush="White" Block.LineHeight="2" AcceptsTab="True">
                     <FlowDocument Background="#FF1E1E1E" Foreground="#33A5FF">
                         <Paragraph>
                             <Run Text="RichTextBox"/>
