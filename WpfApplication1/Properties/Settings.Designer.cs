@@ -37,7 +37,7 @@ namespace WpfApplication1.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("BroncBotz")]
+        [global::System.Configuration.DefaultSettingValueAttribute("broncbotz")]
         public string Username {
             get {
                 return ((string)(this["Username"]));
