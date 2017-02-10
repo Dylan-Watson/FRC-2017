@@ -2,7 +2,7 @@
 
 <Robot>
 
-  <Version version="1.0" />
+  <Version version="2.0" />
   <Comment comment="Configured for the test kit" />
 
   <!-- If true, will dump full exception methods to the console and driverstation. -->
@@ -13,8 +13,22 @@
 
   <EnableAuton value="true" />
 
-  <!-- Sets whether or not to initialize the NavX-->
+  <!-- Sets whether or not to initialize the NavX -->
   <UseNavX value="true" port="default" />
+  
+  <EnableSecondaryCameraServer value="true" width="1280" height="720" fps="30" autoExposure="false"/>
+  
+  <!-- Sets the Vision Targets and Vision Settings -->
+  <TargetSettings>
+    <!-- Examples -->
+    <!-- NOTE: Even if you aren't including any vision targets you must include the encapsulating tag -->
+    <!--<primaryTarget id="int" enabled="bool" minRadius="int" maxRadius="int" lowerHue="byte" upperHue="byte" lowerSaturation="byte" upperSaturation="byte" lowerValue="byte" upperValue="byte" red="byte" green="byte" blue="byte" maxObjects="int"/>-->
+    <primaryTarget id="0" enabled="true" minRadius="30" maxRadius="500" lowerHue="0" upperHue="255" lowerSaturation="215" upperSaturation="255" lowerValue="0" upperValue="40" red="255" green="0" blue="0" maxObjects="500"/>
+  </TargetSettings> 
+  
+  <!-- CameraSettings exposure="double" -->
+  <!-- NOTE: Even if you aren't including any vision targets/camera, you must inculde this tag. Set exposure to null -->
+  <CameraSettings exposure="-10"/>
 
   <!-- Contains assignments to ports and robot dimensions -->
   <RobotConfig>
@@ -23,16 +37,9 @@
     <Victors>
       <!-- Examples -->
       <!--<xxxxxxxx type="SP" channel="x ID from roboRio" reversed="x" drive="false" optional encoder="xxxxxx" upperLimit="Name of DI" optional lowerLimit="Name of DI" />-->
-      <testVictorOne type="SP" channel="0" reversed="false" drive="false"/>
+      <left_0 type="SP" channel="0" reversed="true" drive="true" side="left"/>
+      <right_0 type="SP" channel="1" reversed="true" drive="true" side="left"/>
     </Victors>
-
-    <!-- All CANTalon assignments -->
-    <Talons>
-      <!-- Examples -->
-      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="pwm" encoder="xxxxxx" />-->
-      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="master" encoder="xxxxxx" optional PID p="double" i="double" d="double" />-->
-      <!--<xxxxxxxx channel="x ID from roboRio" reversed="x" type="slave" encoder="xxxxxx" master="binding name (name of master talon)" />-->
-    </Talons>
 
     <!-- Encoder locations -->
     <Encoders>
@@ -43,12 +50,14 @@
     <Solenoids>
       <!--<xxxxxx forward="x" reverse="x" default="forward/reverse" reversed="false" />-->
       <!-- default is optional, reversed is not. -->
+
     </Solenoids>
 
     <!--  Digital input/outputs !!!!NOTE!!!! DI and DO are on the same line as the Encoders -->
     <!--  so DO NOT have matching channel numbers, that allocated drifferent resources in the same spot.-->
     <DI>
       <!--<xxxxxx channel="x" />-->
+
     </DI>
 
     <DO>
@@ -71,7 +80,9 @@
     <Potentiometers>
       <!--<xxxxxx channel="x">-->
       <!--<test_potentiometer channel="0" />-->
+
     </Potentiometers>
+  
   </RobotConfig>
 
   <!-- Control assignments -->
@@ -92,21 +103,18 @@
       <drive driveFit="0" power="3" />
       <powerMultiplier powerMultiplier="1" />
 
-      <leftDrive axis="1" reversed="true" deadZone=".02" bindTo="testVictorOne" />
-      <rightDrive axis="5" reversed="false" deadZone=".02" bindTo="testVictorOne" />
+      <leftDrive axis="1" reversed="true" deadZone=".02" bindTo="left_0" />
+      <rightDrive axis="5" reversed="false" deadZone=".02" bindTo="right_0" />
     </Driver>
 
     <DriverAux>
+
     </DriverAux>
 
     <!-- Operator assignments -->
     <Operator>
       <slot controllerSlot="1" />
-      <a type ="button" button="1" reversed="false" powerMultiplier=".75" bindTo="testVictorOne" />
-      <x type ="button" button="3" reversed="false" powerMultiplier=".85" bindTo="testVictorOne" />
-      <y type ="button" button="4" reversed="false" powerMultiplier=".95" bindTo="testVictorOne" />
-      <b type ="button" button="2" reversed="false" powerMultiplier="1" bindTo="testVictorOne" />
-      
+    
     </Operator>
   </Controls>
 

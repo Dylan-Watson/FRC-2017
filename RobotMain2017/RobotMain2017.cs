@@ -37,9 +37,6 @@ namespace RobotMain2017
             config.Load(CONFIG_FILE);
             FrameworkCommunication.Initialize();
             auton = new Initialize(config);
-            var settings = CameraServer.Instance.StartAutomaticCapture();
-            settings.SetResolution(640, 480);
-            settings.SetFPS(120);
         }
 
         #endregion Public Constructors
@@ -59,8 +56,8 @@ namespace RobotMain2017
         #region Private Fields
 
         //private const string CONFIG_FILE = @"robot.xml";
-        //private const string CONFIG_FILE = @"robot_test_kit.xml";
-        private const string CONFIG_FILE = @"eltoro.xml";
+        private const string CONFIG_FILE = @"robot_test_kit.xml";
+        //private const string CONFIG_FILE = @"eltoro.xml";
 
         private readonly Config config = new Config();
 

@@ -21,6 +21,8 @@ using WPILib.Exceptions;
 
 namespace Base.Config
 {
+    using CSCore;
+
     /// <summary>
     ///     Manages and loads the configuration file from XML.
     /// </summary>
@@ -131,18 +133,19 @@ namespace Base.Config
             {
                 if (Convert.ToBoolean(getAttributeValue("value", "EnableSecondaryCameraServer")))
                 {
-                    var server = CameraServer.Instance.StartAutomaticCapture();
-                    server.SetExposureAuto();
-                    server.SetResolution(Convert.ToInt32(getAttributeValue("width", "EnableSecondaryCameraServer")),
-                        Convert.ToInt32(getAttributeValue("height", "EnableSecondaryCameraServer")));
-                    server.SetFPS(Convert.ToInt32(getAttributeValue("fps", "EnableSecondaryCameraServer")));
-
-                    var host = Dns.GetHostEntry(Dns.GetHostName());
-                    foreach (var ip in host.AddressList)
+                    var cam = CameraServer.Instance.StartAutomaticCapture();
+                    try
                     {
-                        if (ip.AddressFamily == AddressFamily.InterNetwork)
-                            Report.General($"Secondary camera server started, you can access the stream at http://{ip}:1181");
+                        if (Convert.ToBoolean(getAttributeValue("autoExposure", "EnableSecondaryCameraServer")))
+                            cam.SetExposureAuto();
                     }
+                    catch (Exception) { }
+
+                    cam.SetResolution(Convert.ToInt32(getAttributeValue("width", "EnableSecondaryCameraServer")),
+                        Convert.ToInt32(getAttributeValue("height", "EnableSecondaryCameraServer")));
+                    cam.SetFPS(Convert.ToInt32(getAttributeValue("fps", "EnableSecondaryCameraServer")));
+
+                    Report.General($@"Secondary camera server started, you can access the stream at http://10.34.81.2:1181");
                 }
             }
             catch (Exception ex)
