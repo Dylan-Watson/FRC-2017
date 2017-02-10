@@ -134,7 +134,7 @@ namespace Base
             if (ReferenceEquals(this, obj)) return true;
 
             var other = obj as CommonName;
-            return other != null && equals(other);
+            return (other != null) && equals(other);
         }
 
         /// <summary>

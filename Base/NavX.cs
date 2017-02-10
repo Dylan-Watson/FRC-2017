@@ -98,6 +98,12 @@ namespace Base
         public string Name { get; } = "NavX";
 
         /// <summary>
+        ///     Determins if the component will output to the dashboard
+        /// </summary>
+        [Obsolete("Unused Property")]
+        public bool Debug { get; set; }
+
+        /// <summary>
         ///     Unused, always returns null
         /// </summary>
         [Obsolete("Unused Property")]

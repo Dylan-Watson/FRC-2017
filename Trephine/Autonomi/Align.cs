@@ -34,7 +34,7 @@ namespace Trephine.Autonomi
                 baseCalls.SetLeftDrive(-getSpeed(offset, GAMMA, ALPHA));
                 baseCalls.SetRightDrive(-getSpeed(offset, GAMMA, ALPHA));
             }
-            else if (offset < 20 && offset > -20)
+            else if ((offset < 20) && (offset > -20))
             {
                 /*get the diameter of the target at current position 
                  * assume diameter should be 15 units

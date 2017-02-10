@@ -109,6 +109,11 @@ namespace Base.Components
         public string Name { get; }
 
         /// <summary>
+        ///     Determins if the component will output to the dashboard
+        /// </summary>
+        public bool Debug { get; set; }
+
+        /// <summary>
         ///     Defines the object issuing the commands
         /// </summary>
         public object Sender { get; private set; }
@@ -160,7 +165,7 @@ namespace Base.Components
             lock (victor)
 #endif
             {
-                if (val < -Constants.MINUMUM_JOYSTICK_RETURN && AllowCc)
+                if ((val < -Constants.MINUMUM_JOYSTICK_RETURN) && AllowCc)
                 {
                     InUse = true;
                     if (IsReversed)
@@ -174,7 +179,7 @@ namespace Base.Components
                         onValueChanged(new VirtualControlEventArgs(val, InUse));
                     }
                 }
-                else if (val > Constants.MINUMUM_JOYSTICK_RETURN && AllowC)
+                else if ((val > Constants.MINUMUM_JOYSTICK_RETURN) && AllowC)
                 {
                     InUse = true;
                     if (IsReversed)
@@ -266,6 +271,9 @@ namespace Base.Components
         private void onValueChanged(VirtualControlEventArgs e)
         {
             ValueChanged?.Invoke(this, e);
+
+            if(Debug)
+                FrameworkCommunication.Instance.SendData($"{Name}", e.Value);
         }
 
         /// <summary>

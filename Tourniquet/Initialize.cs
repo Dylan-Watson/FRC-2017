@@ -43,6 +43,9 @@ namespace Tourniquet
                 leftDriverConfig.DeadZone, config.DriverConfig.LeftDriveControlSchema.IsEnabled,
                 leftDriverConfig.PowerMultiplier, leftDriverConfig.FitPower);
 
+            if (leftDriverConfig.Debug)
+                leftDriveControl.Debug = true;
+
             foreach (var binding in leftDriverConfig.Bindings)
                 leftDriveControl.AddComponent(config.ActiveCollection.Get(binding));
 
@@ -53,6 +56,9 @@ namespace Tourniquet
                 rightDriverConfig.Axis, rightDriverConfig.FitFunction, rightDriverConfig.Reversed,
                 rightDriverConfig.DeadZone, config.DriverConfig.RightDriveControlSchema.IsEnabled,
                 rightDriverConfig.PowerMultiplier, rightDriverConfig.FitPower);
+
+            if (rightDriverConfig.Debug)
+                rightDriveControl.Debug = true;
 
             foreach (var binding in rightDriverConfig.Bindings)
                 rightDriveControl.AddComponent(config.ActiveCollection.Get(binding));
@@ -72,6 +78,10 @@ namespace Tourniquet
                             axisControl.AddComponent(config.ActiveCollection.Get(binding));
 
                         ControlCollection.Instance.AddDriverControl(axisControl);
+
+                        if (s.Debug)
+                            axisControl.Debug = true;
+
                         break;
 
                     case ControlType.Button:
@@ -82,6 +92,10 @@ namespace Tourniquet
                             btnControl.AddComponent(config.ActiveCollection.Get(binding));
 
                         ControlCollection.Instance.AddDriverControl(btnControl);
+
+                        if (s.Debug)
+                            btnControl.Debug = true;
+
                         break;
 
                     case ControlType.DualButton:
@@ -92,6 +106,10 @@ namespace Tourniquet
                             dualBtnControl.AddComponent(config.ActiveCollection.Get(binding));
 
                         ControlCollection.Instance.AddDriverControl(dualBtnControl);
+
+                        if (s.Debug)
+                            dualBtnControl.Debug = true;
+
                         break;
 
                     case ControlType.ToggleButton:
@@ -102,6 +120,10 @@ namespace Tourniquet
                             toggleBtnControl.AddComponent(config.ActiveCollection.Get(binding));
 
                         ControlCollection.Instance.AddDriverControl(toggleBtnControl);
+
+                        if (s.Debug)
+                            toggleBtnControl.Debug = true;
+
                         break;
                 }
 
@@ -122,6 +144,10 @@ namespace Tourniquet
                             axisControl.AddComponent(config.ActiveCollection.Get(binding));
 
                         ControlCollection.Instance.AddOperatorControl(axisControl);
+
+                        if (s.Debug)
+                            axisControl.Debug = true;
+
                         break;
 
                     case ControlType.Button:
@@ -132,6 +158,10 @@ namespace Tourniquet
                             btnControl.AddComponent(config.ActiveCollection.Get(binding));
 
                         ControlCollection.Instance.AddOperatorControl(btnControl);
+
+                        if (s.Debug)
+                            btnControl.Debug = true;
+
                         break;
 
                     case ControlType.DualButton:
@@ -142,6 +172,10 @@ namespace Tourniquet
                             dualBtnControl.AddComponent(config.ActiveCollection.Get(binding));
 
                         ControlCollection.Instance.AddOperatorControl(dualBtnControl);
+
+                        if (s.Debug)
+                            dualBtnControl.Debug = true;
+
                         break;
 
                     case ControlType.ToggleButton:
@@ -152,6 +186,10 @@ namespace Tourniquet
                             toggleBtnControl.AddComponent(config.ActiveCollection.Get(binding));
 
                         ControlCollection.Instance.AddOperatorControl(toggleBtnControl);
+
+                        if (s.Debug)
+                            toggleBtnControl.Debug = true;
+
                         break;
                 }
 

@@ -140,7 +140,7 @@ namespace Base
         /// </summary>
         public void Abort(object sender)
         {
-            if (thread != null && thread.IsAlive)
+            if ((thread != null) && thread.IsAlive)
             {
                 thread?.Abort();
                 Aborted?.Invoke(sender, new EventArgs());
@@ -175,7 +175,7 @@ namespace Base
             }
             else
             {
-                if(thread != null && thread.IsAlive)
+                if((thread != null) && thread.IsAlive)
                     Abort(RobotStatus.Instance);
             }
         }

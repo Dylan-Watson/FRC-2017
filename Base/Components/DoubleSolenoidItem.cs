@@ -84,6 +84,11 @@ namespace Base.Components
         public string Name { get; }
 
         /// <summary>
+        ///     Determins if the component will output to the dashboard
+        /// </summary>
+        public bool Debug { get; set; }
+
+        /// <summary>
         ///     Defines the object issuing the commands
         /// </summary>
         public object Sender { get; private set; }
@@ -158,7 +163,7 @@ namespace Base.Components
             lock (solenoid)
 #endif
             {
-                if (val >= 0 && val <= 2)
+                if ((val >= 0) && (val <= 2))
                 {
                     InUse = true;
                     if (Math.Abs(val - 2) <= Math.Abs(val * .00001))
@@ -240,6 +245,9 @@ namespace Base.Components
         private void onValueChanged(VirtualControlEventArgs e)
         {
             ValueChanged?.Invoke(this, e);
+
+            if(Debug)
+                FrameworkCommunication.Instance.SendData($"{Name}", e.Value);
         }
 
         private void setForward()

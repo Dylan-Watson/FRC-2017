@@ -68,6 +68,11 @@ namespace Base.Components
         public string Name { get; }
 
         /// <summary>
+        ///     Determins if the component will output to the dashboard
+        /// </summary>
+        public bool Debug { get; set; }
+
+        /// <summary>
         ///     Defines the object issuing the commands
         /// </summary>
         public object Sender { get; } = null;
@@ -142,6 +147,9 @@ namespace Base.Components
         private void onValueChanged(VirtualControlEventArgs e)
         {
             ValueChanged?.Invoke(this, e);
+
+            if(Debug)
+                FrameworkCommunication.Instance.SendData($"{Name}", e.Value);
         }
 
         #endregion Private Methods

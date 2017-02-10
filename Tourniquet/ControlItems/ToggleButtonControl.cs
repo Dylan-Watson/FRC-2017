@@ -13,6 +13,8 @@ using WPILib;
 
 namespace Tourniquet.ControlItems
 {
+    using Base;
+
     internal class ToggleButtonControl : ControlItem
     {
         #region Public Constructors
@@ -49,11 +51,19 @@ namespace Tourniquet.ControlItems
                         if (!IsReversed)
                         {
                             set(1 * multiplier);
+
+                            if (Debug)
+                                FrameworkCommunication.Instance.SendData($"{ControlName}", 1 * multiplier);
+
                             IsRunning = true;
                         }
                         else
                         {
                             set(0);
+
+                            if (Debug)
+                                FrameworkCommunication.Instance.SendData($"{ControlName}", 0);
+
                             stop();
                             IsRunning = false;
                         }
@@ -63,12 +73,20 @@ namespace Tourniquet.ControlItems
                         if (!IsReversed)
                         {
                             set(0);
+
+                            if (Debug)
+                                FrameworkCommunication.Instance.SendData($"{ControlName}", 0);
+
                             stop();
                             IsRunning = false;
                         }
                         else
                         {
                             set(1 * multiplier);
+
+                            if (Debug)
+                                FrameworkCommunication.Instance.SendData($"{ControlName}", 1 * multiplier);
+
                             IsRunning = true;
                         }
                     }

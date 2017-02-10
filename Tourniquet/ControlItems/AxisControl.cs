@@ -83,14 +83,22 @@ namespace Tourniquet.ControlItems
         public override void Update()
         {
             var raw = joystick.GetRawAxis(axis);
-            if (raw > deadZone || raw < -deadZone)
+            if ((raw > deadZone) || (raw < -deadZone))
             {
                 set(fitFunction(raw, deadZone, power) * multiplier);
+
+                if(Debug)
+                    FrameworkCommunication.Instance.SendData($"{ControlName}", fitFunction(raw, deadZone, power) * multiplier);
+
                 IsRunning = true;
             }
             else if (IsRunning)
             {
                 stop();
+
+                if (Debug)
+                    FrameworkCommunication.Instance.SendData($"{ControlName}", 0);
+
                 IsRunning = false;
             }
         }

@@ -77,6 +77,11 @@ namespace Base.Components
         public string Name { get; }
 
         /// <summary>
+        ///     Determins if the component will output to the dashboard
+        /// </summary>
+        public bool Debug { get; set; }
+
+        /// <summary>
         ///     Defines the object issuing the commands
         /// </summary>
         public object Sender { get; private set; }
@@ -163,7 +168,7 @@ namespace Base.Components
         /// <param name="sender"></param>
         public void Set(double val, object sender)
         {
-            if (val >= 0 && val <= 2)
+            if ((val >= 0) && (val <= 2))
             {
                 InUse = true;
                 if (Math.Abs(val - 2) <= Math.Abs(val * Constants.EPSILON_MIN))
@@ -211,6 +216,9 @@ namespace Base.Components
         private void onValueChanged(VirtualControlEventArgs e)
         {
             ValueChanged?.Invoke(this, e);
+
+            if(Debug)
+                FrameworkCommunication.Instance.SendData($"{Name}", e.Value);
         }
 
         /// <summary>

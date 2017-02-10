@@ -63,6 +63,12 @@ namespace Base.Components
         public string Name { get; } = "BuiltInAccelerometer";
 
         /// <summary>
+        ///     Determins if the component will output to the dashboard
+        /// </summary>
+        [Obsolete("Unused Property")]
+        public bool Debug { get; set; }
+
+        /// <summary>
         ///     Defines the object issuing the commands
         /// </summary>
         public object Sender { get; } = null;

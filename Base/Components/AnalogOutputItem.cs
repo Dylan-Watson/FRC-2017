@@ -64,7 +64,7 @@ namespace Base.Components
             lock (aout)
 #endif
             {
-                if (val >= 0 && val <= 5)
+                if ((val >= 0) && (val <= 5))
                 {
                     InUse = true;
                     aout.SetVoltage(val);
@@ -97,6 +97,11 @@ namespace Base.Components
         ///     Name of the component
         /// </summary>
         public string Name { get; }
+
+        /// <summary>
+        ///     Determins if the component will output to the dashboard
+        /// </summary>
+        public bool Debug { get; set; }
 
         /// <summary>
         ///     Defines the object issuing the commands
@@ -151,6 +156,9 @@ namespace Base.Components
         private void onValueChanged(VirtualControlEventArgs e)
         {
             ValueChanged?.Invoke(this, e);
+
+            if(Debug)
+                FrameworkCommunication.Instance.SendData($"{Name}", e.Value);
         }
 
         #endregion Private Methods

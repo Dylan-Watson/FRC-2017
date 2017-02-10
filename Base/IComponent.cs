@@ -52,6 +52,11 @@ namespace Base
         string Name { get; }
 
         /// <summary>
+        ///     Determins if the component should output to the dashboard
+        /// </summary>
+        bool Debug { get; }
+
+        /// <summary>
         ///     Returns the object that is currently using the component
         /// </summary>
         object Sender { get; }

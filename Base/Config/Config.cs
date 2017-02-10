@@ -139,13 +139,16 @@ namespace Base.Config
                         if (Convert.ToBoolean(getAttributeValue("autoExposure", "EnableSecondaryCameraServer")))
                             cam.SetExposureAuto();
                     }
-                    catch (Exception) { }
+                    catch (Exception)
+                    {
+                    }
 
                     cam.SetResolution(Convert.ToInt32(getAttributeValue("width", "EnableSecondaryCameraServer")),
                         Convert.ToInt32(getAttributeValue("height", "EnableSecondaryCameraServer")));
                     cam.SetFPS(Convert.ToInt32(getAttributeValue("fps", "EnableSecondaryCameraServer")));
 
-                    Report.General($@"Secondary camera server started, you can access the stream at http://10.34.81.2:1181");
+                    Report.General(
+                        $@"Secondary camera server started, you can access the stream at http://10.34.81.2:1181");
                 }
             }
             catch (Exception ex)
@@ -153,14 +156,14 @@ namespace Base.Config
                 Log.Write(ex);
                 Report.Error("There was an error initializing the secondary camera server");
 
-                if(VerboseOutput)
+                if (VerboseOutput)
                     Report.Error(ex.Message);
             }
 
             var hasVision = false;
             try
             {
-                foreach(var element in getElements("TargetSettings"))
+                foreach (var element in getElements("TargetSettings"))
                 {
                     try
                     {
@@ -181,11 +184,13 @@ namespace Base.Config
 
                         var color = System.Drawing.Color.FromArgb(red, green, blue);
 
-                        VisionMonitor.Instance.CreateTargetSetting(id, enabled, minRadius, maxRadius, lowerHue, lowerSaturation, lowerValue, upperHue, upperSaturation, upperValue, color, maxObjects);
+                        VisionMonitor.Instance.CreateTargetSetting(id, enabled, minRadius, maxRadius, lowerHue,
+                            lowerSaturation, lowerValue, upperHue, upperSaturation, upperValue, color, maxObjects);
 
                         Report.General($"Added Vision Target {element?.Name}.");
 
-                        Log.Str($"{element?.Name} -> ID: {id}, Enabled: {enabled}, Min Radius {minRadius}, Max Radius {maxRadius}, Lower Hue: {lowerHue}, Upper Hue: {upperHue}, Lower Saturation: {lowerSaturation}, Upper Saturation: {upperSaturation}, Lower Value: {lowerValue}, Upper Value: {upperValue}, Red: {red}, Green {green}, Blue: {blue}, Max Objects {maxObjects}.");
+                        Log.Str(
+                            $"{element?.Name} -> ID: {id}, Enabled: {enabled}, Min Radius {minRadius}, Max Radius {maxRadius}, Lower Hue: {lowerHue}, Upper Hue: {upperHue}, Lower Saturation: {lowerSaturation}, Upper Saturation: {upperSaturation}, Lower Value: {lowerValue}, Upper Value: {upperValue}, Red: {red}, Green {green}, Blue: {blue}, Max Objects {maxObjects}.");
                     }
                     catch (Exception ex)
                     {
@@ -234,11 +239,17 @@ namespace Base.Config
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
                             $"Added Encoder {element.Name}, aChannel = {Convert.ToInt32(element.Attribute("aChannel").Value)}, bChannel = {Convert.ToInt32(element.Attribute("bChannel").Value)}, isReversed = {isReversed}");
-                        ActiveCollection.AddComponent(
-                            new EncoderItem(element.Name.ToString(),
-                                Convert.ToInt32(element.Attribute("aChannel").Value),
-                                Convert.ToInt32(element.Attribute("bChannel").Value),
-                                isReversed));
+
+                        var encoder = new EncoderItem(element.Name.ToString(),
+                            Convert.ToInt32(element.Attribute("aChannel").Value),
+                            Convert.ToInt32(element.Attribute("bChannel").Value),
+                            isReversed);
+
+                        ActiveCollection.AddComponent(encoder);
+
+                        if (Convert.ToBoolean(element.Attribute("debug")?.Value))
+                            encoder.Debug = true;
+
                     }
                     catch (Exception ex)
                     {
@@ -277,9 +288,14 @@ namespace Base.Config
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
                             $"Added Digital Input {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
-                        ActiveCollection.AddComponent(
-                            new DigitalInputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString()));
+
+                        var di = new DigitalInputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString());
+
+                        ActiveCollection.AddComponent(di);
+
+                        if (Convert.ToBoolean(element.Attribute("debug")?.Value))
+                            di.Debug = true;
                     }
                     catch (Exception ex)
                     {
@@ -318,9 +334,13 @@ namespace Base.Config
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
                             $"Added Digital Output {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
-                        ActiveCollection.AddComponent(
-                            new DigitalOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString()));
+                        var doi = new DigitalOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString());
+
+                        ActiveCollection.AddComponent(doi);
+
+                        if (Convert.ToBoolean(element.Attribute("debug")?.Value))
+                            doi.Debug = true;
                     }
                     catch (Exception ex)
                     {
@@ -359,10 +379,13 @@ namespace Base.Config
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
                             $"Added Analog Input {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
-                        var tmp = new AnalogInputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                        var ai = new AnalogInputItem(Convert.ToInt32(element.Attribute("channel").Value),
                             element.Name.ToString());
 
-                        ActiveCollection.AddComponent(tmp);
+                        ActiveCollection.AddComponent(ai);
+
+                        if (Convert.ToBoolean(element.Attribute("debug")?.Value))
+                            ai.Debug = true;
                     }
                     catch (Exception ex)
                     {
@@ -401,9 +424,13 @@ namespace Base.Config
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
                             $"Added Analog Output {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
-                        ActiveCollection.AddComponent(
-                            new AnalogOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString()));
+                        var ao = new AnalogOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString());
+
+                        ActiveCollection.AddComponent(ao);
+
+                        if (Convert.ToBoolean(element.Attribute("debug")?.Value))
+                            ao.Debug = true;
                     }
                     catch (Exception ex)
                     {
@@ -466,13 +493,16 @@ namespace Base.Config
                             $"Added Victor{type} {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
                         if (!Convert.ToBoolean(element.Attribute("drive").Value))
                         {
-                                    var temp = new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
+                            var temp = new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
                                 element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value));
 
-                                    ActiveCollection.AddComponent(temp);
-                                    temp.SetUpperLimit(upperLimit);
-                                    temp.SetLowerLimit(lowerLimit);
-                                    temp.SetEncoder(motorEncoder);
+                            ActiveCollection.AddComponent(temp);
+                            temp.SetUpperLimit(upperLimit);
+                            temp.SetLowerLimit(lowerLimit);
+                            temp.SetEncoder(motorEncoder);
+
+                            if (Convert.ToBoolean(element.Attribute("debug")?.Value))
+                                temp.Debug = true;
                         }
                         else
                         {
@@ -489,6 +519,9 @@ namespace Base.Config
                                     temp.SetLowerLimit(lowerLimit);
                                     temp.SetEncoder(motorEncoder);
 
+                                    if (Convert.ToBoolean(element.Attribute("debug")?.Value))
+                                        temp.Debug = true;
+
                                     break;
 
                                 case "left":
@@ -501,6 +534,10 @@ namespace Base.Config
                                     temp.SetUpperLimit(upperLimit);
                                     temp.SetLowerLimit(lowerLimit);
                                     temp.SetEncoder(motorEncoder);
+
+                                    if (Convert.ToBoolean(element.Attribute("debug")?.Value))
+                                        temp.Debug = true;
+
                                     break;
                             }
                         }
@@ -550,11 +587,15 @@ namespace Base.Config
                         componentNames.Add(new CommonName(element.Name.ToString()));
                         Report.General(
                             $"Added Double Solenoid {element.Name}, forward channel {Convert.ToInt32(element.Attribute("forward").Value)}, reverse channel {Convert.ToInt32(element.Attribute("reverse").Value)}, default position = {d}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
-                        ActiveCollection.AddComponent(
-                            new DoubleSolenoidItem(element.Name.ToString(),
-                                Convert.ToInt32(element.Attribute("forward").Value),
-                                Convert.ToInt32(element.Attribute("reverse").Value), d,
-                                Convert.ToBoolean(element.Attribute("reversed").Value)));
+                        var ds = new DoubleSolenoidItem(element.Name.ToString(),
+                            Convert.ToInt32(element.Attribute("forward").Value),
+                            Convert.ToInt32(element.Attribute("reverse").Value), d,
+                            Convert.ToBoolean(element.Attribute("reversed").Value));
+
+                        ActiveCollection.AddComponent(ds);
+
+                        if (Convert.ToBoolean(element.Attribute("debug")?.Value))
+                            ds.Debug = true;
                     }
                     catch (Exception ex)
                     {
@@ -603,9 +644,12 @@ namespace Base.Config
 
                         Report.General(
                             $"Added Relay {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}, default position {d}");
-                        ActiveCollection.AddComponent(
-                            new RelayItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString(), d));
+                        var relay = new RelayItem(Convert.ToInt32(element.Attribute("channel").Value),
+                            element.Name.ToString(), d);
+                        ActiveCollection.AddComponent(relay);
+
+                        if (Convert.ToBoolean(element.Attribute("debug")?.Value))
+                            relay.Debug = true;
                     }
                     catch (Exception ex)
                     {
@@ -648,6 +692,9 @@ namespace Base.Config
                         var tmp = new PotentiometerItem(Convert.ToInt32(element.Attribute("channel").Value),
                             element.Name.ToString());
                         ActiveCollection.AddComponent(tmp);
+
+                        if (Convert.ToBoolean(element.Attribute("debug")?.Value))
+                            tmp.Debug = true;
                     }
                     catch (Exception ex)
                     {
@@ -907,10 +954,16 @@ namespace Base.Config
                     toBindCommonName(getAttribute("bindTo", "Controls", "Driver", "leftDrive")), leftAxis, leftDz,
                     multiplier, leftReversed);
 
+                if(Convert.ToBoolean(getAttributeValue("debug", "Controls", "Driver", "leftDrive")))
+                    left.Debug = true;
+
                 var right = new Schemas.DriverControlSchema("rightDrive", (MotorControlFitFunction) driveFit,
                     driveFitPower,
                     toBindCommonName(getAttribute("bindTo", "Controls", "Driver", "rightDrive")), rightAxis, rightDz,
                     multiplier, rightReversed);
+
+                if (Convert.ToBoolean(getAttributeValue("debug", "Controls", "Driver", "rightDrive")))
+                    right.Debug = true;
 
                 var temp = new List<Schemas.ControlSchema>();
                 foreach (var element in getElements("Controls", "DriverAux"))
@@ -949,10 +1002,17 @@ namespace Base.Config
                                 if (VerboseOutput)
                                     Report.Error(ex.Message);
                             }
-                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Axis,
+
+                            var control = new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Axis,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("axis").Value), deadZone,
-                                powerMultiplier, reversed));
+                                powerMultiplier, reversed);
+
+                            temp.Add(control);
+
+                            if (Convert.ToBoolean(element.Attribute("debug")?.Value))
+                                control.Debug = true;
+
                             break;
 
                         case Schemas.ControlType.Button:
@@ -967,24 +1027,41 @@ namespace Base.Config
                                 if (VerboseOutput)
                                     Report.Error(ex.Message);
                             }
-                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Button,
+                             control = new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Button,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("button").Value), actOnRelease, powerMultiplier,
-                                reversed));
+                                reversed);
+                                
+                                temp.Add(control);
+
+                            if (Convert.ToBoolean(element.Attribute("debug")?.Value))
+                                control.Debug = true;
                             break;
 
                         case Schemas.ControlType.DualButton:
-                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.DualButton,
+                            control = new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.DualButton,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("buttonA").Value),
                                 Convert.ToInt32(element.Attribute("buttonB").Value),
-                                powerMultiplier, reversed));
+                                powerMultiplier, reversed);
+
+                            temp.Add(control);
+
+                            if (Convert.ToBoolean(element.Attribute("debug")?.Value))
+                                control.Debug = true;
+
                             break;
 
                         case Schemas.ControlType.ToggleButton:
-                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.ToggleButton,
+                            control = new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.ToggleButton,
                                 toBindCommonName(element.Attribute("bindTo")),
-                                Convert.ToInt32(element.Attribute("button").Value), powerMultiplier, reversed));
+                                Convert.ToInt32(element.Attribute("button").Value), powerMultiplier, reversed);
+
+                            temp.Add(control);
+
+                            if (Convert.ToBoolean(element.Attribute("debug")?.Value))
+                                control.Debug = true;
+
                             break;
                     }
                 }
@@ -1046,10 +1123,15 @@ namespace Base.Config
                                 if (VerboseOutput)
                                     Report.Error(ex.Message);
                             }
-                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Axis,
+                            var control = new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Axis,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("axis").Value), deadZone,
-                                powerMultiplier, reversed));
+                                powerMultiplier, reversed);
+
+                            temp.Add(control);
+
+                            if (Convert.ToBoolean(element.Attribute("debug")?.Value))
+                                control.Debug = true;
                             break;
 
                         case Schemas.ControlType.Button:
@@ -1064,24 +1146,40 @@ namespace Base.Config
                                 if (VerboseOutput)
                                     Report.Error(ex.Message);
                             }
-                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Button,
+                            control = new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Button,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("button").Value), actOnRelease, powerMultiplier,
-                                reversed));
+                                reversed);
+
+                            temp.Add(control);
+
+                            if (Convert.ToBoolean(element.Attribute("debug")?.Value))
+                                control.Debug = true;
                             break;
 
                         case Schemas.ControlType.DualButton:
-                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.DualButton,
+                            control = new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.DualButton,
                                 toBindCommonName(element.Attribute("bindTo")),
                                 Convert.ToInt32(element.Attribute("buttonA").Value),
                                 Convert.ToInt32(element.Attribute("buttonB").Value),
-                                powerMultiplier, reversed));
+                                powerMultiplier, reversed);
+
+                            temp.Add(control);
+
+                            if (Convert.ToBoolean(element.Attribute("debug")?.Value))
+                                control.Debug = true;
                             break;
 
                         case Schemas.ControlType.ToggleButton:
-                            temp.Add(new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.ToggleButton,
+                            control = new Schemas.ControlSchema(element.Name.ToString(),
+                                Schemas.ControlType.ToggleButton,
                                 toBindCommonName(element.Attribute("bindTo")),
-                                Convert.ToInt32(element.Attribute("button").Value), powerMultiplier, reversed));
+                                Convert.ToInt32(element.Attribute("button").Value), powerMultiplier, reversed);
+
+                            temp.Add(control);
+
+                            if (Convert.ToBoolean(element.Attribute("debug")?.Value))
+                                control.Debug = true;
                             break;
 
                         default:

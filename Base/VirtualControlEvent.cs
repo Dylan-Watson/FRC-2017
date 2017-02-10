@@ -78,16 +78,16 @@ namespace Base
 
                     var actor = component;
 
-                    if (EventType == VirtualControlEventType.Value &&
-                        SetMethod == VirtualControlEventSetMethod.Passthrough)
+                    if ((EventType == VirtualControlEventType.Value) &&
+                        (SetMethod == VirtualControlEventSetMethod.Passthrough))
                     {
                         (actor as Motor)?.Set(param.Value, this);
                         (actor as OutputComponent)?.Set(Math.Abs(param.Value), this);
                         (actor as DoubleSolenoidItem)?.Set(Math.Abs(param.Value), this);
                         (actor as RelayItem)?.Set((Relay.Value) Math.Abs(param.Value), this);
                     }
-                    else if (EventType == VirtualControlEventType.Value &&
-                             SetMethod == VirtualControlEventSetMethod.Adjusted)
+                    else if ((EventType == VirtualControlEventType.Value) &&
+                             (SetMethod == VirtualControlEventSetMethod.Adjusted))
                     {
                         if (sender is AnalogInputItem || sender is PotentiometerItem)
                         {
@@ -117,8 +117,8 @@ namespace Base
                             (actor as RelayItem)?.Set((Relay.Value) Math.Abs(param.Value), this);
                         }
                     }
-                    else if (EventType == VirtualControlEventType.Usage &&
-                             SetMethod == VirtualControlEventSetMethod.Passthrough)
+                    else if ((EventType == VirtualControlEventType.Usage) &&
+                             (SetMethod == VirtualControlEventSetMethod.Passthrough))
                     {
                         (actor as Motor)?.Set(Convert.ToDouble(param.InUse), this);
                         (actor as OutputComponent)?.Set(param.InUse, this);

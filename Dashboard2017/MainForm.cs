@@ -302,17 +302,22 @@ namespace Dashboard2017
                             .Select(control => control)
                             .ToList();
 
-                    if (key.Split('_')[0] == "AUTON" || key.Split('_')[0] == "TELEOP")
+                    if ((key.Split('_')[0] == "AUTON") || (key.Split('_')[0] == "TELEOP"))
                         if (controls.All(c => c.Name != key))
                         {
                             var tmp = new DebugControl(key);
                             parent.debugControlLayoutPanel.Controls.Add(tmp);
-                            tmp.UpdateLabel($"{key.Substring(6)}: {source.GetValue(key)}");
+
+                            tmp.UpdateLabel($"{key.Substring(7)}: {source.GetValue(key)}");
                         }
                         else
                         {
                             var control = controls.FirstOrDefault(c => c.Name == key);
-                            control?.UpdateLabel($"{key.Substring(6)}: {source.GetValue(key)}");
+
+                            if (source.GetValue(key).Type == NtType.Double)
+                                control?.UpdateLabel($"{key.Substring(7)}: {source.GetNumber(key)}");
+                            else
+                                control?.UpdateLabel($"{key.Substring(7)}: {source.GetValue(key).GetObjectValue()}");
                         }
                 }));
             }

@@ -63,7 +63,7 @@ namespace WpfApplication1
 
         private void saveSettings()
         {
-            if (IPTextBox1.Text == "" || IPTextBox2.Text == "" || IPTextBox3.Text == "" || IPTextBox4.Text == "" || UsernameTextBox.Text == "")
+            if ((IPTextBox1.Text == "") || (IPTextBox2.Text == "") || (IPTextBox3.Text == "") || (IPTextBox4.Text == "") || (UsernameTextBox.Text == ""))
             {
                 MessageBoxResult result = MessageBox.Show("You have unsaved changes. Do you want to save?", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.OK)

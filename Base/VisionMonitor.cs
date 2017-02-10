@@ -77,7 +77,7 @@ namespace Base
                 for (var i = 0; i < _targets.Count; i++)
                 {
                     var o = _targets[i];
-                    if (o != null && o.Target.ID == target.ID)
+                    if ((o != null) && (o.Target.ID == target.ID))
                         _targets.RemoveAt(i);
                 }
                 var tmp = new CommunicationFrames.TargetContainer {Target = new CommunicationFrames.Target(target)};
@@ -91,7 +91,7 @@ namespace Base
                 _currentTarget = _frameFromByteArray(source.GetRaw(key));
                 _updateTarget(_currentTarget);
 
-                if (_currentTarget.ID != 0 || _currentTarget.HasTarget == lastDashboardUpdate) return;
+                if ((_currentTarget.ID != 0) || (_currentTarget.HasTarget == lastDashboardUpdate)) return;
                 FrameworkCommunication.Instance.GetDashboardComm().PutBoolean("TARGET", _currentTarget.HasTarget);
                 lastDashboardUpdate = _currentTarget.HasTarget;
             }
@@ -187,7 +187,7 @@ namespace Base
         public CommunicationFrames.TargetContainer GetLatestTargetData(int id)
         {
             foreach (var target in _targets)
-                if (target != null && target.Target.ID == id)
+                if ((target != null) && (target.Target.ID == id))
                     return target;
             return null;
         }

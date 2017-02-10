@@ -91,7 +91,23 @@ namespace Base
         ///     Sends data to the dashboard
         /// </summary>
         /// <param name="key">network table key</param>
-        /// <param name="value">object value to send</param>
+        /// <param name="value">double value to send</param>
+        /// <param name="announcePeriod">should the key be prefixed with the current robot state? (auton/teleop)</param>
+        public void SendData(string key, double value, bool announcePeriod = true)
+        {
+            if (LoopCheck._IsTeleoporated() && announcePeriod)
+                dashboardComm.PutNumber($"TELEOP_{key}", value);
+            else if (LoopCheck._IsAutonomous() && announcePeriod)
+                dashboardComm.PutNumber($"AUTON_{key}", value);
+            else
+                dashboardComm.PutNumber($"{key}", value);
+        }
+
+        /// <summary>
+        ///     Sends data to the dashboard
+        /// </summary>
+        /// <param name="key">network table key</param>
+        /// <param name="value">double value to send</param>
         /// <param name="announcePeriod">should the key be prefixed with the current robot state? (auton/teleop)</param>
         public void SendData(string key, object value, bool announcePeriod = true)
         {

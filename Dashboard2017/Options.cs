@@ -63,8 +63,8 @@ namespace Dashboard2017
 
         private void setTeamNumber_Click(object sender, EventArgs e)
         {
-            if (Regex.IsMatch(teamNumber.Text, "[0-9]") && teamNumber.Text.Length < 5 &&
-                teamNumber.Text.Length >= 2)
+            if (Regex.IsMatch(teamNumber.Text, "[0-9]") && (teamNumber.Text.Length < 5) &&
+                (teamNumber.Text.Length >= 2))
             {
                 switch (teamNumber.Text.Length)
                 {

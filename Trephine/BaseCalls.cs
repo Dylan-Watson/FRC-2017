@@ -73,7 +73,7 @@ namespace Trephine
             var rightPow = config.ActiveCollection.GetRightDriveMotors.Select(s => ((Motor)s).Get()).ToList()[0];
             var leftPow = config.ActiveCollection.GetLeftDriveMotors.Select(s => ((Motor)s).Get()).ToList()[0];
 
-            while(Math.Abs(rightPow) > .05 && Math.Abs(leftPow) > .05)
+            while((Math.Abs(rightPow) > .05) && (Math.Abs(leftPow) > .05))
             {
                 rightPow /= 1.02;
                 leftPow /= 1.02;

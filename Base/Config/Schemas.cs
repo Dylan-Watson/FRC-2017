@@ -361,6 +361,11 @@ namespace Base.Config
             public string Name { get; protected set; }
 
             /// <summary>
+            ///     Determins if the control should output debug data to dashboard
+            /// </summary>
+            public bool Debug { get; set; }
+
+            /// <summary>
             ///     Output multiplier for control
             /// </summary>
             public double PowerMultiplier { get; protected set; }

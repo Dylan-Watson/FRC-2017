@@ -62,7 +62,7 @@
 
             if (pre > 1)
                 return 1;
-            else if (current < variance && current > -variance)
+            else if ((current < variance) && (current > -variance))
                 return 0;
             return pre;
         }
