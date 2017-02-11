@@ -3,7 +3,6 @@ using System.Windows;
 using Microsoft.Win32;
 using System.Xml;
 using System.Text;
-using System.IO;
 using System.Windows.Documents;
 
 namespace WpfApplication1
@@ -59,13 +58,13 @@ namespace WpfApplication1
 
         private void OpenButton_Click(object sender, RoutedEventArgs e)
         {
-            try {
+     /*       try {
                 beenSaved = true;
                 recentSaved = true;
             }
 
             catch (Exception ex) {
-            }
+            }*/
         }
 
         #endregion
@@ -73,12 +72,7 @@ namespace WpfApplication1
         #region Methods
 
         public void saveFile() {
-            if (beenSaved) {
-                XmlTextWriter writer = new XmlTextWriter(filePath, Encoding.UTF8);
-                writer.Formatting = Formatting.Indented;
-            }
-            else
-            {
+            if (!beenSaved) {
                 SaveFileDialog dlg = new SaveFileDialog();
                 dlg.FileName = "robot_config"; // Default file name
                 dlg.DefaultExt = ".xml"; // Default file extension
@@ -88,20 +82,35 @@ namespace WpfApplication1
                 bool? result = dlg.ShowDialog();
 
                 // Process save file dialog box results
-                if (result == true)
-                {
-                    // Save document
-                    filePath = dlg.FileName;
-                    XmlDocument doc = new XmlDocument();
-                    doc.LoadXml(new TextRange(MainEditor.Document.ContentStart, MainEditor.Document.ContentEnd).Text);
-                    //format here
-                    XmlTextWriter writer = new XmlTextWriter(filePath, Encoding.UTF8) { Formatting = Formatting.Indented };
-                    doc.WriteTo(writer);
+                if (result != true)
+                    return;
+                filePath = dlg.FileName;
+            }
+            try
+            {
+                // Save document
+                XmlDocument doc = new XmlDocument();
+                string content = $@"<?xml version=""1.0"" encoding=""UTF-8""?>{new TextRange(MainEditor.Document.ContentStart, MainEditor.Document.ContentEnd).Text}";
+                doc.LoadXml(content);
+                //validate here
+                XmlTextWriter writer = new XmlTextWriter(filePath, Encoding.UTF8) { Formatting = Formatting.Indented };
+                doc.WriteTo(writer);
 
-                    writer.Close();
-                }
+                writer.Close();
                 beenSaved = true;
             }
+            catch (Exception ex)
+            {
+                MessageBoxResult result = MessageBox.Show($"XML is not Valid.\nThe file will not save!\ndo you want to see the error?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Error);
+                if (result == MessageBoxResult.Yes)
+                    MessageBox.Show($"ERROR:\n{ex.Message}", "Error", MessageBoxButton.OK);
+            }
+        }
+
+        public bool w3SpecCheck()
+        {
+
+            return true;
         }
 
         private bool checkClose()
@@ -114,7 +123,7 @@ namespace WpfApplication1
                     return true;
                 else
                 {
-                    saveFile();
+                //    saveFile();
                     return true;
                 }
 
