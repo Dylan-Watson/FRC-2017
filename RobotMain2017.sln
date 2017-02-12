@@ -20,8 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dashboard2017", "Dashboard2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configs", "Configs", "{897330E3-0E42-41F6-AB49-15B6630546D9}"
 	ProjectSection(SolutionItems) = preProject
+		config.xml = config.xml
 		eltoro.xml = eltoro.xml
-		robot_test_kit.xml = robot_test_kit.xml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigEditor", "WpfApplication1\ConfigEditor.csproj", "{F00B7441-07BE-469A-BC42-D212E646DE5B}"

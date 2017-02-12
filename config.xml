@@ -3,10 +3,10 @@
 <Robot>
 
   <Version version="2.0" />
-  <Comment comment="Configured for the test kit" />
+  <Comment comment="Configured for the practice bot" />
 
   <!-- If true, will dump full exception methods to the console and driverstation. -->
-  <VerboseOutput value="true" />
+  <VerboseOutput value="false" />
 
   <!-- Absolutely do not change QuickLoad to true, only Ryan should do this. -->
   <QuickLoad value="false" />
@@ -16,7 +16,7 @@
   <!-- Sets whether or not to initialize the NavX -->
   <UseNavX value="true" port="default" />
   
-  <EnableSecondaryCameraServer value="true" width="1280" height="720" fps="30" autoExposure="false"/>
+  <EnableSecondaryCameraServer value="false" width="1280" height="720" fps="30" autoExposure="false"/>
   
   <!-- Sets the Vision Targets and Vision Settings -->
   <TargetSettings>
@@ -38,7 +38,9 @@
       <!-- Examples -->
       <!--<xxxxxxxx type="SP" channel="x ID from roboRio" reversed="x" drive="false" optional encoder="xxxxxx" upperLimit="Name of DI" optional lowerLimit="Name of DI" />-->
       <left_0 type="SP" channel="0" reversed="true" drive="true" side="left" debug="true"/>
-      <right_0 type="SP" channel="1" reversed="true" drive="true" side="left" debug="true"/>
+      <right_0 type="SP" channel="2" reversed="false" drive="true" side="right" debug="true"/>
+      <left_1 type="SP" channel="1" reversed="true" drive="true" side="left" debug="true"/>
+      <right_1 type="SP" channel="3" reversed="false" drive="true" side="right" debug="true"/>
     </Victors>
 
     <!-- Encoder locations -->
@@ -103,8 +105,8 @@
       <drive driveFit="0" power="3" />
       <powerMultiplier powerMultiplier="1" />
 
-      <leftDrive axis="1" reversed="true" deadZone=".02" debug ="true" bindTo="left_0" />
-      <rightDrive axis="5" reversed="false" deadZone=".02" debug="true" bindTo="right_0" />
+      <leftDrive axis="1" reversed="true" deadZone=".02" debug ="true" bindTo="left_0, left_1" />
+      <rightDrive axis="5" reversed="true" deadZone=".02" debug="true" bindTo="right_0, right_1" />
     </Driver>
 
     <DriverAux>
