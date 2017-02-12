@@ -308,16 +308,25 @@ namespace Dashboard2017
                             var tmp = new DebugControl(key);
                             parent.debugControlLayoutPanel.Controls.Add(tmp);
 
-                            tmp.UpdateLabel($"{key.Substring(7)}: {source.GetValue(key)}");
+                            if (source.GetValue(key).Type == NtType.Double)
+                            {
+                                var val = string.Format("{0:#,0.00000}", source.GetNumber(key));
+                                tmp.UpdateLabel($"{key.Substring(7)}: {val}");
+                            }
+                            else
+                                tmp.UpdateLabel($"{key.Substring(7)}: {source.GetValue(key)}");
                         }
                         else
                         {
                             var control = controls.FirstOrDefault(c => c.Name == key);
 
                             if (source.GetValue(key).Type == NtType.Double)
-                                control?.UpdateLabel($"{key.Substring(7)}: {source.GetNumber(key)}");
+                            {
+                                var val = string.Format("{0:#,0.00000}", source.GetNumber(key));
+                                control?.UpdateLabel($"{key.Substring(7)}: {val}");
+                            }
                             else
-                                control?.UpdateLabel($"{key.Substring(7)}: {source.GetValue(key).GetObjectValue()}");
+                                control?.UpdateLabel($"{key.Substring(7)}: {source.GetValue(key)}");
                         }
                 }));
             }
