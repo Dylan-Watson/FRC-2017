@@ -1,0 +1,1 @@
+ftp -i -s:u.ftp

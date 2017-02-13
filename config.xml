@@ -2,11 +2,11 @@
 
 <Robot>
 
-  <Version version="2.0" />
-  <Comment comment="Configured for the practice bot" />
+  <Version version="1.1" />
+  <Comment comment="Configured for 2017" />
 
   <!-- If true, will dump full exception methods to the console and driverstation. -->
-  <VerboseOutput value="false" />
+  <VerboseOutput value="true" />
 
   <!-- Absolutely do not change QuickLoad to true, only Ryan should do this. -->
   <QuickLoad value="false" />
@@ -59,7 +59,8 @@
     <!--  so DO NOT have matching channel numbers, that allocated drifferent resources in the same spot.-->
     <DI>
       <!--<xxxxxx channel="x" />-->
-
+      <ntRelayReady channel="8" />
+      <ntRelayConnection channel="9" />
     </DI>
 
     <DO>

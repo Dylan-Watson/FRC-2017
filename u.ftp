@@ -1,0 +1,5 @@
+open 10.34.81.2
+anonymous
+put config.xml
+disconnect
+quit
