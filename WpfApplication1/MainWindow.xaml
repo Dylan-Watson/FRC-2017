@@ -4,9 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApplication1"
+        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
         mc:Ignorable="d"
-        Title="Config Editor" Height="550" Width="725">
-    <Grid>
+        Title="Config Editor" Height="550" Width="725"
+        PreviewKeyDown="Window_KeyDown" >
+        <Grid>
         
         <!--#region Wrapper -->
         <DockPanel Height="auto">
@@ -57,14 +59,9 @@
                 <!--#endregion-->
                 
                 <!--#region Text Editor Box -->
-                <RichTextBox x:Name="MainEditor" DockPanel.Dock="Bottom" Grid.Row="1" FontSize="14" 
-                             CaretBrush="White" Block.LineHeight="2" AcceptsTab="True">
-                    <FlowDocument Background="#FF1E1E1E" Foreground="#33A5FF">
-                        <Paragraph>
-                            <Run Text="RichTextBox"/>
-                        </Paragraph>
-                    </FlowDocument>
-                </RichTextBox>
+                    <avalonEdit:TextEditor x:Name="MainEditor" DockPanel.Dock="Bottom" Grid.Row="1" FontSize="14" 
+                                Block.LineHeight="2" SyntaxHighlighting="XML" Background="#FF1E1E1E" Foreground="#33A5FF"
+                                TextChanged="MainEditor_TextChanged"  LineNumbersForeground="#33A5FF" ShowLineNumbers="True" WordWrap="True"/>
                 <!--#endregion-->
                 
             </Grid>

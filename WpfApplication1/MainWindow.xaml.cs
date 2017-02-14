@@ -2,8 +2,13 @@
 using System.Windows;
 using Microsoft.Win32;
 using System.Xml;
+using System.Xml.Schema;
 using System.Text;
-using System.Windows.Documents;
+using System.Windows.Input;
+using System.IO;
+using ICSharpCode.AvalonEdit.Utils;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using ICSharpCode.AvalonEdit.Highlighting;
 
 namespace WpfApplication1
 {
@@ -12,17 +17,36 @@ namespace WpfApplication1
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Instance Vars
+
         private bool beenSaved { get; set; } = false;
 
         private bool recentSaved { get; set; } = false;
 
         private string filePath { get; set; } = null;
 
+        private string validationMessage { get; set; }
+
+        #endregion
+
+        #region Public Constructors
+
         public MainWindow()
         {
             InitializeComponent();
             Closing += MainWindow_Closing;
+            using (StreamReader s = new StreamReader(@"XML.xshd"))
+            {
+                using (XmlTextReader reader = new XmlTextReader(s))
+                {
+                    MainEditor.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+                }
+            }
         }
+
+        #endregion
+
+        #region Event Handlers
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -31,8 +55,6 @@ namespace WpfApplication1
             else
                 Environment.Exit(0);
         }
-
-        #region Event Handlers
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -43,7 +65,11 @@ namespace WpfApplication1
 
         private void BuildButton_Click(object sender, RoutedEventArgs e)
         {
-
+            bool valid = buildFile();
+            if (valid)
+                MessageBox.Show("You're all set!", "Valid", MessageBoxButton.OK, MessageBoxImage.Information);
+            else if (!valid)
+                MessageBox.Show($"Build Failed!\nERROR:\n{validationMessage}", "Not Valid", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
@@ -58,64 +84,119 @@ namespace WpfApplication1
 
         private void OpenButton_Click(object sender, RoutedEventArgs e)
         {
-     /*       try {
-                beenSaved = true;
-                recentSaved = true;
-            }
+            openFile();
+        }
 
-            catch (Exception ex) {
-            }*/
+        private void MainEditor_TextChanged(object sender, EventArgs e)
+        {
+            recentSaved = false;
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.S && Keyboard.IsKeyDown(Key.LeftCtrl))
+            {
+                saveFile();
+            }
+            else if (e.Key == Key.O && Keyboard.IsKeyDown(Key.LeftCtrl))
+            {
+                openFile();
+            }
+        }
+
+        private void ValidationEventHandler(object sender, ValidationEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
 
         #region Methods
 
-        public void saveFile() {
-            if (!beenSaved) {
+        private void openFile()
+        {
+            try
+            {
+                OpenFileDialog openDLG = new OpenFileDialog();
+                openDLG.DefaultExt = ".xml";
+                openDLG.Filter = "XML Files (.xml)|*.xml";
+                bool? result = openDLG.ShowDialog();
+                if (result == true)
+                {
+                    filePath = openDLG.FileName;
+                    /*string[] lines = File.ReadAllLines(filePath);
+                    MainEditor.Text = lines;
+                    */
+                    checkClose();
+                    StreamReader str = FileReader.OpenFile(filePath, Encoding.UTF8);
+                    MainEditor.Text = str.ReadToEnd();
+                    beenSaved = true;
+                    recentSaved = true;
+                    Title = $"{filePath}";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Could not open the file.\nERROR: {ex.Message}", "Error", MessageBoxButton.OK);
+            }
+
+        }
+
+        private bool saveFile()
+        {
+            if (!beenSaved)
+            {
                 SaveFileDialog dlg = new SaveFileDialog();
                 dlg.FileName = "robot_config"; // Default file name
                 dlg.DefaultExt = ".xml"; // Default file extension
                 dlg.Filter = "XML Files (.xml)|*.xml"; // Filter files by extension
-
                 // Show save file dialog box
                 bool? result = dlg.ShowDialog();
 
                 // Process save file dialog box results
                 if (result != true)
-                    return;
+                    return false;
                 filePath = dlg.FileName;
             }
             try
             {
-                // Save document
                 XmlDocument doc = new XmlDocument();
-                string content = $@"<?xml version=""1.0"" encoding=""UTF-8""?>{new TextRange(MainEditor.Document.ContentStart, MainEditor.Document.ContentEnd).Text}";
+                string content = MainEditor.Text;
                 doc.LoadXml(content);
-                //validate here
+                if (doc.FirstChild.NodeType != XmlNodeType.XmlDeclaration)
+                {
+                    XmlElement root = doc.DocumentElement;
+                    doc.InsertBefore(doc.CreateXmlDeclaration("1.0", "UTF-8", null), root);
+                }
                 XmlTextWriter writer = new XmlTextWriter(filePath, Encoding.UTF8) { Formatting = Formatting.Indented };
                 doc.WriteTo(writer);
 
                 writer.Close();
+
+                StringWriter stringWriter = new StringWriter();
+                XmlWriter xmlTextWriter = XmlWriter.Create(stringWriter);
+                doc.WriteTo(xmlTextWriter);
+                xmlTextWriter.Flush();
+                MainEditor.Text = stringWriter.GetStringBuilder().ToString();
+                
+                recentSaved = true;
                 beenSaved = true;
+                Title = $"{filePath}";
+                return true;
             }
             catch (Exception ex)
             {
                 MessageBoxResult result = MessageBox.Show($"XML is not Valid.\nThe file will not save!\ndo you want to see the error?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Error);
                 if (result == MessageBoxResult.Yes)
                     MessageBox.Show($"ERROR:\n{ex.Message}", "Error", MessageBoxButton.OK);
+                return false;
             }
-        }
-
-        public bool w3SpecCheck()
-        {
-
-            return true;
         }
 
         private bool checkClose()
         {
-            if(!recentSaved || !beenSaved){
+            if ((!recentSaved || !beenSaved) && MainEditor.Text != "")
+            {
                 MessageBoxResult result = MessageBox.Show("You have unsaved changes. Do you want to save?", "Confirmation", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.Cancel)
                     return false;
@@ -123,7 +204,7 @@ namespace WpfApplication1
                     return true;
                 else
                 {
-                //    saveFile();
+                    saveFile();
                     return true;
                 }
 
@@ -132,7 +213,52 @@ namespace WpfApplication1
                 return true;
         }
 
-        #endregion
+        private bool buildFile()
+        {
+            XmlDocument doc = new XmlDocument();
+            string content = MainEditor.Text;
+            try
+            {
+                doc.LoadXml(content);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Build failed on account of invalid XML by W3 Spec\nERROR: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            if (saveFile())
+            {
+                XmlElement root = doc.DocumentElement;
+                if (doc.FirstChild.NodeType != XmlNodeType.XmlDeclaration)
+                {
+                    XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+                    doc.InsertBefore(dec, root);
+                }
+                doc.InsertBefore(doc.CreateDocumentType("Robot", null, "DTD.dtd", null),
+                        doc.DocumentElement);
+                bool isXmlValid = true;
+                StringBuilder xmlValMsg = new StringBuilder();
 
+                XmlReaderSettings settings = new XmlReaderSettings();
+                settings.DtdProcessing = DtdProcessing.Parse;
+                settings.ValidationType = ValidationType.DTD;
+                settings.ValidationFlags = XmlSchemaValidationFlags.ReportValidationWarnings;
+                settings.ValidationEventHandler += new ValidationEventHandler(delegate (object sender, ValidationEventArgs args)
+                {
+                    isXmlValid = false;
+                    xmlValMsg.AppendLine(args.Message);
+                });
+
+                XmlReader validator = XmlReader.Create(filePath, settings);
+                while (validator.Read()) { }
+                validator.Close();
+
+                validationMessage = xmlValMsg.ToString();
+                return isXmlValid;
+            }
+            return false;
+        }
+
+        #endregion
     }
 }
