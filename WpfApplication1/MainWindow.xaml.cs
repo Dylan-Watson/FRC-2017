@@ -17,7 +17,6 @@ namespace WpfApplication1
     /// </summary>
     public partial class MainWindow : Window
     {
-        //test
         #region Instance Vars
 
         private bool beenSaved { get; set; } = false;
@@ -171,7 +170,10 @@ namespace WpfApplication1
                 XmlWriter xmlTextWriter = XmlWriter.Create(stringWriter);
                 doc.WriteTo(xmlTextWriter);
                 xmlTextWriter.Flush();
-                MainEditor.Text = stringWriter.GetStringBuilder().ToString();
+
+                StreamReader str = FileReader.OpenFile(filePath, Encoding.UTF8);
+                MainEditor.Text = str.ReadToEnd();
+                str.Close();
 
                 recentSaved = true;
                 beenSaved = true;
