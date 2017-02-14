@@ -104,11 +104,6 @@ namespace WpfApplication1
             }
         }
 
-        private void ValidationEventHandler(object sender, ValidationEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         #endregion
 
         #region Methods
