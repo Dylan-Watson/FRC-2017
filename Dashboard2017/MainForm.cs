@@ -15,7 +15,6 @@ using NetworkTables;
 using NetworkTables.Tables;
 using System;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
@@ -27,7 +26,11 @@ namespace Dashboard2017
     /// </summary>
     public partial class MainForm : Form
     {
-        MjpegDecoder m;
+        #region Private Fields
+
+        private MjpegDecoder m;
+
+        #endregion Private Fields
 
         #region Public Constructors
 
@@ -55,46 +58,6 @@ namespace Dashboard2017
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             toggleFeed.BackColor = Color.Red;
             pictureBox1.ImageLocation = @"default.jpg";
-        }
-
-        private void toggleFeedToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            toggleFeed.BackColor = Color.Green;
-            m = new MjpegDecoder();
-            m.FrameReady += M_FrameReady;
-            m.ParseStream(new Uri(@"http://10.34.81.2:1181/stream.mjpg"));
-            toggleFeed.Click -= toggleFeedToolStripMenuItem1_Click;
-            toggleFeed.Click += ToggleFeed_Click;
-        }
-
-        private void ToggleFeed_Click(object sender, EventArgs e)
-        {
-            m.StopStream();
-            m.FrameReady -= M_FrameReady;
-            toggleFeed.BackColor = Color.Red;
-            pictureBox1.ImageLocation = @"default.jpg";
-            toggleFeed.Click += toggleFeedToolStripMenuItem1_Click;
-            toggleFeed.Click -= ToggleFeed_Click;
-        }
-
-        private void M_FrameReady(object sender, FrameReadyEventArgs e)
-        {
-            pictureBox1.Image = e.Bitmap;
-        }
-
-        private void AutonCombo_LostFocus(object sender, EventArgs e)
-        {
-            autonCombo.SelectedIndexChanged -= AutonCombo_SelectedIndexChanged;
-        }
-
-        private void AutonCombo_GotFocus(object sender, EventArgs e)
-        {
-            autonCombo.SelectedIndexChanged += AutonCombo_SelectedIndexChanged;
-        }
-
-        private void AutonCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            TableManager.Instance.Table.PutValue(@"AUTON_SELECT", Value.MakeString(autonCombo.SelectedItem.ToString()));
         }
 
         #endregion Public Constructors
@@ -128,6 +91,23 @@ namespace Dashboard2017
         }
 
         /// <summary>
+        /// </summary>
+        /// <param name="connected"></param>
+        public void SetNtRelayStatusLight(bool connected)
+        {
+            ntRelayStatusLight.Invoke(
+                new Action(() => { ntRelayStatusLight.BackColor = connected ? Color.Green : Color.Red; }));
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="connected"></param>
+        public void SetRioStatusLight(bool connected)
+        {
+            rioStatusLight.Invoke(new Action(() => { rioStatusLight.BackColor = connected ? Color.Green : Color.Red; }));
+        }
+
+        /// <summary>
         ///     Updates targetingLabel
         /// </summary>
         public void TargetAquired()
@@ -138,6 +118,25 @@ namespace Dashboard2017
                 targetingLabel.BackColor = Color.LawnGreen;
                 targetingLabel.Text = "TARGET \nAQUIRED";
             }));
+        }
+
+        #endregion Public Methods
+
+        #region Private Methods
+
+        private void AutonCombo_GotFocus(object sender, EventArgs e)
+        {
+            autonCombo.SelectedIndexChanged += AutonCombo_SelectedIndexChanged;
+        }
+
+        private void AutonCombo_LostFocus(object sender, EventArgs e)
+        {
+            autonCombo.SelectedIndexChanged -= AutonCombo_SelectedIndexChanged;
+        }
+
+        private void AutonCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TableManager.Instance.Table.PutValue(@"AUTON_SELECT", Value.MakeString(autonCombo.SelectedItem.ToString()));
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) => Application.Exit();
@@ -156,6 +155,11 @@ namespace Dashboard2017
             ConsoleManager.Instance.SetConsoleManager(consoleTextBox);
             setupNetworkTables();
             ConsoleManager.Instance.AppendInfo("Dashboard ready.", Color.Green);
+        }
+
+        private void M_FrameReady(object sender, FrameReadyEventArgs e)
+        {
+            pictureBox1.Image = e.Bitmap;
         }
 
         private void networkTablesInit(string address)
@@ -180,41 +184,52 @@ namespace Dashboard2017
             if (IPAddress.TryParse(Settings.Default.rioAddress, out ipAddress))
                 networkTablesInit(Settings.Default.rioAddress);
             else
+            {
                 ConsoleManager.Instance.AppendError(
                     "No NetworkTables address set, go to 'Options' to set roboRIO address.");
+            }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="connected"></param>
-        public void SetRioStatusLight(bool connected)
+        private void ToggleFeed_Click(object sender, EventArgs e)
         {
-            rioStatusLight.Invoke(new Action(() => { rioStatusLight.BackColor = connected ? Color.Green : Color.Red; }));
+            m.StopStream();
+            m.FrameReady -= M_FrameReady;
+            toggleFeed.BackColor = Color.Red;
+            pictureBox1.ImageLocation = @"default.jpg";
+            toggleFeed.Click += toggleFeedToolStripMenuItem1_Click;
+            toggleFeed.Click -= ToggleFeed_Click;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="connected"></param>
-        public void SetNtRelayStatusLight(bool connected)
+        private void toggleFeedToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            ntRelayStatusLight.Invoke(
-                new Action(() => { ntRelayStatusLight.BackColor = connected ? Color.Green : Color.Red; }));
+            toggleFeed.BackColor = Color.Green;
+            m = new MjpegDecoder();
+            m.FrameReady += M_FrameReady;
+            m.ParseStream(new Uri(@"http://10.34.81.2:1181/stream.mjpg"));
+            toggleFeed.Click -= toggleFeedToolStripMenuItem1_Click;
+            toggleFeed.Click += ToggleFeed_Click;
         }
 
-        #endregion Public Methods
+        #endregion Private Methods
 
         #region Private Classes
 
         private class NetworkTableLister : IRemoteConnectionListener
         {
+            #region Private Fields
+
             private readonly MainForm parent;
+
+            #endregion Private Fields
+
+            #region Public Constructors
 
             public NetworkTableLister(MainForm parent)
             {
                 this.parent = parent;
             }
+
+            #endregion Public Constructors
 
             #region Public Methods
 
@@ -283,9 +298,7 @@ namespace Dashboard2017
                         parent.NoTarget();
                 }
                 else if (key == @"NTRELAY_CONNECTION")
-                {
                     parent.SetNtRelayStatusLight(source.GetBoolean(@"NTRELAY_CONNECTION"));
-                }
                 else if (key == @"AUTON_LIST")
                 {
                     parent.autonCombo.Invoke(
@@ -302,7 +315,8 @@ namespace Dashboard2017
                             .Select(control => control)
                             .ToList();
 
-                    if ((key.Split('_')[0] == "AUTON") || (key.Split('_')[0] == "TELEOP"))
+                    if (key.Split('_')[0] == "AUTON" || key.Split('_')[0] == "TELEOP")
+                    {
                         if (controls.All(c => c.Name != key))
                         {
                             var tmp = new DebugControl(key);
@@ -328,6 +342,7 @@ namespace Dashboard2017
                             else
                                 control?.UpdateLabel($"{key.Substring(7)}: {source.GetValue(key)}");
                         }
+                    }
                 }));
             }
 

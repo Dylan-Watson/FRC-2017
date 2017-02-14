@@ -5,11 +5,7 @@ namespace Trephine.Autonomi
 {
     internal class Align : Autonomous
     {
-        const double GAMMA = .011;
-        const double ALPHA = .20;
-
-        const double GAMMA2 = .075;
-        const double ALPHA2 = .20;
+        #region Protected Methods
 
         protected override void main()
         {
@@ -28,15 +24,14 @@ namespace Trephine.Autonomi
                 baseCalls.SetLeftDrive(-getSpeed(offset, GAMMA, ALPHA));
                 baseCalls.SetRightDrive(-getSpeed(offset, GAMMA, ALPHA));
             }
-
             else if (offset < -20)
             {
                 baseCalls.SetLeftDrive(-getSpeed(offset, GAMMA, ALPHA));
                 baseCalls.SetRightDrive(-getSpeed(offset, GAMMA, ALPHA));
             }
-            else if ((offset < 20) && (offset > -20))
+            else if (offset < 20 && offset > -20)
             {
-                /*get the diameter of the target at current position 
+                /*get the diameter of the target at current position
                  * assume diameter should be 15 units
                  */
                 var diameter = getDistanceOffset(target);
@@ -58,9 +53,29 @@ namespace Trephine.Autonomi
             }
         }
 
-        private double getSpeed(int offset, double gamma, double alpha)
+        #endregion Protected Methods
+
+        #region Private Fields
+
+        private const double ALPHA = .20;
+        private const double ALPHA2 = .20;
+        private const double GAMMA = .011;
+        private const double GAMMA2 = .075;
+
+        #endregion Private Fields
+
+        #region Private Methods
+
+        private int getDistanceOffset(Target target)
         {
-            return (offset * gamma * alpha);
+            var centre = 60;
+
+            if (target.Radius > centre)
+                return target.Radius - centre;
+            if (target.Radius < centre)
+                return -(centre - target.Radius);
+
+            return 0;
         }
 
         private int getOffset(Target target)
@@ -69,22 +84,17 @@ namespace Trephine.Autonomi
 
             if (target.X > centre)
                 return target.X - centre;
-            else if (target.X < centre)
+            if (target.X < centre)
                 return -(centre - target.X);
 
             return 0;
         }
 
-        private int getDistanceOffset(Target target)
+        private double getSpeed(int offset, double gamma, double alpha)
         {
-            var centre = 60;
-
-            if (target.Radius > centre)
-                return target.Radius - centre;
-            else if (target.Radius < centre)
-                return -(centre - target.Radius);
-
-            return 0;
+            return offset * gamma * alpha;
         }
+
+        #endregion Private Methods
     }
 }

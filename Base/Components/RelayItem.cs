@@ -168,7 +168,7 @@ namespace Base.Components
         /// <param name="sender"></param>
         public void Set(double val, object sender)
         {
-            if ((val >= 0) && (val <= 2))
+            if (val >= 0 && val <= 2)
             {
                 InUse = true;
                 if (Math.Abs(val - 2) <= Math.Abs(val * Constants.EPSILON_MIN))
@@ -217,7 +217,7 @@ namespace Base.Components
         {
             ValueChanged?.Invoke(this, e);
 
-            if(Debug)
+            if (Debug)
                 FrameworkCommunication.Instance.SendData($"{Name}", e.Value);
         }
 

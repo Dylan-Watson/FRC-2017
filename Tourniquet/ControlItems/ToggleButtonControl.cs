@@ -9,12 +9,11 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using Base;
 using WPILib;
 
 namespace Tourniquet.ControlItems
 {
-    using Base;
-
     internal class ToggleButtonControl : ControlItem
     {
         #region Public Constructors
@@ -46,6 +45,7 @@ namespace Tourniquet.ControlItems
             {
                 toggle ^= currentState;
                 if (!currentState)
+                {
                     if (toggle)
                     {
                         if (!IsReversed)
@@ -90,6 +90,7 @@ namespace Tourniquet.ControlItems
                             IsRunning = true;
                         }
                     }
+                }
             }
 
             previousState = currentState;

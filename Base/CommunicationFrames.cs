@@ -20,38 +20,6 @@ namespace Base
     /// </summary>
     public static class CommunicationFrames
     {
-        #region Public Classes
-
-        /// <summary>
-        ///     Class to define a communication frame time stamp
-        ///     based off of the current match time
-        /// </summary>
-        public class FrameTimeStamp
-        {
-            #region Public Fields
-
-            /// <summary>
-            ///     Time in seconds
-            /// </summary>
-            public readonly double TimeStamp;
-
-            #endregion Public Fields
-
-            #region Public Constructors
-
-            /// <summary>
-            ///     Default constructor
-            /// </summary>
-            public FrameTimeStamp()
-            {
-                TimeStamp = DriverStation.Instance.GetMatchTime();
-            }
-
-            #endregion Public Constructors
-        }
-
-        #endregion Public Classes
-
         #region Public Structs
 
         /// <summary>
@@ -69,22 +37,10 @@ namespace Base
             public int ID;
 
             /// <summary>
-            ///     The X and Y placment of the target's centre
-            /// </summary>
-            //[FieldOffset(1)]
-            public int X, Y;
-
-            /// <summary>
             ///     Radius of target
             /// </summary>
             //[FieldOffset(2)]
             public int Radius;
-
-            /// <summary>
-            ///     Width and Height of target
-            /// </summary>
-            //[FieldOffset(3)]
-            public int Width, Height;
 
             /// <summary>
             ///     Booleans to define if the image is valid and if
@@ -94,6 +50,18 @@ namespace Base
             /// </summary>
             //[FieldOffset(4)]
             public bool ValidImage, HasTarget;
+
+            /// <summary>
+            ///     Width and Height of target
+            /// </summary>
+            //[FieldOffset(3)]
+            public int Width, Height;
+
+            /// <summary>
+            ///     The X and Y placment of the target's centre
+            /// </summary>
+            //[FieldOffset(1)]
+            public int X, Y;
 
             #endregion Public Fields
 
@@ -116,22 +84,6 @@ namespace Base
             }
 
             #endregion Public Constructors
-        }
-
-        /// <summary>
-        ///     Class to contain the Target and the TimeStamp
-        /// </summary>
-        public class TargetContainer
-        {
-            /// <summary>
-            ///     The target to be contained
-            /// </summary>
-            public Target Target;
-
-            /// <summary>
-            ///     Time stamp of the communication
-            /// </summary>
-            public FrameTimeStamp TimeStamp;
         }
 
         /// <summary>
@@ -165,5 +117,57 @@ namespace Base
         }
 
         #endregion Public Structs
+
+        #region Public Classes
+
+        /// <summary>
+        ///     Class to define a communication frame time stamp
+        ///     based off of the current match time
+        /// </summary>
+        public class FrameTimeStamp
+        {
+            #region Public Fields
+
+            /// <summary>
+            ///     Time in seconds
+            /// </summary>
+            public readonly double TimeStamp;
+
+            #endregion Public Fields
+
+            #region Public Constructors
+
+            /// <summary>
+            ///     Default constructor
+            /// </summary>
+            public FrameTimeStamp()
+            {
+                TimeStamp = DriverStation.Instance.GetMatchTime();
+            }
+
+            #endregion Public Constructors
+        }
+
+        /// <summary>
+        ///     Class to contain the Target and the TimeStamp
+        /// </summary>
+        public class TargetContainer
+        {
+            #region Public Fields
+
+            /// <summary>
+            ///     The target to be contained
+            /// </summary>
+            public Target Target;
+
+            /// <summary>
+            ///     Time stamp of the communication
+            /// </summary>
+            public FrameTimeStamp TimeStamp;
+
+            #endregion Public Fields
+        }
+
+        #endregion Public Classes
     }
 }
