@@ -139,11 +139,13 @@ namespace Dashboard2017
         private void Console_TextChanged(object sender, EventArgs e)
         {
             if (!console.IsDisposed)
+            {
                 console.Invoke(new Action(() =>
                 {
                     console.SelectionStart = console.Text.Length;
                     console.ScrollToCaret();
                 }));
+            }
         }
 
         #endregion Private Methods

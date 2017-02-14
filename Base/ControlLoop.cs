@@ -21,20 +21,11 @@ namespace Base
     /// </summary>
     public abstract class ControlLoop
     {
-        #region Protected Methods
-
-        /// <summary>
-        ///     Method for the implimentor to implement, this is what is called withing the loop
-        /// </summary>
-        protected abstract void main();
-
-        #endregion Protected Methods
-
         #region Private Fields
 
-        private double cycleTime = .05;
-
         private volatile bool cancel;
+
+        private double cycleTime = .05;
 
         private bool finished;
 
@@ -42,13 +33,27 @@ namespace Base
 
         #endregion Private Fields
 
-
         #region Public Events
+
+        /// <summary>
+        ///     Event raised when the control loop is aborted
+        /// </summary>
+        public event EventHandler<EventArgs> Aborted;
+
+        /// <summary>
+        ///     Event raised when a cancelation request is complete
+        /// </summary>
+        public event EventHandler<EventArgs> CancelationComplete;
 
         /// <summary>
         ///     Event raised when a cancelation is requested
         /// </summary>
         public event EventHandler<EventArgs> CancelationRequest;
+
+        /// <summary>
+        ///     Event raised when a cancelation request is complete
+        /// </summary>
+        public event EventHandler<EventArgs> Finished;
 
         /// <summary>
         ///     Event raised when a cancelation is requested
@@ -58,26 +63,23 @@ namespace Base
         /// <summary>
         ///     Event raised when a cancelation request is complete
         /// </summary>
-        public event EventHandler<EventArgs> CancelationComplete;
-
-        /// <summary>
-        ///     Event raised when a cancelation request is complete
-        /// </summary>
-        public event EventHandler<EventArgs> Finished;
-
-        /// <summary>
-        ///     Event raised when a cancelation request is complete
-        /// </summary>
         public event EventHandler<EventArgs> Started;
-
-        /// <summary>
-        ///     Event raised when the control loop is aborted
-        /// </summary>
-        public event EventHandler<EventArgs> Aborted;
 
         #endregion Public Events
 
         #region Public Methods
+
+        /// <summary>
+        ///     Aborts the thread, instantly stopping execution. If possible always try to cancel over abort
+        /// </summary>
+        public void Abort(object sender)
+        {
+            if (thread != null && thread.IsAlive)
+            {
+                thread?.Abort();
+                Aborted?.Invoke(sender, new EventArgs());
+            }
+        }
 
         /// <summary>
         ///     Cancels the loop asynchronously at the next available time
@@ -88,6 +90,25 @@ namespace Base
             Report.General($"{GetType()} cancellation requested.");
             CancelationRequest?.Invoke(sender, new EventArgs());
         }
+
+        /// <summary>
+        ///     Cancels the loop synchronously at the next available time
+        /// </summary>
+        public void CancelSync(object sender)
+        {
+            cancel = true;
+            Report.General($"{GetType()} cancellation requested.");
+            CancelationRequest?.Invoke(sender, new EventArgs());
+            while (thread.IsAlive)
+                // ReSharper disable once EmptyEmbeddedStatement
+                ;
+        }
+
+        /// <summary>
+        ///     Returns the status of the thread that the loop is in
+        /// </summary>
+        /// <returns></returns>
+        public bool IsAlive() => thread.IsAlive;
 
         /// <summary>
         ///     Sets the time in miliseconds that the loop will wait each iteration, the default is .005 seconds
@@ -123,72 +144,33 @@ namespace Base
         }
 
         /// <summary>
-        /// Cancels the loop synchronously at the next available time
-        /// </summary>
-        public void CancelSync(object sender)
-        {
-            cancel = true;
-            Report.General($"{GetType()} cancellation requested.");
-            CancelationRequest?.Invoke(sender, new EventArgs());
-            while (thread.IsAlive)
-                // ReSharper disable once EmptyEmbeddedStatement
-                ;
-        }
-
-        /// <summary>
-        /// Aborts the thread, instantly stopping execution. If possible always try to cancel over abort
-        /// </summary>
-        public void Abort(object sender)
-        {
-            if ((thread != null) && thread.IsAlive)
-            {
-                thread?.Abort();
-                Aborted?.Invoke(sender, new EventArgs());
-            }
-        }
-
-        /// <summary>
         ///     Returns the status of the thread that the loop is in
         /// </summary>
         /// <returns></returns>
         public ThreadState ThreadState() => thread.ThreadState;
 
-        /// <summary>
-        ///     Returns the status of the thread that the loop is in
-        /// </summary>
-        /// <returns></returns>
-        public bool IsAlive() => thread.IsAlive;
-
         #endregion Public Methods
 
-        #region Private Methods
-
-        private void Instance_RobotStatusChanged(object sender, RobotStatusChangedEventArgs e)
-        {
-            if ((e.CurrentRobotState == RobotState.Auton) || (e.CurrentRobotState == RobotState.Teleop))
-            {
-                finished = false;
-                cancel = false;
-                thread = new Thread(backgroundLoop);
-                thread.Start();
-                Started?.Invoke(this, new EventArgs());
-            }
-            else
-            {
-                if((thread != null) && thread.IsAlive)
-                    Abort(RobotStatus.Instance);
-            }
-        }
+        #region Protected Methods
 
         /// <summary>
-        /// Gracefully stops the execution of the loop.
-        /// This should be called when you are finished.
+        ///     Gracefully stops the execution of the loop.
+        ///     This should be called when you are finished.
         /// </summary>
         protected void done()
         {
             finished = true;
             SignaledCompletion?.Invoke(this, new EventArgs());
         }
+
+        /// <summary>
+        ///     Method for the implimentor to implement, this is what is called withing the loop
+        /// </summary>
+        protected abstract void main();
+
+        #endregion Protected Methods
+
+        #region Private Methods
 
         private void backgroundLoop()
         {
@@ -216,6 +198,23 @@ namespace Base
             {
                 Finished?.Invoke(this, new EventArgs());
                 Report.General($"{GetType()} ran to completion.");
+            }
+        }
+
+        private void Instance_RobotStatusChanged(object sender, RobotStatusChangedEventArgs e)
+        {
+            if (e.CurrentRobotState == RobotState.Auton || e.CurrentRobotState == RobotState.Teleop)
+            {
+                finished = false;
+                cancel = false;
+                thread = new Thread(backgroundLoop);
+                thread.Start();
+                Started?.Invoke(this, new EventArgs());
+            }
+            else
+            {
+                if (thread != null && thread.IsAlive)
+                    Abort(RobotStatus.Instance);
             }
         }
 

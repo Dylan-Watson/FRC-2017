@@ -121,6 +121,12 @@ namespace Base
         #region Public Methods
 
         /// <summary>
+        ///     Method to return the last value set to the motor
+        /// </summary>
+        /// <returns>double value</returns>
+        public abstract double Get();
+
+        /// <summary>
         ///     Sets the IsReversed flag/property to false
         /// </summary>
         public void RestoreDirection() => IsReversed = false;
@@ -153,12 +159,6 @@ namespace Base
         ///     Abstract method to stop the motor/speed cotnroller
         /// </summary>
         public abstract void Stop();
-
-        /// <summary>
-        ///     Method to return the last value set to the motor 
-        /// </summary>
-        /// <returns>double value</returns>
-        public abstract double Get();
 
         #endregion Public Methods
     }

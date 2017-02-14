@@ -165,7 +165,7 @@ namespace Base.Components
             lock (victor)
 #endif
             {
-                if ((val < -Constants.MINUMUM_JOYSTICK_RETURN) && AllowCc)
+                if (val < -Constants.MINUMUM_JOYSTICK_RETURN && AllowCc)
                 {
                     InUse = true;
                     if (IsReversed)
@@ -179,7 +179,7 @@ namespace Base.Components
                         onValueChanged(new VirtualControlEventArgs(val, InUse));
                     }
                 }
-                else if ((val > Constants.MINUMUM_JOYSTICK_RETURN) && AllowC)
+                else if (val > Constants.MINUMUM_JOYSTICK_RETURN && AllowC)
                 {
                     InUse = true;
                     if (IsReversed)
@@ -245,7 +245,7 @@ namespace Base.Components
             }
         }
 
-#endregion Public Methods
+        #endregion Public Methods
 
         #region Private Methods
 
@@ -272,21 +272,20 @@ namespace Base.Components
         {
             ValueChanged?.Invoke(this, e);
 
-            if(Debug)
+            if (Debug)
                 FrameworkCommunication.Instance.SendData($"{Name}", e.Value);
         }
 
         /// <summary>
-        ///     Method to return the last value set to the motor 
+        ///     Method to return the last value set to the motor
         /// </summary>
         /// <returns>double value</returns>
         public override double Get()
         {
-            if(IsReversed)
+            if (IsReversed)
                 return victor.Get() * -1;
             return victor.Get();
         }
-        
 
         #endregion Private Methods
     }

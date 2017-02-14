@@ -87,8 +87,10 @@ namespace Base
             try
             {
                 if (componentCollection.ContainsKey(component.Name))
+                {
                     throw new AllocationException(
                         $"Attempting to allocate two components with the same name - {component.Name}");
+                }
                 componentCollection.Add(component.Name, component);
 
                 var input = component as InputComponent;

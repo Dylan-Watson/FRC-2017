@@ -13,16 +13,12 @@ using Base.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Sockets;
 using System.Xml.Linq;
 using WPILib;
 using WPILib.Exceptions;
 
 namespace Base.Config
 {
-    using CSCore;
-
     /// <summary>
     ///     Manages and loads the configuration file from XML.
     /// </summary>
@@ -249,7 +245,6 @@ namespace Base.Config
 
                         if (Convert.ToBoolean(element.Attribute("debug")?.Value))
                             encoder.Debug = true;
-
                     }
                     catch (Exception ex)
                     {
@@ -949,15 +944,15 @@ namespace Base.Config
                         Report.Error(ex.Message);
                 }
 
-                var left = new Schemas.DriverControlSchema("leftDrive", (MotorControlFitFunction) driveFit,
+                var left = new Schemas.DriverControlSchema("leftDrive", (MotorControlFitFunction)driveFit,
                     driveFitPower,
                     toBindCommonName(getAttribute("bindTo", "Controls", "Driver", "leftDrive")), leftAxis, leftDz,
                     multiplier, leftReversed);
 
-                if(Convert.ToBoolean(getAttributeValue("debug", "Controls", "Driver", "leftDrive")))
+                if (Convert.ToBoolean(getAttributeValue("debug", "Controls", "Driver", "leftDrive")))
                     left.Debug = true;
 
-                var right = new Schemas.DriverControlSchema("rightDrive", (MotorControlFitFunction) driveFit,
+                var right = new Schemas.DriverControlSchema("rightDrive", (MotorControlFitFunction)driveFit,
                     driveFitPower,
                     toBindCommonName(getAttribute("bindTo", "Controls", "Driver", "rightDrive")), rightAxis, rightDz,
                     multiplier, rightReversed);
@@ -1027,12 +1022,12 @@ namespace Base.Config
                                 if (VerboseOutput)
                                     Report.Error(ex.Message);
                             }
-                             control = new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Button,
-                                toBindCommonName(element.Attribute("bindTo")),
-                                Convert.ToInt32(element.Attribute("button").Value), actOnRelease, powerMultiplier,
-                                reversed);
-                                
-                                temp.Add(control);
+                            control = new Schemas.ControlSchema(element.Name.ToString(), Schemas.ControlType.Button,
+                               toBindCommonName(element.Attribute("bindTo")),
+                               Convert.ToInt32(element.Attribute("button").Value), actOnRelease, powerMultiplier,
+                               reversed);
+
+                            temp.Add(control);
 
                             if (Convert.ToBoolean(element.Attribute("debug")?.Value))
                                 control.Debug = true;
@@ -1304,7 +1299,7 @@ namespace Base.Config
 
             var values = attribute.Value.Contains(",")
                 ? attribute.Value.Split(',').ToList()
-                : new List<string> {attribute.Value};
+                : new List<string> { attribute.Value };
 
             values = values.Distinct().ToList();
 

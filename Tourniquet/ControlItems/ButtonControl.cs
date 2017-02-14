@@ -9,12 +9,11 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using Base;
 using WPILib;
 
 namespace Tourniquet.ControlItems
 {
-    using Base;
-
     /// <summary>
     ///     Defines a control that uses a button on the controller
     /// </summary>
@@ -48,6 +47,7 @@ namespace Tourniquet.ControlItems
         public override void Update()
         {
             if (joystick.GetRawButton(button))
+            {
                 if (!IsReversed)
                 {
                     set(1 * multiplier);
@@ -67,7 +67,9 @@ namespace Tourniquet.ControlItems
                     stop();
                     IsRunning = false;
                 }
+            }
             else if (IsRunning && actOnRelease)
+            {
                 if (!IsReversed)
                 {
                     set(0);
@@ -87,17 +89,18 @@ namespace Tourniquet.ControlItems
 
                     IsRunning = true;
                 }
+            }
         }
 
         #endregion Public Methods
 
         #region Private Fields
 
+        private readonly bool actOnRelease;
+
         private readonly int button;
 
         private readonly double multiplier;
-
-        private readonly bool actOnRelease;
 
         #endregion Private Fields
     }

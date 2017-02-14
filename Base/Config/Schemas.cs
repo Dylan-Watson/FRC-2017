@@ -157,8 +157,10 @@ namespace Base.Config
             public static ControlType GetControlTypeFromAttribute(XAttribute attribute)
             {
                 if (attribute == null)
+                {
                     throw new ArgumentNullException(nameof(attribute),
                         "Parameter cannot be null in GetControlTypeFromAttribute.");
+                }
 
                 switch (attribute.Value)
                 {
@@ -351,6 +353,11 @@ namespace Base.Config
             public double DeadZone { get; protected set; }
 
             /// <summary>
+            ///     Determins if the control should output debug data to dashboard
+            /// </summary>
+            public bool Debug { get; set; }
+
+            /// <summary>
             ///     Defines if the control is enabled
             /// </summary>
             public bool IsEnabled { get; protected set; }
@@ -359,11 +366,6 @@ namespace Base.Config
             ///     Name of the control this schema represents
             /// </summary>
             public string Name { get; protected set; }
-
-            /// <summary>
-            ///     Determins if the control should output debug data to dashboard
-            /// </summary>
-            public bool Debug { get; set; }
 
             /// <summary>
             ///     Output multiplier for control
