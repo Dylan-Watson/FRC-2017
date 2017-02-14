@@ -105,11 +105,6 @@ namespace WpfApplication1
             }
         }
 
-        private void ValidationEventHandler(object sender, ValidationEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         #endregion
 
         #region Methods
@@ -125,12 +120,10 @@ namespace WpfApplication1
                 if (result == true)
                 {
                     filePath = openDLG.FileName;
-                    /*string[] lines = File.ReadAllLines(filePath);
-                    MainEditor.Text = lines;
-                    */
                     checkClose();
                     StreamReader str = FileReader.OpenFile(filePath, Encoding.UTF8);
                     MainEditor.Text = str.ReadToEnd();
+                    str.Close();
                     beenSaved = true;
                     recentSaved = true;
                     Title = $"{filePath}";
