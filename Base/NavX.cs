@@ -145,8 +145,10 @@ namespace Base
         internal static NavX InitializeNavX(SPI.Port spiPortId, byte updateRateHz = 50)
         {
             if (_lazy != null)
+            {
                 Report.Error(
                     @"A NavX instance already been created, someone other than Config is trying to create an instance.");
+            }
             _lazy = new Lazy<NavX>(() => new NavX(spiPortId, updateRateHz));
             return Instance;
         }
@@ -160,8 +162,10 @@ namespace Base
         internal static NavX InitializeNavX(SPI.Port spiPortId, int spiBitrate, byte updateRateHz = 50)
         {
             if (_lazy != null)
+            {
                 Report.Error(
                     @"A NavX instance already been created, someone other than Config is trying to create an instance.");
+            }
             _lazy = new Lazy<NavX>(() => new NavX(spiPortId, spiBitrate, updateRateHz));
             return Instance;
         }
@@ -174,8 +178,10 @@ namespace Base
         internal static NavX InitializeNavX(I2C.Port i2CPortId, byte updateRateHz = 50)
         {
             if (_lazy != null)
+            {
                 Report.Error(
                     @"A NavX instance already been created, someone other than Config is trying to create an instance.");
+            }
             _lazy = new Lazy<NavX>(() => new NavX(i2CPortId, updateRateHz));
             return Instance;
         }
@@ -190,8 +196,10 @@ namespace Base
             SerialDataType dataType = SerialDataType.KProcessedData, byte updateRateHz = 50)
         {
             if (_lazy != null)
+            {
                 Report.Error(
                     @"A NavX instance already been created, someone other than Config is trying to create an instance.");
+            }
             _lazy = new Lazy<NavX>(() => new NavX(serialPortId, dataType, updateRateHz));
             return Instance;
         }

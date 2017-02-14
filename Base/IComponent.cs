@@ -42,6 +42,11 @@ namespace Base
         #region Public Properties
 
         /// <summary>
+        ///     Determins if the component should output to the dashboard
+        /// </summary>
+        bool Debug { get; }
+
+        /// <summary>
         ///     Boolean flag to determin if the component is in use
         /// </summary>
         bool InUse { get; }
@@ -50,11 +55,6 @@ namespace Base
         ///     The name of the component
         /// </summary>
         string Name { get; }
-
-        /// <summary>
-        ///     Determins if the component should output to the dashboard
-        /// </summary>
-        bool Debug { get; }
 
         /// <summary>
         ///     Returns the object that is currently using the component

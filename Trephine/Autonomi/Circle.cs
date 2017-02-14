@@ -16,9 +16,13 @@ namespace Trephine.Autonomi
     /// </summary>
     internal class Circle : Autonomous
     {
+        #region Protected Methods
+
         protected override void main()
         {
             done();
         }
+
+        #endregion Protected Methods
     }
 }

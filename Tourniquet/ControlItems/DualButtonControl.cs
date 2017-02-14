@@ -10,12 +10,11 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using Base;
 using WPILib;
 
 namespace Tourniquet.ControlItems
 {
-    using Base;
-
     /// <summary>
     ///     Control that uses two butons to perform an action
     /// </summary>

@@ -24,6 +24,8 @@ namespace Trephine.Autonomi
 
         #endregion Private Fields
 
+        #region Protected Methods
+
         protected override void main()
         {
             baseCalls.SetRightDrive(power);
@@ -32,5 +34,7 @@ namespace Trephine.Autonomi
             baseCalls.SlowStop();
             done();
         }
+
+        #endregion Protected Methods
     }
 }

@@ -49,9 +49,7 @@ namespace Dashboard2017
                 Close();
             }
             else
-            {
                 MessageBox.Show(@"The RIO address is not a valid IPv4 or IPv6 address.", @"Invalid Input");
-            }
         }
 
         private void OverrideAddress_CheckedChanged(object sender, EventArgs e)
@@ -63,8 +61,8 @@ namespace Dashboard2017
 
         private void setTeamNumber_Click(object sender, EventArgs e)
         {
-            if (Regex.IsMatch(teamNumber.Text, "[0-9]") && (teamNumber.Text.Length < 5) &&
-                (teamNumber.Text.Length >= 2))
+            if (Regex.IsMatch(teamNumber.Text, "[0-9]") && teamNumber.Text.Length < 5 &&
+                teamNumber.Text.Length >= 2)
             {
                 switch (teamNumber.Text.Length)
                 {
@@ -85,9 +83,7 @@ namespace Dashboard2017
                 addressBox.Text = rioIp;
             }
             else
-            {
                 MessageBox.Show($@"The value {teamNumber.Text} is not a valid team number.", @"Invalid Input");
-            }
         }
 
         #endregion Private Methods

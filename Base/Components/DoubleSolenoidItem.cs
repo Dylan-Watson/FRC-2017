@@ -163,21 +163,25 @@ namespace Base.Components
             lock (solenoid)
 #endif
             {
-                if ((val >= 0) && (val <= 2))
+                if (val >= 0 && val <= 2)
                 {
                     InUse = true;
                     if (Math.Abs(val - 2) <= Math.Abs(val * .00001))
                         solenoid.Set(DoubleSolenoid.Value.Off);
                     else if (Math.Abs(val - 0) <= Math.Abs(val * .00001))
+                    {
                         if (!IsReversed)
                             setForward();
                         else
                             setReverse();
+                    }
                     else if (Math.Abs(val - 1) <= Math.Abs(val * .00001))
+                    {
                         if (!IsReversed)
                             setReverse();
                         else
                             setForward();
+                    }
                 }
                 else
                 {
@@ -246,7 +250,7 @@ namespace Base.Components
         {
             ValueChanged?.Invoke(this, e);
 
-            if(Debug)
+            if (Debug)
                 FrameworkCommunication.Instance.SendData($"{Name}", e.Value);
         }
 

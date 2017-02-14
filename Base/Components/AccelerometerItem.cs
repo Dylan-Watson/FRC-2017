@@ -48,6 +48,12 @@ namespace Base.Components
         #region Public Properties
 
         /// <summary>
+        ///     Determins if the component will output to the dashboard
+        /// </summary>
+        [Obsolete("Unused Property")]
+        public bool Debug { get; set; }
+
+        /// <summary>
         ///     Gets the instance (if any) of the builtin accelerometer
         /// </summary>
         public static RioAccelerometerItem Instance => _lazy?.Value;
@@ -61,12 +67,6 @@ namespace Base.Components
         ///     Name of the component
         /// </summary>
         public string Name { get; } = "BuiltInAccelerometer";
-
-        /// <summary>
-        ///     Determins if the component will output to the dashboard
-        /// </summary>
-        [Obsolete("Unused Property")]
-        public bool Debug { get; set; }
 
         /// <summary>
         ///     Defines the object issuing the commands
