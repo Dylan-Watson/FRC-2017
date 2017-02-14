@@ -52,6 +52,21 @@ namespace Base
 
         private class TableActivityListener : ITableListener
         {
+            #region Public Methods
+
+            public void ValueChanged(ITable source, string key, Value value, NotifyFlags flags)
+            {
+                if (!key.StartsWith("TARGET")) return;
+                _currentTarget = _frameFromByteArray(source.GetRaw(key));
+                _updateTarget(_currentTarget);
+
+                if (_currentTarget.ID != 0 || _currentTarget.HasTarget == lastDashboardUpdate) return;
+                FrameworkCommunication.Instance.GetDashboardComm().PutBoolean("TARGET", _currentTarget.HasTarget);
+                lastDashboardUpdate = _currentTarget.HasTarget;
+            }
+
+            #endregion Public Methods
+
             #region Private Fields
 
             private static CommunicationFrames.Target _currentTarget;
@@ -77,23 +92,12 @@ namespace Base
                 for (var i = 0; i < _targets.Count; i++)
                 {
                     var o = _targets[i];
-                    if ((o != null) && (o.Target.ID == target.ID))
+                    if (o != null && o.Target.ID == target.ID)
                         _targets.RemoveAt(i);
                 }
                 var tmp = new CommunicationFrames.TargetContainer {Target = new CommunicationFrames.Target(target)};
 
                 _targets.Add(tmp);
-            }
-
-            public void ValueChanged(ITable source, string key, Value value, NotifyFlags flags)
-            {
-                if (!key.StartsWith("TARGET")) return;
-                _currentTarget = _frameFromByteArray(source.GetRaw(key));
-                _updateTarget(_currentTarget);
-
-                if ((_currentTarget.ID != 0) || (_currentTarget.HasTarget == lastDashboardUpdate)) return;
-                FrameworkCommunication.Instance.GetDashboardComm().PutBoolean("TARGET", _currentTarget.HasTarget);
-                lastDashboardUpdate = _currentTarget.HasTarget;
             }
 
             #endregion Private Methods
@@ -160,15 +164,6 @@ namespace Base
         }
 
         /// <summary>
-        /// Sets the exposure for the camera
-        /// </summary>
-        /// <param name="value">value to set the exposure to</param>
-        public void SetExposure(double value)
-        {
-            ntRelayTable.PutNumber(@"SET_EXPOSURE", value);
-        }
-
-        /// <summary>
         ///     Deletes an target setting from the Co-Processors list
         ///     of target to search for
         /// </summary>
@@ -187,9 +182,20 @@ namespace Base
         public CommunicationFrames.TargetContainer GetLatestTargetData(int id)
         {
             foreach (var target in _targets)
-                if ((target != null) && (target.Target.ID == id))
+            {
+                if (target != null && target.Target.ID == id)
                     return target;
+            }
             return null;
+        }
+
+        /// <summary>
+        ///     Sets the exposure for the camera
+        /// </summary>
+        /// <param name="value">value to set the exposure to</param>
+        public void SetExposure(double value)
+        {
+            ntRelayTable.PutNumber(@"SET_EXPOSURE", value);
         }
 
         #endregion Public Methods

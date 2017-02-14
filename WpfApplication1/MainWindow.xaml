@@ -7,72 +7,67 @@
         mc:Ignorable="d"
         Title="Config Editor" Height="550" Width="725">
     <Grid>
-        
+
         <!--#region Wrapper -->
         <DockPanel Height="auto">
-            
+
             <!--#region DockPanel Grid-->
             <Grid>
-                
+
                 <!--#region Grid Row Solutions-->
                 <Grid.RowDefinitions>
                     <!-- Menu Row -->
-                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25" />
                     <!-- Text Editor Row -->
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <!--#endregion-->
-                
+
                 <!--#region Main Menu -->
                 <Menu x:Name="menu" Height="25" Width="auto" Background="#fbfbf8" Grid.Row="0" VerticalAlignment="Top">
-                    
+
                     <!--#region File Dropdown Menu -->
                     <MenuItem Header="_File" Height="25" Margin="0">
                         <!-- Open a File -->
-                        <MenuItem Name="OpenButton" Header="_Open" Click="OpenButton_Click"/>
+                        <MenuItem Name="OpenButton" Header="_Open" Click="OpenButton_Click" />
                         <!-- Save a File -->
-                        <MenuItem Name="SaveButton" Header="_Save" Click="SaveButton_Click"/>
-                        <Separator/>
+                        <MenuItem Name="SaveButton" Header="_Save" Click="SaveButton_Click" />
+                        <Separator />
                         <!-- Exit the Application -->
-                        <MenuItem Name="ExitButton" Header="_Quexit" Click="ExitButton_Click"/>
+                        <MenuItem Name="ExitButton" Header="_Quexit" Click="ExitButton_Click" />
                     </MenuItem>
                     <!--#endregion-->
-                    
+
                     <!--#region Robot Connections Dropdown Menu-->
                     <MenuItem Header="_Robot">
                         <!-- Open Connection Settings Window-->
-                        <MenuItem Name="SettingsButton" Header="Set_tings" Click="SettingsButton_Click"/>
+                        <MenuItem Name="SettingsButton" Header="Set_tings" Click="SettingsButton_Click" />
                         <!-- Upload the Config to the robot -->
-                        <!-- NOTE: Be sure to run the build button function before upload --> 
-                        <MenuItem Name="UploadButton" Header="_Upload"/>
+                        <!-- NOTE: Be sure to run the build button function before upload -->
+                        <MenuItem Name="UploadButton" Header="_Upload" />
                     </MenuItem>
                     <!--#endregion-->
-                    
+
                     <!--#region Build Button-->
                     <!-- Button to build and check the syntax of the XML -->
-                    <MenuItem Name="BuildButton" Header="_Build" Click="BuildButton_Click"/>
+                    <MenuItem Name="BuildButton" Header="_Build" Click="BuildButton_Click" />
                     <!--#endregion-->
-                    
                 </Menu>
                 <!--#endregion-->
-                
+
                 <!--#region Text Editor Box -->
-                <RichTextBox x:Name="MainEditor" DockPanel.Dock="Bottom" Grid.Row="1" FontSize="14" 
+                <RichTextBox x:Name="MainEditor" DockPanel.Dock="Bottom" Grid.Row="1" FontSize="14"
                              CaretBrush="White" Block.LineHeight="2" AcceptsTab="True">
                     <FlowDocument Background="#FF1E1E1E" Foreground="#33A5FF">
                         <Paragraph>
-                            <Run Text="RichTextBox"/>
+                            <Run Text="RichTextBox" />
                         </Paragraph>
                     </FlowDocument>
                 </RichTextBox>
                 <!--#endregion-->
-                
             </Grid>
             <!--#endregion-->
-        
         </DockPanel>
         <!--#endregion-->
-    
     </Grid>
 </Window>
- 

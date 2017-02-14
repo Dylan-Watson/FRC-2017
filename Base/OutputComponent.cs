@@ -41,11 +41,13 @@ namespace Base
         /// </exception>
         public void Set(double val, object sender)
         {
-            if ((val >= 0) && (val <= 5))
+            if (val >= 0 && val <= 5)
                 set(val, sender);
             else
+            {
                 throw new ArgumentOutOfRangeException(nameof(val),
                     "The value provided to the IO device was not within the generalized allowed range (0 to +5).");
+            }
         }
 
         /// <summary>

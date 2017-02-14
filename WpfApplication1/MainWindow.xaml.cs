@@ -1,22 +1,19 @@
-﻿using System;
-using System.Windows;
-using Microsoft.Win32;
-using System.Xml;
+﻿using Microsoft.Win32;
+using System;
+using System.ComponentModel;
 using System.Text;
+using System.Windows;
 using System.Windows.Documents;
+using System.Xml;
 
 namespace WpfApplication1
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        private bool beenSaved { get; set; } = false;
-
-        private bool recentSaved { get; set; } = false;
-
-        private string filePath { get; set; } = null;
+        #region Public Constructors
 
         public MainWindow()
         {
@@ -24,62 +21,30 @@ namespace WpfApplication1
             Closing += MainWindow_Closing;
         }
 
-        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        private bool beenSaved { get; set; }
+
+        private string filePath { get; set; }
+        private bool recentSaved { get; } = false;
+
+        #endregion Private Properties
+
+        #region Public Methods
+
+        public void saveFile()
         {
-            if (!checkClose())
-                e.Cancel = true;
-            else
-                Environment.Exit(0);
-        }
-
-        #region Event Handlers
-
-        private void SettingsButton_Click(object sender, RoutedEventArgs e)
-        {
-            Settings set = new Settings(this);
-            set.Show();
-            IsEnabled = false;
-        }
-
-        private void BuildButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ExitButton_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
-        {
-            saveFile();
-        }
-
-        private void OpenButton_Click(object sender, RoutedEventArgs e)
-        {
-     /*       try {
-                beenSaved = true;
-                recentSaved = true;
-            }
-
-            catch (Exception ex) {
-            }*/
-        }
-
-        #endregion
-
-        #region Methods
-
-        public void saveFile() {
-            if (!beenSaved) {
-                SaveFileDialog dlg = new SaveFileDialog();
+            if (!beenSaved)
+            {
+                var dlg = new SaveFileDialog();
                 dlg.FileName = "robot_config"; // Default file name
                 dlg.DefaultExt = ".xml"; // Default file extension
                 dlg.Filter = "XML Files (.xml)|*.xml"; // Filter files by extension
 
                 // Show save file dialog box
-                bool? result = dlg.ShowDialog();
+                var result = dlg.ShowDialog();
 
                 // Process save file dialog box results
                 if (result != true)
@@ -89,11 +54,13 @@ namespace WpfApplication1
             try
             {
                 // Save document
-                XmlDocument doc = new XmlDocument();
-                string content = $@"<?xml version=""1.0"" encoding=""UTF-8""?>{new TextRange(MainEditor.Document.ContentStart, MainEditor.Document.ContentEnd).Text}";
+                var doc = new XmlDocument();
+                string content =
+                    $@"<?xml version=""1.0"" encoding=""UTF-8""?>{new TextRange(MainEditor.Document.ContentStart,
+                        MainEditor.Document.ContentEnd).Text}";
                 doc.LoadXml(content);
                 //validate here
-                XmlTextWriter writer = new XmlTextWriter(filePath, Encoding.UTF8) { Formatting = Formatting.Indented };
+                var writer = new XmlTextWriter(filePath, Encoding.UTF8) {Formatting = Formatting.Indented};
                 doc.WriteTo(writer);
 
                 writer.Close();
@@ -101,7 +68,9 @@ namespace WpfApplication1
             }
             catch (Exception ex)
             {
-                MessageBoxResult result = MessageBox.Show($"XML is not Valid.\nThe file will not save!\ndo you want to see the error?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Error);
+                var result =
+                    MessageBox.Show($"XML is not Valid.\nThe file will not save!\ndo you want to see the error?",
+                        "Warning", MessageBoxButton.YesNo, MessageBoxImage.Error);
                 if (result == MessageBoxResult.Yes)
                     MessageBox.Show($"ERROR:\n{ex.Message}", "Error", MessageBoxButton.OK);
             }
@@ -109,30 +78,68 @@ namespace WpfApplication1
 
         public bool w3SpecCheck()
         {
-
             return true;
+        }
+
+        #endregion Public Methods
+
+        #region Private Methods
+
+        private void BuildButton_Click(object sender, RoutedEventArgs e)
+        {
         }
 
         private bool checkClose()
         {
-            if(!recentSaved || !beenSaved){
-                MessageBoxResult result = MessageBox.Show("You have unsaved changes. Do you want to save?", "Confirmation", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+            if (!recentSaved || !beenSaved)
+            {
+                var result = MessageBox.Show("You have unsaved changes. Do you want to save?", "Confirmation",
+                    MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.Cancel)
                     return false;
-                else if (result == MessageBoxResult.No)
+                if (result == MessageBoxResult.No)
                     return true;
-                else
-                {
                 //    saveFile();
-                    return true;
-                }
-
-            }
-            else
                 return true;
+            }
+            return true;
         }
 
-        #endregion
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
 
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            if (!checkClose())
+                e.Cancel = true;
+            else
+                Environment.Exit(0);
+        }
+
+        private void OpenButton_Click(object sender, RoutedEventArgs e)
+        {
+            /*       try {
+                       beenSaved = true;
+                       recentSaved = true;
+                   }
+                   catch (Exception ex) {
+                   }*/
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            saveFile();
+        }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var set = new Settings(this);
+            set.Show();
+            IsEnabled = false;
+        }
+
+        #endregion Private Methods
     }
 }

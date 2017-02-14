@@ -165,7 +165,7 @@ namespace Base.Components
         {
             ValueChanged?.Invoke(this, e);
 
-            if(Debug)
+            if (Debug)
                 FrameworkCommunication.Instance.SendData($"{Name}", e.Value);
         }
 

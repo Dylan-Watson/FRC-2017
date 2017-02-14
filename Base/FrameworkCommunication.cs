@@ -42,8 +42,12 @@ namespace Base
 
         #endregion Public Properties
 
+        #region Private Classes
+
         private class NtRelayListener : IRemoteConnectionListener
         {
+            #region Public Methods
+
             public void Connected(IRemote remote, ConnectionInfo info)
             {
                 Instance.GetDashboardComm().PutValue(@"NTRELAY_CONNECTION", Value.MakeValue(true));
@@ -53,7 +57,11 @@ namespace Base
             {
                 Instance.GetDashboardComm().PutValue(@"NTRELAY_CONNECTION", Value.MakeValue(false));
             }
+
+            #endregion Public Methods
         }
+
+        #endregion Private Classes
 
         #region Private Fields
 
@@ -74,6 +82,14 @@ namespace Base
         #endregion Private Fields
 
         #region Public Methods
+
+        /// <summary>
+        ///     Initialize the singleton
+        /// </summary>
+        public static void Initialize()
+        {
+            var tmp = Instance;
+        }
 
         /// <summary>
         ///     Method to get the dashboardComm
@@ -127,14 +143,6 @@ namespace Base
         public void SendHealthData(string key, object value)
         {
             dashboardComm.PutValue($"HEALTH_{key}", Value.MakeValue(value));
-        }
-
-        /// <summary>
-        ///     Initialize the singleton
-        /// </summary>
-        public static void Initialize()
-        {
-            var tmp = Instance;
         }
 
         #endregion Public Methods

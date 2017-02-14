@@ -25,35 +25,30 @@ namespace Trephine
     /// </summary>
     public sealed class BaseCalls
     {
-        private static readonly Lazy<BaseCalls> _lazy =
-            new Lazy<BaseCalls>(() => new BaseCalls());
-
-        #region Private Fields
-
-        private Config config;
-
-        #endregion Private Fields
+        #region Private Constructors
 
         private BaseCalls()
         {
         }
 
+        #endregion Private Constructors
+
+        #region Public Properties
+
         /// <summary>
         /// </summary>
         public static BaseCalls Instance => _lazy.Value;
 
-        #region Public Constructors
+        #endregion Public Properties
 
-        /// <summary>
-        ///     Constructor
-        /// </summary>
-        /// <param name="config">instance of the config</param>
-        public void SetConfig(Config config)
-        {
-            this.config = config;
-        }
+        #region Private Fields
 
-        #endregion Public Constructors
+        private static readonly Lazy<BaseCalls> _lazy =
+            new Lazy<BaseCalls>(() => new BaseCalls());
+
+        private Config config;
+
+        #endregion Private Fields
 
         #region Public Methods
 
@@ -64,27 +59,6 @@ namespace Trephine
         {
             config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor) s).Stop());
             config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor) s).Stop());
-        }
-        /// <summary>
-        ///     slowly stops drive train yeet
-        /// </summary>
-        public void SlowStop()
-        {
-            var rightPow = config.ActiveCollection.GetRightDriveMotors.Select(s => ((Motor)s).Get()).ToList()[0];
-            var leftPow = config.ActiveCollection.GetLeftDriveMotors.Select(s => ((Motor)s).Get()).ToList()[0];
-
-            while((Math.Abs(rightPow) > .05) && (Math.Abs(leftPow) > .05))
-            {
-                rightPow /= 1.02;
-                leftPow /= 1.02;
-
-                SetLeftDrive(leftPow);
-                SetRightDrive(rightPow);
-
-                Timer.Delay(.005);
-            }
-
-            FullDriveStop();
         }
 
         /// <summary>
@@ -103,6 +77,15 @@ namespace Trephine
         public Config GetConfig() => config;
 
         /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="config">instance of the config</param>
+        public void SetConfig(Config config)
+        {
+            this.config = config;
+        }
+
+        /// <summary>
         ///     Sets the left drive of the robot to a specified value
         /// </summary>
         /// <param name="value">value to set</param>
@@ -115,6 +98,28 @@ namespace Trephine
         /// <param name="value">value to set</param>
         public void SetRightDrive(double value)
             => config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor) s).Set(value, this));
+
+        /// <summary>
+        ///     slowly stops drive train yeet
+        /// </summary>
+        public void SlowStop()
+        {
+            var rightPow = config.ActiveCollection.GetRightDriveMotors.Select(s => ((Motor) s).Get()).ToList()[0];
+            var leftPow = config.ActiveCollection.GetLeftDriveMotors.Select(s => ((Motor) s).Get()).ToList()[0];
+
+            while (Math.Abs(rightPow) > .05 && Math.Abs(leftPow) > .05)
+            {
+                rightPow /= 1.02;
+                leftPow /= 1.02;
+
+                SetLeftDrive(leftPow);
+                SetRightDrive(rightPow);
+
+                Timer.Delay(.005);
+            }
+
+            FullDriveStop();
+        }
 
         #endregion Public Methods
     }

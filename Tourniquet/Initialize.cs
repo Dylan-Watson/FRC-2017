@@ -67,6 +67,7 @@ namespace Tourniquet
 
             //load auxillary controls that the driver may have
             foreach (var s in config.DriverConfig.ControlsData)
+            {
                 switch (s.ControlType)
                 {
                     case ControlType.Axis:
@@ -126,12 +127,14 @@ namespace Tourniquet
 
                         break;
                 }
+            }
 
             #endregion Driver_Setup
 
             #region Operator_Setup
 
             foreach (var s in config.OperatorConfig.ControlsData)
+            {
                 switch (s.ControlType)
                 {
                     case ControlType.Axis:
@@ -192,6 +195,7 @@ namespace Tourniquet
 
                         break;
                 }
+            }
 
             #endregion Operator_Setup
         }

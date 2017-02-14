@@ -24,8 +24,6 @@ namespace RobotMain2017
     /// </summary>
     public class RobotMain2017 : SampleRobot
     {
-        private readonly Initialize auton;
-
         #region Public Constructors
 
         /// <summary>
@@ -56,6 +54,7 @@ namespace RobotMain2017
         #region Private Fields
 
         private const string CONFIG_FILE = @"config.xml";
+        private readonly Initialize auton;
 
         private readonly Config config = new Config();
 

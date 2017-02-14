@@ -35,6 +35,11 @@ namespace Base
         public const string DISABLED = @"DISABLED";
 
         /// <summary>
+        ///     Value to use with epsilon comparison of floating points
+        /// </summary>
+        public const double EPSILON_MIN = .00001;
+
+        /// <summary>
         ///     The minimum value before we start accepting joystick input values
         /// </summary>
         public const double MINUMUM_JOYSTICK_RETURN = .04;
@@ -48,11 +53,6 @@ namespace Base
         ///     The name of the network table to communicate with vision co-processor
         /// </summary>
         public const string VISION_NETWORK_TABLE = @"NTRELAY_2017";
-
-        /// <summary>
-        ///     Value to use with epsilon comparison of floating points
-        /// </summary>
-        public const double EPSILON_MIN = .00001;
 
         #endregion Public Fields
     }

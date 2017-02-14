@@ -103,6 +103,7 @@ namespace Base
             var iterations = values.Count;
 
             for (var i = 0; i < iterations; i++)
+            {
                 foreach (var v in names.Select(t => t.GetValue(null)))
                 {
                     if (v.ToString() == values[0])
@@ -115,10 +116,13 @@ namespace Base
                     if (!values.Any())
                         return bindings;
                 }
+            }
 
             foreach (var str in values)
+            {
                 Report.Error(
                     $"Control attempting to bind to the resource \"{str}\" that has no CommonName, or doesn't exist!");
+            }
 
             return bindings;
         }
@@ -134,7 +138,7 @@ namespace Base
             if (ReferenceEquals(this, obj)) return true;
 
             var other = obj as CommonName;
-            return (other != null) && equals(other);
+            return other != null && equals(other);
         }
 
         /// <summary>
