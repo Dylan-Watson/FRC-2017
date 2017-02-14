@@ -55,9 +55,6 @@ namespace WpfApplication1
             IPTextBox2.Text = IP[1];
             IPTextBox3.Text = IP[2];
             IPTextBox4.Text = IP[3];
-            UsernameTextBox.Text = Properties.Settings.Default.Username;
-            PasswordTextBox.Password = Properties.Settings.Default.Password;
-            //Properties.Settings.Default.Save();
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -68,8 +65,7 @@ namespace WpfApplication1
 
         private void saveSettings()
         {
-            if (IPTextBox1.Text == "" || IPTextBox2.Text == "" || IPTextBox3.Text == "" || IPTextBox4.Text == "" ||
-                UsernameTextBox.Text == "")
+            if (IPTextBox1.Text == "" || IPTextBox2.Text == "" || IPTextBox3.Text == "" || IPTextBox4.Text == "")
             {
                 var result = MessageBox.Show("You have unsaved changes. Do you want to save?", "Confirmation",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -77,12 +73,6 @@ namespace WpfApplication1
                     return;
             }
             string IP = $"{IPTextBox1.Text}.{IPTextBox2.Text}.{IPTextBox3.Text}.{IPTextBox4.Text}";
-            string username = $"{UsernameTextBox.Text}";
-            string password = $"{UsernameTextBox.Text}";
-
-            Properties.Settings.Default.IP = IP;
-            Properties.Settings.Default.Username = username;
-            Properties.Settings.Default.Password = password;
         }
 
         private void Settings_Closed(object sender, EventArgs e)

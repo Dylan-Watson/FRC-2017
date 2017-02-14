@@ -140,7 +140,7 @@ namespace WpfApplication1
             if (!beenSaved)
             {
                 SaveFileDialog dlg = new SaveFileDialog();
-                dlg.FileName = "robot_config"; // Default file name
+                dlg.FileName = "config"; // Default file name
                 dlg.DefaultExt = ".xml"; // Default file extension
                 dlg.Filter = "XML Files (.xml)|*.xml"; // Filter files by extension
                 // Show save file dialog box

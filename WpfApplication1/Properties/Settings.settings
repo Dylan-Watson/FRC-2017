@@ -5,11 +5,5 @@
     <Setting Name="IP" Type="System.String" Scope="User">
       <Value Profile="(Default)">10.34.81.2</Value>
     </Setting>
-    <Setting Name="Username" Type="System.String" Scope="User">
-      <Value Profile="(Default)">broncbotz</Value>
-    </Setting>
-    <Setting Name="Password" Type="System.String" Scope="User">
-      <Value Profile="(Default)">broncbotz</Value>
-    </Setting>
   </Settings>
 </SettingsFile>

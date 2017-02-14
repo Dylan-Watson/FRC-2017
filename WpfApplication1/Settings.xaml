@@ -55,11 +55,7 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" FontSize="15" />
             <!-- Username Input Label -->
-            <Label Name="UsernameLabel" Content="Username" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center"
-                   VerticalAlignment="Center" FontSize="15" />
             <!-- Password Input Label -->
-            <Label Name="PasswordLabel" Content="Password" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center"
-                   VerticalAlignment="Center" FontSize="15" />
             <!--#endregion-->
 
             <!--#region Input Fields-->
@@ -80,13 +76,6 @@
                      TextWrapping="Wrap" VerticalAlignment="Center" Width="40" Grid.Row="0"
                      FontSize="15" MaxLines="1" MaxLength="3" TextAlignment="Center"
                      PreviewTextInput="IPBox_PreviewTextInput" />
-
-            <TextBox x:Name="UsernameTextBox" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="0"
-                     TextWrapping="Wrap" VerticalAlignment="Center" Width="300" Grid.Row="1"
-                     FontSize="15" MaxLines="1" TextAlignment="Left" />
-
-            <PasswordBox x:Name="PasswordTextBox" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="0"
-                         FontSize="15" Grid.Row="2" Width="300" />
             <!--#endregion-->
         </Grid>
         <!--#endregion-->
