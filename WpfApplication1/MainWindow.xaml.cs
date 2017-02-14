@@ -105,6 +105,11 @@ namespace WpfApplication1
             }
         }
 
+        private void ValidationEventHandler(object sender, ValidationEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Methods
@@ -174,7 +179,7 @@ namespace WpfApplication1
                 doc.WriteTo(xmlTextWriter);
                 xmlTextWriter.Flush();
                 MainEditor.Text = stringWriter.GetStringBuilder().ToString();
-                
+
                 recentSaved = true;
                 beenSaved = true;
                 Title = $"{filePath}";
