@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApplication1"
         mc:Ignorable="d"
-        Title="Settings" Height="300" Width="475">
+        Title="Settings" Height="300" Width="475" ShowInTaskbar="False">
     <Grid Name="OuterGrid">
 
         <!--#region Outer Grid Row Definitions -->

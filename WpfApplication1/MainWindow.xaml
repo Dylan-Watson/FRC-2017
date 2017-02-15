@@ -46,7 +46,7 @@
                         <MenuItem Name="SettingsButton" Header="Set_tings" Click="SettingsButton_Click"/>
                         <!-- Upload the Config to the robot -->
                         <!-- NOTE: Be sure to run the build button function before upload -->
-                        <MenuItem Name="UploadButton" Header="_Upload"/>
+                        <MenuItem Name="UploadButton" Header="_Upload" Click="UploadButton_Click"/>
                     </MenuItem>
                     <!--#endregion-->
 

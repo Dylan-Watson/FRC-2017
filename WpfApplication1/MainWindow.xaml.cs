@@ -4,6 +4,7 @@ using Microsoft.Win32;
 using System.Xml;
 using System.Xml.Schema;
 using System.Text;
+using System.Net;
 using System.Windows.Input;
 using System.IO;
 using ICSharpCode.AvalonEdit.Utils;
@@ -255,6 +256,42 @@ namespace WpfApplication1
             return false;
         }
 
+        public void uploadFile()
+        {
+            //if (buildFile())
+            if (saveFile())
+            {
+                Loading load = new Loading();
+                load.Show();
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"ftp://{Properties.Settings.Default.IP}/config.xml");
+                request.Method = WebRequestMethods.Ftp.UploadFile;
+
+                request.Credentials = new NetworkCredential("anonymous", "");
+
+                StreamReader sourceStream = new StreamReader(filePath);
+                byte[] fileContents = Encoding.UTF8.GetBytes(sourceStream.ReadToEnd());
+                sourceStream.Close();
+                request.ContentLength = fileContents.Length;
+
+                Stream requestStream = request.GetRequestStream();
+                requestStream.Write(fileContents, 0, fileContents.Length);
+                requestStream.Close();
+
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+
+                load.Close();
+                MessageBox.Show("Completed Upload", "Upload", MessageBoxButton.OK, MessageBoxImage.Information);
+                //Console.WriteLine("Upload File Complete, status {0}", response.StatusDescription);
+
+                response.Close();
+            }
+        }
+
         #endregion
+
+        private void UploadButton_Click(object sender, RoutedEventArgs e)
+        {
+            uploadFile();
+        }
     }
 }

@@ -73,6 +73,7 @@ namespace WpfApplication1
                     return;
             }
             string IP = $"{IPTextBox1.Text}.{IPTextBox2.Text}.{IPTextBox3.Text}.{IPTextBox4.Text}";
+            Properties.Settings.Default.IP = IP;
         }
 
         private void Settings_Closed(object sender, EventArgs e)
