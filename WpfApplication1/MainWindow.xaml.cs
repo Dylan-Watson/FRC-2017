@@ -262,28 +262,35 @@ namespace WpfApplication1
             if (saveFile())
             {
                 Loading load = new Loading();
-                load.Show();
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"ftp://{Properties.Settings.Default.IP}/config.xml");
-                request.Method = WebRequestMethods.Ftp.UploadFile;
+                try
+                {
+                    load.Show();
+                    FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"ftp://{Properties.Settings.Default.IP}/config.xml");
+                    request.Timeout = 60000;
+                    request.Method = WebRequestMethods.Ftp.UploadFile;
+                    request.Credentials = new NetworkCredential("anonymous", "");
 
-                request.Credentials = new NetworkCredential("anonymous", "");
+                    StreamReader sourceStream = new StreamReader(filePath);
+                    byte[] fileContents = Encoding.UTF8.GetBytes(sourceStream.ReadToEnd());
+                    sourceStream.Close();
+                    request.ContentLength = fileContents.Length;
 
-                StreamReader sourceStream = new StreamReader(filePath);
-                byte[] fileContents = Encoding.UTF8.GetBytes(sourceStream.ReadToEnd());
-                sourceStream.Close();
-                request.ContentLength = fileContents.Length;
+                    Stream requestStream = request.GetRequestStream();
+                    requestStream.Write(fileContents, 0, fileContents.Length);
+                    requestStream.Close();
 
-                Stream requestStream = request.GetRequestStream();
-                requestStream.Write(fileContents, 0, fileContents.Length);
-                requestStream.Close();
+                    FtpWebResponse response = (FtpWebResponse)request.GetResponse();
 
-                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
-
-                load.Close();
-                MessageBox.Show("Completed Upload", "Upload", MessageBoxButton.OK, MessageBoxImage.Information);
-                //Console.WriteLine("Upload File Complete, status {0}", response.StatusDescription);
-
-                response.Close();
+                    load.Close();
+                    response.Close();
+                    MessageBox.Show($"{response.StatusDescription}", "Upload", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Exception thrown in connection\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Upload Failed", "Fail", MessageBoxButton.OK, MessageBoxImage.Error);
+                    load.Close();
+                }
             }
         }
 
