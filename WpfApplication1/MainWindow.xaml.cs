@@ -1,15 +1,16 @@
-﻿using System;
-using System.Windows;
+﻿using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using ICSharpCode.AvalonEdit.Utils;
 using Microsoft.Win32;
+using System;
+using System.ComponentModel;
+using System.IO;
+using System.Net;
+using System.Text;
+using System.Windows;
+using System.Windows.Input;
 using System.Xml;
 using System.Xml.Schema;
-using System.Text;
-using System.Net;
-using System.Windows.Input;
-using System.IO;
-using ICSharpCode.AvalonEdit.Utils;
-using ICSharpCode.AvalonEdit.Highlighting.Xshd;
-using ICSharpCode.AvalonEdit.Highlighting;
 
 namespace WpfApplication1
 {
@@ -21,10 +22,10 @@ namespace WpfApplication1
         #region Instance Vars
 
         private bool beenSaved { get; set; } = false;
+        
+        private string filePath { get; set; } = null;
 
         private bool recentSaved { get; set; } = false;
-
-        private string filePath { get; set; } = null;
 
         private string validationMessage { get; set; }
 
@@ -58,21 +59,6 @@ namespace WpfApplication1
 
         #region Event Handlers
 
-        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (!checkClose())
-                e.Cancel = true;
-            else
-                Environment.Exit(0);
-        }
-
-        private void SettingsButton_Click(object sender, RoutedEventArgs e)
-        {
-            Settings set = new Settings(this);
-            set.Show();
-            IsEnabled = false;
-        }
-
         private void BuildButton_Click(object sender, RoutedEventArgs e)
         {
             bool valid = buildFile();
@@ -87,9 +73,17 @@ namespace WpfApplication1
             Close();
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        private void MainEditor_TextChanged(object sender, EventArgs e)
         {
-            saveFile();
+            recentSaved = false;
+        }
+
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            if (!checkClose())
+                e.Cancel = true;
+            else
+                Environment.Exit(0);
         }
 
         private void OpenButton_Click(object sender, RoutedEventArgs e)
@@ -97,11 +91,18 @@ namespace WpfApplication1
             openFile();
         }
 
-        private void MainEditor_TextChanged(object sender, EventArgs e)
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            recentSaved = false;
+            saveFile();
         }
 
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Settings set = new Settings(this);
+            set.Show();
+            IsEnabled = false;
+        }
+   
         private void UploadButton_Click(object sender, RoutedEventArgs e)
         {
             uploadFile();
@@ -110,6 +111,72 @@ namespace WpfApplication1
         #endregion
 
         #region Methods
+
+        private bool buildFile()
+        {
+            XmlDocument doc = new XmlDocument();
+            string content = MainEditor.Text;
+            try
+            {
+                doc.LoadXml(content);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Build failed on account of invalid XML by W3 Spec\nERROR: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            if (saveFile())
+            {
+                XmlElement root = doc.DocumentElement;
+                if (doc.FirstChild.NodeType != XmlNodeType.XmlDeclaration)
+                {
+                    XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+                    doc.InsertBefore(dec, root);
+                }
+                doc.InsertBefore(doc.CreateDocumentType("Robot", null, "DTD.dtd", null),
+                        doc.DocumentElement);
+                bool isXmlValid = true;
+                StringBuilder xmlValMsg = new StringBuilder();
+
+                XmlReaderSettings settings = new XmlReaderSettings();
+                settings.DtdProcessing = DtdProcessing.Parse;
+                settings.ValidationType = ValidationType.DTD;
+                settings.ValidationFlags = XmlSchemaValidationFlags.ReportValidationWarnings;
+                settings.ValidationEventHandler += new ValidationEventHandler(delegate (object sender, ValidationEventArgs args)
+                {
+                    isXmlValid = false;
+                    xmlValMsg.AppendLine(args.Message);
+                });
+
+                XmlReader validator = XmlReader.Create(filePath, settings);
+                while (validator.Read()) { }
+                validator.Close();
+
+                validationMessage = xmlValMsg.ToString();
+                return isXmlValid;
+            }
+            return false;
+        }
+
+        private bool checkClose()
+        {
+            if ((!recentSaved || !beenSaved) && MainEditor.Text != "")
+            {
+                MessageBoxResult result = MessageBox.Show("You have unsaved changes. Do you want to save?", "Confirmation", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Cancel)
+                    return false;
+                else if (result == MessageBoxResult.No)
+                    return true;
+                else
+                {
+                    saveFile();
+                    return true;
+                }
+
+            }
+            else
+                return true;
+        }
 
         private void openFile()
         {
@@ -191,73 +258,7 @@ namespace WpfApplication1
                 return false;
             }
         }
-
-        private bool checkClose()
-        {
-            if ((!recentSaved || !beenSaved) && MainEditor.Text != "")
-            {
-                MessageBoxResult result = MessageBox.Show("You have unsaved changes. Do you want to save?", "Confirmation", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
-                if (result == MessageBoxResult.Cancel)
-                    return false;
-                else if (result == MessageBoxResult.No)
-                    return true;
-                else
-                {
-                    saveFile();
-                    return true;
-                }
-
-            }
-            else
-                return true;
-        }
-
-        private bool buildFile()
-        {
-            XmlDocument doc = new XmlDocument();
-            string content = MainEditor.Text;
-            try
-            {
-                doc.LoadXml(content);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Build failed on account of invalid XML by W3 Spec\nERROR: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
-            }
-            if (saveFile())
-            {
-                XmlElement root = doc.DocumentElement;
-                if (doc.FirstChild.NodeType != XmlNodeType.XmlDeclaration)
-                {
-                    XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
-                    doc.InsertBefore(dec, root);
-                }
-                doc.InsertBefore(doc.CreateDocumentType("Robot", null, "DTD.dtd", null),
-                        doc.DocumentElement);
-                bool isXmlValid = true;
-                StringBuilder xmlValMsg = new StringBuilder();
-
-                XmlReaderSettings settings = new XmlReaderSettings();
-                settings.DtdProcessing = DtdProcessing.Parse;
-                settings.ValidationType = ValidationType.DTD;
-                settings.ValidationFlags = XmlSchemaValidationFlags.ReportValidationWarnings;
-                settings.ValidationEventHandler += new ValidationEventHandler(delegate (object sender, ValidationEventArgs args)
-                {
-                    isXmlValid = false;
-                    xmlValMsg.AppendLine(args.Message);
-                });
-
-                XmlReader validator = XmlReader.Create(filePath, settings);
-                while (validator.Read()) { }
-                validator.Close();
-
-                validationMessage = xmlValMsg.ToString();
-                return isXmlValid;
-            }
-            return false;
-        }
-
+        
         public void uploadFile()
         {
             //if (buildFile())
