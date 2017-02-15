@@ -43,6 +43,15 @@ namespace WpfApplication1
                     MainEditor.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
                 }
             }
+            KeyBinding SaveCmdKeyBinding = new KeyBinding(ApplicationCommands.Save, Key.S, ModifierKeys.Control);
+            KeyBinding OpenCmdKeyBinding = new KeyBinding(ApplicationCommands.Open, Key.S, ModifierKeys.Control);
+            CommandBinding sv = new CommandBinding(ApplicationCommands.Save);
+            sv.Executed += new ExecutedRoutedEventHandler(SaveButton_Click);
+            CommandBinding op = new CommandBinding(ApplicationCommands.Open);
+            op.Executed += new ExecutedRoutedEventHandler(OpenButton_Click);
+            CommandBindings.Add(op);
+            CommandBindings.Add(sv);
+
         }
 
         #endregion
@@ -91,18 +100,6 @@ namespace WpfApplication1
         private void MainEditor_TextChanged(object sender, EventArgs e)
         {
             recentSaved = false;
-        }
-
-        private void Window_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.S && Keyboard.IsKeyDown(Key.LeftCtrl))
-            {
-                saveFile();
-            }
-            else if (e.Key == Key.O && Keyboard.IsKeyDown(Key.LeftCtrl))
-            {
-                openFile();
-            }
         }
 
         private void UploadButton_Click(object sender, RoutedEventArgs e)

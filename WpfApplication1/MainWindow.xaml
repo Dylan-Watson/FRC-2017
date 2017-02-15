@@ -6,8 +6,7 @@
         xmlns:local="clr-namespace:WpfApplication1"
         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
         mc:Ignorable="d"
-        Title="Config Editor" Height="550" Width="725"
-        PreviewKeyDown="Window_KeyDown" >
+        Title="Config Editor" Height="550" Width="725">
     <Grid>
 
         <!--#region Wrapper -->
