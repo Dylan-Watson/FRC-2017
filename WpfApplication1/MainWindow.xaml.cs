@@ -133,27 +133,6 @@ namespace WpfApplication1
                     XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
                     doc.InsertBefore(dec, root);
                 }
-                doc.InsertBefore(doc.CreateDocumentType("Robot", null, "DTD.dtd", null),
-                        doc.DocumentElement);
-                bool isXmlValid = true;
-                StringBuilder xmlValMsg = new StringBuilder();
-
-                XmlReaderSettings settings = new XmlReaderSettings();
-                settings.DtdProcessing = DtdProcessing.Parse;
-                settings.ValidationType = ValidationType.DTD;
-                settings.ValidationFlags = XmlSchemaValidationFlags.ReportValidationWarnings;
-                settings.ValidationEventHandler += new ValidationEventHandler(delegate (object sender, ValidationEventArgs args)
-                {
-                    isXmlValid = false;
-                    xmlValMsg.AppendLine(args.Message);
-                });
-
-                XmlReader validator = XmlReader.Create(filePath, settings);
-                while (validator.Read()) { }
-                validator.Close();
-
-                validationMessage = xmlValMsg.ToString();
-                return isXmlValid;
             }
             return false;
         }
