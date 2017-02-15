@@ -5,17 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApplication1"
         mc:Ignorable="d"
-        Height="300" Width="300" ResizeMode="NoResize" ShowInTaskbar="False">
+        Height="150" Width="350" ResizeMode="NoResize" ShowInTaskbar="False">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" Name="Padding"/>
             <ColumnDefinition Width="Auto" Name="Picture"/>
-            <ColumnDefinition Width="*" Name="Loading"/>
+            <ColumnDefinition Width="*" Name="LoadText"/>
         </Grid.ColumnDefinitions>
-        <Image Grid.Column="1" Width="75" Height="75"/>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="Auto" Margin="40,0,0,0" 
+        <Image Grid.Column="1" Width="75" Height="75">
+        </Image>
+        <TextBox x:Name="textBox" HorizontalAlignment="Center" Height="Auto" Margin="0" 
                  TextWrapping="Wrap" VerticalAlignment="Center" Width="144" Grid.Column="2"
-                 Text="Loading..." TextAlignment="Center"/>
+                 Text="Loading..." TextAlignment="Center" FontSize="30" BorderThickness="0"/>
     </Grid>
 
 </Window>
