@@ -105,6 +105,11 @@ namespace WpfApplication1
             }
         }
 
+        private void UploadButton_Click(object sender, RoutedEventArgs e)
+        {
+            uploadFile();
+        }
+
         #endregion
 
         #region Methods
@@ -296,9 +301,5 @@ namespace WpfApplication1
 
         #endregion
 
-        private void UploadButton_Click(object sender, RoutedEventArgs e)
-        {
-            uploadFile();
-        }
     }
 }
