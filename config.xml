@@ -59,8 +59,8 @@
     <!--  so DO NOT have matching channel numbers, that allocated drifferent resources in the same spot.-->
     <DI>
       <!--<xxxxxx channel="x" />-->
-      <ntRelayReady channel="8" />
-      <ntRelayConnection channel="9" />
+      <ntRelayReady channel="8" debug="false"/>
+      <ntRelayConnection channel="9" debug="false"/>
     </DI>
 
     <DO>

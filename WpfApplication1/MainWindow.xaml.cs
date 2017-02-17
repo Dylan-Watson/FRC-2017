@@ -29,6 +29,8 @@ namespace WpfApplication1
 
         private string validationMessage { get; set; }
 
+        private Loading load;
+
         #endregion
 
         #region Public Constructors
@@ -132,10 +134,12 @@ namespace WpfApplication1
                     XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
                     doc.InsertBefore(dec, root);
                 }
-                Exception e = Build.BuildFile(filePath);
-                if (e != null)
+                Tuple<string, Exception> e = Build.BuildFile(filePath);
+                if (e.Item2 != null)
                 {
-                    MessageBox.Show($"Custom Build Failed!\nERROR: {e}", "Custom Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBoxResult answer =  MessageBox.Show($"Custom Build Failed!\nERROR: {e.Item1}\n{e.Item2.Message}\n\nWould you like to see the exception?", "Custom Error", MessageBoxButton.YesNo, MessageBoxImage.Error);
+                    if (answer == MessageBoxResult.Yes)
+                        MessageBox.Show($"{e.Item2}", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
                     return false;
                 }
                 else
@@ -250,36 +254,48 @@ namespace WpfApplication1
             //if (buildFile())
             if (saveFile())
             {
-                Loading load = new Loading();
-                try
-                {
-                    load.Show();
-                    FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"ftp://{Properties.Settings.Default.IP}/config.xml");
-                    request.Timeout = 60000;
-                    request.Method = WebRequestMethods.Ftp.UploadFile;
-                    request.Credentials = new NetworkCredential("anonymous", "");
+                load = new Loading();
+                BackgroundWorker helpme = new BackgroundWorker();
+                load.Show();
+                helpme.DoWork += Helpme_DoWork;
+                helpme.RunWorkerCompleted += Helpme_RunWorkerCompleted;
+                helpme.RunWorkerAsync();
+            }
+        }
 
-                    StreamReader sourceStream = new StreamReader(filePath);
-                    byte[] fileContents = Encoding.UTF8.GetBytes(sourceStream.ReadToEnd());
-                    sourceStream.Close();
-                    request.ContentLength = fileContents.Length;
+        private void Helpme_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            load.Close();
+        }
 
-                    Stream requestStream = request.GetRequestStream();
-                    requestStream.Write(fileContents, 0, fileContents.Length);
-                    requestStream.Close();
+        private void Helpme_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
 
-                    FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"ftp://{Properties.Settings.Default.IP}/config.xml");
+                request.Timeout = 10000;
+                request.Method = WebRequestMethods.Ftp.UploadFile;
+                request.Credentials = new NetworkCredential("anonymous", "");
 
-                    load.Close();
-                    response.Close();
-                    MessageBox.Show($"{response.StatusDescription}", "Upload", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Exception thrown in connection\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    MessageBox.Show($"Upload Failed", "Fail", MessageBoxButton.OK, MessageBoxImage.Error);
-                    load.Close();
-                }
+                StreamReader sourceStream = new StreamReader(filePath);
+                byte[] fileContents = Encoding.UTF8.GetBytes(sourceStream.ReadToEnd());
+                sourceStream.Close();
+                request.ContentLength = fileContents.Length;
+
+                Stream requestStream = request.GetRequestStream();
+                requestStream.Write(fileContents, 0, fileContents.Length);
+                requestStream.Close();
+
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+
+                response.Close();
+                MessageBox.Show($"{response.StatusDescription}", "Upload", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Exception thrown in connection\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Upload Failed", "Fail", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

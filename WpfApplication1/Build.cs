@@ -9,7 +9,7 @@ namespace WpfApplication1
     {
         public static XDocument doc;
 
-        public static Exception BuildFile(string filePath)
+        public static Tuple<string, Exception> BuildFile(string filePath)
         {
             #region LoadFile
 
@@ -19,7 +19,7 @@ namespace WpfApplication1
             }
             catch (Exception e)
             {
-                return e;
+                return new Tuple<string,Exception>(@"Faied to load the config!", e);
             }
 
             #endregion
@@ -34,7 +34,7 @@ namespace WpfApplication1
             }
             catch (Exception e)
             {
-                return e;
+                return new Tuple<string, Exception>(@"Failed to locate one or more metadata values!", e);
             }
             #endregion
 
@@ -48,7 +48,7 @@ namespace WpfApplication1
             }
             catch (Exception e)
             {
-                return e;
+                return new Tuple<string, Exception>(@"Failed to load the Quickoad value!", e);
             }
 
             #endregion
@@ -62,7 +62,7 @@ namespace WpfApplication1
             }
             catch (Exception e)
             {
-                return e;
+                return new Tuple<string, Exception>(@"Faied to load the UseNavX Value!", e);
             }
 
             #endregion
@@ -79,7 +79,7 @@ namespace WpfApplication1
                 }
                 catch (Exception e)
                 {
-                    return e;
+                    return new Tuple<string, Exception>("Faied to load the AutoExposure Value!", e);
                 }
 
                 try {
@@ -89,12 +89,12 @@ namespace WpfApplication1
                 }
                 catch (Exception e)
                 {
-                    return e;
+                    return new Tuple<string, Exception>(@"Faied to load one or more of the EnableSecondaryCamera attribute Values!", e);
                 }
             }
             catch (Exception e)
             {
-                return e;
+                return new Tuple<string, Exception>(@"Failed to load the EnableSecondaryServer!", e);
             }
 
             try
@@ -120,13 +120,13 @@ namespace WpfApplication1
                     }
                     catch (Exception e)
                     {
-                        return e;
+                        return new Tuple<string, Exception>(@"Failed to load one or more of the TargetSetting attributes!", e);
                     }
                 }
             }
             catch (Exception e)
             {
-                return e;
+                return new Tuple<string, Exception>(@"Failed to load the TargetSettings Element!", e);
             }
 
             try
@@ -135,7 +135,7 @@ namespace WpfApplication1
             }
             catch (Exception e)
             {
-                return e;
+                return new Tuple<string, Exception>(@"Failed to load the exposure attribute of the CameraSettings element!", e);
             }
 
             #endregion
@@ -155,12 +155,12 @@ namespace WpfApplication1
                     }
                     catch (Exception e)
                     {
-                        return e;
+                        return new Tuple<string, Exception>(@"Failed to load one or more of the Encoder attributes!", e);
                     }
             }
             catch (Exception e)
             {
-                return e;
+                return new Tuple<string, Exception>(@"Failed to load one or more of the Encoder elements!", e);
             }
 
             #endregion Encoders
@@ -177,12 +177,12 @@ namespace WpfApplication1
                     }
                     catch (Exception e)
                     {
-                        return e;
+                        return new Tuple<string, Exception>(@"Failed to load one or more of the attributes for the DI Element!", e);
                     }
             }
             catch (Exception e)
             {
-                return e;
+                return new Tuple<string, Exception>(@"Failed to load one or more of the DI Elements!!", e);
             }
 
             #endregion DI
@@ -199,12 +199,12 @@ namespace WpfApplication1
                     }
                     catch (Exception e)
                     {
-                        return e;
+                        return new Tuple<string, Exception>(@"Failed to load one or more of the attributes for the DO Element!", e);
                     }
             }
             catch (Exception e)
             {
-                return e;
+                return new Tuple<string, Exception>(@"Failed to load one or more of the DO elements!", e);
             }
 
             #endregion DO
@@ -221,12 +221,12 @@ namespace WpfApplication1
                     }
                     catch (Exception e)
                     {
-                        return e;
+                        return new Tuple<string, Exception>(@"Failed to load one or more of the attributes for the AI Element!", e);
                     }
             }
             catch (Exception e)
             {
-                return e;
+                return new Tuple<string, Exception>(@"Failed to load one or more of the AI Elements!", e);
             }
 
             #endregion AI
@@ -243,12 +243,12 @@ namespace WpfApplication1
                     }
                     catch (Exception e)
                     {
-                        return e;
+                        return new Tuple<string, Exception>(@"Failed to load one or more of the attributes for the AO Element!", e);
                     }
             }
             catch (Exception e)
             {
-                return e;
+                return new Tuple<string, Exception>(@"Failed to load one or more of the AO Elements!", e);
             }
 
             #endregion AO
@@ -268,13 +268,13 @@ namespace WpfApplication1
                     }
                     catch (Exception e)
                     {
-                        return e;
+                        return new Tuple<string, Exception>(@"Failed to load one or more of the attributes for the Victor Element!", e);
                     }
                 }
             }
             catch (Exception e)
             {
-                return e;
+                return new Tuple<string, Exception>(@"Failed to load one or more of the Victor Elements!", e);
             }
 
             #endregion Victors
@@ -293,13 +293,13 @@ namespace WpfApplication1
                     }
                     catch (Exception e)
                     {
-                        return e;
+                        return new Tuple<string, Exception>(@"Failed to load one or more of the attributes for the Solenoid Element!", e);
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return ex;
+                return new Tuple<string, Exception>(@"Failed to load one or more of the Solenoid Elements!", e);
             }
 
             #endregion DoubleSolenoids
@@ -314,14 +314,14 @@ namespace WpfApplication1
                         Convert.ToInt32(element.Attribute("channel").Value);
                         Convert.ToBoolean(element.Attribute("debug").Value);
                     }
-                    catch (Exception ex)
+                    catch (Exception e)
                     {
-                        return ex;
+                        return new Tuple<string, Exception>(@"Failed to load one or more of the attributes for the Relay Element!", e);
                     }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return ex;
+                return new Tuple<string, Exception>(@"Failed to load one or more of the Relay Elements!", e);
             }
 
             #endregion Relays
@@ -336,13 +336,14 @@ namespace WpfApplication1
                         Convert.ToInt32(element.Attribute("channel").Value);
                         Convert.ToBoolean(element.Attribute("debug").Value);
                     }
-                    catch (Exception ex)
+                    catch (Exception e)
                     {
-                        return ex; }
+                        return new Tuple<string, Exception>(@"Failed to load one or more of the attributes for the Potentiometer Element!", e);
+                    }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return ex;
+                return new Tuple<string, Exception>(@"Failed to load one or more of the Potentiometer Elements!", e);
             }
 
             #endregion
@@ -411,12 +412,12 @@ namespace WpfApplication1
                         }
                     }
                     catch (Exception e) {
-                        return e;
+                        return new Tuple<string, Exception>(@"Failed to load one or more of the Driver AUX Elements or Attributes!", e);
                     }
                 }
             }
-            catch (Exception ex) {
-                return ex;
+            catch (Exception e) {
+                return new Tuple<string, Exception>(@"Failed to load one or more of the Driver Schema Elements!", e);
             }
 
             #endregion
@@ -467,14 +468,14 @@ namespace WpfApplication1
                     }
                     catch (Exception e)
                     {
-                        return e;
+                        return new Tuple<string, Exception>(@"Failed to load one or more of the Operator Elements!", e);
                     }
 
                 }
             }
             catch (Exception e)
             {
-                return e;
+                return new Tuple<string, Exception>(@"Failed to load one or more of the Operator Elements!", e);
             }
 
             #endregion
@@ -493,19 +494,19 @@ namespace WpfApplication1
                         XAttribute _ttemp = element.Attribute("drivers");
                         _ttemp = element.Attribute("actions");
                     }
-                    catch (Exception ex)
+                    catch (Exception e)
                     {
-                        return ex;
+                        return new Tuple<string, Exception>(@"Failed to load one or more of the VirtualControlEvents Elements!", e);
                     }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return ex;
+                return new Tuple<string, Exception>(@"Failed to load one or more of the VirtualControlEvents Elements!", e);
             }
 
             #endregion
 
-            return null;
+            return new Tuple<string, Exception>(null,null);
         }
 
         #region Util
