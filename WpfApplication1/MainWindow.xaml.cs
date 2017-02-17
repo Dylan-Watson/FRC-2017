@@ -3,9 +3,11 @@ using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Utils;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -100,13 +102,77 @@ namespace WpfApplication1
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             Settings set = new Settings(this);
-            set.Show();
+            set.ShowDialog();
             IsEnabled = false;
         }
    
         private void UploadButton_Click(object sender, RoutedEventArgs e)
         {
             uploadFile();
+        }
+
+        private void Helpme_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            load.Close();
+        }
+
+        private void Helpme_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"ftp://{Properties.Settings.Default.IP}/config.xml");
+                request.Timeout = 10000;
+                request.Method = WebRequestMethods.Ftp.UploadFile;
+                request.Credentials = new NetworkCredential("anonymous", "");
+
+                StreamReader sourceStream = new StreamReader(filePath);
+                byte[] fileContents = Encoding.UTF8.GetBytes(sourceStream.ReadToEnd());
+                sourceStream.Close();
+                request.ContentLength = fileContents.Length;
+
+                Stream requestStream = request.GetRequestStream();
+                requestStream.Write(fileContents, 0, fileContents.Length);
+                requestStream.Close();
+
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+
+                response.Close();
+                MessageBox.Show($"{response.StatusDescription}", "Upload", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Exception thrown in connection\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Upload Failed", "Fail", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void Help_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"ftp://{Properties.Settings.Default.IP}/config.xml");
+                request.Timeout = 10000;
+                request.Method = WebRequestMethods.Ftp.DownloadFile;
+                request.Credentials = new NetworkCredential("anonymous", "");
+
+
+                List<string> lines = ReadLines(request.GetRequestStream());
+
+                MainEditor.Text = string.Empty;
+                foreach (string line in lines)
+                    MainEditor.AppendText(line);
+
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+
+                response.Close();
+                MessageBox.Show($"{response.StatusDescription}", "Upload", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Exception thrown in connection\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Upload Failed", "Fail", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         #endregion
@@ -179,13 +245,15 @@ namespace WpfApplication1
                 if (result == true)
                 {
                     filePath = openDLG.FileName;
-                    checkClose();
-                    StreamReader str = FileReader.OpenFile(filePath, Encoding.UTF8);
-                    MainEditor.Text = str.ReadToEnd();
-                    str.Close();
-                    beenSaved = true;
-                    recentSaved = true;
-                    Title = $"{filePath}";
+                    if (checkClose())
+                    {
+                        StreamReader str = FileReader.OpenFile(filePath, Encoding.UTF8);
+                        MainEditor.Text = str.ReadToEnd();
+                        str.Close();
+                        beenSaved = true;
+                        recentSaved = true;
+                        Title = $"{filePath}";
+                    }
                 }
             }
             catch (Exception ex)
@@ -251,51 +319,41 @@ namespace WpfApplication1
         
         public void uploadFile()
         {
-            //if (buildFile())
-            if (saveFile())
+            if (buildFile())
             {
                 load = new Loading();
                 BackgroundWorker helpme = new BackgroundWorker();
-                load.Show();
+                load.ShowDialog();
                 helpme.DoWork += Helpme_DoWork;
                 helpme.RunWorkerCompleted += Helpme_RunWorkerCompleted;
                 helpme.RunWorkerAsync();
             }
         }
 
-        private void Helpme_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        public void getFile()
         {
-            load.Close();
+            if (!checkClose())
+                return;
+            load = new Loading();
+            BackgroundWorker help = new BackgroundWorker();
+            load.ShowDialog();
+            help.DoWork += Help_DoWork;
+            help.RunWorkerCompleted += Helpme_RunWorkerCompleted;
+            help.RunWorkerAsync();
         }
 
-        private void Helpme_DoWork(object sender, DoWorkEventArgs e)
+        public List<string> ReadLines(Stream streamProvider)
         {
-            try
+            using (streamProvider)
+            using (var reader = new StreamReader(streamProvider))
             {
-
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"ftp://{Properties.Settings.Default.IP}/config.xml");
-                request.Timeout = 10000;
-                request.Method = WebRequestMethods.Ftp.UploadFile;
-                request.Credentials = new NetworkCredential("anonymous", "");
-
-                StreamReader sourceStream = new StreamReader(filePath);
-                byte[] fileContents = Encoding.UTF8.GetBytes(sourceStream.ReadToEnd());
-                sourceStream.Close();
-                request.ContentLength = fileContents.Length;
-
-                Stream requestStream = request.GetRequestStream();
-                requestStream.Write(fileContents, 0, fileContents.Length);
-                requestStream.Close();
-
-                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
-
-                response.Close();
-                MessageBox.Show($"{response.StatusDescription}", "Upload", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Exception thrown in connection\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                MessageBox.Show($"Upload Failed", "Fail", MessageBoxButton.OK, MessageBoxImage.Error);
+                string line;
+                List<string> _temp = new List<string>();
+                while ((line = reader.ReadLine()) != null)
+                {
+                    _temp.Add(line);
+                }
+                return _temp;
             }
         }
 

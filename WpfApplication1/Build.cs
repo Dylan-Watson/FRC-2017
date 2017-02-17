@@ -148,7 +148,7 @@ namespace WpfApplication1
                     try
                     {
                         Convert.ToBoolean(element.Attribute("reversed").Value);
-                        Convert.ToBoolean(element.Attribute("debug").Value);
+                        Convert.ToBoolean(element.Attribute("debug")?.Value);
                         Convert.ToInt32(element.Attribute("aChannel").Value);
                         Convert.ToInt32(element.Attribute("bChannel").Value);
 
@@ -173,7 +173,7 @@ namespace WpfApplication1
                     try
                     {
                         Convert.ToInt32(element.Attribute("channel").Value);
-                        Convert.ToBoolean(element.Attribute("debug").Value);
+                        Convert.ToBoolean(element.Attribute("debug")?.Value);
                     }
                     catch (Exception e)
                     {
@@ -195,7 +195,7 @@ namespace WpfApplication1
                     try
                     {
                         Convert.ToInt32(element.Attribute("channel").Value);
-                        Convert.ToBoolean(element.Attribute("debug").Value);
+                        Convert.ToBoolean(element.Attribute("debug")?.Value);
                     }
                     catch (Exception e)
                     {
@@ -217,7 +217,7 @@ namespace WpfApplication1
                     try
                     {
                         Convert.ToInt32(element.Attribute("channel").Value);
-                        Convert.ToBoolean(element.Attribute("debug").Value);
+                        Convert.ToBoolean(element.Attribute("debug")?.Value);
                     }
                     catch (Exception e)
                     {
@@ -239,7 +239,7 @@ namespace WpfApplication1
                     try
                     {
                         Convert.ToInt32(element.Attribute("channel").Value);
-                        Convert.ToBoolean(element.Attribute("debug").Value);
+                        Convert.ToBoolean(element.Attribute("debug")?.Value);
                     }
                     catch (Exception e)
                     {
@@ -264,7 +264,7 @@ namespace WpfApplication1
                         Convert.ToInt32(element.Attribute("channel").Value);
                         Convert.ToBoolean(element.Attribute("reversed").Value);
                         Convert.ToBoolean(element.Attribute("drive").Value);
-                        Convert.ToBoolean(element.Attribute("debug").Value);
+                        Convert.ToBoolean(element.Attribute("debug")?.Value);
                     }
                     catch (Exception e)
                     {
@@ -289,7 +289,7 @@ namespace WpfApplication1
                         Convert.ToInt32(element.Attribute("forward").Value);
                         Convert.ToInt32(element.Attribute("reverse").Value);
                         Convert.ToBoolean(element.Attribute("reversed").Value);
-                        Convert.ToBoolean(element.Attribute("debug").Value);
+                        Convert.ToBoolean(element.Attribute("debug")?.Value);
                     }
                     catch (Exception e)
                     {
@@ -312,7 +312,7 @@ namespace WpfApplication1
                     try
                     {
                         Convert.ToInt32(element.Attribute("channel").Value);
-                        Convert.ToBoolean(element.Attribute("debug").Value);
+                        Convert.ToBoolean(element.Attribute("debug")?.Value);
                     }
                     catch (Exception e)
                     {
@@ -334,7 +334,7 @@ namespace WpfApplication1
                     try
                     {
                         Convert.ToInt32(element.Attribute("channel").Value);
-                        Convert.ToBoolean(element.Attribute("debug").Value);
+                        Convert.ToBoolean(element.Attribute("debug")?.Value);
                     }
                     catch (Exception e)
                     {
@@ -385,27 +385,27 @@ namespace WpfApplication1
                                 Convert.ToDouble(element.Attribute("deadZone").Value);
                                 _temp = element.Attribute("bindTo");
                                 Convert.ToInt32(element.Attribute("axis").Value);
-                                Convert.ToBoolean(element.Attribute("debug").Value);
+                                Convert.ToBoolean(element.Attribute("debug")?.Value);
                                 break;
 
                             case ControlType.Button:
                                 Convert.ToBoolean(element.Attribute("actOnRelease").Value);
                                 _temp = element.Attribute("bindTo");
                                 Convert.ToInt32(element.Attribute("button").Value);
-                                Convert.ToBoolean(element.Attribute("debug").Value);
+                                Convert.ToBoolean(element.Attribute("debug")?.Value);
                                 break;
 
                             case ControlType.DualButton:
                                 _temp = element.Attribute("bindTo");
                                 Convert.ToInt32(element.Attribute("buttonA").Value);
                                 Convert.ToInt32(element.Attribute("buttonB").Value);
-                                Convert.ToBoolean(element.Attribute("debug").Value);
+                                Convert.ToBoolean(element.Attribute("debug")?.Value);
                                 break;
 
                             case ControlType.ToggleButton:
                                 _temp = element.Attribute("bindTo");
                                 Convert.ToInt32(element.Attribute("button").Value);
-                                Convert.ToBoolean(element.Attribute("debug").Value);
+                                Convert.ToBoolean(element.Attribute("debug")?.Value);
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException();
@@ -439,27 +439,27 @@ namespace WpfApplication1
                                 Convert.ToDouble(element.Attribute("deadZone").Value);
                                 _temp = element.Attribute("bindTo");
                                 Convert.ToInt32(element.Attribute("axis").Value);
-                                Convert.ToBoolean(element.Attribute("debug").Value);
+                                Convert.ToBoolean(element.Attribute("debug")?.Value);
                                 break;
 
                             case ControlType.Button:
                                 Convert.ToBoolean(element.Attribute("actOnRelease").Value);
                                 _temp = element.Attribute("bindTo");
                                 Convert.ToInt32(element.Attribute("button").Value);
-                                Convert.ToBoolean(element.Attribute("debug").Value);
+                                Convert.ToBoolean(element.Attribute("debug")?.Value);
                                 break;
 
                             case ControlType.DualButton:
                                 _temp = element.Attribute("bindTo");
                                 Convert.ToInt32(element.Attribute("buttonA").Value);
                                 Convert.ToInt32(element.Attribute("buttonB").Value);
-                                Convert.ToBoolean(element.Attribute("debug").Value);
+                                Convert.ToBoolean(element.Attribute("debug")?.Value);
                                 break;
 
                             case ControlType.ToggleButton:
                                 _temp = element.Attribute("bindTo");
                                 Convert.ToInt32(element.Attribute("button").Value);
-                                Convert.ToBoolean(element.Attribute("debug").Value);
+                                Convert.ToBoolean(element.Attribute("debug")?.Value);
                                 break;
 
                             default:
