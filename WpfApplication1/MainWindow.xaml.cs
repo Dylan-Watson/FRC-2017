@@ -52,7 +52,6 @@ namespace WpfApplication1
             op.Executed += new ExecutedRoutedEventHandler(OpenButton_Click);
             CommandBindings.Add(op);
             CommandBindings.Add(sv);
-
         }
 
         #endregion

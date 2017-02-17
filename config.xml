@@ -16,7 +16,7 @@
   <!-- Sets whether or not to initialize the NavX -->
   <UseNavX value="true" port="default" />
   
-  <EnableSecondaryCameraServer value="false" width="1280" height="720" fps="30" autoExposure="false"/>
+  <EnableSecondaryCameraServer value="true" width="1280" height="720" fps="30" autoExposure="false"/>
   
   <!-- Sets the Vision Targets and Vision Settings -->
   <TargetSettings>
