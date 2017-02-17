@@ -133,6 +133,14 @@ namespace WpfApplication1
                     XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
                     doc.InsertBefore(dec, root);
                 }
+                Exception e = Build.BuildFile(filePath);
+                if (e != null)
+                {
+                    MessageBox.Show($"Custom Build Failed!\nERROR: {e.Message}", "Custom Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return false;
+                }
+                else
+                    return true;
             }
             return false;
         }
