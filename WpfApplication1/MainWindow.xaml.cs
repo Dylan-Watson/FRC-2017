@@ -136,7 +136,7 @@ namespace WpfApplication1
                 Exception e = Build.BuildFile(filePath);
                 if (e != null)
                 {
-                    MessageBox.Show($"Custom Build Failed!\nERROR: {e.Message}", "Custom Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Custom Build Failed!\nERROR: {e}", "Custom Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return false;
                 }
                 else
