@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace WpfApplication1
@@ -84,12 +82,12 @@ namespace WpfApplication1
                     return e;
                 }
 
-                try{
+                try {
                     Convert.ToInt32(getAttributeValue("width", "EnableSecondaryCameraServer"));
                     Convert.ToInt32(getAttributeValue("height", "EnableSecondaryCameraServer"));
                     Convert.ToInt32(getAttributeValue("fps", "EnableSecondaryCameraServer"));
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     return e;
                 }
@@ -150,11 +148,10 @@ namespace WpfApplication1
                     try
                     {
                         Convert.ToBoolean(element.Attribute("reversed").Value);
-
+                        Convert.ToBoolean(element.Attribute("debug").Value);
                         Convert.ToInt32(element.Attribute("aChannel").Value);
                         Convert.ToInt32(element.Attribute("bChannel").Value);
 
-                        Convert.ToBoolean(element.Attribute("debug")?.Value));
                     }
                     catch (Exception e)
                     {
@@ -176,7 +173,7 @@ namespace WpfApplication1
                     try
                     {
                         Convert.ToInt32(element.Attribute("channel").Value);
-                        Convert.ToBoolean(element.Attribute("debug")?.Value);
+                        Convert.ToBoolean(element.Attribute("debug").Value);
                     }
                     catch (Exception e)
                     {
@@ -198,7 +195,7 @@ namespace WpfApplication1
                     try
                     {
                         Convert.ToInt32(element.Attribute("channel").Value);
-                        Convert.ToBoolean(element.Attribute("debug")?.Value);
+                        Convert.ToBoolean(element.Attribute("debug").Value);
                     }
                     catch (Exception e)
                     {
@@ -220,31 +217,16 @@ namespace WpfApplication1
                     try
                     {
                         Convert.ToInt32(element.Attribute("channel").Value);
-                        Convert.ToBoolean(element.Attribute("debug")?.Value);
+                        Convert.ToBoolean(element.Attribute("debug").Value);
                     }
-                    catch (Exception ex)
+                    catch (Exception e)
                     {
-                        if (ex is AllocationException)
-                        {
-                            AllocationExceptionReport(ex, element);
-                        }
-                        else
-                        {
-                            Report.Error(
-                                $"Failed to load AnalogInput {element?.Name}. This may cause a fatal runtime error! See log for details.");
-                            Log.Write(ex);
-                            if (VerboseOutput)
-                                Report.Error(ex.Message);
-                        }
+                        return e;
                     }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Report.Error(
-                    "There was an error loading one or more analog inputs. This may cause a fatal runtime error! See log for details.");
-                Log.Write(ex);
-                if (VerboseOutput)
-                    Report.Error(ex.Message);
+                return e;
             }
 
             #endregion AI
@@ -256,40 +238,17 @@ namespace WpfApplication1
                 foreach (var element in getElements("RobotConfig", "AO"))
                     try
                     {
-                        componentNames.Add(new CommonName(element.Name.ToString()));
-                        Report.General(
-                            $"Added Analog Output {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
-                        var ao = new AnalogOutputItem(Convert.ToInt32(element.Attribute("channel").Value),
-                            element.Name.ToString());
-
-                        ActiveCollection.AddComponent(ao);
-
-                        if (Convert.ToBoolean(element.Attribute("debug")?.Value))
-                            ao.Debug = true;
+                        Convert.ToInt32(element.Attribute("channel").Value);
+                        Convert.ToBoolean(element.Attribute("debug").Value);
                     }
-                    catch (Exception ex)
+                    catch (Exception e)
                     {
-                        if (ex is AllocationException)
-                        {
-                            AllocationExceptionReport(ex, element);
-                        }
-                        else
-                        {
-                            Report.Error(
-                                $"Failed to load AnalogOutput {element?.Name}. This may cause a fatal runtime error! See log for details.");
-                            Log.Write(ex);
-                            if (VerboseOutput)
-                                Report.Error(ex.Message);
-                        }
+                        return e;
                     }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Report.Error(
-                    "There was an error loading one or more analog outputs. This may cause a fatal runtime error! See log for details.");
-                Log.Write(ex);
-                if (VerboseOutput)
-                    Report.Error(ex.Message);
+                return e;
             }
 
             #endregion AO
@@ -298,108 +257,24 @@ namespace WpfApplication1
 
             try
             {
-                foreach (var element in getElements("RobotConfig", "Victors"))
+                foreach (var element in getElements("RobotConfig", "Victors")) {
                     try
                     {
                         var type = element.Attribute("type").Value;
-
-                        var t = VictorType.Sp;
-                        if (type == "888")
-                            t = VictorType.EightEightEight;
-
-                        DigitalInputItem upperLimit = null;
-                        DigitalInputItem lowerLimit = null;
-                        if (element.Attribute("upperLimit") != null)
-                            upperLimit =
-                                (DigitalInputItem)
-                                ActiveCollection.Get(toBindCommonName(element.Attribute("upperLimit"))[0]);
-                        if (element.Attribute("lowerLimit") != null)
-                            lowerLimit =
-                                (DigitalInputItem)
-                                ActiveCollection.Get(toBindCommonName(element.Attribute("lowerLimit"))[0]);
-                        EncoderItem motorEncoder = null;
-                        if (element.Attribute("encoder") != null)
-                            motorEncoder =
-                                (EncoderItem)
-                                ActiveCollection.Get(toBindCommonName(element.Attribute("encoder"))[0]);
-
-                        componentNames.Add(new CommonName(element.Name.ToString()));
-                        Report.General(
-                            $"Added Victor{type} {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
-                        if (!Convert.ToBoolean(element.Attribute("drive").Value))
-                        {
-                            var temp = new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value));
-
-                            ActiveCollection.AddComponent(temp);
-                            temp.SetUpperLimit(upperLimit);
-                            temp.SetLowerLimit(lowerLimit);
-                            temp.SetEncoder(motorEncoder);
-
-                            if (Convert.ToBoolean(element.Attribute("debug")?.Value))
-                                temp.Debug = true;
-                        }
-                        else
-                        {
-                            switch (element.Attribute("side").Value)
-                            {
-                                case "right":
-                                    var temp =
-                                        new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
-                                            element.Name.ToString(), Motor.Side.Right,
-                                            Convert.ToBoolean(element.Attribute("reversed").Value));
-
-                                    ActiveCollection.AddComponent(temp);
-                                    temp.SetUpperLimit(upperLimit);
-                                    temp.SetLowerLimit(lowerLimit);
-                                    temp.SetEncoder(motorEncoder);
-
-                                    if (Convert.ToBoolean(element.Attribute("debug")?.Value))
-                                        temp.Debug = true;
-
-                                    break;
-
-                                case "left":
-                                    temp =
-                                        new VictorItem(t, Convert.ToInt32(element.Attribute("channel").Value),
-                                            element.Name.ToString(), Motor.Side.Left,
-                                            Convert.ToBoolean(element.Attribute("reversed").Value));
-
-                                    ActiveCollection.AddComponent(temp);
-                                    temp.SetUpperLimit(upperLimit);
-                                    temp.SetLowerLimit(lowerLimit);
-                                    temp.SetEncoder(motorEncoder);
-
-                                    if (Convert.ToBoolean(element.Attribute("debug")?.Value))
-                                        temp.Debug = true;
-
-                                    break;
-                            }
-                        }
+                        Convert.ToInt32(element.Attribute("channel").Value);
+                        Convert.ToBoolean(element.Attribute("reversed").Value);
+                        Convert.ToBoolean(element.Attribute("drive").Value);
+                        Convert.ToBoolean(element.Attribute("debug").Value);
                     }
-                    catch (Exception ex)
+                    catch (Exception e)
                     {
-                        if (ex is AllocationException)
-                        {
-                            AllocationExceptionReport(ex, element);
-                        }
-                        else
-                        {
-                            Report.Error(
-                                $"Failed to load Victor {element?.Name}. This may cause a fatal runtime error! See log for details.");
-                            Log.Write(ex);
-                            if (VerboseOutput)
-                                Report.Error(ex.Message);
-                        }
+                        return e;
                     }
+                }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Report.Error(
-                    "There was an error loading one or more victors. This may cause a fatal runtime error! See log for details.");
-                Log.Write(ex);
-                if (VerboseOutput)
-                    Report.Error(ex.Message);
+                return e;
             }
 
             #endregion Victors
@@ -408,53 +283,23 @@ namespace WpfApplication1
 
             try
             {
-                foreach (var element in getElements("RobotConfig", "Solenoids"))
+                foreach (var element in getElements("RobotConfig", "Solenoids")) {
                     try
                     {
-                        var _default = element.Attribute("default")?.Value;
-
-                        var d = DoubleSolenoid.Value.Off;
-                        if (_default == "forward")
-                            d = DoubleSolenoid.Value.Forward;
-                        else if (_default == "reverse")
-                            d = DoubleSolenoid.Value.Reverse;
-
-                        componentNames.Add(new CommonName(element.Name.ToString()));
-                        Report.General(
-                            $"Added Double Solenoid {element.Name}, forward channel {Convert.ToInt32(element.Attribute("forward").Value)}, reverse channel {Convert.ToInt32(element.Attribute("reverse").Value)}, default position = {d}, is reversed = {Convert.ToBoolean(element.Attribute("reversed").Value)}");
-                        var ds = new DoubleSolenoidItem(element.Name.ToString(),
-                            Convert.ToInt32(element.Attribute("forward").Value),
-                            Convert.ToInt32(element.Attribute("reverse").Value), d,
-                            Convert.ToBoolean(element.Attribute("reversed").Value));
-
-                        ActiveCollection.AddComponent(ds);
-
-                        if (Convert.ToBoolean(element.Attribute("debug")?.Value))
-                            ds.Debug = true;
+                        Convert.ToInt32(element.Attribute("forward").Value);
+                        Convert.ToInt32(element.Attribute("reverse").Value);
+                        Convert.ToBoolean(element.Attribute("reversed").Value);
+                        Convert.ToBoolean(element.Attribute("debug").Value);
                     }
-                    catch (Exception ex)
+                    catch (Exception e)
                     {
-                        if (ex is AllocationException)
-                        {
-                            AllocationExceptionReport(ex, element);
-                        }
-                        else
-                        {
-                            Report.Error(
-                                $"Failed to load DoubleSolenoid {element?.Name}. This may cause a fatal runtime error! See log for details.");
-                            Log.Write(ex);
-                            if (VerboseOutput)
-                                Report.Error(ex.Message);
-                        }
+                        return e;
                     }
+                }
             }
             catch (Exception ex)
             {
-                Report.Error(
-                    "There was an error loading one or more DoubleSolenoids. This may cause a fatal runtime error! See log for details.");
-                Log.Write(ex);
-                if (VerboseOutput)
-                    Report.Error(ex.Message);
+                return ex;
             }
 
             #endregion DoubleSolenoids
@@ -466,49 +311,17 @@ namespace WpfApplication1
                 foreach (var element in getElements("RobotConfig", "Relays"))
                     try
                     {
-                        componentNames.Add(new CommonName(element.Name.ToString()));
-
-                        var _default = element.Attribute("default")?.Value;
-                        var d = Relay.Value.Off;
-                        if (_default == "on")
-                            d = Relay.Value.On;
-                        else if (_default == "forward")
-                            d = Relay.Value.Forward;
-                        else if (_default == "reverse")
-                            d = Relay.Value.Reverse;
-
-                        Report.General(
-                            $"Added Relay {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}, default position {d}");
-                        var relay = new RelayItem(Convert.ToInt32(element.Attribute("channel").Value),
-                            element.Name.ToString(), d);
-                        ActiveCollection.AddComponent(relay);
-
-                        if (Convert.ToBoolean(element.Attribute("debug")?.Value))
-                            relay.Debug = true;
+                        Convert.ToInt32(element.Attribute("channel").Value);
+                        Convert.ToBoolean(element.Attribute("debug").Value);
                     }
                     catch (Exception ex)
                     {
-                        if (ex is AllocationException)
-                        {
-                            AllocationExceptionReport(ex, element);
-                        }
-                        else
-                        {
-                            Report.Error(
-                                $"Failed to load Relay {element?.Name}. This may cause a fatal runtime error! See log for details.");
-                            Log.Write(ex);
-                            if (VerboseOutput)
-                                Report.Error(ex.Message);
-                        }
+                        return ex;
                     }
             }
             catch (Exception ex)
             {
-                Report.Error(
-                    "There was an error loading one or more relays. This may cause a fatal runtime error! See log for details.");
-                Log.Write(ex);
-                if (VerboseOutput)
-                    Report.Error(ex.Message);
+                return ex;
             }
 
             #endregion Relays
@@ -520,83 +333,254 @@ namespace WpfApplication1
                 foreach (var element in getElements("RobotConfig", "Potentiometers"))
                     try
                     {
-                        componentNames.Add(new CommonName(element.Name.ToString()));
-
-                        Report.General(
-                            $"Added Potentiometer {element.Name}, channel {Convert.ToInt32(element.Attribute("channel").Value)}");
-                        var tmp = new PotentiometerItem(Convert.ToInt32(element.Attribute("channel").Value),
-                            element.Name.ToString());
-                        ActiveCollection.AddComponent(tmp);
-
-                        if (Convert.ToBoolean(element.Attribute("debug")?.Value))
-                            tmp.Debug = true;
+                        Convert.ToInt32(element.Attribute("channel").Value);
+                        Convert.ToBoolean(element.Attribute("debug").Value);
                     }
                     catch (Exception ex)
                     {
-                        if (ex is AllocationException)
-                        {
-                            AllocationExceptionReport(ex, element);
-                        }
-                        else
-                        {
-                            Report.Error(
-                                $"Failed to load Potentiometer {element?.Name}. This may cause a fatal runtime error! See log for details.");
-                            Log.Write(ex);
-                            if (VerboseOutput)
-                                Report.Error(ex.Message);
-                        }
-                    }
+                        return ex; }
             }
             catch (Exception ex)
             {
-                Report.Error(
-                    "There was an error loading one or more potentiometers. This may cause a fatal runtime error! See log for details.");
-                Log.Write(ex);
-                if (VerboseOutput)
-                    Report.Error(ex.Message);
+                return ex;
             }
 
             #endregion
 
-            retrieveDriverSchema();
-            retrieveOperatorSchema();
-            constructVirtualControlEvents();
+            #endregion
+
+            #region AllocateDriverSchema
+
+            try
+            {
+                Convert.ToInt32(getAttributeValue("controllerSlot", "Controls", "Driver", "slot"));
+                Convert.ToInt32(getAttributeValue("driveFit", "Controls", "Driver", "drive"));
+                Convert.ToDouble(getAttributeValue("power", "Controls", "Driver", "drive"));
+                Convert.ToDouble(getAttributeValue("powerMultiplier", "Controls", "Driver", "powerMultiplier"));
+
+                Convert.ToInt32(getAttributeValue("axis", "Controls", "Driver", "leftDrive"));
+                Convert.ToInt32(getAttributeValue("axis", "Controls", "Driver", "rightDrive"));
+                Convert.ToBoolean(getAttributeValue("reversed", "Controls", "Driver", "leftDrive"));
+                Convert.ToBoolean(getAttributeValue("reversed", "Controls", "Driver", "rightDrive"));
+                Convert.ToDouble(getAttributeValue("deadZone", "Controls", "Driver", "leftDrive"));
+                Convert.ToDouble(getAttributeValue("deadZone", "Controls", "Driver", "rightDrive"));
+                XAttribute _temp = getAttribute("bindTo", "Controls", "Driver", "leftDrive");
+
+                Convert.ToBoolean(getAttributeValue("debug", "Controls", "Driver", "leftDrive"));
+                
+                _temp = getAttribute("bindTo", "Controls", "Driver", "rightDrive");
+
+                Convert.ToBoolean(getAttributeValue("debug", "Controls", "Driver", "rightDrive"));
+
+                foreach (var element in getElements("Controls", "DriverAux")) {
+                    try
+                    {
+                        Convert.ToDouble(element.Attribute("powerMultiplier").Value);
+                        Convert.ToBoolean(element.Attribute("reversed").Value);
+
+                        switch (GetControlTypeFromAttribute(element.Attribute("type")))
+                        {
+                            case ControlType.Axis:
+                                Convert.ToDouble(element.Attribute("deadZone").Value);
+                                _temp = element.Attribute("bindTo");
+                                Convert.ToInt32(element.Attribute("axis").Value);
+                                Convert.ToBoolean(element.Attribute("debug").Value);
+                                break;
+
+                            case ControlType.Button:
+                                Convert.ToBoolean(element.Attribute("actOnRelease").Value);
+                                _temp = element.Attribute("bindTo");
+                                Convert.ToInt32(element.Attribute("button").Value);
+                                Convert.ToBoolean(element.Attribute("debug").Value);
+                                break;
+
+                            case ControlType.DualButton:
+                                _temp = element.Attribute("bindTo");
+                                Convert.ToInt32(element.Attribute("buttonA").Value);
+                                Convert.ToInt32(element.Attribute("buttonB").Value);
+                                Convert.ToBoolean(element.Attribute("debug").Value);
+                                break;
+
+                            case ControlType.ToggleButton:
+                                _temp = element.Attribute("bindTo");
+                                Convert.ToInt32(element.Attribute("button").Value);
+                                Convert.ToBoolean(element.Attribute("debug").Value);
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                    catch (Exception e) {
+                        return e;
+                    }
+                }
+            }
+            catch (Exception ex) {
+                return ex;
+            }
+
+            #endregion
+
+            #region AllocateOperatorSchema
+
+            try
+            {
+                foreach (var element in getElements("Controls", "Operator").Where(element => element.Name != "slot"))
+                {
+                    try
+                    {
+                        XAttribute _temp;
+                        Convert.ToDouble(element.Attribute("powerMultiplier").Value);
+                        Convert.ToBoolean(element.Attribute("reversed").Value);
+                        switch (GetControlTypeFromAttribute(element.Attribute("type")))
+                        {
+                            case ControlType.Axis:
+                                Convert.ToDouble(element.Attribute("deadZone").Value);
+                                _temp = element.Attribute("bindTo");
+                                Convert.ToInt32(element.Attribute("axis").Value);
+                                Convert.ToBoolean(element.Attribute("debug").Value);
+                                break;
+
+                            case ControlType.Button:
+                                Convert.ToBoolean(element.Attribute("actOnRelease").Value);
+                                _temp = element.Attribute("bindTo");
+                                Convert.ToInt32(element.Attribute("button").Value);
+                                Convert.ToBoolean(element.Attribute("debug").Value);
+                                break;
+
+                            case ControlType.DualButton:
+                                _temp = element.Attribute("bindTo");
+                                Convert.ToInt32(element.Attribute("buttonA").Value);
+                                Convert.ToInt32(element.Attribute("buttonB").Value);
+                                Convert.ToBoolean(element.Attribute("debug").Value);
+                                break;
+
+                            case ControlType.ToggleButton:
+                                _temp = element.Attribute("bindTo");
+                                Convert.ToInt32(element.Attribute("button").Value);
+                                Convert.ToBoolean(element.Attribute("debug").Value);
+                                break;
+
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        return e;
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
+
+            #endregion
+
+            #region Construct VirtualControlEvents
+
+            try
+            {
+                foreach (var element in getElements("VirtualControlEvents"))
+                    try
+                    {
+                        string _temp = element.Attribute("type")?.Value;
+                        _temp = element.Attribute("setMethod")?.Value;
+                        Convert.ToBoolean(element.Attribute("auton")?.Value);
+                        Convert.ToBoolean(element.Attribute("teleop")?.Value);
+                        XAttribute _ttemp = element.Attribute("drivers");
+                        _ttemp = element.Attribute("actions");
+                    }
+                    catch (Exception ex)
+                    {
+                        return ex;
+                    }
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+
+            #endregion
+
+            return null;
         }
-        #endregion Potentiometers
 
         #region Util
 
         private static string getAttributeValue(string attribute, params string[] elements)
+        {
+        return getNode(elements).Attribute(attribute).Value;
+        }
+
+        private static XElement getNode(params string[] elements)
+        {
+            var node = doc.Root;
+
+            node = elements.Aggregate(node, (current, value) => current.Element(value));
+            return node;
+        }
+
+        public static void Load(string fileName)
+        {
+            doc = XDocument.Load(fileName);
+        }
+
+        private static IEnumerable<XElement> getElements(params string[] elements) => getNode(elements).Elements();
+
+        private static XAttribute getAttribute(string attribute, params string[] elements)
+        {
+            return getNode(elements).Attribute(attribute);
+        }
+
+        private static ControlType GetControlTypeFromAttribute(XAttribute attribute)
+        {
+            if (attribute == null)
             {
-                try
-                {
-                    return getNode(elements).Attribute(attribute).Value;
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-                return null;
+                throw new ArgumentNullException(nameof(attribute),
+                    "Parameter cannot be null in GetControlTypeFromAttribute.");
             }
 
-            private static XElement getNode(params string[] elements)
+            switch (attribute.Value)
             {
-                var node = doc.Root;
-            
-                node = elements.Aggregate(node, (current, value) => current.Element(value));
-                return node;
+                case "button":
+                    return ControlType.Button;
+
+                case "dualButton":
+                    return ControlType.DualButton;
+
+                case "toggle":
+                    return ControlType.ToggleButton;
+
+                default:
+                    return ControlType.Axis;
             }
+        }
 
-            public static void Load(string fileName)
-            {
-                doc = XDocument.Load(fileName);
-            }
+        private enum ControlType {
+            /// <summary>
+            ///     Axis control
+            /// </summary>
+            Axis,
 
-            private static IEnumerable<XElement> getElements(params string[] elements) => getNode(elements).Elements();
+            /// <summary>
+            ///     Button control
+            /// </summary>
+            Button,
 
+            /// <summary>
+            ///     Two button control
+            /// </summary>
+            DualButton,
+
+            /// <summary>
+            ///     Toggle button control
+            /// </summary>
+            ToggleButton
+        }
 
         #endregion
-
-    }
     }
 }
