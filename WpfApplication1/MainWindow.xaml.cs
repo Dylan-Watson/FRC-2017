@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using System.Xml;
 using System.Xml.Schema;
 
@@ -111,6 +112,11 @@ namespace WpfApplication1
             uploadFile();
         }
 
+        private void DownloadButton_Click(object sender, RoutedEventArgs e)
+        {
+            getFile();
+        }
+
         private void Helpme_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             load.Close();
@@ -156,12 +162,8 @@ namespace WpfApplication1
                 request.Method = WebRequestMethods.Ftp.DownloadFile;
                 request.Credentials = new NetworkCredential("anonymous", "");
 
-
-                List<string> lines = ReadLines(request.GetRequestStream());
-
-                MainEditor.Text = string.Empty;
-                foreach (string line in lines)
-                    MainEditor.AppendText(line);
+                MainEditor.Dispatcher.Invoke(DispatcherPriority.Normal,
+                        new Action(() => { MainEditor.AppendText(ReadLines(request.GetResponse().GetResponseStream())); }));
 
                 FtpWebResponse response = (FtpWebResponse)request.GetResponse();
 
@@ -323,10 +325,10 @@ namespace WpfApplication1
             {
                 load = new Loading();
                 BackgroundWorker helpme = new BackgroundWorker();
-                load.ShowDialog();
                 helpme.DoWork += Helpme_DoWork;
                 helpme.RunWorkerCompleted += Helpme_RunWorkerCompleted;
                 helpme.RunWorkerAsync();
+                load.ShowDialog();
             }
         }
 
@@ -336,25 +338,16 @@ namespace WpfApplication1
                 return;
             load = new Loading();
             BackgroundWorker help = new BackgroundWorker();
-            load.ShowDialog();
             help.DoWork += Help_DoWork;
             help.RunWorkerCompleted += Helpme_RunWorkerCompleted;
             help.RunWorkerAsync();
+            load.ShowDialog();
         }
 
-        public List<string> ReadLines(Stream streamProvider)
+        public string ReadLines(Stream streamProvider)
         {
-            using (streamProvider)
             using (var reader = new StreamReader(streamProvider))
-            {
-                string line;
-                List<string> _temp = new List<string>();
-                while ((line = reader.ReadLine()) != null)
-                {
-                    _temp.Add(line);
-                }
-                return _temp;
-            }
+                return reader.ReadToEnd();
         }
 
         #endregion
