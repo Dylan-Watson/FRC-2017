@@ -257,9 +257,14 @@ namespace WpfApplication1
                 request.Method = WebRequestMethods.Ftp.DownloadFile;
                 request.Credentials = new NetworkCredential("anonymous", "");
 
+                string lines = null;
+
+                using (var reader = new StreamReader(request.GetResponse().GetResponseStream()))
+                    lines = reader.ReadToEnd();
+
                 ///Get the XML Text of the file on the RoboRIO
                 MainEditor.Dispatcher.Invoke(DispatcherPriority.Normal,
-                        new Action(() => { MainEditor.Clear(); MainEditor.AppendText(ReadLines(request.GetResponse().GetResponseStream())); }));
+                        new Action(() => { MainEditor.Clear(); MainEditor.AppendText(lines); }));
 
                 FtpWebResponse response = (FtpWebResponse)request.GetResponse();
 
@@ -465,18 +470,6 @@ namespace WpfApplication1
                 help.RunWorkerAsync();
                 load.ShowDialog();
             }
-
-        /// <summary>
-        ///     Utility method to read all lines from a configuration file 
-        ///     and return them
-        /// </summary>
-        /// <param name="streamProvider">The stream to read the file from</param>
-        /// <returns>XML File Lines</returns>
-        public string ReadLines(Stream streamProvider)
-        {
-            using (var reader = new StreamReader(streamProvider))
-                return reader.ReadToEnd();
-        }
 
         #endregion
 

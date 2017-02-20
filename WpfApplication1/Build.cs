@@ -139,7 +139,10 @@ namespace WpfApplication1
 
             try
             {
-                Convert.ToDouble(getAttributeValue("exposure", "CameraSettings"));
+                if (getAttributeValue("exposure", "CameraSettings") != "null")
+                {
+                    Convert.ToDouble(getAttributeValue("exposure", "CameraSettings"));
+                }
             }
             catch (Exception e)
             {
