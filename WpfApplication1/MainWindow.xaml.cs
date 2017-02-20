@@ -3,17 +3,14 @@ using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Utils;
 using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
-using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml;
-using System.Xml.Schema;
 
 namespace WpfApplication1
 {
@@ -24,24 +21,46 @@ namespace WpfApplication1
     {
         #region Instance Vars
 
+        /// <summary>
+        ///     Boolean property to determine if the current file has ever been saved
+        /// </summary>
         private bool beenSaved { get; set; } = false;
         
+        /// <summary>
+        ///     The full system file path of the current file
+        /// </summary>
         private string filePath { get; set; } = null;
 
+        /// <summary>
+        ///     Boolean property to determine if the current file has been saved with all current changes
+        /// </summary>
         private bool recentSaved { get; set; } = false;
 
+        /// <summary>
+        ///     The message returned by the validation checker
+        /// </summary>
         private string validationMessage { get; set; }
 
+        /// <summary>
+        ///     The loading window to show while connecting to the RoboRIO
+        /// </summary>
         private Loading load;
 
         #endregion
 
         #region Public Constructors
 
+        /// <summary>
+        ///     Constructor
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
+            
+            ///Set the event handler for the window closing event
             Closing += MainWindow_Closing;
+
+            ///Set up the custom XMl Highlighting definition
             using (StreamReader s = new StreamReader(@"XML.xshd"))
             {
                 using (XmlTextReader reader = new XmlTextReader(s))
@@ -49,6 +68,8 @@ namespace WpfApplication1
                     MainEditor.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
                 }
             }
+
+            ///Set up the custom key bindings
             KeyBinding SaveCmdKeyBinding = new KeyBinding(ApplicationCommands.Save, Key.S, ModifierKeys.Control);
             KeyBinding OpenCmdKeyBinding = new KeyBinding(ApplicationCommands.Open, Key.S, ModifierKeys.Control);
             CommandBinding sv = new CommandBinding(ApplicationCommands.Save);
@@ -63,84 +84,152 @@ namespace WpfApplication1
 
         #region Event Handlers
 
+        /// <summary>
+        ///     Event handler for the build button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BuildButton_Click(object sender, RoutedEventArgs e)
         {
+            ///Check to see if the XML is valid
             bool valid = buildFile();
+
+            ///Display the results
             if (valid)
                 MessageBox.Show("You're all set!", "Valid", MessageBoxButton.OK, MessageBoxImage.Information);
             else if (!valid)
                 MessageBox.Show($"Build Failed!\nERROR:\n{validationMessage}", "Not Valid", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
+        /// <summary>
+        ///     Event handler for the exit button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
 
+        /// <summary>
+        ///     Event handler to manage the recent saved property whenever the textbox content is changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainEditor_TextChanged(object sender, EventArgs e)
         {
             recentSaved = false;
         }
 
+        /// <summary>
+        ///     Event handler to check for unsaved changed when the window closes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainWindow_Closing(object sender, CancelEventArgs e)
-        {
+        {   
+            ///Cancel the closing of the window
             if (!checkClose())
                 e.Cancel = true;
+
+            ///Close the window
             else
                 Environment.Exit(0);
         }
 
+        /// <summary>
+        ///     Event handler for the open file button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OpenButton_Click(object sender, RoutedEventArgs e)
         {
             openFile();
         }
 
+        /// <summary>
+        ///     Event handler for the save file button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             saveFile();
         }
 
+        /// <summary>
+        ///     Event handler for the open settings window button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
+            ///Open the settings window
             Settings set = new Settings(this);
             set.ShowDialog();
+
+            ///Deactivate this window
             IsEnabled = false;
         }
-   
+        
+        /// <summary>
+        ///     Event handler for the upload file button
+        /// <param name="e"></param>
+        /// <param name="sender"></param>
         private void UploadButton_Click(object sender, RoutedEventArgs e)
         {
             uploadFile();
         }
 
+        /// <summary>
+        ///     Event handler for the download file button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
             getFile();
         }
 
+        /// <summary>
+        ///     Event handler for the upload file background worker
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Helpme_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             load.Close();
         }
 
+        /// <summary>
+        ///     Event handler for the DoWork function in the upload file
+        ///     BackgroundWorker
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Helpme_DoWork(object sender, DoWorkEventArgs e)
         {
             try
             {
-
+                ///Initiate an FTP request
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"ftp://{Properties.Settings.Default.IP}/config.xml");
                 request.Timeout = 10000;
                 request.Method = WebRequestMethods.Ftp.UploadFile;
                 request.Credentials = new NetworkCredential("anonymous", "");
 
+                ///Open a StreamReader to the filePath
                 StreamReader sourceStream = new StreamReader(filePath);
+                ///Get the contents of the file
                 byte[] fileContents = Encoding.UTF8.GetBytes(sourceStream.ReadToEnd());
                 sourceStream.Close();
                 request.ContentLength = fileContents.Length;
-
+                
+                ///Open a Stream to the RoboRIO and upload the file
                 Stream requestStream = request.GetRequestStream();
                 requestStream.Write(fileContents, 0, fileContents.Length);
                 requestStream.Close();
 
+                ///Get a response from the RoboRIO
                 FtpWebResponse response = (FtpWebResponse)request.GetResponse();
 
                 response.Close();
@@ -153,15 +242,22 @@ namespace WpfApplication1
             }
         }
 
+        /// <summary>
+        ///     Event handler for the DoWork function in the download file BackgroundWorker
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Help_DoWork(object sender, DoWorkEventArgs e)
         {
             try
             {
+                ///Initiate an FTP request
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"ftp://{Properties.Settings.Default.IP}/config.xml");
                 request.Timeout = 10000;
                 request.Method = WebRequestMethods.Ftp.DownloadFile;
                 request.Credentials = new NetworkCredential("anonymous", "");
 
+                ///Get the XML Text of the file on the RoboRIO
                 MainEditor.Dispatcher.Invoke(DispatcherPriority.Normal,
                         new Action(() => { MainEditor.AppendText(ReadLines(request.GetResponse().GetResponseStream())); }));
 
@@ -181,12 +277,18 @@ namespace WpfApplication1
 
         #region Methods
 
+        /// <summary>
+        ///     Utility method to handle validating the file
+        /// </summary>
+        /// <returns>IsXMLValid</returns>
         private bool buildFile()
         {
+            ///Get the current content of the textbox
             XmlDocument doc = new XmlDocument();
             string content = MainEditor.Text;
             try
             {
+                ///NOTE: This will validate the XML against the XML Spec
                 doc.LoadXml(content);
             }
             catch (Exception ex)
@@ -194,6 +296,7 @@ namespace WpfApplication1
                 MessageBox.Show($"Build failed on account of invalid XML by W3 Spec\nERROR: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
+            ///Save the file
             if (saveFile())
             {
                 XmlElement root = doc.DocumentElement;
@@ -202,6 +305,7 @@ namespace WpfApplication1
                     XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
                     doc.InsertBefore(dec, root);
                 }
+                ///Test the XML against the custom config
                 Tuple<string, Exception> e = Build.BuildFile(filePath);
                 if (e.Item2 != null)
                 {
@@ -216,6 +320,10 @@ namespace WpfApplication1
             return false;
         }
 
+        /// <summary>
+        ///     Utility method to handle checking for saved changes
+        /// </summary>
+        /// <returns>IsRecentlySaved</returns>
         private bool checkClose()
         {
             if ((!recentSaved || !beenSaved) && MainEditor.Text != "")
@@ -236,6 +344,9 @@ namespace WpfApplication1
                 return true;
         }
 
+        /// <summary>
+        ///     Utility method to handle opening a file
+        /// </summary>
         private void openFile()
         {
             try
@@ -265,6 +376,10 @@ namespace WpfApplication1
 
         }
 
+        /// <summary>
+        ///     Utility method to handle saving a file
+        /// </summary>
+        /// <returns>IsFileSaved</returns>
         private bool saveFile()
         {
             if (!beenSaved)
@@ -319,6 +434,9 @@ namespace WpfApplication1
             }
         }
         
+        /// <summary>
+        ///     Utility method to handle uploading a file to the RoboRIO
+        /// </summary>
         public void uploadFile()
         {
             if (buildFile())
@@ -332,18 +450,28 @@ namespace WpfApplication1
             }
         }
 
+        /// <summary>
+        ///     Utility method to handle downloading 
+        ///     a file from the RoboRIO
+        /// </summary>
         public void getFile()
-        {
-            if (!checkClose())
-                return;
-            load = new Loading();
-            BackgroundWorker help = new BackgroundWorker();
-            help.DoWork += Help_DoWork;
-            help.RunWorkerCompleted += Helpme_RunWorkerCompleted;
-            help.RunWorkerAsync();
-            load.ShowDialog();
-        }
+            {
+                if (!checkClose())
+                    return;
+                load = new Loading();
+                BackgroundWorker help = new BackgroundWorker();
+                help.DoWork += Help_DoWork;
+                help.RunWorkerCompleted += Helpme_RunWorkerCompleted;
+                help.RunWorkerAsync();
+                load.ShowDialog();
+            }
 
+        /// <summary>
+        ///     Utility method to read all lines from a configuration file 
+        ///     and return them
+        /// </summary>
+        /// <param name="streamProvider">The stream to read the file from</param>
+        /// <returns>XML File Lines</returns>
         public string ReadLines(Stream streamProvider)
         {
             using (var reader = new StreamReader(streamProvider))

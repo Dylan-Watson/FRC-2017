@@ -7,8 +7,16 @@ namespace WpfApplication1
 {
     public static class Build
     {
+        /// <summary>
+        ///     THe XDocument used to store the current config
+        /// </summary>
         public static XDocument doc;
 
+        /// <summary>
+        ///     Utility adaptation of the config load file in Base
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns>custom text exception, thrown exception/returns>
         public static Tuple<string, Exception> BuildFile(string filePath)
         {
             #region LoadFile
@@ -511,11 +519,22 @@ namespace WpfApplication1
 
         #region Util
 
+        /// <summary>
+        ///     Utility method to get the value of an attribute
+        /// </summary>
+        /// <param name="attribute">The name of the attribute to find</param>
+        /// <param name="elements">The element tree to follow</param>
+        /// <returns>The value of the attributes</returns>
         private static string getAttributeValue(string attribute, params string[] elements)
         {
-        return getNode(elements).Attribute(attribute).Value;
+            return getNode(elements).Attribute(attribute).Value;
         }
 
+        /// <summary>
+        ///     Utility method to get the XElement of an XML Tree
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <returns>XElement element</returns>
         private static XElement getNode(params string[] elements)
         {
             var node = doc.Root;
@@ -524,18 +543,38 @@ namespace WpfApplication1
             return node;
         }
 
+        /// <summary>
+        ///     Load the document from the filePath
+        /// </summary>
+        /// <param name="fileName">The full system file path</param>
         public static void Load(string fileName)
         {
             doc = XDocument.Load(fileName);
         }
 
+        /// <summary>
+        ///     Utility method to get an IEnumerable of XElements
+        /// </summary>
+        /// <param name="elements">Names of elements</param>
+        /// <returns>IEnumerable of XElements</returns>
         private static IEnumerable<XElement> getElements(params string[] elements) => getNode(elements).Elements();
 
+        /// <summary>
+        ///     Utility method to get an Attribute
+        /// </summary>
+        /// <param name="attribute">Name of the attribute</param>
+        /// <param name="elements">List of element names</param>
+        /// <returns>XAttribute attribute</returns>
         private static XAttribute getAttribute(string attribute, params string[] elements)
         {
             return getNode(elements).Attribute(attribute);
         }
 
+        /// <summary>
+        ///     Utility method to get the control method from an attribute
+        /// </summary>
+        /// <param name="attribute">The XAttribute</param>
+        /// <returns>ControlType controltype</returns>
         private static ControlType GetControlTypeFromAttribute(XAttribute attribute)
         {
             if (attribute == null)
