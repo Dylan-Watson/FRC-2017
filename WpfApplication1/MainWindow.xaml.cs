@@ -264,12 +264,12 @@ namespace WpfApplication1
                 FtpWebResponse response = (FtpWebResponse)request.GetResponse();
 
                 response.Close();
-                MessageBox.Show($"{response.StatusDescription}", "Upload", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"{response.StatusDescription}", "Download", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Exception thrown in connection\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                MessageBox.Show($"Upload Failed", "Fail", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Download Failed", "Fail", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
