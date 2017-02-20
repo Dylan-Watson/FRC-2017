@@ -259,7 +259,7 @@ namespace WpfApplication1
 
                 ///Get the XML Text of the file on the RoboRIO
                 MainEditor.Dispatcher.Invoke(DispatcherPriority.Normal,
-                        new Action(() => { MainEditor.AppendText(ReadLines(request.GetResponse().GetResponseStream())); }));
+                        new Action(() => { MainEditor.Clear(); MainEditor.AppendText(ReadLines(request.GetResponse().GetResponseStream())); }));
 
                 FtpWebResponse response = (FtpWebResponse)request.GetResponse();
 
