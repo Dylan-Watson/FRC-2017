@@ -387,7 +387,6 @@ namespace WpfApplication1
                 foreach (var element in getElements("Controls", "DriverAux")) {
                     try
                     {
-                        Convert.ToDouble(element.Attribute("powerMultiplier").Value);
                         Convert.ToBoolean(element.Attribute("reversed").Value);
 
                         switch (GetControlTypeFromAttribute(element.Attribute("type")))
@@ -442,7 +441,7 @@ namespace WpfApplication1
                     try
                     {
                         XAttribute _temp;
-                        Convert.ToDouble(element.Attribute("powerMultiplier").Value);
+                        //Convert.ToDouble(element.Attribute("powerMultiplier").Value);
                         Convert.ToBoolean(element.Attribute("reversed").Value);
                         switch (GetControlTypeFromAttribute(element.Attribute("type")))
                         {
