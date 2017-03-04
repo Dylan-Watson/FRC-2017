@@ -881,7 +881,7 @@ namespace Base.Config
         {
             try
             {
-                Report.General($"Version: {Convert.ToDouble(getAttributeValue("version", "Version"))}");
+                Report.General($"Config Version: {Convert.ToDouble(getAttributeValue("version", "Version"))}");
                 Report.General($"Comment: {getAttributeValue("comment", "Comment")}");
                 VerboseOutput = Convert.ToBoolean(getAttributeValue("value", "VerboseOutput"));
                 if (VerboseOutput)

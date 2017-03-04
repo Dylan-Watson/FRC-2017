@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Resources;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following set of attributes.
@@ -7,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("RobotMain2017")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("RobotMain2017")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCompany("BroncBotz")]
+[assembly: AssemblyProduct("BroncBotz Orange Juice")]
+[assembly: AssemblyCopyright("Copyright © BroncBotz  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -29,5 +30,7 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers by using the '*'
 // as shown below: [assembly: AssemblyVersion("2016.0.0.55")]
 
-[assembly: AssemblyVersion("2016.0.0.55")]
+[assembly: AssemblyVersion("1.1.*")]
 [assembly: AssemblyFileVersion("2016.0.0.55")]
+[assembly: NeutralResourcesLanguage("en")]
+

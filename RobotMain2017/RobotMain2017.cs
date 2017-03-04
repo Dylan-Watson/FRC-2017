@@ -3,6 +3,7 @@ Class Name: RobotMain2017 inherits SampleRobot
 Summary: Entry point from WPIlib, main class where robot routines are
 started.
 Project: FRC2017
+Robot Name: Orange Juice
 Copyright (c) BroncBotz.
 All rights reserved.
 
@@ -12,6 +13,8 @@ Email: cooper.ryan@centaurisoft.org
 
 using Base;
 using Base.Config;
+using System.Diagnostics;
+using System.Reflection;
 using Tourniquet;
 using WPILib;
 using Initialize = Trephine.Initialize;
@@ -38,6 +41,8 @@ namespace RobotMain2017
             var hm = new HealthMonitor();
             hm.OverrideCycleTime(1);
             hm.Start(true);
+
+            Report.General($"\n\nOrange Juice Ready! Version {Assembly.GetExecutingAssembly().GetName().Version}\n\n");
         }
 
         #endregion Public Constructors

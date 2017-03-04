@@ -32,7 +32,6 @@ namespace Base
 
             for (int i = 0; i <= 15; i++)
                 comms.SendHealthData($"Channel_{i}", pdb.GetCurrent(i));
-            Report.General($"{ DriverStation.Instance.GetMatchTime()}");
         }
 
         #endregion Protected Methods
