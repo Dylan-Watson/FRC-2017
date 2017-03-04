@@ -35,6 +35,9 @@ namespace RobotMain2017
             config.Load(CONFIG_FILE);
             FrameworkCommunication.Initialize();
             auton = new Initialize(config);
+            var hm = new HealthMonitor();
+            hm.OverrideCycleTime(1);
+            hm.Start(true);
         }
 
         #endregion Public Constructors

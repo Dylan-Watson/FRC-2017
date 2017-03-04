@@ -29,6 +29,8 @@ namespace Base
 
         private bool finished;
 
+        private bool overrideSaftey;
+
         private Thread thread;
 
         #endregion Private Fields
@@ -124,8 +126,9 @@ namespace Base
         /// <summary>
         ///     Starts the loop in a new thread
         /// </summary>
-        public void Start()
+        public void Start(bool overrideSaftey = false)
         {
+            this.overrideSaftey = overrideSaftey;
             finished = false;
             cancel = false;
             Report.General($"Spinning up the {GetType()} system.");
@@ -164,7 +167,7 @@ namespace Base
         }
 
         /// <summary>
-        ///     Method for the implimentor to implement, this is what is called withing the loop
+        ///     Method for the implimentor to implement, this is what is called within the loop
         /// </summary>
         protected abstract void main();
 
@@ -178,7 +181,7 @@ namespace Base
             {
                 while (!cancel && !finished)
                 {
-                    if (LoopCheck._IsAutonomous() || LoopCheck._IsTeleoporated())
+                    if (LoopCheck._IsAutonomous() || LoopCheck._IsTeleoporated() || overrideSaftey)
                         main();
 
                     Timer.Delay(cycleTime);
@@ -222,7 +225,7 @@ namespace Base
         {
             try
             {
-                while (!cancel && !finished && (LoopCheck._IsAutonomous() || LoopCheck._IsTeleoporated()))
+                while (!cancel && !finished && (LoopCheck._IsAutonomous() || LoopCheck._IsTeleoporated() || overrideSaftey))
                 {
                     main();
                     Timer.Delay(cycleTime);

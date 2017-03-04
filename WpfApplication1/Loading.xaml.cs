@@ -37,7 +37,6 @@ namespace WpfApplication1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        //TODO: Ryan, is that what this does? I think this part was you.
         private void Loading_Loaded(object sender, RoutedEventArgs e)
         {
             var hwnd = new WindowInteropHelper(this).Handle;

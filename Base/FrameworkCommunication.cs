@@ -142,7 +142,7 @@ namespace Base
         /// <param name="value">object value to send</param>
         public void SendHealthData(string key, object value)
         {
-            dashboardComm.PutValue($"HEALTH_{key}", Value.MakeValue(value));
+            dashboardComm.PutValue($"H_{key}", Value.MakeValue(value));
         }
 
         #endregion Public Methods

@@ -14,10 +14,13 @@ using MjpegProcessor;
 using NetworkTables;
 using NetworkTables.Tables;
 using System;
+using System.IO;
 using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace Dashboard2017
 {
@@ -29,6 +32,8 @@ namespace Dashboard2017
         #region Private Fields
 
         private MjpegDecoder m;
+
+        private string healthFile = null;
 
         #endregion Private Fields
 
@@ -275,6 +280,11 @@ namespace Dashboard2017
                     var newState = source.GetValue(key).ToString();
                     if (currentState != newState)
                     {
+                        if (newState == @"DISABLED")
+                        {
+                            parent.healthFile = null;
+                        }
+
                         parent.debugControlLayoutPanel.Invoke(
                             new Action(() => parent.debugControlLayoutPanel.Controls.Clear()));
 
@@ -287,8 +297,29 @@ namespace Dashboard2017
                     }
                     currentState = newState;
                 }
-                else if (key.StartsWith(@"HEALTH_"))
+                else if (key.StartsWith(@"H_") && currentState != @"DISABLED" && currentState != null)
                 {
+                    XDocument doc;
+                    if (parent.healthFile == null)
+                    {
+                        if (!Directory.Exists(@"Logs"))
+                            Directory.CreateDirectory(@"Logs");
+                        parent.healthFile = $@"Logs/{string.Format("Log_{0:dd_MM_yyyy_hh_mm_ss}.xml", DateTime.Now.ToUniversalTime())}";
+                        File.Create(parent.healthFile).Close();
+                        doc = new XDocument(
+                            new XElement("Match", 
+                                new XAttribute("date", $"{DateTime.Today.Day}/{DateTime.Today.Month}/{DateTime.Today.Year}"),
+                                new XAttribute("time", $"{DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}")));
+                    }
+                    else
+                    {
+                        StreamReader read = new StreamReader(parent.healthFile);
+                        doc = XDocument.Load(read);
+                        read.Close();
+                    }
+                    doc.Root.Add(new XElement(key, 
+                        new XAttribute("value", value.GetDouble())));
+                    doc.Save(parent.healthFile);
                 }
                 else if (key == @"TARGET")
                 {

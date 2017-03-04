@@ -63,7 +63,6 @@ namespace WpfApplication1
 
             #region NavX
 
-            //TODO: allow different ports to be used when initializing NavX
             try
             {
                 Convert.ToBoolean(getAttributeValue("value", "UseNavX"));
@@ -478,7 +477,7 @@ namespace WpfApplication1
                     }
                     catch (Exception e)
                     {
-                        return new Tuple<string, Exception>(@"Failed to load one or more of the Operator Elements!", e);
+                        return new Tuple<string, Exception>(@"Failed to load one or more of the Operator Element Attributes!", e);
                     }
 
                 }
