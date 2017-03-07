@@ -574,6 +574,8 @@ namespace Base.Config
                         var _default = element.Attribute("default")?.Value;
 
                         var d = DoubleSolenoid.Value.Off;
+                        if(_default == "na")
+                            d = DoubleSolenoid.Value.Off;
                         if (_default == "forward")
                             d = DoubleSolenoid.Value.Forward;
                         else if (_default == "reverse")
