@@ -43,6 +43,15 @@
       <right_1 type="SP" channel="3" reversed="false" drive="true" side="right" debug="true"/>
     </Victors>
 
+
+    <Talons>
+      <talonTest type="master" channel="0" reversed="false" debug="false" p=".5" i=".001" d="0"/>
+      <!-- Examples -->
+        <!--<xxxxxxxx type="pwm/master/slave" channel="x ID from roboRio" reversed="x" debug="false" optional encoder="xxxxxx" upperLimit="Name of DI"  lowerLimit="Name of DI" />-->
+      <!-- NOTE: If using master, it is reccomended to use attributes p="double" i="double" d="double"  ////// Defaults are .5, .001, 0, respecitively"-->
+    <!-- NOTE: Do not use PID for a slave -->
+    </Talons>
+    
     <!-- Encoder locations -->
     <Encoders>
       <!--<xxxxxx aChannel="x" bChannel="x" optional reversed="x" />-->

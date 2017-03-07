@@ -81,6 +81,7 @@
     <Compile Include="Components\AccelerometerItem.cs" />
     <Compile Include="Components\AnalogInputItem.cs" />
     <Compile Include="Components\AnalogOutputItem.cs" />
+    <Compile Include="Components\CanTalonItem.cs" />
     <Compile Include="Components\EncoderItem.cs" />
     <Compile Include="Components\DoubleSolenoidItem.cs" />
     <Compile Include="Components\DigitalInputItem.cs" />
