@@ -152,32 +152,33 @@ namespace Trephine
         ///     slow start DT
         /// </summary>
         /// <param name="finalPower"></param>
-        /*
-         * I AM GONNA DO A THING WHERE U CAN SLOW SPIN L8R
-         */
         public void SlowStart(double finalPower)
         {
-            if (finalPower < 0)
-            {
-                for (double d = -.05; d < finalPower; d *= 1.02)
+                for (double d = .05 * Math.Sign(finalPower); d < finalPower; d *= 1.02)
                 {
                     SetLeftDrive(d);
                     SetRightDrive(d);
                     Timer.Delay(.005);
                 }
+        }
+        /// <summary>
+        //      slow turn DT
+        /// </summary>
+        /// <param name="leftPw"></param>
+        /// <param name="rightPw"></param>
+        public void SlowTurn(double leftPw, double rightPw)
+        {
+            for(double d = .05 * Math.Sign(leftPw); d < leftPw; d *= 1.02)
+            {
+                SetLeftDrive(d);
+                Timer.Delay(.005);
             }
-
-            if (finalPower > 0)
+            for (double d = .05 * Math.Sign(rightPw); d < rightPw; d *= 1.02)
             {
-                for (double d = .05; d < finalPower; d *= 1.02)
-                {
-                    SetLeftDrive(d);
-                    SetRightDrive(d);
-                    Timer.Delay(.005);
-                }
+                SetRightDrive(d);
+                Timer.Delay(.005);
             }
         }
-
         #endregion Public Methods
     }
 }
