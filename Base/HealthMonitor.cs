@@ -31,7 +31,7 @@ namespace Base
             for (int i = 0; i <= 15; i++)
                 comms.SendHealthData($"Channel_{i}", pdb.GetCurrent(i));
 
-            if (DriverStation.Instance.GetBatteryVoltage() < 6.5)
+            if (DriverStation.Instance.GetBatteryVoltage() < Constants.BROWNOUT_THRESHOLD)
                 config.ActiveCollection.GetAllMotors.ForEach(s => s.setBrownOut(true));
             else
                 config.ActiveCollection.GetAllMotors.ForEach(s => s.setBrownOut(false));

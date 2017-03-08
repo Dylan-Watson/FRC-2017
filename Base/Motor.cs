@@ -80,6 +80,8 @@ namespace Base
         /// </summary>
         public Side DriveSide { get; protected set; } = Side.Na;
 
+        public bool Critical { get; set; }
+
         /// <summary>
         ///     Utility function that returns the polarity of the motor 1 forward, -1 reversed
         /// </summary>
