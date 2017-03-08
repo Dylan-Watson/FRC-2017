@@ -74,6 +74,12 @@ namespace Base
             => (from t in componentCollection.Values where t is Motor select t as Motor).ToList().Where
                 (t => t.DriveSide == Motor.Side.Right).ToList().Cast<IComponent>().ToList();
 
+        /// <summary>
+        ///     Gets all of the motors on the robot.
+        /// </summary>
+        public List<Motor> GetAllMotors
+            => (from t in componentCollection.Values where t is Motor select t as Motor).ToList();
+
         #endregion Public Properties
 
         #region Public Methods
