@@ -161,6 +161,9 @@ namespace Base.Components
             SetAllowC(upperLimit?.GetBool() ?? true);
             SetAllowCc(lowerLimit?.GetBool() ?? true);
 
+            if (BrownOut)
+                val /= 2;
+
 #if USE_LOCKING
             lock (victor)
 #endif

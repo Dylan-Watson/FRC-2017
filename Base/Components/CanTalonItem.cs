@@ -152,6 +152,8 @@ namespace Base.Components
             Sender = sender;
             SetAllowC(upperLimit?.GetBool() ?? true);
             SetAllowCc(lowerLimit?.GetBool() ?? true);
+            if (BrownOut)
+                val /= 2;
             if (Slave)
             {
                 Report.Warning(

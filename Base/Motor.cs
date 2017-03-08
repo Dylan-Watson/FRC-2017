@@ -71,6 +71,11 @@ namespace Base
         public bool AllowCc { get; private set; }
 
         /// <summary>
+        ///     Boolean flag to set if we are currently in brownout mode
+        /// </summary>
+        public bool BrownOut { get; private set; }
+
+        /// <summary>
         ///     Side of the drive train the motor is on, if it is on the drive train
         /// </summary>
         public Side DriveSide { get; protected set; } = Side.Na;
@@ -142,6 +147,12 @@ namespace Base
         /// <param name="val">Speed 0-1 to set the motor controller to</param>
         /// <param name="sender">The caller of this function</param>
         public abstract void Set(double val, object sender);
+
+        /// <summary>
+        ///     Sets the BrownOut flag/property to the passed value
+        /// </summary>
+        /// <param name="val"></param>
+        public void setBrownOut(bool val) => BrownOut = val;
 
         /// <summary>
         ///     Sets the AllowC flag/property to the passed value
