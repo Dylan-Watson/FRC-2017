@@ -20,7 +20,7 @@ namespace Trephine.Autonomi
     {
         #region Private Fields
 
-        private readonly double driveTime = 1, power = 1;
+        private readonly double driveTime = .75, power = 1;
 
         #endregion Private Fields
 
@@ -28,11 +28,58 @@ namespace Trephine.Autonomi
 
         protected override void main()
         {
+            /* 
             baseCalls.SetRightDrive(power);
             baseCalls.SetLeftDrive(power);
             Timer.Delay(driveTime);
             baseCalls.SlowStop();
             done();
+            */
+
+            /*
+             * drive forward
+             */
+            baseCalls.SlowStart(power);
+            Timer.Delay(driveTime);
+
+            /*
+             * stop
+             */
+            baseCalls.SlowStop();
+
+            /*
+             * start outtake
+             */
+            baseCalls.SetIntake(.25,this);
+
+            /*
+             * mani
+             */
+            baseCalls.SetMani(DoubleSolenoid.Value.Forward, this);
+            Timer.Delay(1);
+
+            /*
+             * stop outtake
+             */
+            baseCalls.FullStop();
+
+            /*
+             * drive back
+             */
+            baseCalls.SlowStart(-power);
+            Timer.Delay(driveTime);
+            baseCalls.SlowStop();
+
+            /*
+             * return mani
+             */
+            baseCalls.SetMani(DoubleSolenoid.Value.Reverse, this);
+
+            /*
+             * done
+             */
+            done();
+
         }
 
         #endregion Protected Methods

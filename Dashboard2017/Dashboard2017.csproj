@@ -70,6 +70,7 @@
     <Compile Include="AbortableBackgroundWorker.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CommunicationFrames.cs" />
     <Compile Include="ConsoleManager.cs" />
     <Compile Include="DebugControl.cs">
       <SubType>Component</SubType>

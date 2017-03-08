@@ -60,9 +60,10 @@ namespace Base
                 _currentTarget = _frameFromByteArray(source.GetRaw(key));
                 _updateTarget(_currentTarget);
 
-                if (_currentTarget.ID != 0 || _currentTarget.HasTarget == lastDashboardUpdate) return;
-                FrameworkCommunication.Instance.GetDashboardComm().PutBoolean("TARGET", _currentTarget.HasTarget);
-                lastDashboardUpdate = _currentTarget.HasTarget;
+
+                if (_currentTarget.ID != 0) return;// || _currentTarget.HasTarget == lastDashboardUpdate) return;
+                FrameworkCommunication.Instance.GetDashboardComm().PutValue("TARGET", Value.MakeValue(_currentTarget));
+                //lastDashboardUpdate = _currentTarget.HasTarget;
             }
 
             #endregion Public Methods
@@ -70,7 +71,7 @@ namespace Base
             #region Private Fields
 
             private static CommunicationFrames.Target _currentTarget;
-            private bool lastDashboardUpdate;
+            //private bool lastDashboardUpdate;
 
             #endregion Private Fields
 
