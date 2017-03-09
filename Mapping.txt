@@ -1,0 +1,24 @@
+Victor SP - PDB Assignments:
+LDT 		0, 1, 2		
+RDT 		3, 12, 13	
+Shooter 	14, 15
+Intake 		8
+Agitator 	9
+Climber 	10
+Empty 		11
+
+PWM - Rio and more board
+LDT		0, 1, 2	
+RDT		3, 4, 5
+Shooter 	6, 7
+Intake 		8
+Agitator 	9
+Climber 	17
+Empty 		18
+
+Manifold - PCM
+CIMS		0 - 1
+Shooter		2 - 3
+Ramp		4 - 5
+Manipulator	6 - 7
+
