@@ -39,6 +39,7 @@ namespace RobotMain2017
             FrameworkCommunication.Initialize();
             auton = new Initialize(config);
             var hm = new HealthMonitor();
+            hm.setConfig(config);
             hm.OverrideCycleTime(1);
             hm.Start(true);
 

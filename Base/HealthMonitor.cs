@@ -10,8 +10,6 @@ Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
 using WPILib;
-using System.Collections;
-using System;
 
 namespace Base
 {
@@ -32,6 +30,16 @@ namespace Base
 
             for (int i = 0; i <= 15; i++)
                 comms.SendHealthData($"Channel_{i}", pdb.GetCurrent(i));
+
+            if (DriverStation.Instance.GetBatteryVoltage() < Constants.BROWNOUT_THRESHOLD)
+                config.ActiveCollection.GetAllMotors.ForEach(s => s.setBrownOut(true));
+            else
+                config.ActiveCollection.GetAllMotors.ForEach(s => s.setBrownOut(false));
+
+        }
+
+        public void setConfig(Config.Config _config) {
+            config = _config;
         }
 
         #endregion Protected Methods
@@ -41,6 +49,8 @@ namespace Base
         private FrameworkCommunication comms = FrameworkCommunication.Instance;
 
         private PowerDistributionPanel pdb = new PowerDistributionPanel();
+
+        private Config.Config config;
 
         #endregion Private Fields
     }

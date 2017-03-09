@@ -25,6 +25,16 @@ namespace Base
         public const string AUTON = @"AUTON";
 
         /// <summary>
+        ///     The val to cut by when in brownout
+        /// </summary>
+        public const double BROWNOUT_MULT = 0.5;
+
+        /// <summary>
+        ///     Threshold for when the robot enters brownout protection mode 
+        /// </summary>
+        public const double BROWNOUT_THRESHOLD = 6.5;
+
+        /// <summary>
         ///     The name of the network table to communicate witht he dashboard
         /// </summary>
         public const string DASHBOARD_NETWORK_TABLE = @"DASHBOARD_2017";

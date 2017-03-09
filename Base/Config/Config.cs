@@ -498,6 +498,7 @@ namespace Base.Config
 
                             if (Convert.ToBoolean(element.Attribute("debug")?.Value))
                                 temp.Debug = true;
+                            temp.Critical = Convert.ToBoolean(element.Attribute("critical")?.Value);
                         }
                         else
                         {
@@ -516,6 +517,7 @@ namespace Base.Config
 
                                     if (Convert.ToBoolean(element.Attribute("debug")?.Value))
                                         temp.Debug = true;
+                                    temp.Critical = Convert.ToBoolean(element.Attribute("critical")?.Value);
 
                                     break;
 
@@ -532,7 +534,7 @@ namespace Base.Config
 
                                     if (Convert.ToBoolean(element.Attribute("debug")?.Value))
                                         temp.Debug = true;
-
+                                    temp.Critical = Convert.ToBoolean(element.Attribute("critical")?.Value);
                                     break;
                             }
                         }
@@ -598,6 +600,7 @@ namespace Base.Config
                             temp.SetEncoder(motorEncoder);
                             if (Convert.ToBoolean(element.Attribute("debug")?.Value))
                                 temp.Debug = true;
+                            temp.Critical = Convert.ToBoolean(element.Attribute("critical")?.Value);
 
                         }
                         else
@@ -638,6 +641,7 @@ namespace Base.Config
                                     temp.SetEncoder(motorEncoder);
                                     if (Convert.ToBoolean(element.Attribute("debug")?.Value))
                                         temp.Debug = true;
+                                    temp.Critical = Convert.ToBoolean(element.Attribute("critical")?.Value);
                                     Report.General($"{element.Name} is a master with PID set to {p}, {i}, {d}");
                                     break;
                                 case "slave":
@@ -652,6 +656,7 @@ namespace Base.Config
                                         ActiveCollection.AddComponent(_temp);
                                         if (Convert.ToBoolean(element.Attribute("debug")?.Value))
                                             _temp.Debug = true;
+                                        _temp.Critical = Convert.ToBoolean(element.Attribute("critical")?.Value);
                                         Report.General($"{element.Name} is a slave whose master is {master}");
                                     }
                                     catch (Exception ex)
