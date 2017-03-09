@@ -9,7 +9,9 @@ namespace Trephine.Autonomi
         protected override void main()
         {
             while (true)
-                FrameworkCommunication.Instance.SendData("ANGLE", NavX.Instance.GetAngle());
+            {
+                FrameworkCommunication.Instance.SendData("-X", NavX.Instance.GetAngle());
+            }
         }
 
         #endregion Protected Methods

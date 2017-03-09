@@ -77,7 +77,7 @@
     <Compile Include="Autonomous.cs" />
     <Compile Include="BaseCalls.cs" />
     <Compile Include="UtilityFunctions.cs" />
-    <Compile Include="Autonomi\DriveStrait.cs" />
+    <Compile Include="Autonomi\GearCenter.cs" />
     <Compile Include="Initialize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

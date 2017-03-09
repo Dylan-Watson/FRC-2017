@@ -44,6 +44,8 @@ namespace Trephine
 
         private static CommonName intake = new CommonName("intake");
 
+        private static CommonName dt_shifter = new CommonName("dt_shifter");
+
         #endregion Public Properties
 
         #region Private Fields
@@ -106,6 +108,16 @@ namespace Trephine
             => config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor) s).Set(value, this));
 
         /// <summary>
+        ///     shift into high/low gear forward=high 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="sender"></param>
+        public void ShiftGears(DoubleSolenoid.Value value, object sender)
+        {
+            var tmp = (DoubleSolenoidItem)(config.ActiveCollection.Get(dt_shifter));
+            tmp.Set(value, sender);
+        }
+        /// <summary>
         ///     sets the mani to forward or back position
         /// </summary>
         /// <param name="value">value to set</param>
@@ -154,12 +166,28 @@ namespace Trephine
         /// <param name="finalPower"></param>
         public void SlowStart(double finalPower)
         {
-                for (double d = .05 * Math.Sign(finalPower); d < finalPower; d *= 1.02)
+            if(finalPower > 0)
+            {
+                for (double d = .05; d < finalPower; d *= 1.02)
                 {
                     SetLeftDrive(d);
                     SetRightDrive(d);
                     Timer.Delay(.005);
                 }
+                SetLeftDrive(finalPower);
+                SetRightDrive(finalPower);
+            }
+            if(finalPower < 0)
+            {
+                for (double d = -.05; d > finalPower; d *= 1.02)
+                {
+                    SetLeftDrive(d);
+                    SetRightDrive(d);
+                    Timer.Delay(.005);
+                }
+                SetLeftDrive(finalPower);
+                SetRightDrive(finalPower);
+            }
         }
         /// <summary>
         //      slow turn DT

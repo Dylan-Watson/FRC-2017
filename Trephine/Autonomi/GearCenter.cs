@@ -9,6 +9,7 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using Base;
 using WPILib;
 
 namespace Trephine.Autonomi
@@ -16,11 +17,11 @@ namespace Trephine.Autonomi
     /// <summary>
     ///     Drives strait for x amount of time
     /// </summary>
-    internal class DriveStrait : Autonomous
+    internal class GearCenter : Autonomous
     {
         #region Private Fields
 
-        private readonly double driveTime = .75, power = 1;
+        private readonly double driveTime = 1, power = .7;
 
         #endregion Private Fields
 
@@ -28,58 +29,40 @@ namespace Trephine.Autonomi
 
         protected override void main()
         {
-            /* 
-            baseCalls.SetRightDrive(power);
-            baseCalls.SetLeftDrive(power);
-            Timer.Delay(driveTime);
-            baseCalls.SlowStop();
-            done();
-            */
+            //shift into low gear
+            baseCalls.ShiftGears(DoubleSolenoid.Value.Reverse, this);
 
-            /*
-             * drive forward
-             */
+            //drive up to the peg
             baseCalls.SlowStart(power);
             Timer.Delay(driveTime);
 
-            /*
-             * stop
-             */
+            //slow stop
             baseCalls.SlowStop();
 
-            /*
-             * start outtake
-             */
+            //start outtake before dropping gear
             baseCalls.SetIntake(.25,this);
 
-            /*
-             * mani
-             */
+            //drop gear
             baseCalls.SetMani(DoubleSolenoid.Value.Forward, this);
             Timer.Delay(1);
 
-            /*
-             * stop outtake
-             */
+            //stop outtake
             baseCalls.FullStop();
 
-            /*
-             * drive back
-             */
+            //drive back to wall
             baseCalls.SlowStart(-power);
             Timer.Delay(driveTime);
             baseCalls.SlowStop();
 
-            /*
-             * return mani
-             */
+            //return manipulator to down position
             baseCalls.SetMani(DoubleSolenoid.Value.Reverse, this);
 
-            /*
-             * done
-             */
-            done();
+            //report that we are ALMOST done
+            Report.Warning(" DriveStrait Completed");
 
+            //done
+            done();
+            
         }
 
         #endregion Protected Methods
