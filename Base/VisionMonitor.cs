@@ -65,9 +65,12 @@ namespace Base
                 //FrameworkCommunication.Instance.GetDashboardComm().PutValue("TARGET", Value.MakeValue(_currentTarget));
                 //lastDashboardUpdate = _currentTarget.HasTarget;
 
-                if (_currentTarget.ID != 0 || _currentTarget.HasTarget == lastDashboardUpdate) return;
+                if (_currentTarget.ID != 0) return;
                 FrameworkCommunication.Instance.GetDashboardComm().PutBoolean("TARGET", _currentTarget.HasTarget);
-                lastDashboardUpdate = _currentTarget.HasTarget;
+                FrameworkCommunication.Instance.GetDashboardComm().PutNumber("DEBUG_0_X", _currentTarget.X);
+                FrameworkCommunication.Instance.GetDashboardComm().PutNumber("DEBUG_0_Y", _currentTarget.Y);
+                FrameworkCommunication.Instance.GetDashboardComm().PutNumber("DEBUG_0_R", _currentTarget.Radius);
+                //lastDashboardUpdate = _currentTarget.HasTarget;
             }
 
             #endregion Public Methods
@@ -75,7 +78,7 @@ namespace Base
             #region Private Fields
 
             private static CommunicationFrames.Target _currentTarget;
-            private bool lastDashboardUpdate;
+            //private bool lastDashboardUpdate;
 
             #endregion Private Fields
 

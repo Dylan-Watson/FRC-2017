@@ -17,6 +17,7 @@ namespace Dashboard2017
         public DebugControl(string name)
         {
             Name = name;
+            AutoSize = true;    
         }
 
         #endregion Public Constructors

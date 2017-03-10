@@ -346,7 +346,7 @@ namespace Dashboard2017
                             .Select(control => control)
                             .ToList();
 
-                    if (key.Split('_')[0] == "AUTON" || key.Split('_')[0] == "TELEOP")
+                    if (key.Split('_')[0] == @"AUTON" || key.Split('_')[0] == @"TELEOP" || key.Split('_')[0] == @"DEBUG")
                     {
                         if (controls.All(c => c.Name != key))
                         {
@@ -355,7 +355,7 @@ namespace Dashboard2017
 
                             if (source.GetValue(key).Type == NtType.Double)
                             {
-                                var val = string.Format("{0:#,0.00000}", source.GetNumber(key));
+                                var val = string.Format("{0:#,0.000}", source.GetNumber(key));
                                 tmp.UpdateLabel($"{key.Substring(7)}: {val}");
                             }
                             else
@@ -367,7 +367,7 @@ namespace Dashboard2017
 
                             if (source.GetValue(key).Type == NtType.Double)
                             {
-                                var val = string.Format("{0:#,0.00000}", source.GetNumber(key));
+                                var val = string.Format("{0:#,0.000}", source.GetNumber(key));
                                 control?.UpdateLabel($"{key.Substring(7)}: {val}");
                             }
                             else
