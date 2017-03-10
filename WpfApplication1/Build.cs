@@ -274,7 +274,6 @@ namespace WpfApplication1
                         Convert.ToInt32(element.Attribute("channel").Value);
                         Convert.ToBoolean(element.Attribute("reversed").Value);
                         Convert.ToBoolean(element.Attribute("drive").Value);
-                        Convert.ToBoolean(element.Attribute("debug")?.Value);
                     }
                     catch (Exception e)
                     {
@@ -288,6 +287,46 @@ namespace WpfApplication1
             }
 
             #endregion Victors
+
+            #region Talons
+            try
+            {
+                foreach (var element in getElements("RobotConfig", "Talons"))
+                    try
+                    {
+                        if (element.Attribute("type").Value == "pwm")
+                        {
+                            Convert.ToInt32(element.Attribute("channel").Value);
+                            Convert.ToBoolean(element.Attribute("reversed").Value);
+                        }
+                        else
+                            switch (element.Attribute("type").Value)
+                            {
+                                case "master":
+                                    double p = Convert.ToDouble(element.Attribute("p").Value);
+                                    double i = Convert.ToDouble(element.Attribute("i").Value);
+                                    double d = Convert.ToDouble(element.Attribute("d").Value);
+                                    Convert.ToInt32(element.Attribute("channel").Value);
+                                    Convert.ToBoolean(element.Attribute("reversed").Value);
+                                    break;
+                                case "slave":
+                                    var master = element.Attribute("master").Value;
+                                    Convert.ToInt32(element.Attribute("channel").Value);
+                                    Convert.ToBoolean(element.Attribute("reversed").Value);
+                                    break;
+                            }
+                    }
+                    catch (Exception e)
+                    {
+                        return new Tuple<string, Exception>(@"Failed to load one or more of the attributes for the Talon Element!", e);
+                    }
+            }
+            catch (Exception e)
+            {
+                return new Tuple<string, Exception>(@"Failed to load one or more of the Talon Elements!", e);
+            }
+
+            #endregion Talon
 
             #region DoubleSolenoids
 

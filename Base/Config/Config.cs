@@ -593,7 +593,7 @@ namespace Base.Config
                         if (element.Attribute("type").Value == "pwm")
                         {
                             var temp = new CanTalonItem(Convert.ToInt32(element.Attribute("channel").Value),
-                                element.Name.ToString());
+                                element.Name.ToString(), Convert.ToBoolean(element.Attribute("reversed").Value));
                             ActiveCollection.AddComponent(temp);
                             temp.SetUpperLimit(upperLimit);
                             temp.SetLowerLimit(lowerLimit);
