@@ -74,7 +74,11 @@ namespace Trephine.Autonomi
         #endregion Private Fields
 
         #region Private Methods
-
+        /// <summary>
+        /// returns how far away we are from the target
+        /// </summary>
+        /// <param name="target">target that the camera sees</param>
+        /// <returns></returns>
         private int getDistanceOffset(Target target)
         {
             var centre = 60;

@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="Autonomi\Align.cs" />
     <Compile Include="Autonomi\Circle.cs" />
+    <Compile Include="Autonomi\GearBoiler.cs" />
     <Compile Include="Autonomi\NavXTest.cs" />
     <Compile Include="Autonomous.cs" />
     <Compile Include="BaseCalls.cs" />
