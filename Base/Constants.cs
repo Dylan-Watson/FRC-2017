@@ -32,7 +32,7 @@ namespace Base
         /// <summary>
         ///     Threshold for when the robot enters brownout protection mode 
         /// </summary>
-        public const double BROWNOUT_THRESHOLD = 6.5;
+        public const double BROWNOUT_THRESHOLD = 6.0;
 
         /// <summary>
         ///     The name of the network table to communicate witht he dashboard

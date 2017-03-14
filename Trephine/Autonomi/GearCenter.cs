@@ -21,7 +21,7 @@ namespace Trephine.Autonomi
     {
         #region Private Fields
 
-        private readonly double driveTime = 1, power = .7;
+        private readonly double driveTime = 1.2, power = .7;
 
         #endregion Private Fields
 
