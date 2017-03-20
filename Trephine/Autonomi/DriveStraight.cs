@@ -9,17 +9,19 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-
 using Base;
 using WPILib;
 
 namespace Trephine.Autonomi
 {
-    internal class GearBoiler : Autonomous
+    /// <summary>
+    ///     Drives strait for x amount of time
+    /// </summary>
+    internal class DriveStraight : Autonomous
     {
         #region Private Fields
 
-        private readonly double driveTime = 1.0, power = .7;
+        private readonly double driveTime = 1.15, power = .7;
 
         #endregion Private Fields
 
@@ -27,33 +29,29 @@ namespace Trephine.Autonomi
 
         protected override void main()
         {
-            //shift into low gear
+            //low gear
             baseCalls.ShiftGears(DoubleSolenoid.Value.Reverse, this);
 
-            //drive forward
-            baseCalls.SlowStart(power);
+            //drive
+            baseCalls.SetLeftDrive(power);
+            baseCalls.SetRightDrive(power);
             Timer.Delay(driveTime);
 
-            //stop drivetrain
+            //slow stop
             baseCalls.SlowStop();
 
-            //turn
-            baseCalls.SlowTurn(-power, power);
-            Timer.Delay(.5);
+            //shift into high gear
+            baseCalls.ShiftGears(DoubleSolenoid.Value.Forward, this);
 
-            //stop
-
-            //drive forward just a little bit
-
-            //start intake
-
-            //stop drive train
+            //report that we are ALMOST done
+            Report.Warning(" DriveStraight Completed");
 
             //done
             done();
+
+
         }
 
         #endregion Protected Methods
     }
 }
-

@@ -71,14 +71,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompAutonomi\Align.cs" />
-    <Compile Include="CompAutonomi\Circle.cs" />
-    <Compile Include="CompAutonomi\GearBoiler.cs" />
-    <Compile Include="CompAutonomi\NavXTest.cs" />
+    <Compile Include="Autonomi\Align.cs" />
+    <Compile Include="Autonomi\Circle.cs" />
+    <Compile Include="Autonomi\DriveStraight.cs" />
+    <Compile Include="Autonomi\GearLeft.cs" />
+    <Compile Include="Autonomi\GearRight.cs" />
+    <Compile Include="Autonomi\NavXTest.cs" />
     <Compile Include="Autonomous.cs" />
     <Compile Include="BaseCalls.cs" />
     <Compile Include="UtilityFunctions.cs" />
-    <Compile Include="CompAutonomi\GearCenter.cs" />
+    <Compile Include="Autonomi\GearCenter.cs" />
     <Compile Include="Initialize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

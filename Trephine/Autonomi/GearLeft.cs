@@ -9,19 +9,17 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+
 using Base;
 using WPILib;
 
 namespace Trephine.Autonomi
 {
-    /// <summary>
-    ///     Drives strait for x amount of time
-    /// </summary>
-    internal class GearCenter : Autonomous
+    internal class GearLeft : Autonomous
     {
         #region Private Fields
 
-        private readonly double driveTime = 1.2, power = .7;
+        private readonly double driveTime = 1.405, power = .7;
 
         #endregion Private Fields
 
@@ -32,39 +30,62 @@ namespace Trephine.Autonomi
             //shift into low gear
             baseCalls.ShiftGears(DoubleSolenoid.Value.Reverse, this);
 
-            //drive up to the peg
-            baseCalls.SlowStart(power);
+            //drive forward
+            baseCalls.SetLeftDrive(power);
+            baseCalls.SetRightDrive(power);
             Timer.Delay(driveTime);
 
-            //slow stop
+            //stop 
             baseCalls.SlowStop();
 
-            //start outtake before dropping gear
-            baseCalls.SetIntake(.25,this);
+            //turn
+            baseCalls.SlowTurn(power,-power);
+            Timer.Delay(.6);
+
+            //stop
+            baseCalls.SlowStop();
+
+            //drive forward just a little bit
+            baseCalls.SetLeftDrive(power);
+            baseCalls.SetRightDrive(power);
+            Timer.Delay(.01);
+
+            //stop drive train
+            baseCalls.SlowStop();
+
+            //start intake
+            baseCalls.SetIntake(.25, this);
 
             //drop gear
             baseCalls.SetMani(DoubleSolenoid.Value.Forward, this);
+            //baseCalls.SetRamp(DoubleSolenoid.Value.Reverse, this);
             Timer.Delay(1);
+
+            //back up
+            baseCalls.SlowStart(-power);
+            Timer.Delay(.1);
+
+            //return manipulator to down position
+            baseCalls.SetMani(DoubleSolenoid.Value.Reverse, this);
+            //baseCalls.SetRamp(DoubleSolenoid.Value.Forward, this);
+
+            //stop
+            baseCalls.SlowStop();
 
             //stop outtake
             baseCalls.FullStop();
 
-            //drive back to wall
-            baseCalls.SlowStart(-power);
-            Timer.Delay(driveTime);
-            baseCalls.SlowStop();
-
-            //return manipulator to down position
-            baseCalls.SetMani(DoubleSolenoid.Value.Reverse, this);
+            //shift into high gear
+            baseCalls.ShiftGears(DoubleSolenoid.Value.Forward, this);
 
             //report that we are ALMOST done
-            Report.Warning(" DriveStrait Completed");
+            Report.Warning(" GearLeft Completed");
 
             //done
             done();
-            
         }
 
         #endregion Protected Methods
     }
 }
+

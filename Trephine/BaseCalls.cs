@@ -42,6 +42,8 @@ namespace Trephine
 
         private static CommonName gmMani = new CommonName("gm_mani");
 
+        private static CommonName gmRamp = new CommonName("gm_ramp");
+
         private static CommonName intake = new CommonName("intake");
 
         private static CommonName dt_shifter = new CommonName("dt_shifter");
@@ -128,6 +130,16 @@ namespace Trephine
             tmp.Set(value, sender);
         }
 
+        /// <summary>
+        ///     sets gm rampy thingy
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="sender"></param>
+        public void SetRamp(DoubleSolenoid.Value value, object sender)
+        {
+            var tmp = (DoubleSolenoidItem)(config.ActiveCollection.Get(gmRamp));
+            tmp.Set(value, sender);
+        }
         /// <summary>
         ///     sets intake to spin forward/backward 
         /// </summary>
