@@ -91,6 +91,7 @@ namespace Trephine.Autonomi
             return 0;
         }
 
+
         private int getOffset(Target target)
         {
             var centre = target.Width / 2;

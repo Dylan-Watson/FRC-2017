@@ -9,18 +9,25 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
+using Base;
+using WPILib;
+
 namespace Trephine.Autonomi
 {
-    /// <summary>
-    ///     Drives strait for x amount of time
-    /// </summary>
-    internal class Circle : Autonomous
+    internal class EncodreTest : Autonomous
     {
         #region Protected Methods
 
         protected override void main()
         {
-            done();
+            baseCalls.LeftMotor().ResetEncoder();
+            baseCalls.RightMotor().ResetEncoder();
+
+            while (true)
+            {
+                baseCalls.LeftMotor().GetEncoderValue();
+                baseCalls.RightMotor().GetEncoderValue();
+            }
         }
 
         #endregion Protected Methods

@@ -14,14 +14,11 @@ using WPILib;
 
 namespace Trephine.Autonomi
 {
-    /// <summary>
-    ///     Drives strait for x amount of time
-    /// </summary>
     internal class DriveStraight : Autonomous
     {
         #region Private Fields
 
-        private readonly double driveTime = 1.15, power = .7;
+        private readonly double driveTime = 1, power = .5;
 
         #endregion Private Fields
 
@@ -30,7 +27,7 @@ namespace Trephine.Autonomi
         protected override void main()
         {
             //low gear
-            baseCalls.ShiftGears(DoubleSolenoid.Value.Reverse, this);
+            baseCalls.ShiftGears(DoubleSolenoid.Value.Forward, this);
 
             //drive
             baseCalls.SetLeftDrive(power);
@@ -41,7 +38,7 @@ namespace Trephine.Autonomi
             baseCalls.SlowStop();
 
             //shift into high gear
-            baseCalls.ShiftGears(DoubleSolenoid.Value.Forward, this);
+            //baseCalls.ShiftGears(DoubleSolenoid.Value.Forward, this);
 
             //report that we are ALMOST done
             Report.Warning(" DriveStraight Completed");

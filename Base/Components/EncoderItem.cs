@@ -95,6 +95,11 @@ namespace Base.Components
             //GC.SuppressFinalize(this);
         }
 
+        public void Reset()
+        {
+            encoder.Reset();
+        }
+
         /// <summary>
         ///     Gets the current value of the encoder
         /// </summary>

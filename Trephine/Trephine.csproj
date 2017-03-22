@@ -72,7 +72,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Autonomi\Align.cs" />
-    <Compile Include="Autonomi\Circle.cs" />
+    <Compile Include="Autonomi\EncodreTest.cs" />
+    <Compile Include="Autonomi\Encodre.cs" />
     <Compile Include="Autonomi\DriveStraight.cs" />
     <Compile Include="Autonomi\GearLeft.cs" />
     <Compile Include="Autonomi\GearRight.cs" />

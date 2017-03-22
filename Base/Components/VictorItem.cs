@@ -145,6 +145,14 @@ namespace Base.Components
         }
 
         /// <summary>
+        ///     Resets the encoder to 0
+        /// </summary>
+        public void ResetEncoder()
+        {
+            encoder.Reset();
+        }
+
+        /// <summary>
         ///     Gets the raw WPI PWMSpeedController object representing the victor
         /// </summary>
         /// <returns></returns>

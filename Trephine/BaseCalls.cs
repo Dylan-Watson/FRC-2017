@@ -60,24 +60,13 @@ namespace Trephine
         #endregion Private Fields
 
         #region Public Methods
-
         /// <summary>
-        ///     Full stop of the drive train
+        ///     Constructor
         /// </summary>
-        public void FullDriveStop()
+        /// <param name="config">instance of the config</param>
+        public void SetConfig(Config config)
         {
-            config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor) s).Stop());
-            config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor) s).Stop());
-        }
-
-        /// <summary>
-        ///     Full stop of the robot
-        /// </summary>
-        public void FullStop()
-        {
-            config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor) s).Stop());
-            config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor) s).Stop());
-            config.ActiveCollection.GetMotorItem(intake).Stop();
+            this.config = config;
         }
 
         /// <summary>
@@ -87,12 +76,21 @@ namespace Trephine
         public Config GetConfig() => config;
 
         /// <summary>
-        ///     Constructor
+        ///     Full stop of the drive train
         /// </summary>
-        /// <param name="config">instance of the config</param>
-        public void SetConfig(Config config)
+        public void FullDriveStop()
         {
-            this.config = config;
+            config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor) s).Stop());
+            config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor) s).Stop());
+        }
+        /// <summary>
+        ///     Full stop of the robot
+        /// </summary>
+        public void FullStop()
+        {
+            config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor) s).Stop());
+            config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor) s).Stop());
+            config.ActiveCollection.GetMotorItem(intake).Stop();
         }
 
         /// <summary>
@@ -172,6 +170,7 @@ namespace Trephine
 
             FullDriveStop();
         }
+
         /// <summary>
         ///     slow start DT
         /// </summary>
@@ -201,6 +200,7 @@ namespace Trephine
                 SetRightDrive(finalPower);
             }
         }
+
         /// <summary>
         //      slow turn DT
         /// </summary>
@@ -219,6 +219,58 @@ namespace Trephine
                 Timer.Delay(.005);
             }
         }
+
+        /// <summary>
+        ///     gets the encoder value of the left drivetrain
+        /// </summary>
+        /// <returns></returns>
+        public VictorItem LeftMotor()
+        {
+            return (VictorItem)config.ActiveCollection.GetLeftDriveMotors[0];
+        }
+
+        /// <summary>
+        ///     gets the encoder value of the right drivetrain
+        /// </summary>
+        /// <returns></returns>
+        public VictorItem RightMotor()
+        {
+            return (VictorItem)config.ActiveCollection.GetRightDriveMotors[0];
+        }
+
+        /// <summary>
+        ///     uses encoders to make dt run straight around a certain power
+        /// </summary>
+        /// <param name="power"></param>
+        /// <param name="driveTime"></param>
+        public void EncoderDrive(double power, double driveTime)
+        {
+            var wd = new WatchDog(driveTime);
+            wd.Start();
+
+            var left = power;
+            var right = power;
+
+            SetLeftDrive(left);
+            SetRightDrive(right);
+
+            LeftMotor().ResetEncoder();
+            RightMotor().ResetEncoder();
+            
+            while (wd.State == WatchDog.WatchDogState.Running)
+            {
+                if (LeftMotor().GetEncoderValue() > RightMotor().GetEncoderValue())
+                    left -= .0001;
+                if (RightMotor().GetEncoderValue() > LeftMotor().GetEncoderValue())
+                    left += .0001;
+
+                SetLeftDrive(left);
+                SetRightDrive(right);
+            }
+
+            SlowStop;
+        }
+
         #endregion Public Methods
     }
 }
