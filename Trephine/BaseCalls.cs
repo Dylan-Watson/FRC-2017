@@ -259,16 +259,16 @@ namespace Trephine
             
             while (wd.State == WatchDog.WatchDogState.Running)
             {
-                if (LeftMotor().GetEncoderValue() > RightMotor().GetEncoderValue())
+                if (Math.Abs(LeftMotor().GetEncoderValue()) > Math.Abs(RightMotor().GetEncoderValue()))
                     left -= .0001;
-                if (RightMotor().GetEncoderValue() > LeftMotor().GetEncoderValue())
+                if (Math.Abs(RightMotor().GetEncoderValue()) > Math.Abs(LeftMotor().GetEncoderValue()))
                     left += .0001;
 
                 SetLeftDrive(left);
                 SetRightDrive(right);
             }
 
-            SlowStop;
+            SlowStop();
         }
 
         #endregion Public Methods
