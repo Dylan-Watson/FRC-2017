@@ -157,7 +157,6 @@ namespace WpfApplication1
                 foreach (var element in getElements("RobotConfig", "Encoders"))
                     try
                     {
-                        Convert.ToBoolean(element.Attribute("reversed").Value);
                         Convert.ToBoolean(element.Attribute("debug")?.Value);
                         Convert.ToInt32(element.Attribute("aChannel").Value);
                         Convert.ToInt32(element.Attribute("bChannel").Value);
