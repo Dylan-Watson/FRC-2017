@@ -69,12 +69,12 @@ namespace Base
         ///     Contructor for the timer using seconds
         /// </summary>
         /// <param name="seconds">The amount of time (interval) for the timer to go for in seconds</param>
-        public WatchDog(int seconds)
+        /*public WatchDog(int seconds)
         {
             timer = new Timer(seconds * 1000);
             timer.Elapsed += Timer_Expired;
             RobotStatus.Instance.RobotStatusChanged += Instance_RobotStatusChanged;
-        }
+        }*/
 
         /// <summary>
         ///     Constructor for the timer using milliseconds
