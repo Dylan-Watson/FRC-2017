@@ -3,7 +3,7 @@ using WPILib;
 
 namespace Trephine.Autonomi
 {
-    internal class FullEncoderCenterRight : Autonomous
+    internal class FullEncoderCenterLeft : Autonomous
     {
         #region Private Fields
 
@@ -54,7 +54,7 @@ namespace Trephine.Autonomi
 
             Timer.Delay(0.35);
 
-            baseCalls.turnRightFullEncoder(turn, power);
+            baseCalls.turnLeftFullEncoder(turn, power);
 
             Timer.Delay(0.35);
 

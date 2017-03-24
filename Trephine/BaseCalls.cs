@@ -337,9 +337,9 @@ namespace Trephine
             while (avg < distance) {
 
                 if (Math.Abs(LeftMotor().GetEncoderValue()) > Math.Abs(RightMotor().GetEncoderValue()))
-                    left -= .00001;
+                    left -= .00003;
                 if (Math.Abs(RightMotor().GetEncoderValue()) > Math.Abs(LeftMotor().GetEncoderValue()))
-                    left += .00001;
+                    left += .00003;
 
                 SetLeftDrive(left);
                 SetRightDrive(right);
@@ -351,6 +351,11 @@ namespace Trephine
             FullDriveStop();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="distance"></param>
+        /// <param name="power"></param>
         public void turnRightFullEncoder(double distance, double power) {
             LeftMotor().ResetEncoder();
             RightMotor().ResetEncoder();
@@ -358,22 +363,42 @@ namespace Trephine
             double left = power;
             double right = power;
 
-            double temp0 = Math.Abs(LeftMotor().GetEncoderValue()) + Math.Abs(RightMotor().GetEncoderValue());
-            double avg = temp0 / 2;
+            double lft = Math.Abs(LeftMotor().GetEncoderValue());
 
-            while (avg < distance)
+            while (lft < distance)
             {
-
-                if (Math.Abs(LeftMotor().GetEncoderValue()) > Math.Abs(RightMotor().GetEncoderValue()))
-                    left -= .0001;
-                if (Math.Abs(RightMotor().GetEncoderValue()) > Math.Abs(LeftMotor().GetEncoderValue()))
-                    left += .0001;
-
+                
                 SetLeftDrive(left);
                 SetRightDrive(-right);
 
-                temp0 = Math.Abs(LeftMotor().GetEncoderValue()) + Math.Abs(RightMotor().GetEncoderValue());
-                avg = temp0 / 2;
+                lft = Math.Abs(LeftMotor().GetEncoderValue());
+
+            }
+
+            SlowStop();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="distance"></param>
+        /// <param name="power"></param>
+        public void turnLeftFullEncoder(double distance, double power)
+        {
+            LeftMotor().ResetEncoder();
+            RightMotor().ResetEncoder();
+
+            double left = power;
+            double right = power;
+
+            double rgt = Math.Abs(RightMotor().GetEncoderValue());
+
+            while (rgt < distance)
+            {
+                SetLeftDrive(-left);
+                SetRightDrive(right);
+
+                rgt = Math.Abs(RightMotor().GetEncoderValue());
             }
 
             SlowStop();

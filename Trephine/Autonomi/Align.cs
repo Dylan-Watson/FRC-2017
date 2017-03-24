@@ -1,7 +1,7 @@
 ﻿using Base;
 using static Base.CommunicationFrames;
 
-namespace Trephine.Autonomi
+namespace Trephine
 {
     internal class Align : Autonomous
     {
