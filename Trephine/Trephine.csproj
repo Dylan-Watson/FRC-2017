@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Autonomi\Align.cs" />
+    <Compile Include="Autonomi\FullEncoderCenter.cs" />
     <Compile Include="Autonomi\FullEncoderLeft.cs" />
     <Compile Include="Autonomi\GearLeftShoot.cs" />
     <Compile Include="Autonomi\EncodreTest.cs" />
