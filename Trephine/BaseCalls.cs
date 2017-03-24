@@ -337,9 +337,9 @@ namespace Trephine
             while (avg < distance) {
 
                 if (Math.Abs(LeftMotor().GetEncoderValue()) > Math.Abs(RightMotor().GetEncoderValue()))
-                    left -= .0001;
+                    left -= .00001;
                 if (Math.Abs(RightMotor().GetEncoderValue()) > Math.Abs(LeftMotor().GetEncoderValue()))
-                    left += .0001;
+                    left += .00001;
 
                 SetLeftDrive(left);
                 SetRightDrive(right);
@@ -348,7 +348,7 @@ namespace Trephine
                 avg = temp0 / 2;
             }
 
-            SlowStop();
+            FullDriveStop();
         }
 
         public void turnRightFullEncoder(double distance, double power) {
@@ -358,7 +358,8 @@ namespace Trephine
             double left = power;
             double right = power;
 
-            double avg = (Math.Abs(LeftMotor().GetEncoderValue()) + Math.Abs(RightMotor().GetEncoderValue())) / 2;
+            double temp0 = Math.Abs(LeftMotor().GetEncoderValue()) + Math.Abs(RightMotor().GetEncoderValue());
+            double avg = temp0 / 2;
 
             while (avg < distance)
             {
@@ -371,7 +372,8 @@ namespace Trephine
                 SetLeftDrive(left);
                 SetRightDrive(-right);
 
-                avg = (LeftMotor().GetEncoderValue() + RightMotor().GetEncoderValue()) / 2;
+                temp0 = Math.Abs(LeftMotor().GetEncoderValue()) + Math.Abs(RightMotor().GetEncoderValue());
+                avg = temp0 / 2;
             }
 
             SlowStop();

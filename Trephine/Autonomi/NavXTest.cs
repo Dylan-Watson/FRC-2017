@@ -1,6 +1,6 @@
 ﻿using Base;
 
-namespace Trephine.Autonomi
+namespace Trephine
 {
     public class NavXTest : Autonomous
     {

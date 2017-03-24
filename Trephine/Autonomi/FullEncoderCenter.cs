@@ -36,9 +36,9 @@ namespace Trephine.Autonomi
             Timer.Delay(1);
 
             //back up
-            baseCalls.SlowStart(-power);
-            Timer.Delay(1);
-            //baseCalls.driveFullEncoder(forwardEnc, -power);
+            //baseCalls.SlowStart(-power);
+            //Timer.Delay(1);
+            baseCalls.driveFullEncoder(forwardEnc, -power);
 
             //return manipulator to down position
             baseCalls.SetMani(DoubleSolenoid.Value.Reverse, this);
