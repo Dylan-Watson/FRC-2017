@@ -21,7 +21,7 @@ namespace Trephine.Autonomi
     {
         #region Private Fields
 
-        private readonly double driveTime = 800, power = .5;
+        private readonly double driveTime = 1000, power = .5;
 
         #endregion Private Fields
 
@@ -47,7 +47,7 @@ namespace Trephine.Autonomi
             Timer.Delay(1);
 
             //back up
-            baseCalls.EncoderDrive(power, power, driveTime);
+            baseCalls.EncoderDrive(-power, -power, driveTime);
 
             //stop outtake
             baseCalls.FullStop();
