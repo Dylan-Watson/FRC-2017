@@ -7,8 +7,8 @@ namespace Trephine.Autonomi
     {
         #region Private Fields
 
-        private readonly double power;
-        private readonly double forwardEnc;
+        private readonly double power = 0.6;
+        private readonly double forwardEnc = 8550;
         private readonly double turnEnc;
         private readonly double secForwardEnc;
         private readonly double backEnc;
