@@ -331,8 +331,8 @@ namespace Trephine
 
             double left = power;
             double right = power;
-
-            double avg = (Math.Abs(LeftMotor().GetEncoderValue()) + Math.Abs(RightMotor().GetEncoderValue())) / 2;
+            double temp0 = Math.Abs(LeftMotor().GetEncoderValue()) + Math.Abs(RightMotor().GetEncoderValue());
+            double avg =  temp0 / 2;
 
             while (avg < distance) {
 
@@ -344,7 +344,8 @@ namespace Trephine
                 SetLeftDrive(left);
                 SetRightDrive(right);
 
-                avg = (LeftMotor().GetEncoderValue() + RightMotor().GetEncoderValue()) / 2;
+                temp0 = Math.Abs(LeftMotor().GetEncoderValue()) + Math.Abs(RightMotor().GetEncoderValue());
+                avg = temp0 / 2;
             }
 
             SlowStop();
