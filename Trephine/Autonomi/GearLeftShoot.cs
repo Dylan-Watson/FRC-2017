@@ -9,17 +9,19 @@ Author(s): Ryan Cooper
 Email: cooper.ryan@centaurisoft.org
 \********************************************************************/
 
-
 using Base;
 using WPILib;
 
 namespace Trephine.Autonomi
 {
-    internal class GearLeft : Autonomous
+    /// <summary>
+    ///     Drives strait for x amount of time
+    /// </summary>
+    internal class GearLeftShoot : Autonomous
     {
         #region Private Fields
 
-        private readonly double driveTime = 730, power = .7;
+        private readonly double driveTime = 1500, power = .7;
 
         #endregion Private Fields
 
@@ -37,22 +39,19 @@ namespace Trephine.Autonomi
             baseCalls.SlowStop();
 
             //turn
-            baseCalls.EncoderDrive(power, -power, 425);
+            baseCalls.EncoderDrive(power, -power, 400);
 
             //stop
             baseCalls.SlowStop();
 
             //drive forward just a little bit
-            baseCalls.EncoderDrive(power, power, 300);
+            baseCalls.EncoderDrive(power, power, 10);
 
             //stop drive train
             baseCalls.SlowStop();
 
             //start intake
             baseCalls.SetIntake(.25, this);
-
-            //stop
-            baseCalls.SlowStop();
 
             //drop gear
             baseCalls.SetMani(DoubleSolenoid.Value.Forward, this);
@@ -70,14 +69,34 @@ namespace Trephine.Autonomi
             //stop outtake
             baseCalls.FullStop();
 
-            //report that we are ALMOST done
+            //turn around and face boiler
+            baseCalls.EncoderDrive(power, -power, 500);
+
+            //scooch
+            baseCalls.EncoderDrive(power, power, 2500);
+
+
+            /*SHOOT
+            //rev up shooter
+            baseCalls.StartShooter(.85, this);
+
+            //agitate/release balls into the shooter
+            baseCalls.StartAgitator(1, this);
+
+            //STOP shooter and agitator
+            baseCalls.StopShooter();
+            baseCalls.StopAgitator();
+            */
+
+
+            //report that we are done
             Report.Warning(" GearLeft Completed");
 
             //done
             done();
+
         }
 
         #endregion Protected Methods
     }
 }
-

@@ -48,6 +48,12 @@ namespace Trephine
 
         private static CommonName dt_shifter = new CommonName("dt_shifter");
 
+        private static CommonName shooter_0 = new CommonName("shooter_0");
+
+        private static CommonName shooter_1 = new CommonName("shooter_1");
+        
+        private static CommonName agitator = new CommonName("agitator");
+
         #endregion Public Properties
 
         #region Private Fields
@@ -150,6 +156,49 @@ namespace Trephine
         }
 
         /// <summary>
+        ///     revs up shooter
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="sender"></param>
+        public void StartShooter(double value, object sender)
+        {
+            var tmp_0 = (Motor)(config.ActiveCollection.Get(shooter_0));
+            tmp_0.Set(value, sender);
+            var tmp_1 = (Motor)(config.ActiveCollection.Get(shooter_1));
+            tmp_1.Set(value, sender);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="sender"></param>
+        public void StopShooter()
+        {
+            config.ActiveCollection.GetMotorItem(shooter_0).Stop();
+            config.ActiveCollection.GetMotorItem(shooter_1).Stop();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="sender"></param>
+        public void StartAgitator(double value, object sender)
+        {
+            var tmp = (Motor)(config.ActiveCollection.Get(agitator));
+            tmp.Set(value, sender);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void StopAgitator()
+        {
+            config.ActiveCollection.GetMotorItem(agitator).Stop();
+        }
+
+        /// <summary>
         ///     slow stop dt
         /// </summary>
         public void SlowStop()
@@ -243,20 +292,16 @@ namespace Trephine
         /// </summary>
         /// <param name="power"></param>
         /// <param name="driveTime"></param>
-        public void EncoderDrive(double power, double driveTime)
+        public void EncoderDrive(double left, double right, double driveTime)
         {
             var wd = new WatchDog(driveTime);
             wd.Start();
 
-            var left = power;
-            var right = power;
-
             SetLeftDrive(left);
             SetRightDrive(right);
-
+            
             LeftMotor().ResetEncoder();
             RightMotor().ResetEncoder();
-            
             while (wd.State == WatchDog.WatchDogState.Running)
             {
                 if (Math.Abs(LeftMotor().GetEncoderValue()) > Math.Abs(RightMotor().GetEncoderValue()))

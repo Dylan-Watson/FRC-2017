@@ -21,7 +21,7 @@ namespace Trephine.Autonomi
     {
         #region Private Fields
 
-        private readonly double driveTime = 1000/*, power = .5*/;
+        private readonly double driveTime = 800, power = .5;
 
         #endregion Private Fields
 
@@ -34,29 +34,7 @@ namespace Trephine.Autonomi
             baseCalls.ShiftGears(DoubleSolenoid.Value.Forward, this);
 
             //drive up to the peg
-            var wd = new WatchDog(driveTime);
-            wd.Start();
-
-            var left = .5;
-            var right = .5;
-
-            baseCalls.SetLeftDrive(left);
-            baseCalls.SetRightDrive(right);
-
-            baseCalls.RightMotor().ResetEncoder();
-            baseCalls.LeftMotor().ResetEncoder();
-
-            while (wd.State == WatchDog.WatchDogState.Running)
-            {
-                if (baseCalls.LeftMotor().GetEncoderValue() > baseCalls.RightMotor().GetEncoderValue())
-                    left -= .0001;
-                if (baseCalls.RightMotor().GetEncoderValue() > baseCalls.LeftMotor().GetEncoderValue())
-                    left += .0001;
-
-                baseCalls.SetLeftDrive(left);
-                baseCalls.SetRightDrive(right);
-
-            }
+            baseCalls.EncoderDrive(power, power, driveTime);
 
             //slow stop
             baseCalls.SlowStop();
@@ -69,26 +47,7 @@ namespace Trephine.Autonomi
             Timer.Delay(1);
 
             //back up
-            wd.SetInMilliseconds(driveTime);
-            wd.Reset();
-
-            baseCalls.SetLeftDrive(-left);
-            baseCalls.SetRightDrive(-right);
-
-            baseCalls.RightMotor().ResetEncoder();
-            baseCalls.LeftMotor().ResetEncoder();
-
-            while (wd.State == WatchDog.WatchDogState.Running)
-            {
-                if (baseCalls.LeftMotor().GetEncoderValue() > baseCalls.RightMotor().GetEncoderValue())
-                    left += .0001;
-                if (baseCalls.RightMotor().GetEncoderValue() > baseCalls.LeftMotor().GetEncoderValue())
-                    left -= .0001;
-
-                baseCalls.SetLeftDrive(-left);
-                baseCalls.SetRightDrive(-right);
-
-            }
+            baseCalls.EncoderDrive(power, power, driveTime);
 
             //stop outtake
             baseCalls.FullStop();
