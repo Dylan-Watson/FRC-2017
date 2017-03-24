@@ -290,7 +290,7 @@ namespace Trephine
         /// <summary>
         ///     uses encoders to make dt run straight around a certain power
         /// </summary>
-        /// <param name="power"></param>
+        /// <param name="right"></param>
         /// <param name="driveTime"></param>
         public void EncoderDrive(double left, double right, double driveTime)
         {
@@ -317,5 +317,65 @@ namespace Trephine
         }
 
         #endregion Public Methods
+
+        #region Public Dylans
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="distance"></param>
+        /// <param name="power"></param>
+        public void driveFullEncoder(double distance, double power) {
+            LeftMotor().ResetEncoder();
+            RightMotor().ResetEncoder();
+
+            double left = power;
+            double right = power;
+
+            double avg = (Math.Abs(LeftMotor().GetEncoderValue()) + Math.Abs(RightMotor().GetEncoderValue())) / 2;
+
+            while (avg < distance) {
+
+                if (Math.Abs(LeftMotor().GetEncoderValue()) > Math.Abs(RightMotor().GetEncoderValue()))
+                    left -= .0001;
+                if (Math.Abs(RightMotor().GetEncoderValue()) > Math.Abs(LeftMotor().GetEncoderValue()))
+                    left += .0001;
+
+                SetLeftDrive(left);
+                SetRightDrive(right);
+
+                avg = (LeftMotor().GetEncoderValue() + RightMotor().GetEncoderValue()) / 2;
+            }
+
+            SlowStop();
+        }
+
+        public void turnRightFullEncoder(double distance, double power) {
+            LeftMotor().ResetEncoder();
+            RightMotor().ResetEncoder();
+
+            double left = power;
+            double right = power;
+
+            double avg = (Math.Abs(LeftMotor().GetEncoderValue()) + Math.Abs(RightMotor().GetEncoderValue())) / 2;
+
+            while (avg < distance)
+            {
+
+                if (Math.Abs(LeftMotor().GetEncoderValue()) > Math.Abs(RightMotor().GetEncoderValue()))
+                    left -= .0001;
+                if (Math.Abs(RightMotor().GetEncoderValue()) > Math.Abs(LeftMotor().GetEncoderValue()))
+                    left += .0001;
+
+                SetLeftDrive(left);
+                SetRightDrive(-right);
+
+                avg = (LeftMotor().GetEncoderValue() + RightMotor().GetEncoderValue()) / 2;
+            }
+
+            SlowStop();
+        }
+
+        #endregion Public Dylans
     }
 }
