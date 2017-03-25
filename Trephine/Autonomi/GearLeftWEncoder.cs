@@ -1,17 +1,25 @@
-﻿using Base;
+﻿/****************************** Header ******************************\
+Class Name: DriveStrait
+Summary: Practice autonomous made to drive straight
+Project:     FRC2017
+Copyright (c) BroncBotz.
+All rights reserved.
+
+Author(s): Ryan Cooper
+Email: cooper.ryan@centaurisoft.org
+\********************************************************************/
+
+
+using Base;
 using WPILib;
 
 namespace Trephine.Autonomi
 {
-    internal class FullEncoderLeft : Autonomous
+    internal class GearLeftWEncoder : Autonomous
     {
         #region Private Fields
 
-        private readonly double power = 0.6;
-        private readonly double forwardEnc = 8550;
-        private readonly double turnEnc;
-        private readonly double secForwardEnc;
-        private readonly double backEnc;
+        private readonly double driveTime = 730, power = .7;
 
         #endregion Private Fields
 
@@ -23,19 +31,19 @@ namespace Trephine.Autonomi
             baseCalls.ShiftGears(DoubleSolenoid.Value.Forward, this);
 
             //drive forward
-            baseCalls.driveFullEncoder(forwardEnc, power);
+            baseCalls.EncoderDrive(power, power, driveTime);
 
             //stop 
             baseCalls.SlowStop();
 
             //turn
-            baseCalls.turnRightFullEncoder(turnEnc, power);
+            baseCalls.EncoderDrive(power, -power, 425);
 
             //stop
             baseCalls.SlowStop();
 
             //drive forward just a little bit
-            baseCalls.driveFullEncoder(secForwardEnc, power);
+            baseCalls.EncoderDrive(power, power, 300);
 
             //stop drive train
             baseCalls.SlowStop();
@@ -51,7 +59,7 @@ namespace Trephine.Autonomi
             Timer.Delay(1);
 
             //back up
-            baseCalls.driveFullEncoder(backEnc, power);
+            baseCalls.EncoderDrive(-power, -power, 100);
 
             //return manipulator to down position
             baseCalls.SetMani(DoubleSolenoid.Value.Reverse, this);
@@ -63,7 +71,7 @@ namespace Trephine.Autonomi
             baseCalls.FullStop();
 
             //report that we are ALMOST done
-            Report.Warning(" Full Encoder GearLeft Completed");
+            Report.Warning(" GearLeft Completed");
 
             //done
             done();
@@ -72,3 +80,4 @@ namespace Trephine.Autonomi
         #endregion Protected Methods
     }
 }
+

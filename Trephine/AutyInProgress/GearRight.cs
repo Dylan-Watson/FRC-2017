@@ -13,7 +13,7 @@ Email: cooper.ryan@centaurisoft.org
 using Base;
 using WPILib;
 
-namespace Trephine.Autonomi
+namespace Trephine
 {
     internal class GearRight : Autonomous
     {

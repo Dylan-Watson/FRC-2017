@@ -325,7 +325,8 @@ namespace Trephine
         /// </summary>
         /// <param name="distance"></param>
         /// <param name="power"></param>
-        public void driveFullEncoder(double distance, double power) {
+        public void driveFullEncoder(double distance, double power)
+        {
             LeftMotor().ResetEncoder();
             RightMotor().ResetEncoder();
 
@@ -334,12 +335,14 @@ namespace Trephine
             double temp0 = Math.Abs(LeftMotor().GetEncoderValue()) + Math.Abs(RightMotor().GetEncoderValue());
             double avg =  temp0 / 2;
 
-            while (avg < distance) {
+            while (avg < distance)
+
+            {
 
                 if (Math.Abs(LeftMotor().GetEncoderValue()) > Math.Abs(RightMotor().GetEncoderValue()))
-                    left -= .00003;
+                    left += .00004;
                 if (Math.Abs(RightMotor().GetEncoderValue()) > Math.Abs(LeftMotor().GetEncoderValue()))
-                    left += .00003;
+                    right += .00004;
 
                 SetLeftDrive(left);
                 SetRightDrive(right);
@@ -402,6 +405,11 @@ namespace Trephine
             }
 
             SlowStop();
+        }
+
+        public void GyroTurn()
+        {
+
         }
 
         #endregion Public Dylans

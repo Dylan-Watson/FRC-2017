@@ -1,7 +1,7 @@
 ﻿using Base;
 using WPILib;
 
-namespace Trephine.Autonomi
+namespace Trephine
 {
     internal class TurnTest : Autonomous
     {

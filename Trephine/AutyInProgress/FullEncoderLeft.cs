@@ -1,28 +1,17 @@
 ﻿using Base;
 using WPILib;
 
-namespace Trephine.Autonomi
+namespace Trephine
 {
-    internal class FullEncoderCenterLeft : Autonomous
+    internal class FullEncoderLeft : Autonomous
     {
         #region Private Fields
 
-        #region Powers
-
-        private readonly double power = 0.45;
-        private readonly double shootPower = 1.0;
-        private readonly double agitatPower = 1.0;
-
-        #endregion Powers
-
-        #region Distance
-
-        private readonly double forwardEnc = 8425;
-        //JOSE SAID USE BACK LENGTH FOR FORWARD
-        private readonly double backEnc = 4375;
-        private readonly double turn = 1750;
-        
-        #endregion Distance
+        private readonly double power = 0.6;
+        private readonly double forwardEnc = 8550;
+        private readonly double turnEnc;
+        private readonly double secForwardEnc;
+        private readonly double backEnc;
 
         #endregion Private Fields
 
@@ -39,6 +28,18 @@ namespace Trephine.Autonomi
             //stop 
             baseCalls.SlowStop();
 
+            //turn
+            baseCalls.turnRightFullEncoder(turnEnc, power);
+
+            //stop
+            baseCalls.SlowStop();
+
+            //drive forward just a little bit
+            baseCalls.driveFullEncoder(secForwardEnc, power);
+
+            //stop drive train
+            baseCalls.SlowStop();
+
             //start intake
             baseCalls.SetIntake(.25, this);
 
@@ -50,9 +51,7 @@ namespace Trephine.Autonomi
             Timer.Delay(1);
 
             //back up
-            //baseCalls.SlowStart(-power);
-            //Timer.Delay(1);
-            baseCalls.driveFullEncoder(backEnc, -power);
+            baseCalls.driveFullEncoder(backEnc, power);
 
             //return manipulator to down position
             baseCalls.SetMani(DoubleSolenoid.Value.Reverse, this);
@@ -62,20 +61,6 @@ namespace Trephine.Autonomi
 
             //stop outtake
             baseCalls.FullStop();
-
-            Timer.Delay(0.35);
-
-            baseCalls.turnLeftFullEncoder(turn, power);
-
-            Timer.Delay(0.35);
-
-            baseCalls.driveFullEncoder(backEnc, power);
-
-            baseCalls.StartShooter(shootPower, this);
-
-            Timer.Delay(0.75);
-
-            baseCalls.StartAgitator(agitatPower, this);
 
             //report that we are ALMOST done
             Report.Warning(" Full Encoder GearLeft Completed");

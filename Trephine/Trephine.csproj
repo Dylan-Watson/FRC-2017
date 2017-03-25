@@ -71,22 +71,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Autonomi\Align.cs" />
-    <Compile Include="Autonomi\FullEncoderCenterRight.cs" />
-    <Compile Include="Autonomi\FullEncoderCenterLeft.cs" />
-    <Compile Include="Autonomi\FullEncoderLeft.cs" />
-    <Compile Include="Autonomi\GearLeftShoot.cs" />
-    <Compile Include="Autonomi\EncodreTest.cs" />
-    <Compile Include="Autonomi\Encodre.cs" />
-    <Compile Include="Autonomi\DriveStraight.cs" />
     <Compile Include="Autonomi\GearLeft.cs" />
-    <Compile Include="Autonomi\GearRight.cs" />
-    <Compile Include="Autonomi\NavXTest.cs" />
-    <Compile Include="Autonomi\TurnTest.cs" />
+    <Compile Include="AutyInProgress\Align.cs" />
+    <Compile Include="Autonomi\OGCenterBoio.cs" />
+    <Compile Include="AutyInProgress\NavXCenterShoot.cs" />
+    <Compile Include="AutyInProgress\FullEncoderCenterRight.cs" />
+    <Compile Include="AutyInProgress\FullEncoderCenterLeft.cs" />
+    <Compile Include="AutyInProgress\FullEncoderLeft.cs" />
+    <Compile Include="AutyInProgress\GearLeftShoot.cs" />
+    <Compile Include="AutyInProgress\EncodreTest.cs" />
+    <Compile Include="AutyInProgress\Encodre.cs" />
+    <Compile Include="Autonomi\DriveStraight.cs" />
+    <Compile Include="Autonomi\GearLeftWEncoder.cs" />
+    <Compile Include="AutyInProgress\GearRight.cs" />
+    <Compile Include="AutyInProgress\NavXTest.cs" />
+    <Compile Include="AutyInProgress\TurnTest.cs" />
     <Compile Include="Autonomous.cs" />
     <Compile Include="BaseCalls.cs" />
     <Compile Include="UtilityFunctions.cs" />
-    <Compile Include="Autonomi\GearCenter.cs" />
+    <Compile Include="Autonomi\RetardEncoderCenter.cs" />
     <Compile Include="Initialize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
