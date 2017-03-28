@@ -89,7 +89,7 @@ namespace RobotMain2017
         {
             quickLoad();
             RobotStatus.Instance.NotifyState(RobotState.Teleop);
-            new Sensing(config).Start();
+            new Sensing(config);
             new Driver().Start();
             new Operator().Start();
         }

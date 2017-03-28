@@ -17,9 +17,9 @@ using WPILib;
 namespace Tourniquet
 {
     /// <summary>
-    ///     Class to handle specific sensor functionality on the robot, this is a ControlLoop, see ControlLoop in Base
+    ///     Class to handle specific sensor and event based functionality on the robot
     /// </summary>
-    public class Sensing : ControlLoop
+    public class Sensing
     {
         #region Public Constructors
 
@@ -32,16 +32,5 @@ namespace Tourniquet
         }
 
         #endregion Public Constructors
-
-        #region Protected Methods
-
-        /// <summary>
-        ///     Instruction to execute within the loop
-        /// </summary>
-        protected override void main()
-        {
-           
-        }
-        #endregion Protected Methods
     }
 }
