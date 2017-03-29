@@ -1,4 +1,6 @@
-﻿using Base;
+﻿using System;
+using Base;
+using Base.Components;
 using static Base.CommunicationFrames;
 
 namespace Trephine
@@ -90,7 +92,6 @@ namespace Trephine
 
             return 0;
         }
-
 
         private int getOffset(Target target)
         {
