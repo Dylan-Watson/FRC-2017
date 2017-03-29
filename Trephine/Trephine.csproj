@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Autonomi\GearLeft.cs" />
+    <Compile Include="Autonomi\SystemsCheck.cs" />
     <Compile Include="AutyInProgress\Align.cs" />
     <Compile Include="Autonomi\OGCenterBoio.cs" />
     <Compile Include="AutyInProgress\NavXCenterShoot.cs" />

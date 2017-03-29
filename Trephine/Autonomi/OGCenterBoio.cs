@@ -21,7 +21,7 @@ namespace Trephine.Autonomi
     {
         #region Private Fields
 
-        private readonly double driveTime = 2, power = .5;
+        private readonly double driveTime = 5, power = .25;
 
         #endregion Private Fields
 
@@ -31,7 +31,7 @@ namespace Trephine.Autonomi
         {
             //shift into low gear and wait for a second 
             baseCalls.ShiftGears(DoubleSolenoid.Value.Reverse, this);
-            Timer.Delay(.5);
+            Timer.Delay(.25);
 
             //drive up to the peg
             baseCalls.SetLeftDrive(power);
@@ -46,11 +46,11 @@ namespace Trephine.Autonomi
 
             //drop gear
             baseCalls.SetMani(DoubleSolenoid.Value.Forward, this);
-            Timer.Delay(1);
+            Timer.Delay(.25);
 
             //drive back to wall
             baseCalls.SlowStart(-power);
-            Timer.Delay(.5);
+            Timer.Delay(driveTime);
 
             //stop outtake
             baseCalls.FullStop();

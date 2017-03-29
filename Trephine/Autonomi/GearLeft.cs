@@ -19,7 +19,7 @@ namespace Trephine.Autonomi
     {
         #region Private Fields
 
-        private readonly double driveTime = 1.405, power = .7;
+        private readonly double driveTime = 1.325, power = .7;
 
         #endregion Private Fields
 
@@ -40,7 +40,7 @@ namespace Trephine.Autonomi
 
             //turn
             baseCalls.SlowTurn(power, -power);
-            Timer.Delay(.6);
+            Timer.Delay(.8);
 
             //stop
             baseCalls.SlowStop();
@@ -48,12 +48,12 @@ namespace Trephine.Autonomi
             //drive forward just a little bit
             baseCalls.SetLeftDrive(power);
             baseCalls.SetRightDrive(power);
-            Timer.Delay(.01);
+            Timer.Delay(.4);
 
             //stop drive train
             baseCalls.SlowStop();
 
-            //start intake
+            /*start intake
             baseCalls.SetIntake(.25, this);
 
             //drop gear
@@ -77,7 +77,7 @@ namespace Trephine.Autonomi
 
             //shift into high gear
             baseCalls.ShiftGears(DoubleSolenoid.Value.Forward, this);
-
+            */
             //report that we are ALMOST done
             Report.Warning(" GearLeft Completed");
 

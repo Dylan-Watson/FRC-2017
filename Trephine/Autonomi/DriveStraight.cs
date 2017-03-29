@@ -1,15 +1,4 @@
-﻿/****************************** Header ******************************\
-Class Name: DriveStrait
-Summary: Practice autonomous made to drive straight
-Project:     FRC2017
-Copyright (c) BroncBotz.
-All rights reserved.
-
-Author(s): Ryan Cooper
-Email: cooper.ryan@centaurisoft.org
-\********************************************************************/
-
-using Base;
+﻿using Base;
 using WPILib;
 
 namespace Trephine.Autonomi
@@ -18,7 +7,22 @@ namespace Trephine.Autonomi
     {
         #region Private Fields
 
-        private readonly double driveTime = 1, power = .5;
+        #region Powers
+
+        private readonly double power = 0.45;
+        private readonly double shootPower = 1.0;
+        private readonly double agitatPower = 1.0;
+
+        #endregion Powers
+
+        #region Distance
+
+        private readonly double forwardEnc = 8425;
+        //JOSE SAID USE BACK LENGTH FOR FORWARD
+        private readonly double backEnc = 4375;
+        private readonly double turn = 1750;
+
+        #endregion Distance
 
         #endregion Private Fields
 
@@ -26,27 +30,20 @@ namespace Trephine.Autonomi
 
         protected override void main()
         {
-            //low gear
+            //shift into high gear
             baseCalls.ShiftGears(DoubleSolenoid.Value.Forward, this);
 
-            //drive
-            baseCalls.SetLeftDrive(power);
-            baseCalls.SetRightDrive(power);
-            Timer.Delay(driveTime);
+            //drive forward
+            baseCalls.driveFullEncoder(forwardEnc, power);
 
-            //slow stop
+            //stop 
             baseCalls.SlowStop();
 
-            //shift into high gear
-            //baseCalls.ShiftGears(DoubleSolenoid.Value.Forward, this);
-
             //report that we are ALMOST done
-            Report.Warning(" DriveStraight Completed");
+            Report.Warning(" Full Encoder GearLeft Completed");
 
             //done
             done();
-
-
         }
 
         #endregion Protected Methods

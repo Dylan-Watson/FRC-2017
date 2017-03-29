@@ -44,6 +44,8 @@ namespace Trephine
 
         private static CommonName gmRamp = new CommonName("gm_ramp");
 
+        private static CommonName hood = new CommonName("hood");
+
         private static CommonName intake = new CommonName("intake");
 
         private static CommonName dt_shifter = new CommonName("dt_shifter");
@@ -53,6 +55,8 @@ namespace Trephine
         private static CommonName shooter_1 = new CommonName("shooter_1");
         
         private static CommonName agitator = new CommonName("agitator");
+
+        private static CommonName climber = new CommonName("climber");
 
         #endregion Public Properties
 
@@ -123,8 +127,9 @@ namespace Trephine
             var tmp = (DoubleSolenoidItem)(config.ActiveCollection.Get(dt_shifter));
             tmp.Set(value, sender);
         }
+
         /// <summary>
-        ///     sets the mani to forward or back position
+        ///     sets the mani to forward or back position // forward = back
         /// </summary>
         /// <param name="value">value to set</param>
         /// <param name="sender">specifies whats sending it</param>
@@ -156,6 +161,14 @@ namespace Trephine
         }
 
         /// <summary>
+        /// starts intake
+        /// </summary>
+        public void StopIntake()
+        {
+            config.ActiveCollection.GetMotorItem(intake).Stop();
+        }
+
+        /// <summary>
         ///     revs up shooter
         /// </summary>
         /// <param name="value"></param>
@@ -179,6 +192,36 @@ namespace Trephine
             config.ActiveCollection.GetMotorItem(shooter_1).Stop();
         }
 
+        /// <summary>
+        /// starts climber
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="sender"></param>
+        public void StartCimber(double value, object sender)
+        {
+            var tmp_0 = (Motor)(config.ActiveCollection.Get(climber));
+            tmp_0.Set(value, sender);
+        }
+
+        /// <summary>
+        /// stops climber lol
+        /// </summary>
+        public void StopClimber()
+        {
+            config.ActiveCollection.GetMotorItem(climber).Stop();
+        }
+
+        /// <summary>
+        /// shifts Da hood
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="sender"></param>
+        public void ShiftHood(DoubleSolenoid.Value value, object sender)
+        {
+            var tmp = (DoubleSolenoidItem)(config.ActiveCollection.Get(hood));
+            tmp.Set(value, sender);
+
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -251,7 +294,7 @@ namespace Trephine
         }
 
         /// <summary>
-        //      slow turn DT
+        ///     slow turn DT
         /// </summary>
         /// <param name="leftPw"></param>
         /// <param name="rightPw"></param>
@@ -314,6 +357,37 @@ namespace Trephine
             }
 
             SlowStop();
+        }
+        public void GyroTurn()
+        {
+
+        }
+
+        public void DeliverGear(double driveTime, double driveBackTime, double power)
+        {
+            
+            ShiftGears(DoubleSolenoid.Value.Reverse, this);
+            Timer.Delay(.25);
+
+            SetLeftDrive(power);
+            SetRightDrive(power + .025);
+            Timer.Delay(driveTime);
+
+            SetIntake(.6, this);
+
+            SlowStop();
+
+            SetMani(DoubleSolenoid.Value.Forward, this);
+            Timer.Delay(.25);
+
+            SlowStart(-power);
+            Timer.Delay(driveBackTime);
+
+            FullStop();
+
+            SetMani(DoubleSolenoid.Value.Reverse, this);
+
+            ShiftGears(DoubleSolenoid.Value.Forward, this);
         }
 
         #endregion Public Methods
@@ -407,10 +481,7 @@ namespace Trephine
             SlowStop();
         }
 
-        public void GyroTurn()
-        {
-
-        }
+        
 
         #endregion Public Dylans
     }
