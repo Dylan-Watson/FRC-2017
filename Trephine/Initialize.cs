@@ -70,7 +70,7 @@ namespace Trephine
         {
             baseCalls.FullStop();
             auton?.Abort(this);
-            RobotStatus.Instance.RobotStatusChanged -= Instance_RobotStatusChanged;
+            //RobotStatus.Instance.RobotStatusChanged -= Instance_RobotStatusChanged;
         }
 
         #endregion Private Methods

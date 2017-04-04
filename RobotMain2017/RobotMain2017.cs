@@ -99,9 +99,9 @@ namespace RobotMain2017
         /// </summary>
         public override void Test()
         {
-            RobotStatus.Instance.NotifyState(RobotState.Test);
 
-            Disabled();
+            RobotStatus.Instance.NotifyState(RobotState.Test);
+            new Trephine.AutyInProgress.SystemsCheck().Start(true);
         }
 
         #endregion Public Methods

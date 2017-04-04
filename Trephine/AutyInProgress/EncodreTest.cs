@@ -12,7 +12,7 @@ Email: cooper.ryan@centaurisoft.org
 using Base;
 using WPILib;
 
-namespace Trephine
+namespace Trephine.Autonomi
 {
     internal class EncodreTest : Autonomous
     {
@@ -25,8 +25,8 @@ namespace Trephine
 
             while (true)
             {
-                baseCalls.LeftMotor().GetEncoderValue();
-                baseCalls.RightMotor().GetEncoderValue();
+                FrameworkCommunication.Instance.SendData(" Left Encoder Value: ", baseCalls.LeftMotor().GetEncoderValue());
+                FrameworkCommunication.Instance.SendData(" Right Encoder Value: ", baseCalls.RightMotor().GetEncoderValue());
             }
         }
 

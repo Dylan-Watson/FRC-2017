@@ -56,7 +56,9 @@ namespace Trephine
         
         private static CommonName agitator = new CommonName("agitator");
 
-        private static CommonName climber = new CommonName("climber");
+        private static CommonName climber_0 = new CommonName("climber_0");
+
+        private static CommonName climber_1 = new CommonName("climber_1");
 
         #endregion Public Properties
 
@@ -70,6 +72,7 @@ namespace Trephine
         #endregion Private Fields
 
         #region Public Methods
+
         /// <summary>
         ///     Constructor
         /// </summary>
@@ -85,6 +88,9 @@ namespace Trephine
         /// <returns></returns>
         public Config GetConfig() => config;
 
+        #endregion Public Methods
+
+        #region DRIVE methods
         /// <summary>
         ///     Full stop of the drive train
         /// </summary>
@@ -94,13 +100,18 @@ namespace Trephine
             config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor) s).Stop());
         }
         /// <summary>
-        ///     Full stop of the robot
+        ///     Full stop of all the robot's components
         /// </summary>
         public void FullStop()
         {
             config.ActiveCollection.GetRightDriveMotors.ForEach(s => ((Motor) s).Stop());
             config.ActiveCollection.GetLeftDriveMotors.ForEach(s => ((Motor) s).Stop());
             config.ActiveCollection.GetMotorItem(intake).Stop();
+            config.ActiveCollection.GetMotorItem(shooter_0).Stop();
+            config.ActiveCollection.GetMotorItem(shooter_1).Stop();
+            config.ActiveCollection.GetMotorItem(climber_0).Stop();
+            config.ActiveCollection.GetMotorItem(climber_1).Stop();
+            config.ActiveCollection.GetMotorItem(agitator).Stop();
         }
 
         /// <summary>
@@ -128,8 +139,85 @@ namespace Trephine
             tmp.Set(value, sender);
         }
 
+
+
         /// <summary>
-        ///     sets the mani to forward or back position // forward = back
+        ///     slow stop dt
+        /// </summary>
+        public void SlowStop()
+        {
+            var rightPow = config.ActiveCollection.GetRightDriveMotors.Select(s => ((Motor)s).Get()).ToList()[0];
+            var leftPow = config.ActiveCollection.GetLeftDriveMotors.Select(s => ((Motor)s).Get()).ToList()[0];
+
+            while (Math.Abs(rightPow) > .05 && Math.Abs(leftPow) > .05)
+            {
+                rightPow /= 1.02;
+                leftPow /= 1.02;
+
+                SetLeftDrive(leftPow);
+                SetRightDrive(rightPow);
+
+                Timer.Delay(.005);
+            }
+
+            FullDriveStop();
+        }
+
+        /// <summary>
+        ///     slow start DT
+        /// </summary>
+        /// <param name="finalPower"></param>
+        public void SlowStart(double finalPower)
+        {
+            if (finalPower > 0)
+            {
+                for (double d = .05; d < finalPower; d *= 1.02)
+                {
+                    SetLeftDrive(d);
+                    SetRightDrive(d);
+                    Timer.Delay(.005);
+                }
+                SetLeftDrive(finalPower);
+                SetRightDrive(finalPower);
+            }
+            if (finalPower < 0)
+            {
+                for (double d = -.05; d > finalPower; d *= 1.02)
+                {
+                    SetLeftDrive(d);
+                    SetRightDrive(d);
+                    Timer.Delay(.005);
+                }
+                SetLeftDrive(finalPower);
+                SetRightDrive(finalPower);
+            }
+        }
+
+        /// <summary>
+        ///     slow turn DT
+        /// </summary>
+        /// <param name="leftPw"></param>
+        /// <param name="rightPw"></param>
+        public void SlowTurn(double leftPw, double rightPw)
+        {
+            for (double d = .05 * Math.Sign(leftPw); d < leftPw; d *= 1.02)
+            {
+                SetLeftDrive(d);
+                Timer.Delay(.005);
+            }
+            for (double d = .05 * Math.Sign(rightPw); d < rightPw; d *= 1.02)
+            {
+                SetRightDrive(d);
+                Timer.Delay(.005);
+            }
+        }
+
+        #endregion drive methods
+
+        #region OPERATOR controlled functions
+
+        /// <summary>
+        ///     sets the mani to forward or back position // forward = drop
         /// </summary>
         /// <param name="value">value to set</param>
         /// <param name="sender">specifies whats sending it</param>
@@ -199,8 +287,10 @@ namespace Trephine
         /// <param name="sender"></param>
         public void StartCimber(double value, object sender)
         {
-            var tmp_0 = (Motor)(config.ActiveCollection.Get(climber));
+            var tmp_0 = (Motor)(config.ActiveCollection.Get(climber_0));
             tmp_0.Set(value, sender);
+            var tmp_1 = (Motor)(config.ActiveCollection.Get(climber_1));
+            tmp_1.Set(value, sender);
         }
 
         /// <summary>
@@ -208,7 +298,8 @@ namespace Trephine
         /// </summary>
         public void StopClimber()
         {
-            config.ActiveCollection.GetMotorItem(climber).Stop();
+            config.ActiveCollection.GetMotorItem(climber_0).Stop();
+            config.ActiveCollection.GetMotorItem(climber_1).Stop();
         }
 
         /// <summary>
@@ -241,76 +332,9 @@ namespace Trephine
             config.ActiveCollection.GetMotorItem(agitator).Stop();
         }
 
-        /// <summary>
-        ///     slow stop dt
-        /// </summary>
-        public void SlowStop()
-        {
-            var rightPow = config.ActiveCollection.GetRightDriveMotors.Select(s => ((Motor) s).Get()).ToList()[0];
-            var leftPow = config.ActiveCollection.GetLeftDriveMotors.Select(s => ((Motor) s).Get()).ToList()[0];
+        #endregion operator controlled functions
 
-            while (Math.Abs(rightPow) > .05 && Math.Abs(leftPow) > .05)
-            {
-                rightPow /= 1.02;
-                leftPow /= 1.02;
-
-                SetLeftDrive(leftPow);
-                SetRightDrive(rightPow);
-
-                Timer.Delay(.005);
-            }
-
-            FullDriveStop();
-        }
-
-        /// <summary>
-        ///     slow start DT
-        /// </summary>
-        /// <param name="finalPower"></param>
-        public void SlowStart(double finalPower)
-        {
-            if(finalPower > 0)
-            {
-                for (double d = .05; d < finalPower; d *= 1.02)
-                {
-                    SetLeftDrive(d);
-                    SetRightDrive(d);
-                    Timer.Delay(.005);
-                }
-                SetLeftDrive(finalPower);
-                SetRightDrive(finalPower);
-            }
-            if(finalPower < 0)
-            {
-                for (double d = -.05; d > finalPower; d *= 1.02)
-                {
-                    SetLeftDrive(d);
-                    SetRightDrive(d);
-                    Timer.Delay(.005);
-                }
-                SetLeftDrive(finalPower);
-                SetRightDrive(finalPower);
-            }
-        }
-
-        /// <summary>
-        ///     slow turn DT
-        /// </summary>
-        /// <param name="leftPw"></param>
-        /// <param name="rightPw"></param>
-        public void SlowTurn(double leftPw, double rightPw)
-        {
-            for(double d = .05 * Math.Sign(leftPw); d < leftPw; d *= 1.02)
-            {
-                SetLeftDrive(d);
-                Timer.Delay(.005);
-            }
-            for (double d = .05 * Math.Sign(rightPw); d < rightPw; d *= 1.02)
-            {
-                SetRightDrive(d);
-                Timer.Delay(.005);
-            }
-        }
+        #region encoders
 
         /// <summary>
         ///     gets the encoder value of the left drivetrain
@@ -358,44 +382,10 @@ namespace Trephine
 
             SlowStop();
         }
-        public void GyroTurn()
-        {
 
-        }
-
-        public void DeliverGear(double driveTime, double driveBackTime, double power)
-        {
-            
-            ShiftGears(DoubleSolenoid.Value.Reverse, this);
-            Timer.Delay(.25);
-
-            SetLeftDrive(power);
-            SetRightDrive(power + .025);
-            Timer.Delay(driveTime);
-
-            SetIntake(.6, this);
-
-            SlowStop();
-
-            SetMani(DoubleSolenoid.Value.Forward, this);
-            Timer.Delay(.25);
-
-            SlowStart(-power);
-            Timer.Delay(driveBackTime);
-
-            FullStop();
-
-            SetMani(DoubleSolenoid.Value.Reverse, this);
-
-            ShiftGears(DoubleSolenoid.Value.Forward, this);
-        }
-
-        #endregion Public Methods
-
-        #region Public Dylans
 
         /// <summary>
-        /// 
+        ///     drives straight with encoders
         /// </summary>
         /// <param name="distance"></param>
         /// <param name="power"></param>
@@ -407,7 +397,7 @@ namespace Trephine
             double left = power;
             double right = power;
             double temp0 = Math.Abs(LeftMotor().GetEncoderValue()) + Math.Abs(RightMotor().GetEncoderValue());
-            double avg =  temp0 / 2;
+            double avg = temp0 / 2;
 
             while (avg < distance)
 
@@ -429,11 +419,12 @@ namespace Trephine
         }
 
         /// <summary>
-        /// 
+        ///     turns with encoders
         /// </summary>
         /// <param name="distance"></param>
         /// <param name="power"></param>
-        public void turnRightFullEncoder(double distance, double power) {
+        public void turnRightFullEncoder(double distance, double power)
+        {
             LeftMotor().ResetEncoder();
             RightMotor().ResetEncoder();
 
@@ -444,7 +435,7 @@ namespace Trephine
 
             while (lft < distance)
             {
-                
+
                 SetLeftDrive(left);
                 SetRightDrive(-right);
 
@@ -456,7 +447,7 @@ namespace Trephine
         }
 
         /// <summary>
-        /// 
+        ///     turns with encoders
         /// </summary>
         /// <param name="distance"></param>
         /// <param name="power"></param>
@@ -481,8 +472,150 @@ namespace Trephine
             SlowStop();
         }
 
-        
+        #endregion encoders
 
-        #endregion Public Dylans
+        #region auxilary methods
+
+        /// <summary>
+        ///     drops gear and back up
+        /// </summary>
+        /// <param name="driveBackTime"></param>
+        /// <param name="power"></param>
+        public void DeliverGear(double driveBackTime, double power)
+        {
+
+            SetIntake(.6, this);
+            Timer.Delay(.5);
+
+            SetMani(DoubleSolenoid.Value.Forward, this);
+            Timer.Delay(.5);
+
+            //used negative absolute power in case I forget to set power negative
+            GyroEncDrive(3000, -Math.Abs(power));
+
+            FullDriveStop();
+
+        }
+
+        /// <summary>
+        ///     resets the robot to the position it should be when it starts teleop
+        /// </summary>
+        public void RoboReset()
+        {
+            ShiftGears(DoubleSolenoid.Value.Forward, this);
+            SetMani(DoubleSolenoid.Value.Reverse, this);
+            SetRamp(DoubleSolenoid.Value.Forward, this);
+            FullStop();
+        }
+
+        #endregion auxilary methods
+
+        #region Gyro
+
+        /// <summary>
+        ///     drives straight with enc and gyro
+        /// </summary>
+        /// <param name="distance"></param>
+        /// <param name="power"></param>
+        public void GyroEncDrive(double distance, double power)
+        {
+            double error = .025, inc = .0001;
+
+            double straight = NavX.Instance.GetAngle();
+            double currentAngle;
+
+            LeftMotor().ResetEncoder();
+            RightMotor().ResetEncoder();
+
+            double left = power;
+            double right = power;
+            double temp0 = Math.Abs(LeftMotor().GetEncoderValue()) + Math.Abs(RightMotor().GetEncoderValue());
+            double avg = temp0 / 2;
+
+            while (avg < distance)
+
+            {
+                currentAngle = NavX.Instance.GetAngle();
+
+                if (currentAngle > straight + error)
+                    right += inc;
+                if (currentAngle < straight - error)
+                    left += inc;
+
+                SetLeftDrive(left);
+                SetRightDrive(right);
+
+                temp0 = Math.Abs(LeftMotor().GetEncoderValue()) + Math.Abs(RightMotor().GetEncoderValue());
+                avg = temp0 / 2;
+
+            }
+
+            FullDriveStop();
+
+                Report.General(" Left Encoder Value: " + LeftMotor().GetEncoderValue());
+                Report.General(" Right Encoder Value: " + RightMotor().GetEncoderValue());
+        }
+
+        /// <summary>
+        ///     straightens out dt
+        /// </summary>
+        /// <param name="power"></param>
+        /// <param name="straight"></param>
+        public void Straighten(double power, double straight)
+        {
+            double error = .1;
+
+            double current = NavX.Instance.GetAngle();
+
+            while (current > straight + error || current < straight - error)
+            {
+                current = NavX.Instance.GetAngle();
+                FrameworkCommunication.Instance.SendData("-NAVX_PROY", NavX.Instance.GetAngle());
+                if (current > straight + error)
+                {
+                    SetLeftDrive(-power);
+                    SetRightDrive(power);
+                }
+                if (current < straight - error)
+                {
+                    SetLeftDrive(power);
+                    SetRightDrive(-power);
+                }
+                else
+                    FullDriveStop();
+            }
+        }
+        
+        /// <summary>
+        ///     turns using gyro
+        /// </summary>
+        /// <param name="turnAngle">the amount of angle you wanna turn</param>
+        public void GyroTurn(double turnAngle)
+        {
+            double power = .6, error = .1;
+            double current = NavX.Instance.GetAngle();
+
+            if (current < turnAngle)
+            {
+                while (current < turnAngle - error)
+                {
+                    SetLeftDrive(power);
+                    SetRightDrive(-power);
+                }
+            }
+
+            else
+            {
+                while (current > turnAngle + error)
+                {
+                    SetLeftDrive(-power);
+                    SetRightDrive(power);
+                }
+            }
+
+        }
+
+        #endregion Gyro
+        
     }
 }

@@ -22,7 +22,7 @@
         /// <param name="original"></param>
         /// <param name="turn"></param>
         /// <returns></returns>
-        public static int GetDestination(int original, int turn)
+        public static double GetDestination(double original, double turn)
         {
             var val = original + turn;
 

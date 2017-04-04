@@ -1,9 +1,9 @@
 ﻿using Base;
 using WPILib;
 
-namespace Trephine.Autonomi
+namespace Trephine.AutyInProgress
 {
-    internal class SystemsCheck : Autonomous
+    public class SystemsCheck : Autonomous
     {
         #region Private Fields
 
@@ -102,6 +102,11 @@ namespace Trephine.Autonomi
             baseCalls.StartCimber(.75, this);
             Timer.Delay(5);
             baseCalls.StopClimber();
+
+            /*
+             * report
+             */
+            Report.Warning("Systems Check Completed");
 
         }
 
