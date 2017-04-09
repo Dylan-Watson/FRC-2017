@@ -12,12 +12,12 @@ Email: cooper.ryan@centaurisoft.org
 using Base;
 using WPILib;
 
-namespace Trephine.Autonomi
+namespace Trephine.AutyInProgress
 {
     /// <summary>
     ///     Drives strait for x amount of time
     /// </summary>
-    internal class OGCenterBoio : Autonomous
+    internal class GearCenterTimer : Autonomous
     {
         #region Private Fields
 

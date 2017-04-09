@@ -19,35 +19,33 @@ namespace Trephine.AutyInProgress
 
             baseCalls.ShiftGears(DoubleSolenoid.Value.Reverse, this);
             baseCalls.SetLeftDrive(1);
-            Timer.Delay(3);
+            Timer.Delay(1.5);
             baseCalls.ShiftGears(DoubleSolenoid.Value.Forward, this);
-            Timer.Delay(3);
+            Timer.Delay(1.5);
             baseCalls.FullDriveStop();
 
             baseCalls.ShiftGears(DoubleSolenoid.Value.Reverse, this);
             baseCalls.SetRightDrive(1);
-            Timer.Delay(3);
+            Timer.Delay(1.5);
             baseCalls.ShiftGears(DoubleSolenoid.Value.Forward, this);
-            Timer.Delay(3);
+            Timer.Delay(1.5);
             baseCalls.FullDriveStop();
 
             baseCalls.ShiftGears(DoubleSolenoid.Value.Reverse, this);
             baseCalls.SetLeftDrive(1);
             baseCalls.SetRightDrive(1);
-            Timer.Delay(3);
+            Timer.Delay(1.5);
             baseCalls.ShiftGears(DoubleSolenoid.Value.Forward, this);
-            Timer.Delay(3);
+            Timer.Delay(1.5);
             baseCalls.FullDriveStop();
 
             /*
              * GM
              */
             baseCalls.SetIntake(.5, this);
-            Timer.Delay(3);
+            Timer.Delay(1.5);
             baseCalls.StopIntake();
 
-            baseCalls.SetMani(DoubleSolenoid.Value.Forward, this);
-            Timer.Delay(.5);
             baseCalls.SetMani(DoubleSolenoid.Value.Reverse, this);
             Timer.Delay(.5);
             baseCalls.SetMani(DoubleSolenoid.Value.Forward, this);
@@ -56,6 +54,9 @@ namespace Trephine.AutyInProgress
             Timer.Delay(.5);
             baseCalls.SetMani(DoubleSolenoid.Value.Forward, this);
             Timer.Delay(.5);
+            baseCalls.SetMani(DoubleSolenoid.Value.Reverse, this);
+            Timer.Delay(.5);
+            Timer.Delay(2);
 
             baseCalls.SetRamp(DoubleSolenoid.Value.Forward, this);
             Timer.Delay(.5);
@@ -71,16 +72,6 @@ namespace Trephine.AutyInProgress
             /*
              * shooter
              */
-            baseCalls.ShiftHood(DoubleSolenoid.Value.Forward, this);
-            Timer.Delay(.25);
-            baseCalls.ShiftHood(DoubleSolenoid.Value.Reverse, this);
-            Timer.Delay(.25);
-            baseCalls.ShiftHood(DoubleSolenoid.Value.Forward, this);
-            Timer.Delay(.25);
-            baseCalls.ShiftHood(DoubleSolenoid.Value.Reverse, this);
-            Timer.Delay(.25);
-            baseCalls.ShiftHood(DoubleSolenoid.Value.Forward, this);
-            Timer.Delay(.25);
 
             baseCalls.StartShooter(1, this);
             Timer.Delay(3);
@@ -90,23 +81,19 @@ namespace Trephine.AutyInProgress
             Timer.Delay(3);
             baseCalls.StopAgitator();
 
-
-            for (int i = 100; i>=0; i --)
-            {
-                Report.General("PULL CLIMBER BREAKERS",true);
-            }
-            Timer.Delay(10);
             /*
              * climber
              */
             baseCalls.StartCimber(.75, this);
-            Timer.Delay(5);
+            Timer.Delay(3);
             baseCalls.StopClimber();
 
             /*
              * report
              */
-            Report.Warning("Systems Check Completed");
+            Report.General("Systems Check Completed", true);
+
+            done();
 
         }
 

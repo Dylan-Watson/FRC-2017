@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using WPILib;
 using Base;
 
-namespace Trephine.AutyInProgress
+namespace Trephine.Autonomi
 {
-    public class GyroStraighten : Autonomous
+    internal class GyroStraighten : Autonomous
     {
         private readonly double driveTime = 5, driveBackTime = 2.5, power = .6;
 
@@ -26,12 +26,12 @@ namespace Trephine.AutyInProgress
             {
                 current = NavX.Instance.GetAngle();
                 FrameworkCommunication.Instance.SendData("-NAVX_PROY", NavX.Instance.GetAngle());
-                if (current > straight + 5)
+                if (current > straight + .05)
                 {
                     baseCalls.SetLeftDrive(-power);
                     baseCalls.SetRightDrive(power);
                 }
-                if (current < straight - 5)
+                if (current < straight - .05)
                 {
                     baseCalls.SetLeftDrive(power);
                     baseCalls.SetRightDrive(-power);

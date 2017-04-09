@@ -481,20 +481,10 @@ namespace Trephine
         /// </summary>
         /// <param name="driveBackTime"></param>
         /// <param name="power"></param>
-        public void DeliverGear(double driveBackTime, double power)
+        public void DeliverGear(object sender)
         {
-
-            SetIntake(.6, this);
-            Timer.Delay(.5);
-
-            SetMani(DoubleSolenoid.Value.Forward, this);
-            Timer.Delay(.5);
-
-            //used negative absolute power in case I forget to set power negative
-            GyroEncDrive(3000, -Math.Abs(power));
-
-            FullDriveStop();
-
+            SetIntake(.5, sender);
+            SetMani(DoubleSolenoid.Value.Forward, sender);
         }
 
         /// <summary>
@@ -508,6 +498,16 @@ namespace Trephine
             FullStop();
         }
 
+        public void Shoot()
+        {
+            StartShooter(-.85, this);
+            Timer.Delay(1.5);
+            StartAgitator(.5, this);
+            Timer.Delay(7);
+            FullStop();
+
+        }
+
         #endregion auxilary methods
 
         #region Gyro
@@ -519,7 +519,8 @@ namespace Trephine
         /// <param name="power"></param>
         public void GyroEncDrive(double distance, double power)
         {
-            double error = .025, inc = .0001;
+            NavX.Instance.Reset();
+            double error = .01, inc = .00005;
 
             double straight = NavX.Instance.GetAngle();
             double currentAngle;
@@ -554,6 +555,7 @@ namespace Trephine
 
                 Report.General(" Left Encoder Value: " + LeftMotor().GetEncoderValue());
                 Report.General(" Right Encoder Value: " + RightMotor().GetEncoderValue());
+                Report.General("Angle : " + NavX.Instance.GetAngle(), true);
         }
 
         /// <summary>
@@ -563,9 +565,10 @@ namespace Trephine
         /// <param name="straight"></param>
         public void Straighten(double power, double straight)
         {
-            double error = .1;
+            double error = 1;
 
             double current = NavX.Instance.GetAngle();
+            power *= .5;
 
             while (current > straight + error || current < straight - error)
             {
@@ -585,32 +588,80 @@ namespace Trephine
                     FullDriveStop();
             }
         }
-        
+
         /// <summary>
         ///     turns using gyro
         /// </summary>
+        /// <param name="current">current angle</param>
         /// <param name="turnAngle">the amount of angle you wanna turn</param>
-        public void GyroTurn(double turnAngle)
+        public void GyroTurn(double current, double turnAngle)
         {
-            double power = .6, error = .1;
-            double current = NavX.Instance.GetAngle();
+            NavX.Instance.Reset();
 
-            if (current < turnAngle)
+            double power = .4, error = .5;
+            
+            if (turnAngle > 0)
             {
                 while (current < turnAngle - error)
                 {
+                    Report.General("Angle: " + NavX.Instance.GetAngle());
+
                     SetLeftDrive(power);
                     SetRightDrive(-power);
+
+                    current = NavX.Instance.GetAngle();
                 }
+                FullDriveStop();
             }
 
-            else
+            if (turnAngle < 0)
             {
                 while (current > turnAngle + error)
                 {
+                    Report.General("Angle: " + NavX.Instance.GetAngle());
+
                     SetLeftDrive(-power);
                     SetRightDrive(power);
+
+                    current = NavX.Instance.GetAngle();
                 }
+                FullDriveStop();
+            }
+
+            Timer.Delay(.25);
+            LeftMotor().ResetEncoder();
+            RightMotor().ResetEncoder();
+        }
+
+        public void TestGyroTurn(double current, double turnAngle)
+        {
+            NavX.Instance.Reset();
+
+            double power = .4, error = .5;
+
+            while (current < turnAngle - error || current > turnAngle + error)
+            {
+                if (current < turnAngle - error)
+                {
+                    Report.General("Angle: " + NavX.Instance.GetAngle());
+
+                    SetLeftDrive(power);
+                    SetRightDrive(-power);
+
+                    current = NavX.Instance.GetAngle();
+                }
+                FullDriveStop();
+
+                if (current > turnAngle + error)
+                {
+                    Report.General("Angle : " + NavX.Instance.GetAngle());
+
+                    SetLeftDrive(-power);
+                    SetRightDrive(power);
+
+                    current = NavX.Instance.GetAngle();
+                }
+                FullDriveStop();
             }
 
         }

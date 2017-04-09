@@ -71,13 +71,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Autonomi\GearCenterTurnLeft.cs" />
+    <Compile Include="Autonomi\GearCenterTurnRight.cs" />
     <Compile Include="Autonomi\GearLeft.cs" />
-    <Compile Include="Autonomi\SystemsCheck.cs" />
+    <Compile Include="Autonomi\Shoot.cs" />
+    <Compile Include="Autonomi\TestLeft.cs" />
+    <Compile Include="Autonomi\TestRight.cs" />
+    <Compile Include="AutyInProgress\GearLeftTimer.cs" />
+    <Compile Include="AutyInProgress\SystemsCheck.cs" />
     <Compile Include="AutyInProgress\EncoderOffset.cs" />
-    <Compile Include="Autonomi\GearCenterGyro.cs" />
+    <Compile Include="AutyInProgress\GearCenterShootLeft.cs" />
     <Compile Include="AutyInProgress\VisionAlign.cs" />
-    <Compile Include="Autonomi\OGCenterBoio.cs" />
-    <Compile Include="AutyInProgress\GyroStraighten.cs" />
+    <Compile Include="AutyInProgress\GearCenterTimer.cs" />
+    <Compile Include="Autonomi\GyroStraighten.cs" />
     <Compile Include="AutyInProgress\FullEncoderCenterRight.cs" />
     <Compile Include="AutyInProgress\FullEncoderCenterLeft.cs" />
     <Compile Include="AutyInProgress\FullEncoderLeft.cs" />

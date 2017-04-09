@@ -9,9 +9,7 @@ namespace Trephine.Autonomi
 
         #region Powers
 
-        private readonly double power = 0.45;
-        private readonly double shootPower = 1.0;
-        private readonly double agitatPower = 1.0;
+        private readonly double power = 0.4;
 
         #endregion Powers
 
@@ -30,18 +28,11 @@ namespace Trephine.Autonomi
 
         protected override void main()
         {
-            //shift into high gear
-            baseCalls.ShiftGears(DoubleSolenoid.Value.Forward, this);
+            baseCalls.GyroEncDrive(7500, power);
 
-            //drive forward
-            baseCalls.driveFullEncoder(forwardEnc, power);
-
-            //stop 
-            baseCalls.SlowStop();
 
             //report that we are ALMOST done
-            Report.Warning(" Full Encoder GearLeft Completed");
-
+            Report.Warning(" Full Encoder GearLeft ");
             //done
             done();
         }
